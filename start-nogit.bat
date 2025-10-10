@@ -1,5 +1,7 @@
 @echo off
 set "ROOT=%~dp0"
+call "%ROOT%runtimes\others\joinfiles.bat"
+cls
 set "PATH=%ROOT%programs\npp\npp.8.8.6.portable.x64;%PATH%"
 set "PATH=%ROOT%programs\dbeaver\dbeaver-ce-25.2.2-win32.win32.x86_64;%PATH%"
 set "PATH=%ROOT%programs\beekeeper\beekeeper-5.4.1;%PATH%"

@@ -10,11 +10,58 @@ if not exist "%LIST%" (
   exit /b 1
 )
 
+rem ===== Resolve first line (gate check) =====
+set "FIRSTRAW="
+for /f "usebackq tokens=1 delims= " %%A in ("%LIST%") do (
+  set "FIRSTRAW=%%~A"
+  goto :got_first
+)
+:got_first
+if not defined FIRSTRAW (
+  echo [WARN] listfile.txt is empty.
+  echo Runtimes ready.
+  exit /b 0
+)
+set "FIRSTRAW=%FIRSTRAW:/=\%"
+
+rem Resolve to absolute based on this .bat folder if relative
+set "FIRSTABS="
+set "H2=%FIRSTRAW:~0,2%"
+if "%H2:~1,1%"==":" (
+  for %%I in ("%FIRSTRAW%") do set "FIRSTABS=%%~fI"
+) else (
+  if "%H2%"=="\\" (
+    for %%I in ("%FIRSTRAW%") do set "FIRSTABS=%%~fI"
+  ) else (
+    for %%I in ("%~dp0%FIRSTRAW%") do set "FIRSTABS=%%~fI"
+  )
+)
+
+rem Get dir + name and check for .part####
+set "FIRSTDIR="
+set "FIRSTNAME="
+for %%I in ("%FIRSTABS%") do (
+  set "FIRSTDIR=%%~dpI"
+  set "FIRSTNAME=%%~nxI"
+)
+
+set "NEEDJOIN="
+for %%P in ("%FIRSTDIR%%FIRSTNAME%.part*") do (
+  set "NEEDJOIN=1"
+  goto :after_probe
+)
+:after_probe
+
+if not defined NEEDJOIN (
+  echo Runtimes ready.
+  exit /b 0
+)
+
 rem ===== Fixed temp PS1 path =====
 set "TMP=%TEMP%\join_overwrite.ps1"
 if exist "%TMP%" del /f /q "%TMP%" >nul 2>&1
 
-rem ===== Create PowerShell joiner (auto-detect parts *.part####, overwrite) =====
+rem ===== Create PowerShell joiner (auto-detect parts *.part####, overwrite, then delete parts) =====
 > "%TMP%" echo param([Parameter(Mandatory=$true)][string]$BasePath)
 >>"%TMP%" echo $ErrorActionPreference = 'Stop'
 >>"%TMP%" echo function Join-Parts-Overwrite([string]$Base) {
@@ -44,6 +91,15 @@ rem ===== Create PowerShell joiner (auto-detect parts *.part####, overwrite) ===
 >>"%TMP%" echo     }
 >>"%TMP%" echo   } finally { $ofs.Dispose() }
 >>"%TMP%" echo   Write-Host ("[OK] Rebuilt: " + $outPath + " (" + $total + " bytes)")
+>>"%TMP%" echo   # Delete parts after successful rebuild
+>>"%TMP%" echo   foreach ($p in $ordered) {
+>>"%TMP%" echo     try {
+>>"%TMP%" echo       Remove-Item -LiteralPath $p.FullName -Force
+>>"%TMP%" echo       Write-Host ("[CLEAN] Deleted: " + $p.FullName)
+>>"%TMP%" echo     } catch {
+>>"%TMP%" echo       Write-Host ("[WARN] Failed to delete: " + $p.FullName + " - " + $_.Exception.Message)
+>>"%TMP%" echo     }
+>>"%TMP%" echo   }
 >>"%TMP%" echo }
 >>"%TMP%" echo try { Join-Parts-Overwrite -Base $BasePath } catch {
 >>"%TMP%" echo   Write-Host ("[ERR] " + $_.Exception.GetType().FullName + ": " + $_.Exception.Message)
