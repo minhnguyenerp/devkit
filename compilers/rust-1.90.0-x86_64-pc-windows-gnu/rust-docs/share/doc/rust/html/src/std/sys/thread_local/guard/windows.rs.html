@@ -1,0 +1,103 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `library\std\src\sys\thread_local\guard\windows.rs`."><title>windows.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../..\..\../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../..\..\../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../..\..\../static.files/rustdoc-aa0817cf.css"><meta name="rustdoc-vars" data-root-path="../../..\..\../" data-static-root-path="../../..\..\../static.files/" data-current-crate="std" data-themes="" data-resource-suffix="1.90.0" data-rustdoc-version="1.90.0 (1159e78c4 2025-09-14)" data-channel="1.90.0" data-search-js="search-fa3e91e5.js" data-settings-js="settings-5514c975.js" ><script src="../../..\..\../static.files/storage-68b7e25d.js"></script><script defer src="../../..\..\../static.files/src-script-813739b1.js"></script><script defer src="../../..\..\../src-files1.90.0.js"></script><script defer src="../../..\..\../static.files/main-eebb9057.js"></script><noscript><link rel="stylesheet" href="../../..\..\../static.files/noscript-32bb7600.css"></noscript><link rel="alternate icon" type="image/png" href="../../..\..\../static.files/favicon-32x32-6580c154.png"><link rel="icon" type="image/svg+xml" href="../../..\..\../static.files/favicon-044be391.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">std\sys\thread_local\guard/</div>windows.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="doccomment">//! Support for Windows TLS destructors.
+<a href=#2 id=2 data-nosnippet>2</a>//!
+<a href=#3 id=3 data-nosnippet>3</a>//! Unfortunately, Windows does not provide a nice API to provide a destructor
+<a href=#4 id=4 data-nosnippet>4</a>//! for a TLS variable. Thus, the solution here ended up being a little more
+<a href=#5 id=5 data-nosnippet>5</a>//! obscure, but fear not, the internet has informed me [1][2] that this solution
+<a href=#6 id=6 data-nosnippet>6</a>//! is not unique (no way I could have thought of it as well!). The key idea is
+<a href=#7 id=7 data-nosnippet>7</a>//! to insert some hook somewhere to run arbitrary code on thread termination.
+<a href=#8 id=8 data-nosnippet>8</a>//! With this in place we'll be able to run anything we like, including all
+<a href=#9 id=9 data-nosnippet>9</a>//! TLS destructors!
+<a href=#10 id=10 data-nosnippet>10</a>//!
+<a href=#11 id=11 data-nosnippet>11</a>//! In order to realize this, all TLS destructors are tracked by *us*, not the
+<a href=#12 id=12 data-nosnippet>12</a>//! Windows runtime. This means that we have a global list of destructors for
+<a href=#13 id=13 data-nosnippet>13</a>//! each TLS key or variable that we know about.
+<a href=#14 id=14 data-nosnippet>14</a>//!
+<a href=#15 id=15 data-nosnippet>15</a>//! # What's up with CRT$XLB?
+<a href=#16 id=16 data-nosnippet>16</a>//!
+<a href=#17 id=17 data-nosnippet>17</a>//! For anything about TLS destructors to work on Windows, we have to be able
+<a href=#18 id=18 data-nosnippet>18</a>//! to run *something* when a thread exits. To do so, we place a very special
+<a href=#19 id=19 data-nosnippet>19</a>//! static in a very special location. If this is encoded in just the right
+<a href=#20 id=20 data-nosnippet>20</a>//! way, the kernel's loader is apparently nice enough to run some function
+<a href=#21 id=21 data-nosnippet>21</a>//! of ours whenever a thread exits! How nice of the kernel!
+<a href=#22 id=22 data-nosnippet>22</a>//!
+<a href=#23 id=23 data-nosnippet>23</a>//! Lots of detailed information can be found in source [1] above, but the
+<a href=#24 id=24 data-nosnippet>24</a>//! gist of it is that this is leveraging a feature of Microsoft's PE format
+<a href=#25 id=25 data-nosnippet>25</a>//! (executable format) which is not actually used by any compilers today.
+<a href=#26 id=26 data-nosnippet>26</a>//! This apparently translates to any callbacks in the ".CRT$XLB" section
+<a href=#27 id=27 data-nosnippet>27</a>//! being run on certain events.
+<a href=#28 id=28 data-nosnippet>28</a>//!
+<a href=#29 id=29 data-nosnippet>29</a>//! So after all that, we use the compiler's `#[link_section]` feature to place
+<a href=#30 id=30 data-nosnippet>30</a>//! a callback pointer into the magic section so it ends up being called.
+<a href=#31 id=31 data-nosnippet>31</a>//!
+<a href=#32 id=32 data-nosnippet>32</a>//! # What's up with this callback?
+<a href=#33 id=33 data-nosnippet>33</a>//!
+<a href=#34 id=34 data-nosnippet>34</a>//! The callback specified receives a number of parameters from... someone!
+<a href=#35 id=35 data-nosnippet>35</a>//! (the kernel? the runtime? I'm not quite sure!) There are a few events that
+<a href=#36 id=36 data-nosnippet>36</a>//! this gets invoked for, but we're currently only interested on when a
+<a href=#37 id=37 data-nosnippet>37</a>//! thread or a process "detaches" (exits). The process part happens for the
+<a href=#38 id=38 data-nosnippet>38</a>//! last thread and the thread part happens for any normal thread.
+<a href=#39 id=39 data-nosnippet>39</a>//!
+<a href=#40 id=40 data-nosnippet>40</a>//! # The article mentions weird stuff about "/INCLUDE"?
+<a href=#41 id=41 data-nosnippet>41</a>//!
+<a href=#42 id=42 data-nosnippet>42</a>//! It sure does! Specifically we're talking about this quote:
+<a href=#43 id=43 data-nosnippet>43</a>//!
+<a href=#44 id=44 data-nosnippet>44</a>//! ```quote
+<a href=#45 id=45 data-nosnippet>45</a>//! The Microsoft run-time library facilitates this process by defining a
+<a href=#46 id=46 data-nosnippet>46</a>//! memory image of the TLS Directory and giving it the special name
+<a href=#47 id=47 data-nosnippet>47</a>//! “__tls_used” (Intel x86 platforms) or “_tls_used” (other platforms). The
+<a href=#48 id=48 data-nosnippet>48</a>//! linker looks for this memory image and uses the data there to create the
+<a href=#49 id=49 data-nosnippet>49</a>//! TLS Directory. Other compilers that support TLS and work with the
+<a href=#50 id=50 data-nosnippet>50</a>//! Microsoft linker must use this same technique.
+<a href=#51 id=51 data-nosnippet>51</a>//! ```
+<a href=#52 id=52 data-nosnippet>52</a>//!
+<a href=#53 id=53 data-nosnippet>53</a>//! Basically what this means is that if we want support for our TLS
+<a href=#54 id=54 data-nosnippet>54</a>//! destructors/our hook being called then we need to make sure the linker does
+<a href=#55 id=55 data-nosnippet>55</a>//! not omit this symbol. Otherwise it will omit it and our callback won't be
+<a href=#56 id=56 data-nosnippet>56</a>//! wired up.
+<a href=#57 id=57 data-nosnippet>57</a>//!
+<a href=#58 id=58 data-nosnippet>58</a>//! We don't actually use the `/INCLUDE` linker flag here like the article
+<a href=#59 id=59 data-nosnippet>59</a>//! mentions because the Rust compiler doesn't propagate linker flags, but
+<a href=#60 id=60 data-nosnippet>60</a>//! instead we use a shim function which performs a volatile 1-byte load from
+<a href=#61 id=61 data-nosnippet>61</a>//! the address of the _tls_used symbol to ensure it sticks around.
+<a href=#62 id=62 data-nosnippet>62</a>//!
+<a href=#63 id=63 data-nosnippet>63</a>//! [1]: https://www.codeproject.com/Articles/8113/Thread-Local-Storage-The-C-Way
+<a href=#64 id=64 data-nosnippet>64</a>//! [2]: https://github.com/ChromiumWebApps/chromium/blob/master/base/threading/thread_local_storage_win.cc#L42
+<a href=#65 id=65 data-nosnippet>65</a>
+<a href=#66 id=66 data-nosnippet>66</a></span><span class="kw">use </span>core::ffi::c_void;
+<a href=#67 id=67 data-nosnippet>67</a>
+<a href=#68 id=68 data-nosnippet>68</a><span class="kw">use </span><span class="kw">crate</span>::ptr;
+<a href=#69 id=69 data-nosnippet>69</a><span class="kw">use </span><span class="kw">crate</span>::sys::c;
+<a href=#70 id=70 data-nosnippet>70</a>
+<a href=#71 id=71 data-nosnippet>71</a><span class="kw">unsafe extern </span><span class="string">"C" </span>{
+<a href=#72 id=72 data-nosnippet>72</a>    <span class="attr">#[link_name = <span class="string">"_tls_used"</span>]
+<a href=#73 id=73 data-nosnippet>73</a>    </span><span class="kw">static </span>TLS_USED: u8;
+<a href=#74 id=74 data-nosnippet>74</a>}
+<a href=#75 id=75 data-nosnippet>75</a><span class="kw">pub fn </span>enable() {
+<a href=#76 id=76 data-nosnippet>76</a>    <span class="comment">// When destructors are used, we need to add a reference to the _tls_used
+<a href=#77 id=77 data-nosnippet>77</a>    // symbol provided by the CRT, otherwise the TLS support code will get
+<a href=#78 id=78 data-nosnippet>78</a>    // GC'd by the linker and our callback won't be called.
+<a href=#79 id=79 data-nosnippet>79</a>    </span><span class="kw">unsafe </span>{ ptr::from_ref(<span class="kw-2">&amp;</span>TLS_USED).read_volatile() };
+<a href=#80 id=80 data-nosnippet>80</a>    <span class="comment">// We also need to reference CALLBACK to make sure it does not get GC'd
+<a href=#81 id=81 data-nosnippet>81</a>    // by the compiler/LLVM. The callback will end up inside the TLS
+<a href=#82 id=82 data-nosnippet>82</a>    // callback array pointed to by _TLS_USED through linker shenanigans,
+<a href=#83 id=83 data-nosnippet>83</a>    // but as far as the compiler is concerned, it looks like the data is
+<a href=#84 id=84 data-nosnippet>84</a>    // unused, so we need this hack to prevent it from disappearing.
+<a href=#85 id=85 data-nosnippet>85</a>    </span><span class="kw">unsafe </span>{ ptr::from_ref(<span class="kw-2">&amp;</span>CALLBACK).read_volatile() };
+<a href=#86 id=86 data-nosnippet>86</a>}
+<a href=#87 id=87 data-nosnippet>87</a>
+<a href=#88 id=88 data-nosnippet>88</a><span class="attr">#[<span class="kw">unsafe</span>(link_section = <span class="string">".CRT$XLB"</span>)]
+<a href=#89 id=89 data-nosnippet>89</a>#[cfg_attr(miri, used)] </span><span class="comment">// Miri only considers explicitly `#[used]` statics for `lookup_link_section`
+<a href=#90 id=90 data-nosnippet>90</a></span><span class="kw">pub static </span>CALLBACK: <span class="kw">unsafe extern </span><span class="string">"system" </span><span class="kw">fn</span>(<span class="kw-2">*mut </span>c_void, u32, <span class="kw-2">*mut </span>c_void) = tls_callback;
+<a href=#91 id=91 data-nosnippet>91</a>
+<a href=#92 id=92 data-nosnippet>92</a><span class="kw">unsafe extern </span><span class="string">"system" </span><span class="kw">fn </span>tls_callback(_h: <span class="kw-2">*mut </span>c_void, dw_reason: u32, _pv: <span class="kw-2">*mut </span>c_void) {
+<a href=#93 id=93 data-nosnippet>93</a>    <span class="kw">if </span>dw_reason == c::DLL_THREAD_DETACH || dw_reason == c::DLL_PROCESS_DETACH {
+<a href=#94 id=94 data-nosnippet>94</a>        <span class="kw">unsafe </span>{
+<a href=#95 id=95 data-nosnippet>95</a>            <span class="attr">#[cfg(target_thread_local)]
+<a href=#96 id=96 data-nosnippet>96</a>            </span><span class="kw">super</span>::<span class="kw">super</span>::destructors::run();
+<a href=#97 id=97 data-nosnippet>97</a>            <span class="attr">#[cfg(not(target_thread_local))]
+<a href=#98 id=98 data-nosnippet>98</a>            </span><span class="kw">super</span>::<span class="kw">super</span>::key::run_dtors();
+<a href=#99 id=99 data-nosnippet>99</a>
+<a href=#100 id=100 data-nosnippet>100</a>            <span class="kw">crate</span>::rt::thread_cleanup();
+<a href=#101 id=101 data-nosnippet>101</a>        }
+<a href=#102 id=102 data-nosnippet>102</a>    }
+<a href=#103 id=103 data-nosnippet>103</a>}</code></pre></div></section></main></body></html>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Base for standalone applications. Includes minimum set of plugins -->
+<feature
+        id="org.jkiss.dbeaver.app.base.feature"
+        label="DBeaver Base Standalone Application"
+        version="25.2.2.202510052342"
+        provider-name="DBeaver Corp"
+        plugin="org.jkiss.dbeaver.ui.app.standalone">
+
+    <description>DBeaver Universal Database Manager base standalone application</description>
+
+    <copyright>DBeaver Corp and others</copyright>
+    <license url="https://dbeaver.io/product/dbeaver_license.txt"/>
+
+    <includes id="org.jkiss.dbeaver.rcp.feature" version="3.0.43.202510052342"/>
+
+    <includes id="org.jkiss.dbeaver.runtime.feature" version="25.2.2.202510052342"/>
+    <includes id="org.jkiss.dbeaver.ui.feature" version="25.2.2.202510052342"/>
+    <includes id="org.jkiss.dbeaver.db.feature" version="1.0.155.202510052342"/>
+    <includes id="org.jkiss.dbeaver.db.ui.feature" version="1.0.155.202510052342"/>
+
+    <!-- SWT additions -->
+    <plugin id="org.jkiss.dbeaver.ui.swt.linux" os="linux" version="1.0.24.202510052342" />
+    <plugin id="org.jkiss.dbeaver.ui.swt.macos" os="macosx" version="1.0.29.202510052342" />
+    <plugin id="org.jkiss.dbeaver.ui.swt.windows" os="win32" version="1.0.24.202510052342" />
+
+    <!-- Logging -->
+
+    <plugin id="org.jkiss.dbeaver.slf4j" version="2.0.134.202510052342" />
+
+    <!-- Additional plugins for standalone version -->
+
+    <plugin id="org.eclipse.ui.ide.application" version="1.5.800.v20250727-0505" />
+    <plugin id="org.apache.commons.cli" version="1.10.0" />
+    <!-- Launcher -->
+    <plugin id="org.jkiss.dbeaver.launcher" version="1.0.38.202510052342"/>
+    
+
+</feature>

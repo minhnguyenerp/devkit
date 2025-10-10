@@ -1,0 +1,1 @@
+gcc.exe contained in this folder cannot be used for compiling C files - it is only used as a linker. In order to be able to compile projects containing C code use the GCC provided by MinGW or Cygwin.

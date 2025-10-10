@@ -1,0 +1,79 @@
+Manifest-Version: 1.0
+Created-By: 21.0.8 (Ubuntu)
+
+Name: licenses/poi-license.txt
+SHA-384-Digest: If8n45wrql39upOa7BVwIhtn0l/SOC+2CpppFjGwSQocVw8KgRmHhGs/
+ Uj4y1i2c
+
+Name: licenses/sshj-license.txt
+SHA-384-Digest: RRCdJrgDfLM6zHQ7PnuvvEgF8WYUg5JpWypeCQl7ghvPaH+5pdp3F224
+ CX4UnjYF
+
+Name: licenses/external/lgpl-2.1.txt
+SHA-384-Digest: qRBOpYUn9h12OB6JYYMD+RQFVQ6EKNG60kxurhPOmx1Dfv7KYpkOgS7A
+ +GYo5P67
+
+Name: licenses/external/gnu3.txt
+SHA-384-Digest: y9iBRdwGwwAfzh6QFQxRFgWDWy19U+LYit4lkfA19KYWwfbxcQU/r6VI
+ 3L5zIvz3
+
+Name: licenses/dbeaver-community-license.txt
+SHA-384-Digest: II9e1ieUDl5AxyiVq3/FflTua1Sr0kMJ25e6imG7rXg7SiAsA2VemsvE
+ qVsLqM7/
+
+Name: .eclipseproduct
+SHA-384-Digest: kjsVe5aWkU9ZF4ie3JMi+yhplVC1vBQ3L4FhHuORyN+sVPdAMcdKs0Xt
+ HscDewTO
+
+Name: licenses/external/readme.txt
+SHA-384-Digest: YaWq4yNHdcsxdNRytq75qN6zh29c3N9/ppxVuxm9eVpo/YBLGazwvpsi
+ G4cgCLBr
+
+Name: readme.txt
+SHA-384-Digest: glUSnoO3NY5FkMSLn9nnLAbRcicIWf45+2NnuBStCIWPKA3fESGUKF59
+ Gghx8Lig
+
+Name: licenses/external/lgpl-3.0.txt
+SHA-384-Digest: Io9/eyPWtrlOgLOOJ8IPrbwtdSJs285seV8nBpSwa8PzLBgx6nx4xsp6
+ HCm5e64g
+
+Name: licenses/external/mit.txt
+SHA-384-Digest: N5M5gLuLgqTTckGvdznY7Fo8bn1KDU2O+yQuSVXqyCfJUUVvln79PN2p
+ 4HmcrN5C
+
+Name: licenses/external/lgpl-2.0.txt
+SHA-384-Digest: PS6Agn5pHEF/7vihtzjkHzvbJdTsxMKCUQD5GhOh0DYdypZpkUfD1wds
+ N5BmvZD8
+
+Name: licenses/external/asl-2.0.txt
+SHA-384-Digest: II9e1ieUDl5AxyiVq3/FflTua1Sr0kMJ25e6imG7rXg7SiAsA2VemsvE
+ qVsLqM7/
+
+Name: licenses/jsch-license.txt
+SHA-384-Digest: WKg3ZGa6FluFJCqq42i+o5Fd1MQqGKmNd42D4pAh+YymX/kYONtKAB7K
+ BwaB+X2v
+
+Name: licenses/openai-license.txt
+SHA-384-Digest: YYQ2+/uMCdEHHiuee6oBNPmLmxVgLYp+9XQIukrcJq15wjDEGc6bjzOl
+ nisEUNfO
+
+Name: licenses/gis-license.txt
+SHA-384-Digest: JzL88ToziAz/4U6uAvgpyqXcYI1htX+/M8DeLerJf5t3kZmuZY0KnXeP
+ CjrHk2hW
+
+Name: licenses/jsql-license.txt
+SHA-384-Digest: FR7lRq3G+cKiWDkCuYT2kF0EaepEqvy5wET/kj8pdPewZegNq66t2UQQ
+ F83q0jp1
+
+Name: licenses/external/pg.txt
+SHA-384-Digest: LDUml1DJgPAYXSZEbKQEAOeCvzOq9I5LbSBrld3ShYr0meAbFuksoqtD
+ YkfkkIBj
+
+Name: licenses/eclipse_license.html
+SHA-384-Digest: H/HyREeACdezrhi0wNPIIR+FeJwYN15rZJATqDWNfkUb28K3YEUj5SaA
+ ifyAW6bt
+
+Name: licenses/commons_license.txt
+SHA-384-Digest: Mq4ZpEYMUqBFyNhKzhW1D/mPCyQNVgvYwU2s3MM49YCWsAo33I7S2J8I
+ UP7IsEAg
+

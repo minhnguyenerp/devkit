@@ -1,0 +1,14 @@
+file:lib/rustlib/x86_64-pc-windows-gnu/bin/llc.exe
+file:lib/rustlib/x86_64-pc-windows-gnu/bin/llvm-ar.exe
+file:lib/rustlib/x86_64-pc-windows-gnu/bin/llvm-as.exe
+file:lib/rustlib/x86_64-pc-windows-gnu/bin/llvm-cov.exe
+file:lib/rustlib/x86_64-pc-windows-gnu/bin/llvm-dis.exe
+file:lib/rustlib/x86_64-pc-windows-gnu/bin/llvm-link.exe
+file:lib/rustlib/x86_64-pc-windows-gnu/bin/llvm-nm.exe
+file:lib/rustlib/x86_64-pc-windows-gnu/bin/llvm-objcopy.exe
+file:lib/rustlib/x86_64-pc-windows-gnu/bin/llvm-objdump.exe
+file:lib/rustlib/x86_64-pc-windows-gnu/bin/llvm-profdata.exe
+file:lib/rustlib/x86_64-pc-windows-gnu/bin/llvm-readobj.exe
+file:lib/rustlib/x86_64-pc-windows-gnu/bin/llvm-size.exe
+file:lib/rustlib/x86_64-pc-windows-gnu/bin/llvm-strip.exe
+file:lib/rustlib/x86_64-pc-windows-gnu/bin/opt.exe

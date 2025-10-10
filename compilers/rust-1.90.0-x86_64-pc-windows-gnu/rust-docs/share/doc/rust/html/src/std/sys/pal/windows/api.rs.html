@@ -1,0 +1,366 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `library\std\src\sys\pal\windows\api.rs`."><title>api.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../..\..\../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../..\..\../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../..\..\../static.files/rustdoc-aa0817cf.css"><meta name="rustdoc-vars" data-root-path="../../..\..\../" data-static-root-path="../../..\..\../static.files/" data-current-crate="std" data-themes="" data-resource-suffix="1.90.0" data-rustdoc-version="1.90.0 (1159e78c4 2025-09-14)" data-channel="1.90.0" data-search-js="search-fa3e91e5.js" data-settings-js="settings-5514c975.js" ><script src="../../..\..\../static.files/storage-68b7e25d.js"></script><script defer src="../../..\..\../static.files/src-script-813739b1.js"></script><script defer src="../../..\..\../src-files1.90.0.js"></script><script defer src="../../..\..\../static.files/main-eebb9057.js"></script><noscript><link rel="stylesheet" href="../../..\..\../static.files/noscript-32bb7600.css"></noscript><link rel="alternate icon" type="image/png" href="../../..\..\../static.files/favicon-32x32-6580c154.png"><link rel="icon" type="image/svg+xml" href="../../..\..\../static.files/favicon-044be391.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">std\sys\pal\windows/</div>api.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="doccomment">//! # Safe(r) wrappers around Windows API functions.
+<a href=#2 id=2 data-nosnippet>2</a>//!
+<a href=#3 id=3 data-nosnippet>3</a>//! This module contains fairly thin wrappers around Windows API functions,
+<a href=#4 id=4 data-nosnippet>4</a>//! aimed at centralising safety instead of having unsafe blocks spread
+<a href=#5 id=5 data-nosnippet>5</a>//! throughout higher level code. This makes it much easier to audit FFI safety.
+<a href=#6 id=6 data-nosnippet>6</a>//!
+<a href=#7 id=7 data-nosnippet>7</a>//! Not all functions can be made completely safe without more context but in
+<a href=#8 id=8 data-nosnippet>8</a>//! such cases we should still endeavour to reduce the caller's burden of safety
+<a href=#9 id=9 data-nosnippet>9</a>//! as much as possible.
+<a href=#10 id=10 data-nosnippet>10</a>//!
+<a href=#11 id=11 data-nosnippet>11</a>//! ## Guidelines for wrappers
+<a href=#12 id=12 data-nosnippet>12</a>//!
+<a href=#13 id=13 data-nosnippet>13</a>//! Items here should be named similarly to their raw Windows API name, except
+<a href=#14 id=14 data-nosnippet>14</a>//! that they follow Rust's case conventions. E.g. function names are
+<a href=#15 id=15 data-nosnippet>15</a>//! lower_snake_case. The idea here is that it should be easy for a Windows
+<a href=#16 id=16 data-nosnippet>16</a>//! C/C++ programmer to identify the underlying function that's being wrapped
+<a href=#17 id=17 data-nosnippet>17</a>//! while not looking too out of place in Rust code.
+<a href=#18 id=18 data-nosnippet>18</a>//!
+<a href=#19 id=19 data-nosnippet>19</a>//! Every use of an `unsafe` block must have a related SAFETY comment, even if
+<a href=#20 id=20 data-nosnippet>20</a>//! it's trivially safe (for example, see `get_last_error`). Public unsafe
+<a href=#21 id=21 data-nosnippet>21</a>//! functions must document what the caller has to do to call them safely.
+<a href=#22 id=22 data-nosnippet>22</a>//!
+<a href=#23 id=23 data-nosnippet>23</a>//! Avoid unchecked `as` casts. For integers, either assert that the integer
+<a href=#24 id=24 data-nosnippet>24</a>//! is in range or use `try_into` instead. For pointers, prefer to use
+<a href=#25 id=25 data-nosnippet>25</a>//! `ptr.cast::&lt;Type&gt;()` when possible.
+<a href=#26 id=26 data-nosnippet>26</a>//!
+<a href=#27 id=27 data-nosnippet>27</a>//! This module must only depend on core and not on std types as the eventual
+<a href=#28 id=28 data-nosnippet>28</a>//! hope is to have std depend on sys and not the other way around.
+<a href=#29 id=29 data-nosnippet>29</a>//! However, some amount of glue code may currently be necessary so such code
+<a href=#30 id=30 data-nosnippet>30</a>//! should go in sys/pal/windows/mod.rs rather than here. See `IoResult` as an example.
+<a href=#31 id=31 data-nosnippet>31</a>
+<a href=#32 id=32 data-nosnippet>32</a></span><span class="kw">use </span>core::ffi::c_void;
+<a href=#33 id=33 data-nosnippet>33</a><span class="kw">use </span>core::marker::PhantomData;
+<a href=#34 id=34 data-nosnippet>34</a>
+<a href=#35 id=35 data-nosnippet>35</a><span class="kw">use </span><span class="kw">super</span>::c;
+<a href=#36 id=36 data-nosnippet>36</a>
+<a href=#37 id=37 data-nosnippet>37</a><span class="doccomment">/// Creates a null-terminated UTF-16 string from a str.
+<a href=#38 id=38 data-nosnippet>38</a></span><span class="kw">pub macro </span>wide_str(<span class="macro-nonterminal">$str</span>:literal) {{
+<a href=#39 id=39 data-nosnippet>39</a>    <span class="kw">const _</span>: () = {
+<a href=#40 id=40 data-nosnippet>40</a>        <span class="kw">if </span>core::slice::memchr::memchr(<span class="number">0</span>, <span class="macro-nonterminal">$str</span>.as_bytes()).is_some() {
+<a href=#41 id=41 data-nosnippet>41</a>            <span class="macro">panic!</span>(<span class="string">"null terminated strings cannot contain interior nulls"</span>);
+<a href=#42 id=42 data-nosnippet>42</a>        }
+<a href=#43 id=43 data-nosnippet>43</a>    };
+<a href=#44 id=44 data-nosnippet>44</a>    <span class="macro">crate::sys::pal::windows::api::utf16!</span>(<span class="macro">concat!</span>(<span class="macro-nonterminal">$str</span>, <span class="string">'\0'</span>))
+<a href=#45 id=45 data-nosnippet>45</a>}}
+<a href=#46 id=46 data-nosnippet>46</a>
+<a href=#47 id=47 data-nosnippet>47</a><span class="doccomment">/// Creates a UTF-16 string from a str without null termination.
+<a href=#48 id=48 data-nosnippet>48</a></span><span class="kw">pub macro </span>utf16(<span class="macro-nonterminal">$str</span>:expr) {{
+<a href=#49 id=49 data-nosnippet>49</a>    <span class="kw">const </span>UTF8: <span class="kw-2">&amp;</span>str = <span class="macro-nonterminal">$str</span>;
+<a href=#50 id=50 data-nosnippet>50</a>    <span class="kw">const </span>UTF16_LEN: usize = <span class="kw">crate</span>::sys::pal::windows::api::utf16_len(UTF8);
+<a href=#51 id=51 data-nosnippet>51</a>    <span class="kw">const </span>UTF16: [u16; UTF16_LEN] = <span class="kw">crate</span>::sys::pal::windows::api::to_utf16(UTF8);
+<a href=#52 id=52 data-nosnippet>52</a>    <span class="kw-2">&amp;</span>UTF16
+<a href=#53 id=53 data-nosnippet>53</a>}}
+<a href=#54 id=54 data-nosnippet>54</a>
+<a href=#55 id=55 data-nosnippet>55</a><span class="attr">#[cfg(test)]
+<a href=#56 id=56 data-nosnippet>56</a></span><span class="kw">mod </span>tests;
+<a href=#57 id=57 data-nosnippet>57</a>
+<a href=#58 id=58 data-nosnippet>58</a><span class="doccomment">/// Gets the UTF-16 length of a UTF-8 string, for use in the wide_str macro.
+<a href=#59 id=59 data-nosnippet>59</a></span><span class="kw">pub const fn </span>utf16_len(s: <span class="kw-2">&amp;</span>str) -&gt; usize {
+<a href=#60 id=60 data-nosnippet>60</a>    <span class="kw">let </span>s = s.as_bytes();
+<a href=#61 id=61 data-nosnippet>61</a>    <span class="kw">let </span><span class="kw-2">mut </span>i = <span class="number">0</span>;
+<a href=#62 id=62 data-nosnippet>62</a>    <span class="kw">let </span><span class="kw-2">mut </span>len = <span class="number">0</span>;
+<a href=#63 id=63 data-nosnippet>63</a>    <span class="kw">while </span>i &lt; s.len() {
+<a href=#64 id=64 data-nosnippet>64</a>        <span class="comment">// the length of a UTF-8 encoded code-point is given by the number of
+<a href=#65 id=65 data-nosnippet>65</a>        // leading ones, except in the case of ASCII.
+<a href=#66 id=66 data-nosnippet>66</a>        </span><span class="kw">let </span>utf8_len = <span class="kw">match </span>s[i].leading_ones() {
+<a href=#67 id=67 data-nosnippet>67</a>            <span class="number">0 </span>=&gt; <span class="number">1</span>,
+<a href=#68 id=68 data-nosnippet>68</a>            n =&gt; n <span class="kw">as </span>usize,
+<a href=#69 id=69 data-nosnippet>69</a>        };
+<a href=#70 id=70 data-nosnippet>70</a>        i += utf8_len;
+<a href=#71 id=71 data-nosnippet>71</a>        <span class="comment">// Note that UTF-16 surrogates (U+D800 to U+DFFF) are not encodable as UTF-8,
+<a href=#72 id=72 data-nosnippet>72</a>        // so (unlike with WTF-8) we don't have to worry about how they'll get re-encoded.
+<a href=#73 id=73 data-nosnippet>73</a>        </span>len += <span class="kw">if </span>utf8_len &lt; <span class="number">4 </span>{ <span class="number">1 </span>} <span class="kw">else </span>{ <span class="number">2 </span>};
+<a href=#74 id=74 data-nosnippet>74</a>    }
+<a href=#75 id=75 data-nosnippet>75</a>    len
+<a href=#76 id=76 data-nosnippet>76</a>}
+<a href=#77 id=77 data-nosnippet>77</a>
+<a href=#78 id=78 data-nosnippet>78</a><span class="doccomment">/// Const convert UTF-8 to UTF-16, for use in the wide_str macro.
+<a href=#79 id=79 data-nosnippet>79</a>///
+<a href=#80 id=80 data-nosnippet>80</a>/// Note that this is designed for use in const contexts so is not optimized.
+<a href=#81 id=81 data-nosnippet>81</a></span><span class="kw">pub const fn </span>to_utf16&lt;<span class="kw">const </span>UTF16_LEN: usize&gt;(s: <span class="kw-2">&amp;</span>str) -&gt; [u16; UTF16_LEN] {
+<a href=#82 id=82 data-nosnippet>82</a>    <span class="kw">let </span><span class="kw-2">mut </span>output = [<span class="number">0_u16</span>; UTF16_LEN];
+<a href=#83 id=83 data-nosnippet>83</a>    <span class="kw">let </span><span class="kw-2">mut </span>pos = <span class="number">0</span>;
+<a href=#84 id=84 data-nosnippet>84</a>    <span class="kw">let </span>s = s.as_bytes();
+<a href=#85 id=85 data-nosnippet>85</a>    <span class="kw">let </span><span class="kw-2">mut </span>i = <span class="number">0</span>;
+<a href=#86 id=86 data-nosnippet>86</a>    <span class="kw">while </span>i &lt; s.len() {
+<a href=#87 id=87 data-nosnippet>87</a>        <span class="kw">match </span>s[i].leading_ones() {
+<a href=#88 id=88 data-nosnippet>88</a>            <span class="comment">// Decode UTF-8 based on its length.
+<a href=#89 id=89 data-nosnippet>89</a>            // See https://en.wikipedia.org/wiki/UTF-8
+<a href=#90 id=90 data-nosnippet>90</a>            </span><span class="number">0 </span>=&gt; {
+<a href=#91 id=91 data-nosnippet>91</a>                <span class="comment">// ASCII is the same in both encodings
+<a href=#92 id=92 data-nosnippet>92</a>                </span>output[pos] = s[i] <span class="kw">as </span>u16;
+<a href=#93 id=93 data-nosnippet>93</a>                i += <span class="number">1</span>;
+<a href=#94 id=94 data-nosnippet>94</a>                pos += <span class="number">1</span>;
+<a href=#95 id=95 data-nosnippet>95</a>            }
+<a href=#96 id=96 data-nosnippet>96</a>            <span class="number">2 </span>=&gt; {
+<a href=#97 id=97 data-nosnippet>97</a>                <span class="comment">// Bits: 110xxxxx 10xxxxxx
+<a href=#98 id=98 data-nosnippet>98</a>                </span>output[pos] = ((s[i] <span class="kw">as </span>u16 &amp; <span class="number">0b11111</span>) &lt;&lt; <span class="number">6</span>) | (s[i + <span class="number">1</span>] <span class="kw">as </span>u16 &amp; <span class="number">0b111111</span>);
+<a href=#99 id=99 data-nosnippet>99</a>                i += <span class="number">2</span>;
+<a href=#100 id=100 data-nosnippet>100</a>                pos += <span class="number">1</span>;
+<a href=#101 id=101 data-nosnippet>101</a>            }
+<a href=#102 id=102 data-nosnippet>102</a>            <span class="number">3 </span>=&gt; {
+<a href=#103 id=103 data-nosnippet>103</a>                <span class="comment">// Bits: 1110xxxx 10xxxxxx 10xxxxxx
+<a href=#104 id=104 data-nosnippet>104</a>                </span>output[pos] = ((s[i] <span class="kw">as </span>u16 &amp; <span class="number">0b1111</span>) &lt;&lt; <span class="number">12</span>)
+<a href=#105 id=105 data-nosnippet>105</a>                    | ((s[i + <span class="number">1</span>] <span class="kw">as </span>u16 &amp; <span class="number">0b111111</span>) &lt;&lt; <span class="number">6</span>)
+<a href=#106 id=106 data-nosnippet>106</a>                    | (s[i + <span class="number">2</span>] <span class="kw">as </span>u16 &amp; <span class="number">0b111111</span>);
+<a href=#107 id=107 data-nosnippet>107</a>                i += <span class="number">3</span>;
+<a href=#108 id=108 data-nosnippet>108</a>                pos += <span class="number">1</span>;
+<a href=#109 id=109 data-nosnippet>109</a>            }
+<a href=#110 id=110 data-nosnippet>110</a>            <span class="number">4 </span>=&gt; {
+<a href=#111 id=111 data-nosnippet>111</a>                <span class="comment">// Bits: 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
+<a href=#112 id=112 data-nosnippet>112</a>                </span><span class="kw">let </span><span class="kw-2">mut </span>c = ((s[i] <span class="kw">as </span>u32 &amp; <span class="number">0b111</span>) &lt;&lt; <span class="number">18</span>)
+<a href=#113 id=113 data-nosnippet>113</a>                    | ((s[i + <span class="number">1</span>] <span class="kw">as </span>u32 &amp; <span class="number">0b111111</span>) &lt;&lt; <span class="number">12</span>)
+<a href=#114 id=114 data-nosnippet>114</a>                    | ((s[i + <span class="number">2</span>] <span class="kw">as </span>u32 &amp; <span class="number">0b111111</span>) &lt;&lt; <span class="number">6</span>)
+<a href=#115 id=115 data-nosnippet>115</a>                    | (s[i + <span class="number">3</span>] <span class="kw">as </span>u32 &amp; <span class="number">0b111111</span>);
+<a href=#116 id=116 data-nosnippet>116</a>                <span class="comment">// re-encode as UTF-16 (see https://en.wikipedia.org/wiki/UTF-16)
+<a href=#117 id=117 data-nosnippet>117</a>                // - Subtract 0x10000 from the code point
+<a href=#118 id=118 data-nosnippet>118</a>                // - For the high surrogate, shift right by 10 then add 0xD800
+<a href=#119 id=119 data-nosnippet>119</a>                // - For the low surrogate, take the low 10 bits then add 0xDC00
+<a href=#120 id=120 data-nosnippet>120</a>                </span>c -= <span class="number">0x10000</span>;
+<a href=#121 id=121 data-nosnippet>121</a>                output[pos] = ((c &gt;&gt; <span class="number">10</span>) + <span class="number">0xD800</span>) <span class="kw">as </span>u16;
+<a href=#122 id=122 data-nosnippet>122</a>                output[pos + <span class="number">1</span>] = ((c &amp; <span class="number">0b1111111111</span>) + <span class="number">0xDC00</span>) <span class="kw">as </span>u16;
+<a href=#123 id=123 data-nosnippet>123</a>                i += <span class="number">4</span>;
+<a href=#124 id=124 data-nosnippet>124</a>                pos += <span class="number">2</span>;
+<a href=#125 id=125 data-nosnippet>125</a>            }
+<a href=#126 id=126 data-nosnippet>126</a>            <span class="comment">// valid UTF-8 cannot have any other values
+<a href=#127 id=127 data-nosnippet>127</a>            </span><span class="kw">_ </span>=&gt; <span class="macro">unreachable!</span>(),
+<a href=#128 id=128 data-nosnippet>128</a>        }
+<a href=#129 id=129 data-nosnippet>129</a>    }
+<a href=#130 id=130 data-nosnippet>130</a>    output
+<a href=#131 id=131 data-nosnippet>131</a>}
+<a href=#132 id=132 data-nosnippet>132</a>
+<a href=#133 id=133 data-nosnippet>133</a><span class="doccomment">/// Helper method for getting the size of `T` as a u32.
+<a href=#134 id=134 data-nosnippet>134</a>/// Errors at compile time if the size would overflow.
+<a href=#135 id=135 data-nosnippet>135</a>///
+<a href=#136 id=136 data-nosnippet>136</a>/// While a type larger than u32::MAX is unlikely, it is possible if only because of a bug.
+<a href=#137 id=137 data-nosnippet>137</a>/// However, one key motivation for this function is to avoid the temptation to
+<a href=#138 id=138 data-nosnippet>138</a>/// use frequent `as` casts. This is risky because they are too powerful.
+<a href=#139 id=139 data-nosnippet>139</a>/// For example, the following will compile today:
+<a href=#140 id=140 data-nosnippet>140</a>///
+<a href=#141 id=141 data-nosnippet>141</a>/// `size_of::&lt;u64&gt; as u32`
+<a href=#142 id=142 data-nosnippet>142</a>///
+<a href=#143 id=143 data-nosnippet>143</a>/// Note that `size_of` is never actually called, instead a function pointer is
+<a href=#144 id=144 data-nosnippet>144</a>/// converted to a `u32`. Clippy would warn about this but, alas, it's not run
+<a href=#145 id=145 data-nosnippet>145</a>/// on the standard library.
+<a href=#146 id=146 data-nosnippet>146</a></span><span class="kw">const fn </span>win32_size_of&lt;T: Sized&gt;() -&gt; u32 {
+<a href=#147 id=147 data-nosnippet>147</a>    <span class="comment">// Const assert that the size does not exceed u32::MAX.
+<a href=#148 id=148 data-nosnippet>148</a>    // Uses a trait to workaround restriction on using generic types in inner items.
+<a href=#149 id=149 data-nosnippet>149</a>    </span><span class="kw">trait </span>Win32SizeOf: Sized {
+<a href=#150 id=150 data-nosnippet>150</a>        <span class="kw">const </span>WIN32_SIZE_OF: u32 = {
+<a href=#151 id=151 data-nosnippet>151</a>            <span class="kw">let </span>size = size_of::&lt;<span class="self">Self</span>&gt;();
+<a href=#152 id=152 data-nosnippet>152</a>            <span class="macro">assert!</span>(size &lt;= u32::MAX <span class="kw">as </span>usize);
+<a href=#153 id=153 data-nosnippet>153</a>            size <span class="kw">as </span>u32
+<a href=#154 id=154 data-nosnippet>154</a>        };
+<a href=#155 id=155 data-nosnippet>155</a>    }
+<a href=#156 id=156 data-nosnippet>156</a>    <span class="kw">impl</span>&lt;T: Sized&gt; Win32SizeOf <span class="kw">for </span>T {}
+<a href=#157 id=157 data-nosnippet>157</a>
+<a href=#158 id=158 data-nosnippet>158</a>    T::WIN32_SIZE_OF
+<a href=#159 id=159 data-nosnippet>159</a>}
+<a href=#160 id=160 data-nosnippet>160</a>
+<a href=#161 id=161 data-nosnippet>161</a><span class="doccomment">/// The `SetFileInformationByHandle` function takes a generic parameter by
+<a href=#162 id=162 data-nosnippet>162</a>/// making the user specify the type (class), a pointer to the data and its
+<a href=#163 id=163 data-nosnippet>163</a>/// size. This trait allows attaching that information to a Rust type so that
+<a href=#164 id=164 data-nosnippet>164</a>/// [`set_file_information_by_handle`] can be called safely.
+<a href=#165 id=165 data-nosnippet>165</a>///
+<a href=#166 id=166 data-nosnippet>166</a>/// This trait is designed so that it can support variable sized types.
+<a href=#167 id=167 data-nosnippet>167</a>/// However, currently Rust's std only uses fixed sized structures.
+<a href=#168 id=168 data-nosnippet>168</a>///
+<a href=#169 id=169 data-nosnippet>169</a>/// # Safety
+<a href=#170 id=170 data-nosnippet>170</a>///
+<a href=#171 id=171 data-nosnippet>171</a>/// * `as_ptr` must return a pointer to memory that is readable up to `size` bytes.
+<a href=#172 id=172 data-nosnippet>172</a>/// * `CLASS` must accurately reflect the type pointed to by `as_ptr`. E.g.
+<a href=#173 id=173 data-nosnippet>173</a>/// the `FILE_BASIC_INFO` structure has the class `FileBasicInfo`.
+<a href=#174 id=174 data-nosnippet>174</a></span><span class="kw">pub unsafe trait </span>SetFileInformation {
+<a href=#175 id=175 data-nosnippet>175</a>    <span class="doccomment">/// The type of information to set.
+<a href=#176 id=176 data-nosnippet>176</a>    </span><span class="kw">const </span>CLASS: i32;
+<a href=#177 id=177 data-nosnippet>177</a>    <span class="doccomment">/// A pointer to the file information to set.
+<a href=#178 id=178 data-nosnippet>178</a>    </span><span class="kw">fn </span>as_ptr(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">*const </span>c_void;
+<a href=#179 id=179 data-nosnippet>179</a>    <span class="doccomment">/// The size of the type pointed to by `as_ptr`.
+<a href=#180 id=180 data-nosnippet>180</a>    </span><span class="kw">fn </span>size(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; u32;
+<a href=#181 id=181 data-nosnippet>181</a>}
+<a href=#182 id=182 data-nosnippet>182</a><span class="doccomment">/// Helper trait for implementing `SetFileInformation` for statically sized types.
+<a href=#183 id=183 data-nosnippet>183</a></span><span class="kw">unsafe trait </span>SizedSetFileInformation: Sized {
+<a href=#184 id=184 data-nosnippet>184</a>    <span class="kw">const </span>CLASS: i32;
+<a href=#185 id=185 data-nosnippet>185</a>}
+<a href=#186 id=186 data-nosnippet>186</a><span class="kw">unsafe impl</span>&lt;T: SizedSetFileInformation&gt; SetFileInformation <span class="kw">for </span>T {
+<a href=#187 id=187 data-nosnippet>187</a>    <span class="kw">const </span>CLASS: i32 = T::CLASS;
+<a href=#188 id=188 data-nosnippet>188</a>    <span class="kw">fn </span>as_ptr(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">*const </span>c_void {
+<a href=#189 id=189 data-nosnippet>189</a>        (<span class="kw-2">&amp;</span>raw <span class="kw">const </span><span class="kw-2">*</span><span class="self">self</span>).cast::&lt;c_void&gt;()
+<a href=#190 id=190 data-nosnippet>190</a>    }
+<a href=#191 id=191 data-nosnippet>191</a>    <span class="kw">fn </span>size(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; u32 {
+<a href=#192 id=192 data-nosnippet>192</a>        win32_size_of::&lt;<span class="self">Self</span>&gt;()
+<a href=#193 id=193 data-nosnippet>193</a>    }
+<a href=#194 id=194 data-nosnippet>194</a>}
+<a href=#195 id=195 data-nosnippet>195</a>
+<a href=#196 id=196 data-nosnippet>196</a><span class="comment">// SAFETY: FILE_BASIC_INFO, FILE_END_OF_FILE_INFO, FILE_ALLOCATION_INFO,
+<a href=#197 id=197 data-nosnippet>197</a>// FILE_DISPOSITION_INFO, FILE_DISPOSITION_INFO_EX and FILE_IO_PRIORITY_HINT_INFO
+<a href=#198 id=198 data-nosnippet>198</a>// are all plain `repr(C)` structs that only contain primitive types.
+<a href=#199 id=199 data-nosnippet>199</a>// The given information classes correctly match with the struct.
+<a href=#200 id=200 data-nosnippet>200</a></span><span class="kw">unsafe impl </span>SizedSetFileInformation <span class="kw">for </span>c::FILE_BASIC_INFO {
+<a href=#201 id=201 data-nosnippet>201</a>    <span class="kw">const </span>CLASS: i32 = c::FileBasicInfo;
+<a href=#202 id=202 data-nosnippet>202</a>}
+<a href=#203 id=203 data-nosnippet>203</a><span class="kw">unsafe impl </span>SizedSetFileInformation <span class="kw">for </span>c::FILE_END_OF_FILE_INFO {
+<a href=#204 id=204 data-nosnippet>204</a>    <span class="kw">const </span>CLASS: i32 = c::FileEndOfFileInfo;
+<a href=#205 id=205 data-nosnippet>205</a>}
+<a href=#206 id=206 data-nosnippet>206</a><span class="kw">unsafe impl </span>SizedSetFileInformation <span class="kw">for </span>c::FILE_ALLOCATION_INFO {
+<a href=#207 id=207 data-nosnippet>207</a>    <span class="kw">const </span>CLASS: i32 = c::FileAllocationInfo;
+<a href=#208 id=208 data-nosnippet>208</a>}
+<a href=#209 id=209 data-nosnippet>209</a><span class="kw">unsafe impl </span>SizedSetFileInformation <span class="kw">for </span>c::FILE_DISPOSITION_INFO {
+<a href=#210 id=210 data-nosnippet>210</a>    <span class="kw">const </span>CLASS: i32 = c::FileDispositionInfo;
+<a href=#211 id=211 data-nosnippet>211</a>}
+<a href=#212 id=212 data-nosnippet>212</a><span class="kw">unsafe impl </span>SizedSetFileInformation <span class="kw">for </span>c::FILE_DISPOSITION_INFO_EX {
+<a href=#213 id=213 data-nosnippet>213</a>    <span class="kw">const </span>CLASS: i32 = c::FileDispositionInfoEx;
+<a href=#214 id=214 data-nosnippet>214</a>}
+<a href=#215 id=215 data-nosnippet>215</a><span class="kw">unsafe impl </span>SizedSetFileInformation <span class="kw">for </span>c::FILE_IO_PRIORITY_HINT_INFO {
+<a href=#216 id=216 data-nosnippet>216</a>    <span class="kw">const </span>CLASS: i32 = c::FileIoPriorityHintInfo;
+<a href=#217 id=217 data-nosnippet>217</a>}
+<a href=#218 id=218 data-nosnippet>218</a>
+<a href=#219 id=219 data-nosnippet>219</a><span class="attr">#[inline]
+<a href=#220 id=220 data-nosnippet>220</a></span><span class="kw">pub fn </span>set_file_information_by_handle&lt;T: SetFileInformation&gt;(
+<a href=#221 id=221 data-nosnippet>221</a>    handle: c::HANDLE,
+<a href=#222 id=222 data-nosnippet>222</a>    info: <span class="kw-2">&amp;</span>T,
+<a href=#223 id=223 data-nosnippet>223</a>) -&gt; <span class="prelude-ty">Result</span>&lt;(), WinError&gt; {
+<a href=#224 id=224 data-nosnippet>224</a>    <span class="kw">unsafe fn </span>set_info(
+<a href=#225 id=225 data-nosnippet>225</a>        handle: c::HANDLE,
+<a href=#226 id=226 data-nosnippet>226</a>        class: i32,
+<a href=#227 id=227 data-nosnippet>227</a>        info: <span class="kw-2">*const </span>c_void,
+<a href=#228 id=228 data-nosnippet>228</a>        size: u32,
+<a href=#229 id=229 data-nosnippet>229</a>    ) -&gt; <span class="prelude-ty">Result</span>&lt;(), WinError&gt; {
+<a href=#230 id=230 data-nosnippet>230</a>        <span class="kw">unsafe </span>{
+<a href=#231 id=231 data-nosnippet>231</a>            <span class="kw">let </span>result = c::SetFileInformationByHandle(handle, class, info, size);
+<a href=#232 id=232 data-nosnippet>232</a>            (result != <span class="number">0</span>).then_some(()).ok_or_else(get_last_error)
+<a href=#233 id=233 data-nosnippet>233</a>        }
+<a href=#234 id=234 data-nosnippet>234</a>    }
+<a href=#235 id=235 data-nosnippet>235</a>    <span class="comment">// SAFETY: The `SetFileInformation` trait ensures that this is safe.
+<a href=#236 id=236 data-nosnippet>236</a>    </span><span class="kw">unsafe </span>{ set_info(handle, T::CLASS, info.as_ptr(), info.size()) }
+<a href=#237 id=237 data-nosnippet>237</a>}
+<a href=#238 id=238 data-nosnippet>238</a>
+<a href=#239 id=239 data-nosnippet>239</a><span class="doccomment">/// Gets the error from the last function.
+<a href=#240 id=240 data-nosnippet>240</a>/// This must be called immediately after the function that sets the error to
+<a href=#241 id=241 data-nosnippet>241</a>/// avoid the risk of another function overwriting it.
+<a href=#242 id=242 data-nosnippet>242</a></span><span class="kw">pub fn </span>get_last_error() -&gt; WinError {
+<a href=#243 id=243 data-nosnippet>243</a>    <span class="comment">// SAFETY: This just returns a thread-local u32 and has no other effects.
+<a href=#244 id=244 data-nosnippet>244</a>    </span><span class="kw">unsafe </span>{ WinError { code: c::GetLastError() } }
+<a href=#245 id=245 data-nosnippet>245</a>}
+<a href=#246 id=246 data-nosnippet>246</a>
+<a href=#247 id=247 data-nosnippet>247</a><span class="doccomment">/// An error code as returned by [`get_last_error`].
+<a href=#248 id=248 data-nosnippet>248</a>///
+<a href=#249 id=249 data-nosnippet>249</a>/// This is usually a 16-bit Win32 error code but may be a 32-bit HRESULT or NTSTATUS.
+<a href=#250 id=250 data-nosnippet>250</a>/// Check the documentation of the Windows API function being called for expected errors.
+<a href=#251 id=251 data-nosnippet>251</a></span><span class="attr">#[derive(Clone, Copy, PartialEq, Eq)]
+<a href=#252 id=252 data-nosnippet>252</a>#[repr(transparent)]
+<a href=#253 id=253 data-nosnippet>253</a></span><span class="kw">pub struct </span>WinError {
+<a href=#254 id=254 data-nosnippet>254</a>    <span class="kw">pub </span>code: u32,
+<a href=#255 id=255 data-nosnippet>255</a>}
+<a href=#256 id=256 data-nosnippet>256</a><span class="kw">impl </span>WinError {
+<a href=#257 id=257 data-nosnippet>257</a>    <span class="kw">pub const fn </span>new(code: u32) -&gt; <span class="self">Self </span>{
+<a href=#258 id=258 data-nosnippet>258</a>        <span class="self">Self </span>{ code }
+<a href=#259 id=259 data-nosnippet>259</a>    }
+<a href=#260 id=260 data-nosnippet>260</a>}
+<a href=#261 id=261 data-nosnippet>261</a>
+<a href=#262 id=262 data-nosnippet>262</a><span class="comment">// Error code constants.
+<a href=#263 id=263 data-nosnippet>263</a>// The constant names should be the same as the winapi constants except for the leading `ERROR_`.
+<a href=#264 id=264 data-nosnippet>264</a>// Due to the sheer number of codes, error codes should only be added here on an as-needed basis.
+<a href=#265 id=265 data-nosnippet>265</a>// However, they should never be removed as the assumption is they may be useful again in the future.
+<a href=#266 id=266 data-nosnippet>266</a></span><span class="attr">#[allow(unused)]
+<a href=#267 id=267 data-nosnippet>267</a></span><span class="kw">impl </span>WinError {
+<a href=#268 id=268 data-nosnippet>268</a>    <span class="doccomment">/// Success is not an error.
+<a href=#269 id=269 data-nosnippet>269</a>    /// Some Windows APIs do use this to distinguish between a zero return and an error return
+<a href=#270 id=270 data-nosnippet>270</a>    /// but we should never return this to users as an error.
+<a href=#271 id=271 data-nosnippet>271</a>    </span><span class="kw">pub const </span>SUCCESS: <span class="self">Self </span>= <span class="self">Self</span>::new(c::ERROR_SUCCESS);
+<a href=#272 id=272 data-nosnippet>272</a>    <span class="comment">// tidy-alphabetical-start
+<a href=#273 id=273 data-nosnippet>273</a>    </span><span class="kw">pub const </span>ACCESS_DENIED: <span class="self">Self </span>= <span class="self">Self</span>::new(c::ERROR_ACCESS_DENIED);
+<a href=#274 id=274 data-nosnippet>274</a>    <span class="kw">pub const </span>ALREADY_EXISTS: <span class="self">Self </span>= <span class="self">Self</span>::new(c::ERROR_ALREADY_EXISTS);
+<a href=#275 id=275 data-nosnippet>275</a>    <span class="kw">pub const </span>BAD_NETPATH: <span class="self">Self </span>= <span class="self">Self</span>::new(c::ERROR_BAD_NETPATH);
+<a href=#276 id=276 data-nosnippet>276</a>    <span class="kw">pub const </span>BAD_NET_NAME: <span class="self">Self </span>= <span class="self">Self</span>::new(c::ERROR_BAD_NET_NAME);
+<a href=#277 id=277 data-nosnippet>277</a>    <span class="kw">pub const </span>CANT_ACCESS_FILE: <span class="self">Self </span>= <span class="self">Self</span>::new(c::ERROR_CANT_ACCESS_FILE);
+<a href=#278 id=278 data-nosnippet>278</a>    <span class="kw">pub const </span>DELETE_PENDING: <span class="self">Self </span>= <span class="self">Self</span>::new(c::ERROR_DELETE_PENDING);
+<a href=#279 id=279 data-nosnippet>279</a>    <span class="kw">pub const </span>DIRECTORY: <span class="self">Self </span>= <span class="self">Self</span>::new(c::ERROR_DIRECTORY);
+<a href=#280 id=280 data-nosnippet>280</a>    <span class="kw">pub const </span>DIR_NOT_EMPTY: <span class="self">Self </span>= <span class="self">Self</span>::new(c::ERROR_DIR_NOT_EMPTY);
+<a href=#281 id=281 data-nosnippet>281</a>    <span class="kw">pub const </span>FILE_NOT_FOUND: <span class="self">Self </span>= <span class="self">Self</span>::new(c::ERROR_FILE_NOT_FOUND);
+<a href=#282 id=282 data-nosnippet>282</a>    <span class="kw">pub const </span>INSUFFICIENT_BUFFER: <span class="self">Self </span>= <span class="self">Self</span>::new(c::ERROR_INSUFFICIENT_BUFFER);
+<a href=#283 id=283 data-nosnippet>283</a>    <span class="kw">pub const </span>INVALID_FUNCTION: <span class="self">Self </span>= <span class="self">Self</span>::new(c::ERROR_INVALID_FUNCTION);
+<a href=#284 id=284 data-nosnippet>284</a>    <span class="kw">pub const </span>INVALID_HANDLE: <span class="self">Self </span>= <span class="self">Self</span>::new(c::ERROR_INVALID_HANDLE);
+<a href=#285 id=285 data-nosnippet>285</a>    <span class="kw">pub const </span>INVALID_PARAMETER: <span class="self">Self </span>= <span class="self">Self</span>::new(c::ERROR_INVALID_PARAMETER);
+<a href=#286 id=286 data-nosnippet>286</a>    <span class="kw">pub const </span>NOT_FOUND: <span class="self">Self </span>= <span class="self">Self</span>::new(c::ERROR_NOT_FOUND);
+<a href=#287 id=287 data-nosnippet>287</a>    <span class="kw">pub const </span>NOT_SUPPORTED: <span class="self">Self </span>= <span class="self">Self</span>::new(c::ERROR_NOT_SUPPORTED);
+<a href=#288 id=288 data-nosnippet>288</a>    <span class="kw">pub const </span>NO_MORE_FILES: <span class="self">Self </span>= <span class="self">Self</span>::new(c::ERROR_NO_MORE_FILES);
+<a href=#289 id=289 data-nosnippet>289</a>    <span class="kw">pub const </span>OPERATION_ABORTED: <span class="self">Self </span>= <span class="self">Self</span>::new(c::ERROR_OPERATION_ABORTED);
+<a href=#290 id=290 data-nosnippet>290</a>    <span class="kw">pub const </span>PATH_NOT_FOUND: <span class="self">Self </span>= <span class="self">Self</span>::new(c::ERROR_PATH_NOT_FOUND);
+<a href=#291 id=291 data-nosnippet>291</a>    <span class="kw">pub const </span>SHARING_VIOLATION: <span class="self">Self </span>= <span class="self">Self</span>::new(c::ERROR_SHARING_VIOLATION);
+<a href=#292 id=292 data-nosnippet>292</a>    <span class="kw">pub const </span>TIMEOUT: <span class="self">Self </span>= <span class="self">Self</span>::new(c::ERROR_TIMEOUT);
+<a href=#293 id=293 data-nosnippet>293</a>    <span class="comment">// tidy-alphabetical-end
+<a href=#294 id=294 data-nosnippet>294</a></span>}
+<a href=#295 id=295 data-nosnippet>295</a>
+<a href=#296 id=296 data-nosnippet>296</a><span class="doccomment">/// A wrapper around a UNICODE_STRING that is equivalent to `&amp;[u16]`.
+<a href=#297 id=297 data-nosnippet>297</a>///
+<a href=#298 id=298 data-nosnippet>298</a>/// It is preferable to use the `unicode_str!` macro as that contains mitigations for  #143078.
+<a href=#299 id=299 data-nosnippet>299</a>///
+<a href=#300 id=300 data-nosnippet>300</a>/// If the MaximumLength field of the underlying UNICODE_STRING is greater than
+<a href=#301 id=301 data-nosnippet>301</a>/// the Length field then you can test if the string is null terminated by inspecting
+<a href=#302 id=302 data-nosnippet>302</a>/// the u16 directly after the string. You cannot otherwise depend on nul termination.
+<a href=#303 id=303 data-nosnippet>303</a></span><span class="attr">#[derive(Copy, Clone)]
+<a href=#304 id=304 data-nosnippet>304</a></span><span class="kw">pub struct </span>UnicodeStrRef&lt;<span class="lifetime">'a</span>&gt; {
+<a href=#305 id=305 data-nosnippet>305</a>    s: c::UNICODE_STRING,
+<a href=#306 id=306 data-nosnippet>306</a>    lifetime: PhantomData&lt;<span class="kw-2">&amp;</span><span class="lifetime">'a </span>[u16]&gt;,
+<a href=#307 id=307 data-nosnippet>307</a>}
+<a href=#308 id=308 data-nosnippet>308</a>
+<a href=#309 id=309 data-nosnippet>309</a><span class="kw">static </span>EMPTY_STRING_NULL_TERMINATED: <span class="kw-2">&amp;</span>[u16] = <span class="kw-2">&amp;</span>[<span class="number">0</span>];
+<a href=#310 id=310 data-nosnippet>310</a>
+<a href=#311 id=311 data-nosnippet>311</a><span class="kw">impl </span>UnicodeStrRef&lt;<span class="lifetime">'_</span>&gt; {
+<a href=#312 id=312 data-nosnippet>312</a>    <span class="kw">const fn </span>new(slice: <span class="kw-2">&amp;</span>[u16], is_null_terminated: bool) -&gt; <span class="self">Self </span>{
+<a href=#313 id=313 data-nosnippet>313</a>        <span class="kw">let </span>(len, max_len, ptr) = <span class="kw">if </span>slice.is_empty() {
+<a href=#314 id=314 data-nosnippet>314</a>            (<span class="number">0</span>, <span class="number">2</span>, EMPTY_STRING_NULL_TERMINATED.as_ptr().cast_mut())
+<a href=#315 id=315 data-nosnippet>315</a>        } <span class="kw">else </span>{
+<a href=#316 id=316 data-nosnippet>316</a>            <span class="kw">let </span>len = slice.len() - (is_null_terminated <span class="kw">as </span>usize);
+<a href=#317 id=317 data-nosnippet>317</a>            (len * <span class="number">2</span>, size_of_val(slice), slice.as_ptr().cast_mut())
+<a href=#318 id=318 data-nosnippet>318</a>        };
+<a href=#319 id=319 data-nosnippet>319</a>        <span class="self">Self </span>{
+<a href=#320 id=320 data-nosnippet>320</a>            s: c::UNICODE_STRING { Length: len <span class="kw">as _</span>, MaximumLength: max_len <span class="kw">as _</span>, Buffer: ptr },
+<a href=#321 id=321 data-nosnippet>321</a>            lifetime: PhantomData,
+<a href=#322 id=322 data-nosnippet>322</a>        }
+<a href=#323 id=323 data-nosnippet>323</a>    }
+<a href=#324 id=324 data-nosnippet>324</a>
+<a href=#325 id=325 data-nosnippet>325</a>    <span class="kw">pub const fn </span>from_slice_with_nul(slice: <span class="kw-2">&amp;</span>[u16]) -&gt; <span class="self">Self </span>{
+<a href=#326 id=326 data-nosnippet>326</a>        <span class="kw">if </span>!slice.is_empty() {
+<a href=#327 id=327 data-nosnippet>327</a>            <span class="macro">debug_assert!</span>(slice[slice.len() - <span class="number">1</span>] == <span class="number">0</span>);
+<a href=#328 id=328 data-nosnippet>328</a>        }
+<a href=#329 id=329 data-nosnippet>329</a>        <span class="self">Self</span>::new(slice, <span class="bool-val">true</span>)
+<a href=#330 id=330 data-nosnippet>330</a>    }
+<a href=#331 id=331 data-nosnippet>331</a>
+<a href=#332 id=332 data-nosnippet>332</a>    <span class="kw">pub const fn </span>from_slice(slice: <span class="kw-2">&amp;</span>[u16]) -&gt; <span class="self">Self </span>{
+<a href=#333 id=333 data-nosnippet>333</a>        <span class="self">Self</span>::new(slice, <span class="bool-val">false</span>)
+<a href=#334 id=334 data-nosnippet>334</a>    }
+<a href=#335 id=335 data-nosnippet>335</a>
+<a href=#336 id=336 data-nosnippet>336</a>    <span class="doccomment">/// Returns a pointer to the underlying UNICODE_STRING
+<a href=#337 id=337 data-nosnippet>337</a>    </span><span class="kw">pub const fn </span>as_ptr(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">*const </span>c::UNICODE_STRING {
+<a href=#338 id=338 data-nosnippet>338</a>        <span class="kw-2">&amp;</span><span class="self">self</span>.s
+<a href=#339 id=339 data-nosnippet>339</a>    }
+<a href=#340 id=340 data-nosnippet>340</a>}
+<a href=#341 id=341 data-nosnippet>341</a>
+<a href=#342 id=342 data-nosnippet>342</a><span class="doccomment">/// Create a UnicodeStringRef from a literal str or a u16 array.
+<a href=#343 id=343 data-nosnippet>343</a>///
+<a href=#344 id=344 data-nosnippet>344</a>/// To mitigate #143078, when using a literal str the created UNICODE_STRING
+<a href=#345 id=345 data-nosnippet>345</a>/// will be nul terminated. The MaximumLength field of the UNICODE_STRING will
+<a href=#346 id=346 data-nosnippet>346</a>/// be set greater than the Length field to indicate that a nul may be present.
+<a href=#347 id=347 data-nosnippet>347</a>///
+<a href=#348 id=348 data-nosnippet>348</a>/// If using a u16 array, the array is used exactly as provided and you cannot
+<a href=#349 id=349 data-nosnippet>349</a>/// count on the string being nul terminated.
+<a href=#350 id=350 data-nosnippet>350</a>/// This should generally be used for strings that come from the OS.
+<a href=#351 id=351 data-nosnippet>351</a>///
+<a href=#352 id=352 data-nosnippet>352</a>/// **NOTE:** we lack a UNICODE_STRING builder type as we don't currently have
+<a href=#353 id=353 data-nosnippet>353</a>/// a use for it. If needing to dynamically build a UNICODE_STRING, the builder
+<a href=#354 id=354 data-nosnippet>354</a>/// should try to ensure there's a nul one past the end of the string.
+<a href=#355 id=355 data-nosnippet>355</a></span><span class="kw">pub macro </span>unicode_str {
+<a href=#356 id=356 data-nosnippet>356</a>    (<span class="macro-nonterminal">$str</span>:literal) =&gt; {<span class="kw">const </span>{
+<a href=#357 id=357 data-nosnippet>357</a>        <span class="kw">crate</span>::sys::pal::windows::api::UnicodeStrRef::from_slice_with_nul(
+<a href=#358 id=358 data-nosnippet>358</a>            <span class="macro">crate::sys::pal::windows::api::wide_str!</span>(<span class="macro-nonterminal">$str</span>),
+<a href=#359 id=359 data-nosnippet>359</a>        )
+<a href=#360 id=360 data-nosnippet>360</a>    }},
+<a href=#361 id=361 data-nosnippet>361</a>    (<span class="macro-nonterminal">$array</span>:expr) =&gt; {
+<a href=#362 id=362 data-nosnippet>362</a>        <span class="kw">crate</span>::sys::pal::windows::api::UnicodeStrRef::from_slice(
+<a href=#363 id=363 data-nosnippet>363</a>            <span class="macro-nonterminal">$array</span>,
+<a href=#364 id=364 data-nosnippet>364</a>        )
+<a href=#365 id=365 data-nosnippet>365</a>    }
+<a href=#366 id=366 data-nosnippet>366</a>}</code></pre></div></section></main></body></html>

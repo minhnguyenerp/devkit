@@ -1,0 +1,158 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `library\std\src\..\..\backtrace\src\symbolize\gimli\libs_windows.rs`."><title>libs_windows.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../..\..\..\../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../..\..\..\../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../..\..\..\../static.files/rustdoc-aa0817cf.css"><meta name="rustdoc-vars" data-root-path="../../..\..\..\../" data-static-root-path="../../..\..\..\../static.files/" data-current-crate="std" data-themes="" data-resource-suffix="1.90.0" data-rustdoc-version="1.90.0 (1159e78c4 2025-09-14)" data-channel="1.90.0" data-search-js="search-fa3e91e5.js" data-settings-js="settings-5514c975.js" ><script src="../../..\..\..\../static.files/storage-68b7e25d.js"></script><script defer src="../../..\..\..\../static.files/src-script-813739b1.js"></script><script defer src="../../..\..\..\../src-files1.90.0.js"></script><script defer src="../../..\..\..\../static.files/main-eebb9057.js"></script><noscript><link rel="stylesheet" href="../../..\..\..\../static.files/noscript-32bb7600.css"></noscript><link rel="alternate icon" type="image/png" href="../../..\..\..\../static.files/favicon-32x32-6580c154.png"><link rel="icon" type="image/svg+xml" href="../../..\..\..\../static.files/favicon-044be391.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">std\backtrace\src\symbolize\gimli/</div>libs_windows.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use </span><span class="kw">super</span>::<span class="kw">super</span>::<span class="kw">super</span>::windows_sys::<span class="kw-2">*</span>;
+<a href=#2 id=2 data-nosnippet>2</a><span class="kw">use </span><span class="kw">super</span>::mystd::ffi::OsString;
+<a href=#3 id=3 data-nosnippet>3</a><span class="kw">use super</span>::{coff, mmap, Library, LibrarySegment};
+<a href=#4 id=4 data-nosnippet>4</a><span class="kw">use </span>alloc::vec;
+<a href=#5 id=5 data-nosnippet>5</a><span class="kw">use </span>alloc::vec::Vec;
+<a href=#6 id=6 data-nosnippet>6</a><span class="kw">use </span>core::mem;
+<a href=#7 id=7 data-nosnippet>7</a><span class="kw">use </span>core::mem::MaybeUninit;
+<a href=#8 id=8 data-nosnippet>8</a>
+<a href=#9 id=9 data-nosnippet>9</a><span class="comment">// For loading native libraries on Windows, see some discussion on
+<a href=#10 id=10 data-nosnippet>10</a>// rust-lang/rust#71060 for the various strategies here.
+<a href=#11 id=11 data-nosnippet>11</a></span><span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>native_libraries() -&gt; Vec&lt;Library&gt; {
+<a href=#12 id=12 data-nosnippet>12</a>    <span class="kw">let </span><span class="kw-2">mut </span>ret = Vec::new();
+<a href=#13 id=13 data-nosnippet>13</a>    <span class="kw">unsafe </span>{
+<a href=#14 id=14 data-nosnippet>14</a>        add_loaded_images(<span class="kw-2">&amp;mut </span>ret);
+<a href=#15 id=15 data-nosnippet>15</a>    }
+<a href=#16 id=16 data-nosnippet>16</a>    <span class="kw">return </span>ret;
+<a href=#17 id=17 data-nosnippet>17</a>}
+<a href=#18 id=18 data-nosnippet>18</a>
+<a href=#19 id=19 data-nosnippet>19</a><span class="kw">unsafe fn </span>add_loaded_images(ret: <span class="kw-2">&amp;mut </span>Vec&lt;Library&gt;) {
+<a href=#20 id=20 data-nosnippet>20</a>    <span class="kw">unsafe </span>{
+<a href=#21 id=21 data-nosnippet>21</a>        <span class="kw">let </span>snap = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, <span class="number">0</span>);
+<a href=#22 id=22 data-nosnippet>22</a>        <span class="kw">if </span>snap == INVALID_HANDLE_VALUE {
+<a href=#23 id=23 data-nosnippet>23</a>            <span class="kw">return</span>;
+<a href=#24 id=24 data-nosnippet>24</a>        }
+<a href=#25 id=25 data-nosnippet>25</a>
+<a href=#26 id=26 data-nosnippet>26</a>        <span class="comment">// huge struct, probably should avoid manually initializing it even if we can
+<a href=#27 id=27 data-nosnippet>27</a>        </span><span class="kw">let </span><span class="kw-2">mut </span>me = MaybeUninit::&lt;MODULEENTRY32W&gt;::zeroed().assume_init();
+<a href=#28 id=28 data-nosnippet>28</a>        me.dwSize = mem::size_of_val(<span class="kw-2">&amp;</span>me) <span class="kw">as </span>u32;
+<a href=#29 id=29 data-nosnippet>29</a>        <span class="kw">if </span>Module32FirstW(snap, <span class="kw-2">&amp;mut </span>me) == TRUE {
+<a href=#30 id=30 data-nosnippet>30</a>            <span class="kw">loop </span>{
+<a href=#31 id=31 data-nosnippet>31</a>                <span class="kw">if let </span><span class="prelude-val">Some</span>(lib) = load_library(<span class="kw-2">&amp;</span>me) {
+<a href=#32 id=32 data-nosnippet>32</a>                    ret.push(lib);
+<a href=#33 id=33 data-nosnippet>33</a>                }
+<a href=#34 id=34 data-nosnippet>34</a>
+<a href=#35 id=35 data-nosnippet>35</a>                <span class="kw">if </span>Module32NextW(snap, <span class="kw-2">&amp;mut </span>me) != TRUE {
+<a href=#36 id=36 data-nosnippet>36</a>                    <span class="kw">break</span>;
+<a href=#37 id=37 data-nosnippet>37</a>                }
+<a href=#38 id=38 data-nosnippet>38</a>            }
+<a href=#39 id=39 data-nosnippet>39</a>        }
+<a href=#40 id=40 data-nosnippet>40</a>
+<a href=#41 id=41 data-nosnippet>41</a>        CloseHandle(snap);
+<a href=#42 id=42 data-nosnippet>42</a>    }
+<a href=#43 id=43 data-nosnippet>43</a>}
+<a href=#44 id=44 data-nosnippet>44</a>
+<a href=#45 id=45 data-nosnippet>45</a><span class="comment">// Safety: long_path should be null-terminated
+<a href=#46 id=46 data-nosnippet>46</a></span><span class="attr">#[cfg(target_os = <span class="string">"cygwin"</span>)]
+<a href=#47 id=47 data-nosnippet>47</a></span><span class="kw">unsafe fn </span>get_posix_path(long_path: <span class="kw-2">&amp;</span>[u16]) -&gt; <span class="prelude-ty">Option</span>&lt;OsString&gt; {
+<a href=#48 id=48 data-nosnippet>48</a>    <span class="kw">use </span><span class="kw">super</span>::mystd::os::unix::ffi::OsStringExt;
+<a href=#49 id=49 data-nosnippet>49</a>
+<a href=#50 id=50 data-nosnippet>50</a>    <span class="kw">unsafe extern </span><span class="string">"C" </span>{
+<a href=#51 id=51 data-nosnippet>51</a>        <span class="comment">// Doc: https://cygwin.com/cygwin-api/func-cygwin-conv-path.html
+<a href=#52 id=52 data-nosnippet>52</a>        // Src: https://github.com/cygwin/cygwin/blob/718a15ba50e0d01c79800bd658c2477f9a603540/winsup/cygwin/path.cc#L3902
+<a href=#53 id=53 data-nosnippet>53</a>        // Safety:
+<a href=#54 id=54 data-nosnippet>54</a>        // * `what` should be `CCP_WIN_W_TO_POSIX` here
+<a href=#55 id=55 data-nosnippet>55</a>        // * `from` is null-terminated UTF-16 path
+<a href=#56 id=56 data-nosnippet>56</a>        // * `to` is buffer, the buffer size is `size`.
+<a href=#57 id=57 data-nosnippet>57</a>        </span><span class="kw">fn </span>cygwin_conv_path(
+<a href=#58 id=58 data-nosnippet>58</a>            what: libc::c_uint,
+<a href=#59 id=59 data-nosnippet>59</a>            from: <span class="kw-2">*const </span>u16,
+<a href=#60 id=60 data-nosnippet>60</a>            to: <span class="kw-2">*mut </span>u8,
+<a href=#61 id=61 data-nosnippet>61</a>            size: libc::size_t,
+<a href=#62 id=62 data-nosnippet>62</a>        ) -&gt; libc::ssize_t;
+<a href=#63 id=63 data-nosnippet>63</a>    }
+<a href=#64 id=64 data-nosnippet>64</a>    <span class="kw">const </span>CCP_WIN_W_TO_POSIX: libc::c_uint = <span class="number">3</span>;
+<a href=#65 id=65 data-nosnippet>65</a>
+<a href=#66 id=66 data-nosnippet>66</a>    <span class="comment">// If `size` is 0, returns needed buffer size, including null terminator;
+<a href=#67 id=67 data-nosnippet>67</a>    // or -1 if error.
+<a href=#68 id=68 data-nosnippet>68</a>    // Safety: if `size` is 0, `to` is not used.
+<a href=#69 id=69 data-nosnippet>69</a>    </span><span class="kw">let </span>name_len = <span class="kw">unsafe </span>{
+<a href=#70 id=70 data-nosnippet>70</a>        cygwin_conv_path(
+<a href=#71 id=71 data-nosnippet>71</a>            CCP_WIN_W_TO_POSIX,
+<a href=#72 id=72 data-nosnippet>72</a>            long_path.as_ptr(),
+<a href=#73 id=73 data-nosnippet>73</a>            core::ptr::null_mut(),
+<a href=#74 id=74 data-nosnippet>74</a>            <span class="number">0</span>,
+<a href=#75 id=75 data-nosnippet>75</a>        )
+<a href=#76 id=76 data-nosnippet>76</a>    };
+<a href=#77 id=77 data-nosnippet>77</a>    <span class="comment">// Expect at least 1 for null terminator.
+<a href=#78 id=78 data-nosnippet>78</a>    // It's not likely to return error here.
+<a href=#79 id=79 data-nosnippet>79</a>    </span><span class="kw">if </span>name_len &lt; <span class="number">1 </span>{
+<a href=#80 id=80 data-nosnippet>80</a>        <span class="kw">return </span><span class="prelude-val">None</span>;
+<a href=#81 id=81 data-nosnippet>81</a>    }
+<a href=#82 id=82 data-nosnippet>82</a>    <span class="kw">let </span>name_len = name_len <span class="kw">as </span>usize;
+<a href=#83 id=83 data-nosnippet>83</a>    <span class="kw">let </span><span class="kw-2">mut </span>name_buffer = Vec::with_capacity(name_len);
+<a href=#84 id=84 data-nosnippet>84</a>    <span class="comment">// Safety: `name_buffer` is large enough.
+<a href=#85 id=85 data-nosnippet>85</a>    </span><span class="kw">let </span>res = <span class="kw">unsafe </span>{
+<a href=#86 id=86 data-nosnippet>86</a>        cygwin_conv_path(
+<a href=#87 id=87 data-nosnippet>87</a>            CCP_WIN_W_TO_POSIX,
+<a href=#88 id=88 data-nosnippet>88</a>            long_path.as_ptr(),
+<a href=#89 id=89 data-nosnippet>89</a>            name_buffer.as_mut_ptr(),
+<a href=#90 id=90 data-nosnippet>90</a>            name_len,
+<a href=#91 id=91 data-nosnippet>91</a>        )
+<a href=#92 id=92 data-nosnippet>92</a>    };
+<a href=#93 id=93 data-nosnippet>93</a>    <span class="comment">// It's not likely to return error here.
+<a href=#94 id=94 data-nosnippet>94</a>    </span><span class="kw">if </span>res != <span class="number">0 </span>{
+<a href=#95 id=95 data-nosnippet>95</a>        <span class="kw">return </span><span class="prelude-val">None</span>;
+<a href=#96 id=96 data-nosnippet>96</a>    }
+<a href=#97 id=97 data-nosnippet>97</a>    <span class="comment">// Remove the null terminator.
+<a href=#98 id=98 data-nosnippet>98</a>    </span><span class="kw">unsafe </span>{ name_buffer.set_len(name_len - <span class="number">1</span>) };
+<a href=#99 id=99 data-nosnippet>99</a>    <span class="kw">let </span>name = OsString::from_vec(name_buffer);
+<a href=#100 id=100 data-nosnippet>100</a>    <span class="prelude-val">Some</span>(name)
+<a href=#101 id=101 data-nosnippet>101</a>}
+<a href=#102 id=102 data-nosnippet>102</a>
+<a href=#103 id=103 data-nosnippet>103</a><span class="kw">unsafe fn </span>load_library(me: <span class="kw-2">&amp;</span>MODULEENTRY32W) -&gt; <span class="prelude-ty">Option</span>&lt;Library&gt; {
+<a href=#104 id=104 data-nosnippet>104</a>    <span class="attr">#[cfg(windows)]
+<a href=#105 id=105 data-nosnippet>105</a>    </span><span class="kw">let </span>name = {
+<a href=#106 id=106 data-nosnippet>106</a>        <span class="kw">use </span><span class="kw">super</span>::mystd::os::windows::prelude::<span class="kw-2">*</span>;
+<a href=#107 id=107 data-nosnippet>107</a>        <span class="kw">let </span>pos = me
+<a href=#108 id=108 data-nosnippet>108</a>            .szExePath
+<a href=#109 id=109 data-nosnippet>109</a>            .iter()
+<a href=#110 id=110 data-nosnippet>110</a>            .position(|i| <span class="kw-2">*</span>i == <span class="number">0</span>)
+<a href=#111 id=111 data-nosnippet>111</a>            .unwrap_or(me.szExePath.len());
+<a href=#112 id=112 data-nosnippet>112</a>        OsString::from_wide(<span class="kw-2">&amp;</span>me.szExePath[..pos])
+<a href=#113 id=113 data-nosnippet>113</a>    };
+<a href=#114 id=114 data-nosnippet>114</a>    <span class="attr">#[cfg(target_os = <span class="string">"cygwin"</span>)]
+<a href=#115 id=115 data-nosnippet>115</a>    </span><span class="comment">// Safety: the path with max length MAX_PATH always contains a null
+<a href=#116 id=116 data-nosnippet>116</a>    // terminator. Don't slice it.
+<a href=#117 id=117 data-nosnippet>117</a>    </span><span class="kw">let </span>name = <span class="kw">unsafe </span>{ get_posix_path(<span class="kw-2">&amp;</span>me.szExePath[..])<span class="question-mark">? </span>};
+<a href=#118 id=118 data-nosnippet>118</a>
+<a href=#119 id=119 data-nosnippet>119</a>    <span class="comment">// MinGW libraries currently don't support ASLR
+<a href=#120 id=120 data-nosnippet>120</a>    // (rust-lang/rust#16514), but DLLs can still be relocated around in
+<a href=#121 id=121 data-nosnippet>121</a>    // the address space. It appears that addresses in debug info are
+<a href=#122 id=122 data-nosnippet>122</a>    // all as-if this library was loaded at its "image base", which is a
+<a href=#123 id=123 data-nosnippet>123</a>    // field in its COFF file headers. Since this is what debuginfo
+<a href=#124 id=124 data-nosnippet>124</a>    // seems to list we parse the symbol table and store addresses as if
+<a href=#125 id=125 data-nosnippet>125</a>    // the library was loaded at "image base" as well.
+<a href=#126 id=126 data-nosnippet>126</a>    //
+<a href=#127 id=127 data-nosnippet>127</a>    // The library may not be loaded at "image base", however.
+<a href=#128 id=128 data-nosnippet>128</a>    // (presumably something else may be loaded there?) This is where
+<a href=#129 id=129 data-nosnippet>129</a>    // the `bias` field comes into play, and we need to figure out the
+<a href=#130 id=130 data-nosnippet>130</a>    // value of `bias` here. Unfortunately though it's not clear how to
+<a href=#131 id=131 data-nosnippet>131</a>    // acquire this from a loaded module. What we do have, however, is
+<a href=#132 id=132 data-nosnippet>132</a>    // the actual load address (`modBaseAddr`).
+<a href=#133 id=133 data-nosnippet>133</a>    //
+<a href=#134 id=134 data-nosnippet>134</a>    // As a bit of a cop-out for now we mmap the file, read the file
+<a href=#135 id=135 data-nosnippet>135</a>    // header information, then drop the mmap. This is wasteful because
+<a href=#136 id=136 data-nosnippet>136</a>    // we'll probably reopen the mmap later, but this should work well
+<a href=#137 id=137 data-nosnippet>137</a>    // enough for now.
+<a href=#138 id=138 data-nosnippet>138</a>    //
+<a href=#139 id=139 data-nosnippet>139</a>    // Once we have the `image_base` (desired load location) and the
+<a href=#140 id=140 data-nosnippet>140</a>    // `base_addr` (actual load location) we can fill in the `bias`
+<a href=#141 id=141 data-nosnippet>141</a>    // (difference between the actual and desired) and then the stated
+<a href=#142 id=142 data-nosnippet>142</a>    // address of each segment is the `image_base` since that's what the
+<a href=#143 id=143 data-nosnippet>143</a>    // file says.
+<a href=#144 id=144 data-nosnippet>144</a>    //
+<a href=#145 id=145 data-nosnippet>145</a>    // For now it appears that unlike ELF/MachO we can make do with one
+<a href=#146 id=146 data-nosnippet>146</a>    // segment per library, using `modBaseSize` as the whole size.
+<a href=#147 id=147 data-nosnippet>147</a>    </span><span class="kw">let </span>mmap = mmap(name.as_ref())<span class="question-mark">?</span>;
+<a href=#148 id=148 data-nosnippet>148</a>    <span class="kw">let </span>image_base = coff::get_image_base(<span class="kw-2">&amp;</span>mmap)<span class="question-mark">?</span>;
+<a href=#149 id=149 data-nosnippet>149</a>    <span class="kw">let </span>base_addr = me.modBaseAddr <span class="kw">as </span>usize;
+<a href=#150 id=150 data-nosnippet>150</a>    <span class="prelude-val">Some</span>(Library {
+<a href=#151 id=151 data-nosnippet>151</a>        name,
+<a href=#152 id=152 data-nosnippet>152</a>        bias: base_addr.wrapping_sub(image_base),
+<a href=#153 id=153 data-nosnippet>153</a>        segments: <span class="macro">vec!</span>[LibrarySegment {
+<a href=#154 id=154 data-nosnippet>154</a>            stated_virtual_memory_address: image_base,
+<a href=#155 id=155 data-nosnippet>155</a>            len: me.modBaseSize <span class="kw">as </span>usize,
+<a href=#156 id=156 data-nosnippet>156</a>        }],
+<a href=#157 id=157 data-nosnippet>157</a>    })
+<a href=#158 id=158 data-nosnippet>158</a>}</code></pre></div></section></main></body></html>

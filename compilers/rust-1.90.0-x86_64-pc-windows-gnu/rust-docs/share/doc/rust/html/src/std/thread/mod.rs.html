@@ -1,0 +1,2053 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `library\std\src\thread\mod.rs`."><title>mod.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../../static.files/rustdoc-aa0817cf.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="std" data-themes="" data-resource-suffix="1.90.0" data-rustdoc-version="1.90.0 (1159e78c4 2025-09-14)" data-channel="1.90.0" data-search-js="search-fa3e91e5.js" data-settings-js="settings-5514c975.js" ><script src="../../../static.files/storage-68b7e25d.js"></script><script defer src="../../../static.files/src-script-813739b1.js"></script><script defer src="../../../src-files1.90.0.js"></script><script defer src="../../../static.files/main-eebb9057.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-32bb7600.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-6580c154.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-044be391.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">std\thread/</div>mod.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-4"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="doccomment">//! Native threads.
+<a href=#2 id=2 data-nosnippet>2</a>//!
+<a href=#3 id=3 data-nosnippet>3</a>//! ## The threading model
+<a href=#4 id=4 data-nosnippet>4</a>//!
+<a href=#5 id=5 data-nosnippet>5</a>//! An executing Rust program consists of a collection of native OS threads,
+<a href=#6 id=6 data-nosnippet>6</a>//! each with their own stack and local state. Threads can be named, and
+<a href=#7 id=7 data-nosnippet>7</a>//! provide some built-in support for low-level synchronization.
+<a href=#8 id=8 data-nosnippet>8</a>//!
+<a href=#9 id=9 data-nosnippet>9</a>//! Communication between threads can be done through
+<a href=#10 id=10 data-nosnippet>10</a>//! [channels], Rust's message-passing types, along with [other forms of thread
+<a href=#11 id=11 data-nosnippet>11</a>//! synchronization](../../std/sync/index.html) and shared-memory data
+<a href=#12 id=12 data-nosnippet>12</a>//! structures. In particular, types that are guaranteed to be
+<a href=#13 id=13 data-nosnippet>13</a>//! threadsafe are easily shared between threads using the
+<a href=#14 id=14 data-nosnippet>14</a>//! atomically-reference-counted container, [`Arc`].
+<a href=#15 id=15 data-nosnippet>15</a>//!
+<a href=#16 id=16 data-nosnippet>16</a>//! Fatal logic errors in Rust cause *thread panic*, during which
+<a href=#17 id=17 data-nosnippet>17</a>//! a thread will unwind the stack, running destructors and freeing
+<a href=#18 id=18 data-nosnippet>18</a>//! owned resources. While not meant as a 'try/catch' mechanism, panics
+<a href=#19 id=19 data-nosnippet>19</a>//! in Rust can nonetheless be caught (unless compiling with `panic=abort`) with
+<a href=#20 id=20 data-nosnippet>20</a>//! [`catch_unwind`](../../std/panic/fn.catch_unwind.html) and recovered
+<a href=#21 id=21 data-nosnippet>21</a>//! from, or alternatively be resumed with
+<a href=#22 id=22 data-nosnippet>22</a>//! [`resume_unwind`](../../std/panic/fn.resume_unwind.html). If the panic
+<a href=#23 id=23 data-nosnippet>23</a>//! is not caught the thread will exit, but the panic may optionally be
+<a href=#24 id=24 data-nosnippet>24</a>//! detected from a different thread with [`join`]. If the main thread panics
+<a href=#25 id=25 data-nosnippet>25</a>//! without the panic being caught, the application will exit with a
+<a href=#26 id=26 data-nosnippet>26</a>//! non-zero exit code.
+<a href=#27 id=27 data-nosnippet>27</a>//!
+<a href=#28 id=28 data-nosnippet>28</a>//! When the main thread of a Rust program terminates, the entire program shuts
+<a href=#29 id=29 data-nosnippet>29</a>//! down, even if other threads are still running. However, this module provides
+<a href=#30 id=30 data-nosnippet>30</a>//! convenient facilities for automatically waiting for the termination of a
+<a href=#31 id=31 data-nosnippet>31</a>//! thread (i.e., join).
+<a href=#32 id=32 data-nosnippet>32</a>//!
+<a href=#33 id=33 data-nosnippet>33</a>//! ## Spawning a thread
+<a href=#34 id=34 data-nosnippet>34</a>//!
+<a href=#35 id=35 data-nosnippet>35</a>//! A new thread can be spawned using the [`thread::spawn`][`spawn`] function:
+<a href=#36 id=36 data-nosnippet>36</a>//!
+<a href=#37 id=37 data-nosnippet>37</a>//! ```rust
+<a href=#38 id=38 data-nosnippet>38</a>//! use std::thread;
+<a href=#39 id=39 data-nosnippet>39</a>//!
+<a href=#40 id=40 data-nosnippet>40</a>//! thread::spawn(move || {
+<a href=#41 id=41 data-nosnippet>41</a>//!     // some work here
+<a href=#42 id=42 data-nosnippet>42</a>//! });
+<a href=#43 id=43 data-nosnippet>43</a>//! ```
+<a href=#44 id=44 data-nosnippet>44</a>//!
+<a href=#45 id=45 data-nosnippet>45</a>//! In this example, the spawned thread is "detached," which means that there is
+<a href=#46 id=46 data-nosnippet>46</a>//! no way for the program to learn when the spawned thread completes or otherwise
+<a href=#47 id=47 data-nosnippet>47</a>//! terminates.
+<a href=#48 id=48 data-nosnippet>48</a>//!
+<a href=#49 id=49 data-nosnippet>49</a>//! To learn when a thread completes, it is necessary to capture the [`JoinHandle`]
+<a href=#50 id=50 data-nosnippet>50</a>//! object that is returned by the call to [`spawn`], which provides
+<a href=#51 id=51 data-nosnippet>51</a>//! a `join` method that allows the caller to wait for the completion of the
+<a href=#52 id=52 data-nosnippet>52</a>//! spawned thread:
+<a href=#53 id=53 data-nosnippet>53</a>//!
+<a href=#54 id=54 data-nosnippet>54</a>//! ```rust
+<a href=#55 id=55 data-nosnippet>55</a>//! use std::thread;
+<a href=#56 id=56 data-nosnippet>56</a>//!
+<a href=#57 id=57 data-nosnippet>57</a>//! let thread_join_handle = thread::spawn(move || {
+<a href=#58 id=58 data-nosnippet>58</a>//!     // some work here
+<a href=#59 id=59 data-nosnippet>59</a>//! });
+<a href=#60 id=60 data-nosnippet>60</a>//! // some work here
+<a href=#61 id=61 data-nosnippet>61</a>//! let res = thread_join_handle.join();
+<a href=#62 id=62 data-nosnippet>62</a>//! ```
+<a href=#63 id=63 data-nosnippet>63</a>//!
+<a href=#64 id=64 data-nosnippet>64</a>//! The [`join`] method returns a [`thread::Result`] containing [`Ok`] of the final
+<a href=#65 id=65 data-nosnippet>65</a>//! value produced by the spawned thread, or [`Err`] of the value given to
+<a href=#66 id=66 data-nosnippet>66</a>//! a call to [`panic!`] if the thread panicked.
+<a href=#67 id=67 data-nosnippet>67</a>//!
+<a href=#68 id=68 data-nosnippet>68</a>//! Note that there is no parent/child relationship between a thread that spawns a
+<a href=#69 id=69 data-nosnippet>69</a>//! new thread and the thread being spawned.  In particular, the spawned thread may or
+<a href=#70 id=70 data-nosnippet>70</a>//! may not outlive the spawning thread, unless the spawning thread is the main thread.
+<a href=#71 id=71 data-nosnippet>71</a>//!
+<a href=#72 id=72 data-nosnippet>72</a>//! ## Configuring threads
+<a href=#73 id=73 data-nosnippet>73</a>//!
+<a href=#74 id=74 data-nosnippet>74</a>//! A new thread can be configured before it is spawned via the [`Builder`] type,
+<a href=#75 id=75 data-nosnippet>75</a>//! which currently allows you to set the name and stack size for the thread:
+<a href=#76 id=76 data-nosnippet>76</a>//!
+<a href=#77 id=77 data-nosnippet>77</a>//! ```rust
+<a href=#78 id=78 data-nosnippet>78</a>//! # #![allow(unused_must_use)]
+<a href=#79 id=79 data-nosnippet>79</a>//! use std::thread;
+<a href=#80 id=80 data-nosnippet>80</a>//!
+<a href=#81 id=81 data-nosnippet>81</a>//! thread::Builder::new().name("thread1".to_string()).spawn(move || {
+<a href=#82 id=82 data-nosnippet>82</a>//!     println!("Hello, world!");
+<a href=#83 id=83 data-nosnippet>83</a>//! });
+<a href=#84 id=84 data-nosnippet>84</a>//! ```
+<a href=#85 id=85 data-nosnippet>85</a>//!
+<a href=#86 id=86 data-nosnippet>86</a>//! ## The `Thread` type
+<a href=#87 id=87 data-nosnippet>87</a>//!
+<a href=#88 id=88 data-nosnippet>88</a>//! Threads are represented via the [`Thread`] type, which you can get in one of
+<a href=#89 id=89 data-nosnippet>89</a>//! two ways:
+<a href=#90 id=90 data-nosnippet>90</a>//!
+<a href=#91 id=91 data-nosnippet>91</a>//! * By spawning a new thread, e.g., using the [`thread::spawn`][`spawn`]
+<a href=#92 id=92 data-nosnippet>92</a>//!   function, and calling [`thread`][`JoinHandle::thread`] on the [`JoinHandle`].
+<a href=#93 id=93 data-nosnippet>93</a>//! * By requesting the current thread, using the [`thread::current`] function.
+<a href=#94 id=94 data-nosnippet>94</a>//!
+<a href=#95 id=95 data-nosnippet>95</a>//! The [`thread::current`] function is available even for threads not spawned
+<a href=#96 id=96 data-nosnippet>96</a>//! by the APIs of this module.
+<a href=#97 id=97 data-nosnippet>97</a>//!
+<a href=#98 id=98 data-nosnippet>98</a>//! ## Thread-local storage
+<a href=#99 id=99 data-nosnippet>99</a>//!
+<a href=#100 id=100 data-nosnippet>100</a>//! This module also provides an implementation of thread-local storage for Rust
+<a href=#101 id=101 data-nosnippet>101</a>//! programs. Thread-local storage is a method of storing data into a global
+<a href=#102 id=102 data-nosnippet>102</a>//! variable that each thread in the program will have its own copy of.
+<a href=#103 id=103 data-nosnippet>103</a>//! Threads do not share this data, so accesses do not need to be synchronized.
+<a href=#104 id=104 data-nosnippet>104</a>//!
+<a href=#105 id=105 data-nosnippet>105</a>//! A thread-local key owns the value it contains and will destroy the value when the
+<a href=#106 id=106 data-nosnippet>106</a>//! thread exits. It is created with the [`thread_local!`] macro and can contain any
+<a href=#107 id=107 data-nosnippet>107</a>//! value that is `'static` (no borrowed pointers). It provides an accessor function,
+<a href=#108 id=108 data-nosnippet>108</a>//! [`with`], that yields a shared reference to the value to the specified
+<a href=#109 id=109 data-nosnippet>109</a>//! closure. Thread-local keys allow only shared access to values, as there would be no
+<a href=#110 id=110 data-nosnippet>110</a>//! way to guarantee uniqueness if mutable borrows were allowed. Most values
+<a href=#111 id=111 data-nosnippet>111</a>//! will want to make use of some form of **interior mutability** through the
+<a href=#112 id=112 data-nosnippet>112</a>//! [`Cell`] or [`RefCell`] types.
+<a href=#113 id=113 data-nosnippet>113</a>//!
+<a href=#114 id=114 data-nosnippet>114</a>//! ## Naming threads
+<a href=#115 id=115 data-nosnippet>115</a>//!
+<a href=#116 id=116 data-nosnippet>116</a>//! Threads are able to have associated names for identification purposes. By default, spawned
+<a href=#117 id=117 data-nosnippet>117</a>//! threads are unnamed. To specify a name for a thread, build the thread with [`Builder`] and pass
+<a href=#118 id=118 data-nosnippet>118</a>//! the desired thread name to [`Builder::name`]. To retrieve the thread name from within the
+<a href=#119 id=119 data-nosnippet>119</a>//! thread, use [`Thread::name`]. A couple of examples where the name of a thread gets used:
+<a href=#120 id=120 data-nosnippet>120</a>//!
+<a href=#121 id=121 data-nosnippet>121</a>//! * If a panic occurs in a named thread, the thread name will be printed in the panic message.
+<a href=#122 id=122 data-nosnippet>122</a>//! * The thread name is provided to the OS where applicable (e.g., `pthread_setname_np` in
+<a href=#123 id=123 data-nosnippet>123</a>//!   unix-like platforms).
+<a href=#124 id=124 data-nosnippet>124</a>//!
+<a href=#125 id=125 data-nosnippet>125</a>//! ## Stack size
+<a href=#126 id=126 data-nosnippet>126</a>//!
+<a href=#127 id=127 data-nosnippet>127</a>//! The default stack size is platform-dependent and subject to change.
+<a href=#128 id=128 data-nosnippet>128</a>//! Currently, it is 2 MiB on all Tier-1 platforms.
+<a href=#129 id=129 data-nosnippet>129</a>//!
+<a href=#130 id=130 data-nosnippet>130</a>//! There are two ways to manually specify the stack size for spawned threads:
+<a href=#131 id=131 data-nosnippet>131</a>//!
+<a href=#132 id=132 data-nosnippet>132</a>//! * Build the thread with [`Builder`] and pass the desired stack size to [`Builder::stack_size`].
+<a href=#133 id=133 data-nosnippet>133</a>//! * Set the `RUST_MIN_STACK` environment variable to an integer representing the desired stack
+<a href=#134 id=134 data-nosnippet>134</a>//!   size (in bytes). Note that setting [`Builder::stack_size`] will override this. Be aware that
+<a href=#135 id=135 data-nosnippet>135</a>//!   changes to `RUST_MIN_STACK` may be ignored after program start.
+<a href=#136 id=136 data-nosnippet>136</a>//!
+<a href=#137 id=137 data-nosnippet>137</a>//! Note that the stack size of the main thread is *not* determined by Rust.
+<a href=#138 id=138 data-nosnippet>138</a>//!
+<a href=#139 id=139 data-nosnippet>139</a>//! [channels]: crate::sync::mpsc
+<a href=#140 id=140 data-nosnippet>140</a>//! [`join`]: JoinHandle::join
+<a href=#141 id=141 data-nosnippet>141</a>//! [`Result`]: crate::result::Result
+<a href=#142 id=142 data-nosnippet>142</a>//! [`Ok`]: crate::result::Result::Ok
+<a href=#143 id=143 data-nosnippet>143</a>//! [`Err`]: crate::result::Result::Err
+<a href=#144 id=144 data-nosnippet>144</a>//! [`thread::current`]: current::current
+<a href=#145 id=145 data-nosnippet>145</a>//! [`thread::Result`]: Result
+<a href=#146 id=146 data-nosnippet>146</a>//! [`unpark`]: Thread::unpark
+<a href=#147 id=147 data-nosnippet>147</a>//! [`thread::park_timeout`]: park_timeout
+<a href=#148 id=148 data-nosnippet>148</a>//! [`Cell`]: crate::cell::Cell
+<a href=#149 id=149 data-nosnippet>149</a>//! [`RefCell`]: crate::cell::RefCell
+<a href=#150 id=150 data-nosnippet>150</a>//! [`with`]: LocalKey::with
+<a href=#151 id=151 data-nosnippet>151</a>//! [`thread_local!`]: crate::thread_local
+<a href=#152 id=152 data-nosnippet>152</a>
+<a href=#153 id=153 data-nosnippet>153</a></span><span class="attr">#![stable(feature = <span class="string">"rust1"</span>, since = <span class="string">"1.0.0"</span>)]
+<a href=#154 id=154 data-nosnippet>154</a>#![deny(unsafe_op_in_unsafe_fn)]
+<a href=#155 id=155 data-nosnippet>155</a></span><span class="comment">// Under `test`, `__FastLocalKeyInner` seems unused.
+<a href=#156 id=156 data-nosnippet>156</a></span><span class="attr">#![cfg_attr(test, allow(dead_code))]
+<a href=#157 id=157 data-nosnippet>157</a>
+<a href=#158 id=158 data-nosnippet>158</a>#[cfg(all(test, not(any(target_os = <span class="string">"emscripten"</span>, target_os = <span class="string">"wasi"</span>))))]
+<a href=#159 id=159 data-nosnippet>159</a></span><span class="kw">mod </span>tests;
+<a href=#160 id=160 data-nosnippet>160</a>
+<a href=#161 id=161 data-nosnippet>161</a><span class="kw">use </span><span class="kw">crate</span>::any::Any;
+<a href=#162 id=162 data-nosnippet>162</a><span class="kw">use </span><span class="kw">crate</span>::cell::UnsafeCell;
+<a href=#163 id=163 data-nosnippet>163</a><span class="kw">use </span><span class="kw">crate</span>::ffi::CStr;
+<a href=#164 id=164 data-nosnippet>164</a><span class="kw">use </span><span class="kw">crate</span>::marker::PhantomData;
+<a href=#165 id=165 data-nosnippet>165</a><span class="kw">use </span><span class="kw">crate</span>::mem::{<span class="self">self</span>, ManuallyDrop, forget};
+<a href=#166 id=166 data-nosnippet>166</a><span class="kw">use </span><span class="kw">crate</span>::num::NonZero;
+<a href=#167 id=167 data-nosnippet>167</a><span class="kw">use </span><span class="kw">crate</span>::pin::Pin;
+<a href=#168 id=168 data-nosnippet>168</a><span class="kw">use </span><span class="kw">crate</span>::sync::Arc;
+<a href=#169 id=169 data-nosnippet>169</a><span class="kw">use </span><span class="kw">crate</span>::sync::atomic::{Atomic, AtomicUsize, Ordering};
+<a href=#170 id=170 data-nosnippet>170</a><span class="kw">use </span><span class="kw">crate</span>::sys::sync::Parker;
+<a href=#171 id=171 data-nosnippet>171</a><span class="kw">use </span><span class="kw">crate</span>::sys::thread <span class="kw">as </span>imp;
+<a href=#172 id=172 data-nosnippet>172</a><span class="kw">use </span><span class="kw">crate</span>::sys_common::{AsInner, IntoInner};
+<a href=#173 id=173 data-nosnippet>173</a><span class="kw">use </span><span class="kw">crate</span>::time::{Duration, Instant};
+<a href=#174 id=174 data-nosnippet>174</a><span class="kw">use crate</span>::{env, fmt, io, panic, panicking, str};
+<a href=#175 id=175 data-nosnippet>175</a>
+<a href=#176 id=176 data-nosnippet>176</a><span class="attr">#[stable(feature = <span class="string">"scoped_threads"</span>, since = <span class="string">"1.63.0"</span>)]
+<a href=#177 id=177 data-nosnippet>177</a></span><span class="kw">mod </span>scoped;
+<a href=#178 id=178 data-nosnippet>178</a>
+<a href=#179 id=179 data-nosnippet>179</a><span class="attr">#[stable(feature = <span class="string">"scoped_threads"</span>, since = <span class="string">"1.63.0"</span>)]
+<a href=#180 id=180 data-nosnippet>180</a></span><span class="kw">pub use </span>scoped::{Scope, ScopedJoinHandle, scope};
+<a href=#181 id=181 data-nosnippet>181</a>
+<a href=#182 id=182 data-nosnippet>182</a><span class="kw">mod </span>current;
+<a href=#183 id=183 data-nosnippet>183</a>
+<a href=#184 id=184 data-nosnippet>184</a><span class="attr">#[stable(feature = <span class="string">"rust1"</span>, since = <span class="string">"1.0.0"</span>)]
+<a href=#185 id=185 data-nosnippet>185</a></span><span class="kw">pub use </span>current::current;
+<a href=#186 id=186 data-nosnippet>186</a><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">use </span>current::{current_id, current_or_unnamed, drop_current};
+<a href=#187 id=187 data-nosnippet>187</a><span class="kw">use </span>current::{set_current, try_with_current};
+<a href=#188 id=188 data-nosnippet>188</a>
+<a href=#189 id=189 data-nosnippet>189</a><span class="kw">mod </span>spawnhook;
+<a href=#190 id=190 data-nosnippet>190</a>
+<a href=#191 id=191 data-nosnippet>191</a><span class="attr">#[unstable(feature = <span class="string">"thread_spawn_hook"</span>, issue = <span class="string">"132951"</span>)]
+<a href=#192 id=192 data-nosnippet>192</a></span><span class="kw">pub use </span>spawnhook::add_spawn_hook;
+<a href=#193 id=193 data-nosnippet>193</a>
+<a href=#194 id=194 data-nosnippet>194</a><span class="comment">////////////////////////////////////////////////////////////////////////////////
+<a href=#195 id=195 data-nosnippet>195</a>// Thread-local storage
+<a href=#196 id=196 data-nosnippet>196</a>////////////////////////////////////////////////////////////////////////////////
+<a href=#197 id=197 data-nosnippet>197</a>
+<a href=#198 id=198 data-nosnippet>198</a></span><span class="attr">#[macro_use]
+<a href=#199 id=199 data-nosnippet>199</a></span><span class="kw">mod </span>local;
+<a href=#200 id=200 data-nosnippet>200</a>
+<a href=#201 id=201 data-nosnippet>201</a><span class="attr">#[stable(feature = <span class="string">"rust1"</span>, since = <span class="string">"1.0.0"</span>)]
+<a href=#202 id=202 data-nosnippet>202</a></span><span class="kw">pub use </span><span class="self">self</span>::local::{AccessError, LocalKey};
+<a href=#203 id=203 data-nosnippet>203</a>
+<a href=#204 id=204 data-nosnippet>204</a><span class="comment">// Implementation details used by the thread_local!{} macro.
+<a href=#205 id=205 data-nosnippet>205</a></span><span class="attr">#[doc(hidden)]
+<a href=#206 id=206 data-nosnippet>206</a>#[unstable(feature = <span class="string">"thread_local_internals"</span>, issue = <span class="string">"none"</span>)]
+<a href=#207 id=207 data-nosnippet>207</a></span><span class="kw">pub mod </span>local_impl {
+<a href=#208 id=208 data-nosnippet>208</a>    <span class="kw">pub use </span><span class="kw">crate</span>::sys::thread_local::<span class="kw-2">*</span>;
+<a href=#209 id=209 data-nosnippet>209</a>}
+<a href=#210 id=210 data-nosnippet>210</a>
+<a href=#211 id=211 data-nosnippet>211</a><span class="comment">////////////////////////////////////////////////////////////////////////////////
+<a href=#212 id=212 data-nosnippet>212</a>// Builder
+<a href=#213 id=213 data-nosnippet>213</a>////////////////////////////////////////////////////////////////////////////////
+<a href=#214 id=214 data-nosnippet>214</a>
+<a href=#215 id=215 data-nosnippet>215</a></span><span class="doccomment">/// Thread factory, which can be used in order to configure the properties of
+<a href=#216 id=216 data-nosnippet>216</a>/// a new thread.
+<a href=#217 id=217 data-nosnippet>217</a>///
+<a href=#218 id=218 data-nosnippet>218</a>/// Methods can be chained on it in order to configure it.
+<a href=#219 id=219 data-nosnippet>219</a>///
+<a href=#220 id=220 data-nosnippet>220</a>/// The two configurations available are:
+<a href=#221 id=221 data-nosnippet>221</a>///
+<a href=#222 id=222 data-nosnippet>222</a>/// - [`name`]: specifies an [associated name for the thread][naming-threads]
+<a href=#223 id=223 data-nosnippet>223</a>/// - [`stack_size`]: specifies the [desired stack size for the thread][stack-size]
+<a href=#224 id=224 data-nosnippet>224</a>///
+<a href=#225 id=225 data-nosnippet>225</a>/// The [`spawn`] method will take ownership of the builder and create an
+<a href=#226 id=226 data-nosnippet>226</a>/// [`io::Result`] to the thread handle with the given configuration.
+<a href=#227 id=227 data-nosnippet>227</a>///
+<a href=#228 id=228 data-nosnippet>228</a>/// The [`thread::spawn`] free function uses a `Builder` with default
+<a href=#229 id=229 data-nosnippet>229</a>/// configuration and [`unwrap`]s its return value.
+<a href=#230 id=230 data-nosnippet>230</a>///
+<a href=#231 id=231 data-nosnippet>231</a>/// You may want to use [`spawn`] instead of [`thread::spawn`], when you want
+<a href=#232 id=232 data-nosnippet>232</a>/// to recover from a failure to launch a thread, indeed the free function will
+<a href=#233 id=233 data-nosnippet>233</a>/// panic where the `Builder` method will return a [`io::Result`].
+<a href=#234 id=234 data-nosnippet>234</a>///
+<a href=#235 id=235 data-nosnippet>235</a>/// # Examples
+<a href=#236 id=236 data-nosnippet>236</a>///
+<a href=#237 id=237 data-nosnippet>237</a>/// ```
+<a href=#238 id=238 data-nosnippet>238</a>/// use std::thread;
+<a href=#239 id=239 data-nosnippet>239</a>///
+<a href=#240 id=240 data-nosnippet>240</a>/// let builder = thread::Builder::new();
+<a href=#241 id=241 data-nosnippet>241</a>///
+<a href=#242 id=242 data-nosnippet>242</a>/// let handler = builder.spawn(|| {
+<a href=#243 id=243 data-nosnippet>243</a>///     // thread code
+<a href=#244 id=244 data-nosnippet>244</a>/// }).unwrap();
+<a href=#245 id=245 data-nosnippet>245</a>///
+<a href=#246 id=246 data-nosnippet>246</a>/// handler.join().unwrap();
+<a href=#247 id=247 data-nosnippet>247</a>/// ```
+<a href=#248 id=248 data-nosnippet>248</a>///
+<a href=#249 id=249 data-nosnippet>249</a>/// [`stack_size`]: Builder::stack_size
+<a href=#250 id=250 data-nosnippet>250</a>/// [`name`]: Builder::name
+<a href=#251 id=251 data-nosnippet>251</a>/// [`spawn`]: Builder::spawn
+<a href=#252 id=252 data-nosnippet>252</a>/// [`thread::spawn`]: spawn
+<a href=#253 id=253 data-nosnippet>253</a>/// [`io::Result`]: crate::io::Result
+<a href=#254 id=254 data-nosnippet>254</a>/// [`unwrap`]: crate::result::Result::unwrap
+<a href=#255 id=255 data-nosnippet>255</a>/// [naming-threads]: ./index.html#naming-threads
+<a href=#256 id=256 data-nosnippet>256</a>/// [stack-size]: ./index.html#stack-size
+<a href=#257 id=257 data-nosnippet>257</a></span><span class="attr">#[must_use = <span class="string">"must eventually spawn the thread"</span>]
+<a href=#258 id=258 data-nosnippet>258</a>#[stable(feature = <span class="string">"rust1"</span>, since = <span class="string">"1.0.0"</span>)]
+<a href=#259 id=259 data-nosnippet>259</a>#[derive(Debug)]
+<a href=#260 id=260 data-nosnippet>260</a></span><span class="kw">pub struct </span>Builder {
+<a href=#261 id=261 data-nosnippet>261</a>    <span class="comment">// A name for the thread-to-be, for identification in panic messages
+<a href=#262 id=262 data-nosnippet>262</a>    </span>name: <span class="prelude-ty">Option</span>&lt;String&gt;,
+<a href=#263 id=263 data-nosnippet>263</a>    <span class="comment">// The size of the stack for the spawned thread in bytes
+<a href=#264 id=264 data-nosnippet>264</a>    </span>stack_size: <span class="prelude-ty">Option</span>&lt;usize&gt;,
+<a href=#265 id=265 data-nosnippet>265</a>    <span class="comment">// Skip running and inheriting the thread spawn hooks
+<a href=#266 id=266 data-nosnippet>266</a>    </span>no_hooks: bool,
+<a href=#267 id=267 data-nosnippet>267</a>}
+<a href=#268 id=268 data-nosnippet>268</a>
+<a href=#269 id=269 data-nosnippet>269</a><span class="kw">impl </span>Builder {
+<a href=#270 id=270 data-nosnippet>270</a>    <span class="doccomment">/// Generates the base configuration for spawning a thread, from which
+<a href=#271 id=271 data-nosnippet>271</a>    /// configuration methods can be chained.
+<a href=#272 id=272 data-nosnippet>272</a>    ///
+<a href=#273 id=273 data-nosnippet>273</a>    /// # Examples
+<a href=#274 id=274 data-nosnippet>274</a>    ///
+<a href=#275 id=275 data-nosnippet>275</a>    /// ```
+<a href=#276 id=276 data-nosnippet>276</a>    /// use std::thread;
+<a href=#277 id=277 data-nosnippet>277</a>    ///
+<a href=#278 id=278 data-nosnippet>278</a>    /// let builder = thread::Builder::new()
+<a href=#279 id=279 data-nosnippet>279</a>    ///                               .name("foo".into())
+<a href=#280 id=280 data-nosnippet>280</a>    ///                               .stack_size(32 * 1024);
+<a href=#281 id=281 data-nosnippet>281</a>    ///
+<a href=#282 id=282 data-nosnippet>282</a>    /// let handler = builder.spawn(|| {
+<a href=#283 id=283 data-nosnippet>283</a>    ///     // thread code
+<a href=#284 id=284 data-nosnippet>284</a>    /// }).unwrap();
+<a href=#285 id=285 data-nosnippet>285</a>    ///
+<a href=#286 id=286 data-nosnippet>286</a>    /// handler.join().unwrap();
+<a href=#287 id=287 data-nosnippet>287</a>    /// ```
+<a href=#288 id=288 data-nosnippet>288</a>    </span><span class="attr">#[stable(feature = <span class="string">"rust1"</span>, since = <span class="string">"1.0.0"</span>)]
+<a href=#289 id=289 data-nosnippet>289</a>    </span><span class="kw">pub fn </span>new() -&gt; Builder {
+<a href=#290 id=290 data-nosnippet>290</a>        Builder { name: <span class="prelude-val">None</span>, stack_size: <span class="prelude-val">None</span>, no_hooks: <span class="bool-val">false </span>}
+<a href=#291 id=291 data-nosnippet>291</a>    }
+<a href=#292 id=292 data-nosnippet>292</a>
+<a href=#293 id=293 data-nosnippet>293</a>    <span class="doccomment">/// Names the thread-to-be. Currently the name is used for identification
+<a href=#294 id=294 data-nosnippet>294</a>    /// only in panic messages.
+<a href=#295 id=295 data-nosnippet>295</a>    ///
+<a href=#296 id=296 data-nosnippet>296</a>    /// The name must not contain null bytes (`\0`).
+<a href=#297 id=297 data-nosnippet>297</a>    ///
+<a href=#298 id=298 data-nosnippet>298</a>    /// For more information about named threads, see
+<a href=#299 id=299 data-nosnippet>299</a>    /// [this module-level documentation][naming-threads].
+<a href=#300 id=300 data-nosnippet>300</a>    ///
+<a href=#301 id=301 data-nosnippet>301</a>    /// # Examples
+<a href=#302 id=302 data-nosnippet>302</a>    ///
+<a href=#303 id=303 data-nosnippet>303</a>    /// ```
+<a href=#304 id=304 data-nosnippet>304</a>    /// use std::thread;
+<a href=#305 id=305 data-nosnippet>305</a>    ///
+<a href=#306 id=306 data-nosnippet>306</a>    /// let builder = thread::Builder::new()
+<a href=#307 id=307 data-nosnippet>307</a>    ///     .name("foo".into());
+<a href=#308 id=308 data-nosnippet>308</a>    ///
+<a href=#309 id=309 data-nosnippet>309</a>    /// let handler = builder.spawn(|| {
+<a href=#310 id=310 data-nosnippet>310</a>    ///     assert_eq!(thread::current().name(), Some("foo"))
+<a href=#311 id=311 data-nosnippet>311</a>    /// }).unwrap();
+<a href=#312 id=312 data-nosnippet>312</a>    ///
+<a href=#313 id=313 data-nosnippet>313</a>    /// handler.join().unwrap();
+<a href=#314 id=314 data-nosnippet>314</a>    /// ```
+<a href=#315 id=315 data-nosnippet>315</a>    ///
+<a href=#316 id=316 data-nosnippet>316</a>    /// [naming-threads]: ./index.html#naming-threads
+<a href=#317 id=317 data-nosnippet>317</a>    </span><span class="attr">#[stable(feature = <span class="string">"rust1"</span>, since = <span class="string">"1.0.0"</span>)]
+<a href=#318 id=318 data-nosnippet>318</a>    </span><span class="kw">pub fn </span>name(<span class="kw-2">mut </span><span class="self">self</span>, name: String) -&gt; Builder {
+<a href=#319 id=319 data-nosnippet>319</a>        <span class="self">self</span>.name = <span class="prelude-val">Some</span>(name);
+<a href=#320 id=320 data-nosnippet>320</a>        <span class="self">self
+<a href=#321 id=321 data-nosnippet>321</a>    </span>}
+<a href=#322 id=322 data-nosnippet>322</a>
+<a href=#323 id=323 data-nosnippet>323</a>    <span class="doccomment">/// Sets the size of the stack (in bytes) for the new thread.
+<a href=#324 id=324 data-nosnippet>324</a>    ///
+<a href=#325 id=325 data-nosnippet>325</a>    /// The actual stack size may be greater than this value if
+<a href=#326 id=326 data-nosnippet>326</a>    /// the platform specifies a minimal stack size.
+<a href=#327 id=327 data-nosnippet>327</a>    ///
+<a href=#328 id=328 data-nosnippet>328</a>    /// For more information about the stack size for threads, see
+<a href=#329 id=329 data-nosnippet>329</a>    /// [this module-level documentation][stack-size].
+<a href=#330 id=330 data-nosnippet>330</a>    ///
+<a href=#331 id=331 data-nosnippet>331</a>    /// # Examples
+<a href=#332 id=332 data-nosnippet>332</a>    ///
+<a href=#333 id=333 data-nosnippet>333</a>    /// ```
+<a href=#334 id=334 data-nosnippet>334</a>    /// use std::thread;
+<a href=#335 id=335 data-nosnippet>335</a>    ///
+<a href=#336 id=336 data-nosnippet>336</a>    /// let builder = thread::Builder::new().stack_size(32 * 1024);
+<a href=#337 id=337 data-nosnippet>337</a>    /// ```
+<a href=#338 id=338 data-nosnippet>338</a>    ///
+<a href=#339 id=339 data-nosnippet>339</a>    /// [stack-size]: ./index.html#stack-size
+<a href=#340 id=340 data-nosnippet>340</a>    </span><span class="attr">#[stable(feature = <span class="string">"rust1"</span>, since = <span class="string">"1.0.0"</span>)]
+<a href=#341 id=341 data-nosnippet>341</a>    </span><span class="kw">pub fn </span>stack_size(<span class="kw-2">mut </span><span class="self">self</span>, size: usize) -&gt; Builder {
+<a href=#342 id=342 data-nosnippet>342</a>        <span class="self">self</span>.stack_size = <span class="prelude-val">Some</span>(size);
+<a href=#343 id=343 data-nosnippet>343</a>        <span class="self">self
+<a href=#344 id=344 data-nosnippet>344</a>    </span>}
+<a href=#345 id=345 data-nosnippet>345</a>
+<a href=#346 id=346 data-nosnippet>346</a>    <span class="doccomment">/// Disables running and inheriting [spawn hooks](add_spawn_hook).
+<a href=#347 id=347 data-nosnippet>347</a>    ///
+<a href=#348 id=348 data-nosnippet>348</a>    /// Use this if the parent thread is in no way relevant for the child thread.
+<a href=#349 id=349 data-nosnippet>349</a>    /// For example, when lazily spawning threads for a thread pool.
+<a href=#350 id=350 data-nosnippet>350</a>    </span><span class="attr">#[unstable(feature = <span class="string">"thread_spawn_hook"</span>, issue = <span class="string">"132951"</span>)]
+<a href=#351 id=351 data-nosnippet>351</a>    </span><span class="kw">pub fn </span>no_hooks(<span class="kw-2">mut </span><span class="self">self</span>) -&gt; Builder {
+<a href=#352 id=352 data-nosnippet>352</a>        <span class="self">self</span>.no_hooks = <span class="bool-val">true</span>;
+<a href=#353 id=353 data-nosnippet>353</a>        <span class="self">self
+<a href=#354 id=354 data-nosnippet>354</a>    </span>}
+<a href=#355 id=355 data-nosnippet>355</a>
+<a href=#356 id=356 data-nosnippet>356</a>    <span class="doccomment">/// Spawns a new thread by taking ownership of the `Builder`, and returns an
+<a href=#357 id=357 data-nosnippet>357</a>    /// [`io::Result`] to its [`JoinHandle`].
+<a href=#358 id=358 data-nosnippet>358</a>    ///
+<a href=#359 id=359 data-nosnippet>359</a>    /// The spawned thread may outlive the caller (unless the caller thread
+<a href=#360 id=360 data-nosnippet>360</a>    /// is the main thread; the whole process is terminated when the main
+<a href=#361 id=361 data-nosnippet>361</a>    /// thread finishes). The join handle can be used to block on
+<a href=#362 id=362 data-nosnippet>362</a>    /// termination of the spawned thread, including recovering its panics.
+<a href=#363 id=363 data-nosnippet>363</a>    ///
+<a href=#364 id=364 data-nosnippet>364</a>    /// For a more complete documentation see [`thread::spawn`][`spawn`].
+<a href=#365 id=365 data-nosnippet>365</a>    ///
+<a href=#366 id=366 data-nosnippet>366</a>    /// # Errors
+<a href=#367 id=367 data-nosnippet>367</a>    ///
+<a href=#368 id=368 data-nosnippet>368</a>    /// Unlike the [`spawn`] free function, this method yields an
+<a href=#369 id=369 data-nosnippet>369</a>    /// [`io::Result`] to capture any failure to create the thread at
+<a href=#370 id=370 data-nosnippet>370</a>    /// the OS level.
+<a href=#371 id=371 data-nosnippet>371</a>    ///
+<a href=#372 id=372 data-nosnippet>372</a>    /// [`io::Result`]: crate::io::Result
+<a href=#373 id=373 data-nosnippet>373</a>    ///
+<a href=#374 id=374 data-nosnippet>374</a>    /// # Panics
+<a href=#375 id=375 data-nosnippet>375</a>    ///
+<a href=#376 id=376 data-nosnippet>376</a>    /// Panics if a thread name was set and it contained null bytes.
+<a href=#377 id=377 data-nosnippet>377</a>    ///
+<a href=#378 id=378 data-nosnippet>378</a>    /// # Examples
+<a href=#379 id=379 data-nosnippet>379</a>    ///
+<a href=#380 id=380 data-nosnippet>380</a>    /// ```
+<a href=#381 id=381 data-nosnippet>381</a>    /// use std::thread;
+<a href=#382 id=382 data-nosnippet>382</a>    ///
+<a href=#383 id=383 data-nosnippet>383</a>    /// let builder = thread::Builder::new();
+<a href=#384 id=384 data-nosnippet>384</a>    ///
+<a href=#385 id=385 data-nosnippet>385</a>    /// let handler = builder.spawn(|| {
+<a href=#386 id=386 data-nosnippet>386</a>    ///     // thread code
+<a href=#387 id=387 data-nosnippet>387</a>    /// }).unwrap();
+<a href=#388 id=388 data-nosnippet>388</a>    ///
+<a href=#389 id=389 data-nosnippet>389</a>    /// handler.join().unwrap();
+<a href=#390 id=390 data-nosnippet>390</a>    /// ```
+<a href=#391 id=391 data-nosnippet>391</a>    </span><span class="attr">#[stable(feature = <span class="string">"rust1"</span>, since = <span class="string">"1.0.0"</span>)]
+<a href=#392 id=392 data-nosnippet>392</a>    #[cfg_attr(miri, track_caller)] </span><span class="comment">// even without panics, this helps for Miri backtraces
+<a href=#393 id=393 data-nosnippet>393</a>    </span><span class="kw">pub fn </span>spawn&lt;F, T&gt;(<span class="self">self</span>, f: F) -&gt; io::Result&lt;JoinHandle&lt;T&gt;&gt;
+<a href=#394 id=394 data-nosnippet>394</a>    <span class="kw">where
+<a href=#395 id=395 data-nosnippet>395</a>        </span>F: FnOnce() -&gt; T,
+<a href=#396 id=396 data-nosnippet>396</a>        F: Send + <span class="lifetime">'static</span>,
+<a href=#397 id=397 data-nosnippet>397</a>        T: Send + <span class="lifetime">'static</span>,
+<a href=#398 id=398 data-nosnippet>398</a>    {
+<a href=#399 id=399 data-nosnippet>399</a>        <span class="kw">unsafe </span>{ <span class="self">self</span>.spawn_unchecked(f) }
+<a href=#400 id=400 data-nosnippet>400</a>    }
+<a href=#401 id=401 data-nosnippet>401</a>
+<a href=#402 id=402 data-nosnippet>402</a>    <span class="doccomment">/// Spawns a new thread without any lifetime restrictions by taking ownership
+<a href=#403 id=403 data-nosnippet>403</a>    /// of the `Builder`, and returns an [`io::Result`] to its [`JoinHandle`].
+<a href=#404 id=404 data-nosnippet>404</a>    ///
+<a href=#405 id=405 data-nosnippet>405</a>    /// The spawned thread may outlive the caller (unless the caller thread
+<a href=#406 id=406 data-nosnippet>406</a>    /// is the main thread; the whole process is terminated when the main
+<a href=#407 id=407 data-nosnippet>407</a>    /// thread finishes). The join handle can be used to block on
+<a href=#408 id=408 data-nosnippet>408</a>    /// termination of the spawned thread, including recovering its panics.
+<a href=#409 id=409 data-nosnippet>409</a>    ///
+<a href=#410 id=410 data-nosnippet>410</a>    /// This method is identical to [`thread::Builder::spawn`][`Builder::spawn`],
+<a href=#411 id=411 data-nosnippet>411</a>    /// except for the relaxed lifetime bounds, which render it unsafe.
+<a href=#412 id=412 data-nosnippet>412</a>    /// For a more complete documentation see [`thread::spawn`][`spawn`].
+<a href=#413 id=413 data-nosnippet>413</a>    ///
+<a href=#414 id=414 data-nosnippet>414</a>    /// # Errors
+<a href=#415 id=415 data-nosnippet>415</a>    ///
+<a href=#416 id=416 data-nosnippet>416</a>    /// Unlike the [`spawn`] free function, this method yields an
+<a href=#417 id=417 data-nosnippet>417</a>    /// [`io::Result`] to capture any failure to create the thread at
+<a href=#418 id=418 data-nosnippet>418</a>    /// the OS level.
+<a href=#419 id=419 data-nosnippet>419</a>    ///
+<a href=#420 id=420 data-nosnippet>420</a>    /// # Panics
+<a href=#421 id=421 data-nosnippet>421</a>    ///
+<a href=#422 id=422 data-nosnippet>422</a>    /// Panics if a thread name was set and it contained null bytes.
+<a href=#423 id=423 data-nosnippet>423</a>    ///
+<a href=#424 id=424 data-nosnippet>424</a>    /// # Safety
+<a href=#425 id=425 data-nosnippet>425</a>    ///
+<a href=#426 id=426 data-nosnippet>426</a>    /// The caller has to ensure that the spawned thread does not outlive any
+<a href=#427 id=427 data-nosnippet>427</a>    /// references in the supplied thread closure and its return type.
+<a href=#428 id=428 data-nosnippet>428</a>    /// This can be guaranteed in two ways:
+<a href=#429 id=429 data-nosnippet>429</a>    ///
+<a href=#430 id=430 data-nosnippet>430</a>    /// - ensure that [`join`][`JoinHandle::join`] is called before any referenced
+<a href=#431 id=431 data-nosnippet>431</a>    /// data is dropped
+<a href=#432 id=432 data-nosnippet>432</a>    /// - use only types with `'static` lifetime bounds, i.e., those with no or only
+<a href=#433 id=433 data-nosnippet>433</a>    /// `'static` references (both [`thread::Builder::spawn`][`Builder::spawn`]
+<a href=#434 id=434 data-nosnippet>434</a>    /// and [`thread::spawn`][`spawn`] enforce this property statically)
+<a href=#435 id=435 data-nosnippet>435</a>    ///
+<a href=#436 id=436 data-nosnippet>436</a>    /// # Examples
+<a href=#437 id=437 data-nosnippet>437</a>    ///
+<a href=#438 id=438 data-nosnippet>438</a>    /// ```
+<a href=#439 id=439 data-nosnippet>439</a>    /// use std::thread;
+<a href=#440 id=440 data-nosnippet>440</a>    ///
+<a href=#441 id=441 data-nosnippet>441</a>    /// let builder = thread::Builder::new();
+<a href=#442 id=442 data-nosnippet>442</a>    ///
+<a href=#443 id=443 data-nosnippet>443</a>    /// let x = 1;
+<a href=#444 id=444 data-nosnippet>444</a>    /// let thread_x = &amp;x;
+<a href=#445 id=445 data-nosnippet>445</a>    ///
+<a href=#446 id=446 data-nosnippet>446</a>    /// let handler = unsafe {
+<a href=#447 id=447 data-nosnippet>447</a>    ///     builder.spawn_unchecked(move || {
+<a href=#448 id=448 data-nosnippet>448</a>    ///         println!("x = {}", *thread_x);
+<a href=#449 id=449 data-nosnippet>449</a>    ///     }).unwrap()
+<a href=#450 id=450 data-nosnippet>450</a>    /// };
+<a href=#451 id=451 data-nosnippet>451</a>    ///
+<a href=#452 id=452 data-nosnippet>452</a>    /// // caller has to ensure `join()` is called, otherwise
+<a href=#453 id=453 data-nosnippet>453</a>    /// // it is possible to access freed memory if `x` gets
+<a href=#454 id=454 data-nosnippet>454</a>    /// // dropped before the thread closure is executed!
+<a href=#455 id=455 data-nosnippet>455</a>    /// handler.join().unwrap();
+<a href=#456 id=456 data-nosnippet>456</a>    /// ```
+<a href=#457 id=457 data-nosnippet>457</a>    ///
+<a href=#458 id=458 data-nosnippet>458</a>    /// [`io::Result`]: crate::io::Result
+<a href=#459 id=459 data-nosnippet>459</a>    </span><span class="attr">#[stable(feature = <span class="string">"thread_spawn_unchecked"</span>, since = <span class="string">"1.82.0"</span>)]
+<a href=#460 id=460 data-nosnippet>460</a>    #[cfg_attr(miri, track_caller)] </span><span class="comment">// even without panics, this helps for Miri backtraces
+<a href=#461 id=461 data-nosnippet>461</a>    </span><span class="kw">pub unsafe fn </span>spawn_unchecked&lt;F, T&gt;(<span class="self">self</span>, f: F) -&gt; io::Result&lt;JoinHandle&lt;T&gt;&gt;
+<a href=#462 id=462 data-nosnippet>462</a>    <span class="kw">where
+<a href=#463 id=463 data-nosnippet>463</a>        </span>F: FnOnce() -&gt; T,
+<a href=#464 id=464 data-nosnippet>464</a>        F: Send,
+<a href=#465 id=465 data-nosnippet>465</a>        T: Send,
+<a href=#466 id=466 data-nosnippet>466</a>    {
+<a href=#467 id=467 data-nosnippet>467</a>        <span class="prelude-val">Ok</span>(JoinHandle(<span class="kw">unsafe </span>{ <span class="self">self</span>.spawn_unchecked_(f, <span class="prelude-val">None</span>) }<span class="question-mark">?</span>))
+<a href=#468 id=468 data-nosnippet>468</a>    }
+<a href=#469 id=469 data-nosnippet>469</a>
+<a href=#470 id=470 data-nosnippet>470</a>    <span class="attr">#[cfg_attr(miri, track_caller)] </span><span class="comment">// even without panics, this helps for Miri backtraces
+<a href=#471 id=471 data-nosnippet>471</a>    </span><span class="kw">unsafe fn </span>spawn_unchecked_&lt;<span class="lifetime">'scope</span>, F, T&gt;(
+<a href=#472 id=472 data-nosnippet>472</a>        <span class="self">self</span>,
+<a href=#473 id=473 data-nosnippet>473</a>        f: F,
+<a href=#474 id=474 data-nosnippet>474</a>        scope_data: <span class="prelude-ty">Option</span>&lt;Arc&lt;scoped::ScopeData&gt;&gt;,
+<a href=#475 id=475 data-nosnippet>475</a>    ) -&gt; io::Result&lt;JoinInner&lt;<span class="lifetime">'scope</span>, T&gt;&gt;
+<a href=#476 id=476 data-nosnippet>476</a>    <span class="kw">where
+<a href=#477 id=477 data-nosnippet>477</a>        </span>F: FnOnce() -&gt; T,
+<a href=#478 id=478 data-nosnippet>478</a>        F: Send,
+<a href=#479 id=479 data-nosnippet>479</a>        T: Send,
+<a href=#480 id=480 data-nosnippet>480</a>    {
+<a href=#481 id=481 data-nosnippet>481</a>        <span class="kw">let </span>Builder { name, stack_size, no_hooks } = <span class="self">self</span>;
+<a href=#482 id=482 data-nosnippet>482</a>
+<a href=#483 id=483 data-nosnippet>483</a>        <span class="kw">let </span>stack_size = stack_size.unwrap_or_else(|| {
+<a href=#484 id=484 data-nosnippet>484</a>            <span class="kw">static </span>MIN: Atomic&lt;usize&gt; = AtomicUsize::new(<span class="number">0</span>);
+<a href=#485 id=485 data-nosnippet>485</a>
+<a href=#486 id=486 data-nosnippet>486</a>            <span class="kw">match </span>MIN.load(Ordering::Relaxed) {
+<a href=#487 id=487 data-nosnippet>487</a>                <span class="number">0 </span>=&gt; {}
+<a href=#488 id=488 data-nosnippet>488</a>                n =&gt; <span class="kw">return </span>n - <span class="number">1</span>,
+<a href=#489 id=489 data-nosnippet>489</a>            }
+<a href=#490 id=490 data-nosnippet>490</a>
+<a href=#491 id=491 data-nosnippet>491</a>            <span class="kw">let </span>amt = env::var_os(<span class="string">"RUST_MIN_STACK"</span>)
+<a href=#492 id=492 data-nosnippet>492</a>                .and_then(|s| s.to_str().and_then(|s| s.parse().ok()))
+<a href=#493 id=493 data-nosnippet>493</a>                .unwrap_or(imp::DEFAULT_MIN_STACK_SIZE);
+<a href=#494 id=494 data-nosnippet>494</a>
+<a href=#495 id=495 data-nosnippet>495</a>            <span class="comment">// 0 is our sentinel value, so ensure that we'll never see 0 after
+<a href=#496 id=496 data-nosnippet>496</a>            // initialization has run
+<a href=#497 id=497 data-nosnippet>497</a>            </span>MIN.store(amt + <span class="number">1</span>, Ordering::Relaxed);
+<a href=#498 id=498 data-nosnippet>498</a>            amt
+<a href=#499 id=499 data-nosnippet>499</a>        });
+<a href=#500 id=500 data-nosnippet>500</a>
+<a href=#501 id=501 data-nosnippet>501</a>        <span class="kw">let </span>id = ThreadId::new();
+<a href=#502 id=502 data-nosnippet>502</a>        <span class="kw">let </span>my_thread = Thread::new(id, name);
+<a href=#503 id=503 data-nosnippet>503</a>
+<a href=#504 id=504 data-nosnippet>504</a>        <span class="kw">let </span>hooks = <span class="kw">if </span>no_hooks {
+<a href=#505 id=505 data-nosnippet>505</a>            spawnhook::ChildSpawnHooks::default()
+<a href=#506 id=506 data-nosnippet>506</a>        } <span class="kw">else </span>{
+<a href=#507 id=507 data-nosnippet>507</a>            spawnhook::run_spawn_hooks(<span class="kw-2">&amp;</span>my_thread)
+<a href=#508 id=508 data-nosnippet>508</a>        };
+<a href=#509 id=509 data-nosnippet>509</a>
+<a href=#510 id=510 data-nosnippet>510</a>        <span class="kw">let </span>their_thread = my_thread.clone();
+<a href=#511 id=511 data-nosnippet>511</a>
+<a href=#512 id=512 data-nosnippet>512</a>        <span class="kw">let </span>my_packet: Arc&lt;Packet&lt;<span class="lifetime">'scope</span>, T&gt;&gt; = Arc::new(Packet {
+<a href=#513 id=513 data-nosnippet>513</a>            scope: scope_data,
+<a href=#514 id=514 data-nosnippet>514</a>            result: UnsafeCell::new(<span class="prelude-val">None</span>),
+<a href=#515 id=515 data-nosnippet>515</a>            _marker: PhantomData,
+<a href=#516 id=516 data-nosnippet>516</a>        });
+<a href=#517 id=517 data-nosnippet>517</a>        <span class="kw">let </span>their_packet = my_packet.clone();
+<a href=#518 id=518 data-nosnippet>518</a>
+<a href=#519 id=519 data-nosnippet>519</a>        <span class="comment">// Pass `f` in `MaybeUninit` because actually that closure might *run longer than the lifetime of `F`*.
+<a href=#520 id=520 data-nosnippet>520</a>        // See &lt;https://github.com/rust-lang/rust/issues/101983&gt; for more details.
+<a href=#521 id=521 data-nosnippet>521</a>        // To prevent leaks we use a wrapper that drops its contents.
+<a href=#522 id=522 data-nosnippet>522</a>        </span><span class="attr">#[repr(transparent)]
+<a href=#523 id=523 data-nosnippet>523</a>        </span><span class="kw">struct </span>MaybeDangling&lt;T&gt;(mem::MaybeUninit&lt;T&gt;);
+<a href=#524 id=524 data-nosnippet>524</a>        <span class="kw">impl</span>&lt;T&gt; MaybeDangling&lt;T&gt; {
+<a href=#525 id=525 data-nosnippet>525</a>            <span class="kw">fn </span>new(x: T) -&gt; <span class="self">Self </span>{
+<a href=#526 id=526 data-nosnippet>526</a>                MaybeDangling(mem::MaybeUninit::new(x))
+<a href=#527 id=527 data-nosnippet>527</a>            }
+<a href=#528 id=528 data-nosnippet>528</a>            <span class="kw">fn </span>into_inner(<span class="self">self</span>) -&gt; T {
+<a href=#529 id=529 data-nosnippet>529</a>                <span class="comment">// Make sure we don't drop.
+<a href=#530 id=530 data-nosnippet>530</a>                </span><span class="kw">let </span>this = ManuallyDrop::new(<span class="self">self</span>);
+<a href=#531 id=531 data-nosnippet>531</a>                <span class="comment">// SAFETY: we are always initialized.
+<a href=#532 id=532 data-nosnippet>532</a>                </span><span class="kw">unsafe </span>{ this.<span class="number">0</span>.assume_init_read() }
+<a href=#533 id=533 data-nosnippet>533</a>            }
+<a href=#534 id=534 data-nosnippet>534</a>        }
+<a href=#535 id=535 data-nosnippet>535</a>        <span class="kw">impl</span>&lt;T&gt; Drop <span class="kw">for </span>MaybeDangling&lt;T&gt; {
+<a href=#536 id=536 data-nosnippet>536</a>            <span class="kw">fn </span>drop(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+<a href=#537 id=537 data-nosnippet>537</a>                <span class="comment">// SAFETY: we are always initialized.
+<a href=#538 id=538 data-nosnippet>538</a>                </span><span class="kw">unsafe </span>{ <span class="self">self</span>.<span class="number">0</span>.assume_init_drop() };
+<a href=#539 id=539 data-nosnippet>539</a>            }
+<a href=#540 id=540 data-nosnippet>540</a>        }
+<a href=#541 id=541 data-nosnippet>541</a>
+<a href=#542 id=542 data-nosnippet>542</a>        <span class="kw">let </span>f = MaybeDangling::new(f);
+<a href=#543 id=543 data-nosnippet>543</a>        <span class="kw">let </span>main = <span class="kw">move </span>|| {
+<a href=#544 id=544 data-nosnippet>544</a>            <span class="kw">if let </span><span class="prelude-val">Err</span>(_thread) = set_current(their_thread.clone()) {
+<a href=#545 id=545 data-nosnippet>545</a>                <span class="comment">// Both the current thread handle and the ID should not be
+<a href=#546 id=546 data-nosnippet>546</a>                // initialized yet. Since only the C runtime and some of our
+<a href=#547 id=547 data-nosnippet>547</a>                // platform code run before this, this point shouldn't be
+<a href=#548 id=548 data-nosnippet>548</a>                // reachable. Use an abort to save binary size (see #123356).
+<a href=#549 id=549 data-nosnippet>549</a>                </span><span class="macro">rtabort!</span>(<span class="string">"something here is badly broken!"</span>);
+<a href=#550 id=550 data-nosnippet>550</a>            }
+<a href=#551 id=551 data-nosnippet>551</a>
+<a href=#552 id=552 data-nosnippet>552</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(name) = their_thread.cname() {
+<a href=#553 id=553 data-nosnippet>553</a>                imp::Thread::set_name(name);
+<a href=#554 id=554 data-nosnippet>554</a>            }
+<a href=#555 id=555 data-nosnippet>555</a>
+<a href=#556 id=556 data-nosnippet>556</a>            <span class="kw">let </span>f = f.into_inner();
+<a href=#557 id=557 data-nosnippet>557</a>            <span class="kw">let </span>try_result = panic::catch_unwind(panic::AssertUnwindSafe(|| {
+<a href=#558 id=558 data-nosnippet>558</a>                <span class="kw">crate</span>::sys::backtrace::__rust_begin_short_backtrace(|| hooks.run());
+<a href=#559 id=559 data-nosnippet>559</a>                <span class="kw">crate</span>::sys::backtrace::__rust_begin_short_backtrace(f)
+<a href=#560 id=560 data-nosnippet>560</a>            }));
+<a href=#561 id=561 data-nosnippet>561</a>            <span class="comment">// SAFETY: `their_packet` as been built just above and moved by the
+<a href=#562 id=562 data-nosnippet>562</a>            // closure (it is an Arc&lt;...&gt;) and `my_packet` will be stored in the
+<a href=#563 id=563 data-nosnippet>563</a>            // same `JoinInner` as this closure meaning the mutation will be
+<a href=#564 id=564 data-nosnippet>564</a>            // safe (not modify it and affect a value far away).
+<a href=#565 id=565 data-nosnippet>565</a>            </span><span class="kw">unsafe </span>{ <span class="kw-2">*</span>their_packet.result.get() = <span class="prelude-val">Some</span>(try_result) };
+<a href=#566 id=566 data-nosnippet>566</a>            <span class="comment">// Here `their_packet` gets dropped, and if this is the last `Arc` for that packet that
+<a href=#567 id=567 data-nosnippet>567</a>            // will call `decrement_num_running_threads` and therefore signal that this thread is
+<a href=#568 id=568 data-nosnippet>568</a>            // done.
+<a href=#569 id=569 data-nosnippet>569</a>            </span>drop(their_packet);
+<a href=#570 id=570 data-nosnippet>570</a>            <span class="comment">// Here, the lifetime `'scope` can end. `main` keeps running for a bit
+<a href=#571 id=571 data-nosnippet>571</a>            // after that before returning itself.
+<a href=#572 id=572 data-nosnippet>572</a>        </span>};
+<a href=#573 id=573 data-nosnippet>573</a>
+<a href=#574 id=574 data-nosnippet>574</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(scope_data) = <span class="kw-2">&amp;</span>my_packet.scope {
+<a href=#575 id=575 data-nosnippet>575</a>            scope_data.increment_num_running_threads();
+<a href=#576 id=576 data-nosnippet>576</a>        }
+<a href=#577 id=577 data-nosnippet>577</a>
+<a href=#578 id=578 data-nosnippet>578</a>        <span class="kw">let </span>main = Box::new(main);
+<a href=#579 id=579 data-nosnippet>579</a>        <span class="comment">// SAFETY: dynamic size and alignment of the Box remain the same. See below for why the
+<a href=#580 id=580 data-nosnippet>580</a>        // lifetime change is justified.
+<a href=#581 id=581 data-nosnippet>581</a>        </span><span class="kw">let </span>main =
+<a href=#582 id=582 data-nosnippet>582</a>            <span class="kw">unsafe </span>{ Box::from_raw(Box::into_raw(main) <span class="kw">as </span><span class="kw-2">*mut </span>(<span class="kw">dyn </span>FnOnce() + Send + <span class="lifetime">'static</span>)) };
+<a href=#583 id=583 data-nosnippet>583</a>
+<a href=#584 id=584 data-nosnippet>584</a>        <span class="prelude-val">Ok</span>(JoinInner {
+<a href=#585 id=585 data-nosnippet>585</a>            <span class="comment">// SAFETY:
+<a href=#586 id=586 data-nosnippet>586</a>            //
+<a href=#587 id=587 data-nosnippet>587</a>            // `imp::Thread::new` takes a closure with a `'static` lifetime, since it's passed
+<a href=#588 id=588 data-nosnippet>588</a>            // through FFI or otherwise used with low-level threading primitives that have no
+<a href=#589 id=589 data-nosnippet>589</a>            // notion of or way to enforce lifetimes.
+<a href=#590 id=590 data-nosnippet>590</a>            //
+<a href=#591 id=591 data-nosnippet>591</a>            // As mentioned in the `Safety` section of this function's documentation, the caller of
+<a href=#592 id=592 data-nosnippet>592</a>            // this function needs to guarantee that the passed-in lifetime is sufficiently long
+<a href=#593 id=593 data-nosnippet>593</a>            // for the lifetime of the thread.
+<a href=#594 id=594 data-nosnippet>594</a>            //
+<a href=#595 id=595 data-nosnippet>595</a>            // Similarly, the `sys` implementation must guarantee that no references to the closure
+<a href=#596 id=596 data-nosnippet>596</a>            // exist after the thread has terminated, which is signaled by `Thread::join`
+<a href=#597 id=597 data-nosnippet>597</a>            // returning.
+<a href=#598 id=598 data-nosnippet>598</a>            </span>native: <span class="kw">unsafe </span>{ imp::Thread::new(stack_size, my_thread.name(), main)<span class="question-mark">? </span>},
+<a href=#599 id=599 data-nosnippet>599</a>            thread: my_thread,
+<a href=#600 id=600 data-nosnippet>600</a>            packet: my_packet,
+<a href=#601 id=601 data-nosnippet>601</a>        })
+<a href=#602 id=602 data-nosnippet>602</a>    }
+<a href=#603 id=603 data-nosnippet>603</a>}
+<a href=#604 id=604 data-nosnippet>604</a>
+<a href=#605 id=605 data-nosnippet>605</a><span class="comment">////////////////////////////////////////////////////////////////////////////////
+<a href=#606 id=606 data-nosnippet>606</a>// Free functions
+<a href=#607 id=607 data-nosnippet>607</a>////////////////////////////////////////////////////////////////////////////////
+<a href=#608 id=608 data-nosnippet>608</a>
+<a href=#609 id=609 data-nosnippet>609</a></span><span class="doccomment">/// Spawns a new thread, returning a [`JoinHandle`] for it.
+<a href=#610 id=610 data-nosnippet>610</a>///
+<a href=#611 id=611 data-nosnippet>611</a>/// The join handle provides a [`join`] method that can be used to join the spawned
+<a href=#612 id=612 data-nosnippet>612</a>/// thread. If the spawned thread panics, [`join`] will return an [`Err`] containing
+<a href=#613 id=613 data-nosnippet>613</a>/// the argument given to [`panic!`].
+<a href=#614 id=614 data-nosnippet>614</a>///
+<a href=#615 id=615 data-nosnippet>615</a>/// If the join handle is dropped, the spawned thread will implicitly be *detached*.
+<a href=#616 id=616 data-nosnippet>616</a>/// In this case, the spawned thread may no longer be joined.
+<a href=#617 id=617 data-nosnippet>617</a>/// (It is the responsibility of the program to either eventually join threads it
+<a href=#618 id=618 data-nosnippet>618</a>/// creates or detach them; otherwise, a resource leak will result.)
+<a href=#619 id=619 data-nosnippet>619</a>///
+<a href=#620 id=620 data-nosnippet>620</a>/// This call will create a thread using default parameters of [`Builder`], if you
+<a href=#621 id=621 data-nosnippet>621</a>/// want to specify the stack size or the name of the thread, use this API
+<a href=#622 id=622 data-nosnippet>622</a>/// instead.
+<a href=#623 id=623 data-nosnippet>623</a>///
+<a href=#624 id=624 data-nosnippet>624</a>/// As you can see in the signature of `spawn` there are two constraints on
+<a href=#625 id=625 data-nosnippet>625</a>/// both the closure given to `spawn` and its return value, let's explain them:
+<a href=#626 id=626 data-nosnippet>626</a>///
+<a href=#627 id=627 data-nosnippet>627</a>/// - The `'static` constraint means that the closure and its return value
+<a href=#628 id=628 data-nosnippet>628</a>///   must have a lifetime of the whole program execution. The reason for this
+<a href=#629 id=629 data-nosnippet>629</a>///   is that threads can outlive the lifetime they have been created in.
+<a href=#630 id=630 data-nosnippet>630</a>///
+<a href=#631 id=631 data-nosnippet>631</a>///   Indeed if the thread, and by extension its return value, can outlive their
+<a href=#632 id=632 data-nosnippet>632</a>///   caller, we need to make sure that they will be valid afterwards, and since
+<a href=#633 id=633 data-nosnippet>633</a>///   we *can't* know when it will return we need to have them valid as long as
+<a href=#634 id=634 data-nosnippet>634</a>///   possible, that is until the end of the program, hence the `'static`
+<a href=#635 id=635 data-nosnippet>635</a>///   lifetime.
+<a href=#636 id=636 data-nosnippet>636</a>/// - The [`Send`] constraint is because the closure will need to be passed
+<a href=#637 id=637 data-nosnippet>637</a>///   *by value* from the thread where it is spawned to the new thread. Its
+<a href=#638 id=638 data-nosnippet>638</a>///   return value will need to be passed from the new thread to the thread
+<a href=#639 id=639 data-nosnippet>639</a>///   where it is `join`ed.
+<a href=#640 id=640 data-nosnippet>640</a>///   As a reminder, the [`Send`] marker trait expresses that it is safe to be
+<a href=#641 id=641 data-nosnippet>641</a>///   passed from thread to thread. [`Sync`] expresses that it is safe to have a
+<a href=#642 id=642 data-nosnippet>642</a>///   reference be passed from thread to thread.
+<a href=#643 id=643 data-nosnippet>643</a>///
+<a href=#644 id=644 data-nosnippet>644</a>/// # Panics
+<a href=#645 id=645 data-nosnippet>645</a>///
+<a href=#646 id=646 data-nosnippet>646</a>/// Panics if the OS fails to create a thread; use [`Builder::spawn`]
+<a href=#647 id=647 data-nosnippet>647</a>/// to recover from such errors.
+<a href=#648 id=648 data-nosnippet>648</a>///
+<a href=#649 id=649 data-nosnippet>649</a>/// # Examples
+<a href=#650 id=650 data-nosnippet>650</a>///
+<a href=#651 id=651 data-nosnippet>651</a>/// Creating a thread.
+<a href=#652 id=652 data-nosnippet>652</a>///
+<a href=#653 id=653 data-nosnippet>653</a>/// ```
+<a href=#654 id=654 data-nosnippet>654</a>/// use std::thread;
+<a href=#655 id=655 data-nosnippet>655</a>///
+<a href=#656 id=656 data-nosnippet>656</a>/// let handler = thread::spawn(|| {
+<a href=#657 id=657 data-nosnippet>657</a>///     // thread code
+<a href=#658 id=658 data-nosnippet>658</a>/// });
+<a href=#659 id=659 data-nosnippet>659</a>///
+<a href=#660 id=660 data-nosnippet>660</a>/// handler.join().unwrap();
+<a href=#661 id=661 data-nosnippet>661</a>/// ```
+<a href=#662 id=662 data-nosnippet>662</a>///
+<a href=#663 id=663 data-nosnippet>663</a>/// As mentioned in the module documentation, threads are usually made to
+<a href=#664 id=664 data-nosnippet>664</a>/// communicate using [`channels`], here is how it usually looks.
+<a href=#665 id=665 data-nosnippet>665</a>///
+<a href=#666 id=666 data-nosnippet>666</a>/// This example also shows how to use `move`, in order to give ownership
+<a href=#667 id=667 data-nosnippet>667</a>/// of values to a thread.
+<a href=#668 id=668 data-nosnippet>668</a>///
+<a href=#669 id=669 data-nosnippet>669</a>/// ```
+<a href=#670 id=670 data-nosnippet>670</a>/// use std::thread;
+<a href=#671 id=671 data-nosnippet>671</a>/// use std::sync::mpsc::channel;
+<a href=#672 id=672 data-nosnippet>672</a>///
+<a href=#673 id=673 data-nosnippet>673</a>/// let (tx, rx) = channel();
+<a href=#674 id=674 data-nosnippet>674</a>///
+<a href=#675 id=675 data-nosnippet>675</a>/// let sender = thread::spawn(move || {
+<a href=#676 id=676 data-nosnippet>676</a>///     tx.send("Hello, thread".to_owned())
+<a href=#677 id=677 data-nosnippet>677</a>///         .expect("Unable to send on channel");
+<a href=#678 id=678 data-nosnippet>678</a>/// });
+<a href=#679 id=679 data-nosnippet>679</a>///
+<a href=#680 id=680 data-nosnippet>680</a>/// let receiver = thread::spawn(move || {
+<a href=#681 id=681 data-nosnippet>681</a>///     let value = rx.recv().expect("Unable to receive from channel");
+<a href=#682 id=682 data-nosnippet>682</a>///     println!("{value}");
+<a href=#683 id=683 data-nosnippet>683</a>/// });
+<a href=#684 id=684 data-nosnippet>684</a>///
+<a href=#685 id=685 data-nosnippet>685</a>/// sender.join().expect("The sender thread has panicked");
+<a href=#686 id=686 data-nosnippet>686</a>/// receiver.join().expect("The receiver thread has panicked");
+<a href=#687 id=687 data-nosnippet>687</a>/// ```
+<a href=#688 id=688 data-nosnippet>688</a>///
+<a href=#689 id=689 data-nosnippet>689</a>/// A thread can also return a value through its [`JoinHandle`], you can use
+<a href=#690 id=690 data-nosnippet>690</a>/// this to make asynchronous computations (futures might be more appropriate
+<a href=#691 id=691 data-nosnippet>691</a>/// though).
+<a href=#692 id=692 data-nosnippet>692</a>///
+<a href=#693 id=693 data-nosnippet>693</a>/// ```
+<a href=#694 id=694 data-nosnippet>694</a>/// use std::thread;
+<a href=#695 id=695 data-nosnippet>695</a>///
+<a href=#696 id=696 data-nosnippet>696</a>/// let computation = thread::spawn(|| {
+<a href=#697 id=697 data-nosnippet>697</a>///     // Some expensive computation.
+<a href=#698 id=698 data-nosnippet>698</a>///     42
+<a href=#699 id=699 data-nosnippet>699</a>/// });
+<a href=#700 id=700 data-nosnippet>700</a>///
+<a href=#701 id=701 data-nosnippet>701</a>/// let result = computation.join().unwrap();
+<a href=#702 id=702 data-nosnippet>702</a>/// println!("{result}");
+<a href=#703 id=703 data-nosnippet>703</a>/// ```
+<a href=#704 id=704 data-nosnippet>704</a>///
+<a href=#705 id=705 data-nosnippet>705</a>/// # Notes
+<a href=#706 id=706 data-nosnippet>706</a>///
+<a href=#707 id=707 data-nosnippet>707</a>/// This function has the same minimal guarantee regarding "foreign" unwinding operations (e.g.
+<a href=#708 id=708 data-nosnippet>708</a>/// an exception thrown from C++ code, or a `panic!` in Rust code compiled or linked with a
+<a href=#709 id=709 data-nosnippet>709</a>/// different runtime) as [`catch_unwind`]; namely, if the thread created with `thread::spawn`
+<a href=#710 id=710 data-nosnippet>710</a>/// unwinds all the way to the root with such an exception, one of two behaviors are possible,
+<a href=#711 id=711 data-nosnippet>711</a>/// and it is unspecified which will occur:
+<a href=#712 id=712 data-nosnippet>712</a>///
+<a href=#713 id=713 data-nosnippet>713</a>/// * The process aborts.
+<a href=#714 id=714 data-nosnippet>714</a>/// * The process does not abort, and [`join`] will return a `Result::Err`
+<a href=#715 id=715 data-nosnippet>715</a>///   containing an opaque type.
+<a href=#716 id=716 data-nosnippet>716</a>///
+<a href=#717 id=717 data-nosnippet>717</a>/// [`catch_unwind`]: ../../std/panic/fn.catch_unwind.html
+<a href=#718 id=718 data-nosnippet>718</a>/// [`channels`]: crate::sync::mpsc
+<a href=#719 id=719 data-nosnippet>719</a>/// [`join`]: JoinHandle::join
+<a href=#720 id=720 data-nosnippet>720</a>/// [`Err`]: crate::result::Result::Err
+<a href=#721 id=721 data-nosnippet>721</a></span><span class="attr">#[stable(feature = <span class="string">"rust1"</span>, since = <span class="string">"1.0.0"</span>)]
+<a href=#722 id=722 data-nosnippet>722</a>#[cfg_attr(miri, track_caller)] </span><span class="comment">// even without panics, this helps for Miri backtraces
+<a href=#723 id=723 data-nosnippet>723</a></span><span class="kw">pub fn </span>spawn&lt;F, T&gt;(f: F) -&gt; JoinHandle&lt;T&gt;
+<a href=#724 id=724 data-nosnippet>724</a><span class="kw">where
+<a href=#725 id=725 data-nosnippet>725</a>    </span>F: FnOnce() -&gt; T,
+<a href=#726 id=726 data-nosnippet>726</a>    F: Send + <span class="lifetime">'static</span>,
+<a href=#727 id=727 data-nosnippet>727</a>    T: Send + <span class="lifetime">'static</span>,
+<a href=#728 id=728 data-nosnippet>728</a>{
+<a href=#729 id=729 data-nosnippet>729</a>    Builder::new().spawn(f).expect(<span class="string">"failed to spawn thread"</span>)
+<a href=#730 id=730 data-nosnippet>730</a>}
+<a href=#731 id=731 data-nosnippet>731</a>
+<a href=#732 id=732 data-nosnippet>732</a><span class="doccomment">/// Cooperatively gives up a timeslice to the OS scheduler.
+<a href=#733 id=733 data-nosnippet>733</a>///
+<a href=#734 id=734 data-nosnippet>734</a>/// This calls the underlying OS scheduler's yield primitive, signaling
+<a href=#735 id=735 data-nosnippet>735</a>/// that the calling thread is willing to give up its remaining timeslice
+<a href=#736 id=736 data-nosnippet>736</a>/// so that the OS may schedule other threads on the CPU.
+<a href=#737 id=737 data-nosnippet>737</a>///
+<a href=#738 id=738 data-nosnippet>738</a>/// A drawback of yielding in a loop is that if the OS does not have any
+<a href=#739 id=739 data-nosnippet>739</a>/// other ready threads to run on the current CPU, the thread will effectively
+<a href=#740 id=740 data-nosnippet>740</a>/// busy-wait, which wastes CPU time and energy.
+<a href=#741 id=741 data-nosnippet>741</a>///
+<a href=#742 id=742 data-nosnippet>742</a>/// Therefore, when waiting for events of interest, a programmer's first
+<a href=#743 id=743 data-nosnippet>743</a>/// choice should be to use synchronization devices such as [`channel`]s,
+<a href=#744 id=744 data-nosnippet>744</a>/// [`Condvar`]s, [`Mutex`]es or [`join`] since these primitives are
+<a href=#745 id=745 data-nosnippet>745</a>/// implemented in a blocking manner, giving up the CPU until the event
+<a href=#746 id=746 data-nosnippet>746</a>/// of interest has occurred which avoids repeated yielding.
+<a href=#747 id=747 data-nosnippet>747</a>///
+<a href=#748 id=748 data-nosnippet>748</a>/// `yield_now` should thus be used only rarely, mostly in situations where
+<a href=#749 id=749 data-nosnippet>749</a>/// repeated polling is required because there is no other suitable way to
+<a href=#750 id=750 data-nosnippet>750</a>/// learn when an event of interest has occurred.
+<a href=#751 id=751 data-nosnippet>751</a>///
+<a href=#752 id=752 data-nosnippet>752</a>/// # Examples
+<a href=#753 id=753 data-nosnippet>753</a>///
+<a href=#754 id=754 data-nosnippet>754</a>/// ```
+<a href=#755 id=755 data-nosnippet>755</a>/// use std::thread;
+<a href=#756 id=756 data-nosnippet>756</a>///
+<a href=#757 id=757 data-nosnippet>757</a>/// thread::yield_now();
+<a href=#758 id=758 data-nosnippet>758</a>/// ```
+<a href=#759 id=759 data-nosnippet>759</a>///
+<a href=#760 id=760 data-nosnippet>760</a>/// [`channel`]: crate::sync::mpsc
+<a href=#761 id=761 data-nosnippet>761</a>/// [`join`]: JoinHandle::join
+<a href=#762 id=762 data-nosnippet>762</a>/// [`Condvar`]: crate::sync::Condvar
+<a href=#763 id=763 data-nosnippet>763</a>/// [`Mutex`]: crate::sync::Mutex
+<a href=#764 id=764 data-nosnippet>764</a></span><span class="attr">#[stable(feature = <span class="string">"rust1"</span>, since = <span class="string">"1.0.0"</span>)]
+<a href=#765 id=765 data-nosnippet>765</a></span><span class="kw">pub fn </span>yield_now() {
+<a href=#766 id=766 data-nosnippet>766</a>    imp::Thread::yield_now()
+<a href=#767 id=767 data-nosnippet>767</a>}
+<a href=#768 id=768 data-nosnippet>768</a>
+<a href=#769 id=769 data-nosnippet>769</a><span class="doccomment">/// Determines whether the current thread is unwinding because of panic.
+<a href=#770 id=770 data-nosnippet>770</a>///
+<a href=#771 id=771 data-nosnippet>771</a>/// A common use of this feature is to poison shared resources when writing
+<a href=#772 id=772 data-nosnippet>772</a>/// unsafe code, by checking `panicking` when the `drop` is called.
+<a href=#773 id=773 data-nosnippet>773</a>///
+<a href=#774 id=774 data-nosnippet>774</a>/// This is usually not needed when writing safe code, as [`Mutex`es][Mutex]
+<a href=#775 id=775 data-nosnippet>775</a>/// already poison themselves when a thread panics while holding the lock.
+<a href=#776 id=776 data-nosnippet>776</a>///
+<a href=#777 id=777 data-nosnippet>777</a>/// This can also be used in multithreaded applications, in order to send a
+<a href=#778 id=778 data-nosnippet>778</a>/// message to other threads warning that a thread has panicked (e.g., for
+<a href=#779 id=779 data-nosnippet>779</a>/// monitoring purposes).
+<a href=#780 id=780 data-nosnippet>780</a>///
+<a href=#781 id=781 data-nosnippet>781</a>/// # Examples
+<a href=#782 id=782 data-nosnippet>782</a>///
+<a href=#783 id=783 data-nosnippet>783</a>/// ```should_panic
+<a href=#784 id=784 data-nosnippet>784</a>/// use std::thread;
+<a href=#785 id=785 data-nosnippet>785</a>///
+<a href=#786 id=786 data-nosnippet>786</a>/// struct SomeStruct;
+<a href=#787 id=787 data-nosnippet>787</a>///
+<a href=#788 id=788 data-nosnippet>788</a>/// impl Drop for SomeStruct {
+<a href=#789 id=789 data-nosnippet>789</a>///     fn drop(&amp;mut self) {
+<a href=#790 id=790 data-nosnippet>790</a>///         if thread::panicking() {
+<a href=#791 id=791 data-nosnippet>791</a>///             println!("dropped while unwinding");
+<a href=#792 id=792 data-nosnippet>792</a>///         } else {
+<a href=#793 id=793 data-nosnippet>793</a>///             println!("dropped while not unwinding");
+<a href=#794 id=794 data-nosnippet>794</a>///         }
+<a href=#795 id=795 data-nosnippet>795</a>///     }
+<a href=#796 id=796 data-nosnippet>796</a>/// }
+<a href=#797 id=797 data-nosnippet>797</a>///
+<a href=#798 id=798 data-nosnippet>798</a>/// {
+<a href=#799 id=799 data-nosnippet>799</a>///     print!("a: ");
+<a href=#800 id=800 data-nosnippet>800</a>///     let a = SomeStruct;
+<a href=#801 id=801 data-nosnippet>801</a>/// }
+<a href=#802 id=802 data-nosnippet>802</a>///
+<a href=#803 id=803 data-nosnippet>803</a>/// {
+<a href=#804 id=804 data-nosnippet>804</a>///     print!("b: ");
+<a href=#805 id=805 data-nosnippet>805</a>///     let b = SomeStruct;
+<a href=#806 id=806 data-nosnippet>806</a>///     panic!()
+<a href=#807 id=807 data-nosnippet>807</a>/// }
+<a href=#808 id=808 data-nosnippet>808</a>/// ```
+<a href=#809 id=809 data-nosnippet>809</a>///
+<a href=#810 id=810 data-nosnippet>810</a>/// [Mutex]: crate::sync::Mutex
+<a href=#811 id=811 data-nosnippet>811</a></span><span class="attr">#[inline]
+<a href=#812 id=812 data-nosnippet>812</a>#[must_use]
+<a href=#813 id=813 data-nosnippet>813</a>#[stable(feature = <span class="string">"rust1"</span>, since = <span class="string">"1.0.0"</span>)]
+<a href=#814 id=814 data-nosnippet>814</a></span><span class="kw">pub fn </span>panicking() -&gt; bool {
+<a href=#815 id=815 data-nosnippet>815</a>    panicking::panicking()
+<a href=#816 id=816 data-nosnippet>816</a>}
+<a href=#817 id=817 data-nosnippet>817</a>
+<a href=#818 id=818 data-nosnippet>818</a><span class="doccomment">/// Uses [`sleep`].
+<a href=#819 id=819 data-nosnippet>819</a>///
+<a href=#820 id=820 data-nosnippet>820</a>/// Puts the current thread to sleep for at least the specified amount of time.
+<a href=#821 id=821 data-nosnippet>821</a>///
+<a href=#822 id=822 data-nosnippet>822</a>/// The thread may sleep longer than the duration specified due to scheduling
+<a href=#823 id=823 data-nosnippet>823</a>/// specifics or platform-dependent functionality. It will never sleep less.
+<a href=#824 id=824 data-nosnippet>824</a>///
+<a href=#825 id=825 data-nosnippet>825</a>/// This function is blocking, and should not be used in `async` functions.
+<a href=#826 id=826 data-nosnippet>826</a>///
+<a href=#827 id=827 data-nosnippet>827</a>/// # Platform-specific behavior
+<a href=#828 id=828 data-nosnippet>828</a>///
+<a href=#829 id=829 data-nosnippet>829</a>/// On Unix platforms, the underlying syscall may be interrupted by a
+<a href=#830 id=830 data-nosnippet>830</a>/// spurious wakeup or signal handler. To ensure the sleep occurs for at least
+<a href=#831 id=831 data-nosnippet>831</a>/// the specified duration, this function may invoke that system call multiple
+<a href=#832 id=832 data-nosnippet>832</a>/// times.
+<a href=#833 id=833 data-nosnippet>833</a>///
+<a href=#834 id=834 data-nosnippet>834</a>/// # Examples
+<a href=#835 id=835 data-nosnippet>835</a>///
+<a href=#836 id=836 data-nosnippet>836</a>/// ```no_run
+<a href=#837 id=837 data-nosnippet>837</a>/// use std::thread;
+<a href=#838 id=838 data-nosnippet>838</a>///
+<a href=#839 id=839 data-nosnippet>839</a>/// // Let's sleep for 2 seconds:
+<a href=#840 id=840 data-nosnippet>840</a>/// thread::sleep_ms(2000);
+<a href=#841 id=841 data-nosnippet>841</a>/// ```
+<a href=#842 id=842 data-nosnippet>842</a></span><span class="attr">#[stable(feature = <span class="string">"rust1"</span>, since = <span class="string">"1.0.0"</span>)]
+<a href=#843 id=843 data-nosnippet>843</a>#[deprecated(since = <span class="string">"1.6.0"</span>, note = <span class="string">"replaced by `std::thread::sleep`"</span>)]
+<a href=#844 id=844 data-nosnippet>844</a></span><span class="kw">pub fn </span>sleep_ms(ms: u32) {
+<a href=#845 id=845 data-nosnippet>845</a>    sleep(Duration::from_millis(ms <span class="kw">as </span>u64))
+<a href=#846 id=846 data-nosnippet>846</a>}
+<a href=#847 id=847 data-nosnippet>847</a>
+<a href=#848 id=848 data-nosnippet>848</a><span class="doccomment">/// Puts the current thread to sleep for at least the specified amount of time.
+<a href=#849 id=849 data-nosnippet>849</a>///
+<a href=#850 id=850 data-nosnippet>850</a>/// The thread may sleep longer than the duration specified due to scheduling
+<a href=#851 id=851 data-nosnippet>851</a>/// specifics or platform-dependent functionality. It will never sleep less.
+<a href=#852 id=852 data-nosnippet>852</a>///
+<a href=#853 id=853 data-nosnippet>853</a>/// This function is blocking, and should not be used in `async` functions.
+<a href=#854 id=854 data-nosnippet>854</a>///
+<a href=#855 id=855 data-nosnippet>855</a>/// # Platform-specific behavior
+<a href=#856 id=856 data-nosnippet>856</a>///
+<a href=#857 id=857 data-nosnippet>857</a>/// On Unix platforms, the underlying syscall may be interrupted by a
+<a href=#858 id=858 data-nosnippet>858</a>/// spurious wakeup or signal handler. To ensure the sleep occurs for at least
+<a href=#859 id=859 data-nosnippet>859</a>/// the specified duration, this function may invoke that system call multiple
+<a href=#860 id=860 data-nosnippet>860</a>/// times.
+<a href=#861 id=861 data-nosnippet>861</a>/// Platforms which do not support nanosecond precision for sleeping will
+<a href=#862 id=862 data-nosnippet>862</a>/// have `dur` rounded up to the nearest granularity of time they can sleep for.
+<a href=#863 id=863 data-nosnippet>863</a>///
+<a href=#864 id=864 data-nosnippet>864</a>/// Currently, specifying a zero duration on Unix platforms returns immediately
+<a href=#865 id=865 data-nosnippet>865</a>/// without invoking the underlying [`nanosleep`] syscall, whereas on Windows
+<a href=#866 id=866 data-nosnippet>866</a>/// platforms the underlying [`Sleep`] syscall is always invoked.
+<a href=#867 id=867 data-nosnippet>867</a>/// If the intention is to yield the current time-slice you may want to use
+<a href=#868 id=868 data-nosnippet>868</a>/// [`yield_now`] instead.
+<a href=#869 id=869 data-nosnippet>869</a>///
+<a href=#870 id=870 data-nosnippet>870</a>/// [`nanosleep`]: https://linux.die.net/man/2/nanosleep
+<a href=#871 id=871 data-nosnippet>871</a>/// [`Sleep`]: https://docs.microsoft.com/en-us/windows/win32/api/synchapi/nf-synchapi-sleep
+<a href=#872 id=872 data-nosnippet>872</a>///
+<a href=#873 id=873 data-nosnippet>873</a>/// # Examples
+<a href=#874 id=874 data-nosnippet>874</a>///
+<a href=#875 id=875 data-nosnippet>875</a>/// ```no_run
+<a href=#876 id=876 data-nosnippet>876</a>/// use std::{thread, time};
+<a href=#877 id=877 data-nosnippet>877</a>///
+<a href=#878 id=878 data-nosnippet>878</a>/// let ten_millis = time::Duration::from_millis(10);
+<a href=#879 id=879 data-nosnippet>879</a>/// let now = time::Instant::now();
+<a href=#880 id=880 data-nosnippet>880</a>///
+<a href=#881 id=881 data-nosnippet>881</a>/// thread::sleep(ten_millis);
+<a href=#882 id=882 data-nosnippet>882</a>///
+<a href=#883 id=883 data-nosnippet>883</a>/// assert!(now.elapsed() &gt;= ten_millis);
+<a href=#884 id=884 data-nosnippet>884</a>/// ```
+<a href=#885 id=885 data-nosnippet>885</a></span><span class="attr">#[stable(feature = <span class="string">"thread_sleep"</span>, since = <span class="string">"1.4.0"</span>)]
+<a href=#886 id=886 data-nosnippet>886</a></span><span class="kw">pub fn </span>sleep(dur: Duration) {
+<a href=#887 id=887 data-nosnippet>887</a>    imp::Thread::sleep(dur)
+<a href=#888 id=888 data-nosnippet>888</a>}
+<a href=#889 id=889 data-nosnippet>889</a>
+<a href=#890 id=890 data-nosnippet>890</a><span class="doccomment">/// Puts the current thread to sleep until the specified deadline has passed.
+<a href=#891 id=891 data-nosnippet>891</a>///
+<a href=#892 id=892 data-nosnippet>892</a>/// The thread may still be asleep after the deadline specified due to
+<a href=#893 id=893 data-nosnippet>893</a>/// scheduling specifics or platform-dependent functionality. It will never
+<a href=#894 id=894 data-nosnippet>894</a>/// wake before.
+<a href=#895 id=895 data-nosnippet>895</a>///
+<a href=#896 id=896 data-nosnippet>896</a>/// This function is blocking, and should not be used in `async` functions.
+<a href=#897 id=897 data-nosnippet>897</a>///
+<a href=#898 id=898 data-nosnippet>898</a>/// # Platform-specific behavior
+<a href=#899 id=899 data-nosnippet>899</a>///
+<a href=#900 id=900 data-nosnippet>900</a>/// In most cases this function will call an OS specific function. Where that
+<a href=#901 id=901 data-nosnippet>901</a>/// is not supported [`sleep`] is used. Those platforms are referred to as other
+<a href=#902 id=902 data-nosnippet>902</a>/// in the table below.
+<a href=#903 id=903 data-nosnippet>903</a>///
+<a href=#904 id=904 data-nosnippet>904</a>/// # Underlying System calls
+<a href=#905 id=905 data-nosnippet>905</a>///
+<a href=#906 id=906 data-nosnippet>906</a>/// The following system calls are [currently] being used:
+<a href=#907 id=907 data-nosnippet>907</a>///
+<a href=#908 id=908 data-nosnippet>908</a>/// |  Platform |               System call                                            |
+<a href=#909 id=909 data-nosnippet>909</a>/// |-----------|----------------------------------------------------------------------|
+<a href=#910 id=910 data-nosnippet>910</a>/// | Linux     | [clock_nanosleep] (Monotonic clock)                                  |
+<a href=#911 id=911 data-nosnippet>911</a>/// | BSD except OpenBSD | [clock_nanosleep] (Monotonic Clock)]                        |
+<a href=#912 id=912 data-nosnippet>912</a>/// | Android   | [clock_nanosleep] (Monotonic Clock)]                                 |
+<a href=#913 id=913 data-nosnippet>913</a>/// | Solaris   | [clock_nanosleep] (Monotonic Clock)]                                 |
+<a href=#914 id=914 data-nosnippet>914</a>/// | Illumos   | [clock_nanosleep] (Monotonic Clock)]                                 |
+<a href=#915 id=915 data-nosnippet>915</a>/// | Dragonfly | [clock_nanosleep] (Monotonic Clock)]                                 |
+<a href=#916 id=916 data-nosnippet>916</a>/// | Hurd      | [clock_nanosleep] (Monotonic Clock)]                                 |
+<a href=#917 id=917 data-nosnippet>917</a>/// | Fuchsia   | [clock_nanosleep] (Monotonic Clock)]                                 |
+<a href=#918 id=918 data-nosnippet>918</a>/// | Vxworks   | [clock_nanosleep] (Monotonic Clock)]                                 |
+<a href=#919 id=919 data-nosnippet>919</a>/// | Other     | `sleep_until` uses [`sleep`] and does not issue a syscall itself     |
+<a href=#920 id=920 data-nosnippet>920</a>///
+<a href=#921 id=921 data-nosnippet>921</a>/// [currently]: crate::io#platform-specific-behavior
+<a href=#922 id=922 data-nosnippet>922</a>/// [clock_nanosleep]: https://linux.die.net/man/3/clock_nanosleep
+<a href=#923 id=923 data-nosnippet>923</a>///
+<a href=#924 id=924 data-nosnippet>924</a>/// **Disclaimer:** These system calls might change over time.
+<a href=#925 id=925 data-nosnippet>925</a>///
+<a href=#926 id=926 data-nosnippet>926</a>/// # Examples
+<a href=#927 id=927 data-nosnippet>927</a>///
+<a href=#928 id=928 data-nosnippet>928</a>/// A simple game loop that limits the game to 60 frames per second.
+<a href=#929 id=929 data-nosnippet>929</a>///
+<a href=#930 id=930 data-nosnippet>930</a>/// ```no_run
+<a href=#931 id=931 data-nosnippet>931</a>/// #![feature(thread_sleep_until)]
+<a href=#932 id=932 data-nosnippet>932</a>/// # use std::time::{Duration, Instant};
+<a href=#933 id=933 data-nosnippet>933</a>/// # use std::thread;
+<a href=#934 id=934 data-nosnippet>934</a>/// #
+<a href=#935 id=935 data-nosnippet>935</a>/// # fn update() {}
+<a href=#936 id=936 data-nosnippet>936</a>/// # fn render() {}
+<a href=#937 id=937 data-nosnippet>937</a>/// #
+<a href=#938 id=938 data-nosnippet>938</a>/// let max_fps = 60.0;
+<a href=#939 id=939 data-nosnippet>939</a>/// let frame_time = Duration::from_secs_f32(1.0/max_fps);
+<a href=#940 id=940 data-nosnippet>940</a>/// let mut next_frame = Instant::now();
+<a href=#941 id=941 data-nosnippet>941</a>/// loop {
+<a href=#942 id=942 data-nosnippet>942</a>///     thread::sleep_until(next_frame);
+<a href=#943 id=943 data-nosnippet>943</a>///     next_frame += frame_time;
+<a href=#944 id=944 data-nosnippet>944</a>///     update();
+<a href=#945 id=945 data-nosnippet>945</a>///     render();
+<a href=#946 id=946 data-nosnippet>946</a>/// }
+<a href=#947 id=947 data-nosnippet>947</a>/// ```
+<a href=#948 id=948 data-nosnippet>948</a>///
+<a href=#949 id=949 data-nosnippet>949</a>/// A slow API we must not call too fast and which takes a few
+<a href=#950 id=950 data-nosnippet>950</a>/// tries before succeeding. By using `sleep_until` the time the
+<a href=#951 id=951 data-nosnippet>951</a>/// API call takes does not influence when we retry or when we give up
+<a href=#952 id=952 data-nosnippet>952</a>///
+<a href=#953 id=953 data-nosnippet>953</a>/// ```no_run
+<a href=#954 id=954 data-nosnippet>954</a>/// #![feature(thread_sleep_until)]
+<a href=#955 id=955 data-nosnippet>955</a>/// # use std::time::{Duration, Instant};
+<a href=#956 id=956 data-nosnippet>956</a>/// # use std::thread;
+<a href=#957 id=957 data-nosnippet>957</a>/// #
+<a href=#958 id=958 data-nosnippet>958</a>/// # enum Status {
+<a href=#959 id=959 data-nosnippet>959</a>/// #     Ready(usize),
+<a href=#960 id=960 data-nosnippet>960</a>/// #     Waiting,
+<a href=#961 id=961 data-nosnippet>961</a>/// # }
+<a href=#962 id=962 data-nosnippet>962</a>/// # fn slow_web_api_call() -&gt; Status { Status::Ready(42) }
+<a href=#963 id=963 data-nosnippet>963</a>/// #
+<a href=#964 id=964 data-nosnippet>964</a>/// # const MAX_DURATION: Duration = Duration::from_secs(10);
+<a href=#965 id=965 data-nosnippet>965</a>/// #
+<a href=#966 id=966 data-nosnippet>966</a>/// # fn try_api_call() -&gt; Result&lt;usize, ()&gt; {
+<a href=#967 id=967 data-nosnippet>967</a>/// let deadline = Instant::now() + MAX_DURATION;
+<a href=#968 id=968 data-nosnippet>968</a>/// let delay = Duration::from_millis(250);
+<a href=#969 id=969 data-nosnippet>969</a>/// let mut next_attempt = Instant::now();
+<a href=#970 id=970 data-nosnippet>970</a>/// loop {
+<a href=#971 id=971 data-nosnippet>971</a>///     if Instant::now() &gt; deadline {
+<a href=#972 id=972 data-nosnippet>972</a>///         break Err(());
+<a href=#973 id=973 data-nosnippet>973</a>///     }
+<a href=#974 id=974 data-nosnippet>974</a>///     if let Status::Ready(data) = slow_web_api_call() {
+<a href=#975 id=975 data-nosnippet>975</a>///         break Ok(data);
+<a href=#976 id=976 data-nosnippet>976</a>///     }
+<a href=#977 id=977 data-nosnippet>977</a>///
+<a href=#978 id=978 data-nosnippet>978</a>///     next_attempt = deadline.min(next_attempt + delay);
+<a href=#979 id=979 data-nosnippet>979</a>///     thread::sleep_until(next_attempt);
+<a href=#980 id=980 data-nosnippet>980</a>/// }
+<a href=#981 id=981 data-nosnippet>981</a>/// # }
+<a href=#982 id=982 data-nosnippet>982</a>/// # let _data = try_api_call();
+<a href=#983 id=983 data-nosnippet>983</a>/// ```
+<a href=#984 id=984 data-nosnippet>984</a></span><span class="attr">#[unstable(feature = <span class="string">"thread_sleep_until"</span>, issue = <span class="string">"113752"</span>)]
+<a href=#985 id=985 data-nosnippet>985</a></span><span class="kw">pub fn </span>sleep_until(deadline: Instant) {
+<a href=#986 id=986 data-nosnippet>986</a>    imp::Thread::sleep_until(deadline)
+<a href=#987 id=987 data-nosnippet>987</a>}
+<a href=#988 id=988 data-nosnippet>988</a>
+<a href=#989 id=989 data-nosnippet>989</a><span class="doccomment">/// Used to ensure that `park` and `park_timeout` do not unwind, as that can
+<a href=#990 id=990 data-nosnippet>990</a>/// cause undefined behavior if not handled correctly (see #102398 for context).
+<a href=#991 id=991 data-nosnippet>991</a></span><span class="kw">struct </span>PanicGuard;
+<a href=#992 id=992 data-nosnippet>992</a>
+<a href=#993 id=993 data-nosnippet>993</a><span class="kw">impl </span>Drop <span class="kw">for </span>PanicGuard {
+<a href=#994 id=994 data-nosnippet>994</a>    <span class="kw">fn </span>drop(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+<a href=#995 id=995 data-nosnippet>995</a>        <span class="macro">rtabort!</span>(<span class="string">"an irrecoverable error occurred while synchronizing threads"</span>)
+<a href=#996 id=996 data-nosnippet>996</a>    }
+<a href=#997 id=997 data-nosnippet>997</a>}
+<a href=#998 id=998 data-nosnippet>998</a>
+<a href=#999 id=999 data-nosnippet>999</a><span class="doccomment">/// Blocks unless or until the current thread's token is made available.
+<a href=#1000 id=1000 data-nosnippet>1000</a>///
+<a href=#1001 id=1001 data-nosnippet>1001</a>/// A call to `park` does not guarantee that the thread will remain parked
+<a href=#1002 id=1002 data-nosnippet>1002</a>/// forever, and callers should be prepared for this possibility. However,
+<a href=#1003 id=1003 data-nosnippet>1003</a>/// it is guaranteed that this function will not panic (it may abort the
+<a href=#1004 id=1004 data-nosnippet>1004</a>/// process if the implementation encounters some rare errors).
+<a href=#1005 id=1005 data-nosnippet>1005</a>///
+<a href=#1006 id=1006 data-nosnippet>1006</a>/// # `park` and `unpark`
+<a href=#1007 id=1007 data-nosnippet>1007</a>///
+<a href=#1008 id=1008 data-nosnippet>1008</a>/// Every thread is equipped with some basic low-level blocking support, via the
+<a href=#1009 id=1009 data-nosnippet>1009</a>/// [`thread::park`][`park`] function and [`thread::Thread::unpark`][`unpark`]
+<a href=#1010 id=1010 data-nosnippet>1010</a>/// method. [`park`] blocks the current thread, which can then be resumed from
+<a href=#1011 id=1011 data-nosnippet>1011</a>/// another thread by calling the [`unpark`] method on the blocked thread's
+<a href=#1012 id=1012 data-nosnippet>1012</a>/// handle.
+<a href=#1013 id=1013 data-nosnippet>1013</a>///
+<a href=#1014 id=1014 data-nosnippet>1014</a>/// Conceptually, each [`Thread`] handle has an associated token, which is
+<a href=#1015 id=1015 data-nosnippet>1015</a>/// initially not present:
+<a href=#1016 id=1016 data-nosnippet>1016</a>///
+<a href=#1017 id=1017 data-nosnippet>1017</a>/// * The [`thread::park`][`park`] function blocks the current thread unless or
+<a href=#1018 id=1018 data-nosnippet>1018</a>///   until the token is available for its thread handle, at which point it
+<a href=#1019 id=1019 data-nosnippet>1019</a>///   atomically consumes the token. It may also return *spuriously*, without
+<a href=#1020 id=1020 data-nosnippet>1020</a>///   consuming the token. [`thread::park_timeout`] does the same, but allows
+<a href=#1021 id=1021 data-nosnippet>1021</a>///   specifying a maximum time to block the thread for.
+<a href=#1022 id=1022 data-nosnippet>1022</a>///
+<a href=#1023 id=1023 data-nosnippet>1023</a>/// * The [`unpark`] method on a [`Thread`] atomically makes the token available
+<a href=#1024 id=1024 data-nosnippet>1024</a>///   if it wasn't already. Because the token is initially absent, [`unpark`]
+<a href=#1025 id=1025 data-nosnippet>1025</a>///   followed by [`park`] will result in the second call returning immediately.
+<a href=#1026 id=1026 data-nosnippet>1026</a>///
+<a href=#1027 id=1027 data-nosnippet>1027</a>/// The API is typically used by acquiring a handle to the current thread,
+<a href=#1028 id=1028 data-nosnippet>1028</a>/// placing that handle in a shared data structure so that other threads can
+<a href=#1029 id=1029 data-nosnippet>1029</a>/// find it, and then `park`ing in a loop. When some desired condition is met, another
+<a href=#1030 id=1030 data-nosnippet>1030</a>/// thread calls [`unpark`] on the handle.
+<a href=#1031 id=1031 data-nosnippet>1031</a>///
+<a href=#1032 id=1032 data-nosnippet>1032</a>/// The motivation for this design is twofold:
+<a href=#1033 id=1033 data-nosnippet>1033</a>///
+<a href=#1034 id=1034 data-nosnippet>1034</a>/// * It avoids the need to allocate mutexes and condvars when building new
+<a href=#1035 id=1035 data-nosnippet>1035</a>///   synchronization primitives; the threads already provide basic
+<a href=#1036 id=1036 data-nosnippet>1036</a>///   blocking/signaling.
+<a href=#1037 id=1037 data-nosnippet>1037</a>///
+<a href=#1038 id=1038 data-nosnippet>1038</a>/// * It can be implemented very efficiently on many platforms.
+<a href=#1039 id=1039 data-nosnippet>1039</a>///
+<a href=#1040 id=1040 data-nosnippet>1040</a>/// # Memory Ordering
+<a href=#1041 id=1041 data-nosnippet>1041</a>///
+<a href=#1042 id=1042 data-nosnippet>1042</a>/// Calls to `unpark` _synchronize-with_ calls to `park`, meaning that memory
+<a href=#1043 id=1043 data-nosnippet>1043</a>/// operations performed before a call to `unpark` are made visible to the thread that
+<a href=#1044 id=1044 data-nosnippet>1044</a>/// consumes the token and returns from `park`. Note that all `park` and `unpark`
+<a href=#1045 id=1045 data-nosnippet>1045</a>/// operations for a given thread form a total order and _all_ prior `unpark` operations
+<a href=#1046 id=1046 data-nosnippet>1046</a>/// synchronize-with `park`.
+<a href=#1047 id=1047 data-nosnippet>1047</a>///
+<a href=#1048 id=1048 data-nosnippet>1048</a>/// In atomic ordering terms, `unpark` performs a `Release` operation and `park`
+<a href=#1049 id=1049 data-nosnippet>1049</a>/// performs the corresponding `Acquire` operation. Calls to `unpark` for the same
+<a href=#1050 id=1050 data-nosnippet>1050</a>/// thread form a [release sequence].
+<a href=#1051 id=1051 data-nosnippet>1051</a>///
+<a href=#1052 id=1052 data-nosnippet>1052</a>/// Note that being unblocked does not imply a call was made to `unpark`, because
+<a href=#1053 id=1053 data-nosnippet>1053</a>/// wakeups can also be spurious. For example, a valid, but inefficient,
+<a href=#1054 id=1054 data-nosnippet>1054</a>/// implementation could have `park` and `unpark` return immediately without doing anything,
+<a href=#1055 id=1055 data-nosnippet>1055</a>/// making *all* wakeups spurious.
+<a href=#1056 id=1056 data-nosnippet>1056</a>///
+<a href=#1057 id=1057 data-nosnippet>1057</a>/// # Examples
+<a href=#1058 id=1058 data-nosnippet>1058</a>///
+<a href=#1059 id=1059 data-nosnippet>1059</a>/// ```
+<a href=#1060 id=1060 data-nosnippet>1060</a>/// use std::thread;
+<a href=#1061 id=1061 data-nosnippet>1061</a>/// use std::sync::{Arc, atomic::{Ordering, AtomicBool}};
+<a href=#1062 id=1062 data-nosnippet>1062</a>/// use std::time::Duration;
+<a href=#1063 id=1063 data-nosnippet>1063</a>///
+<a href=#1064 id=1064 data-nosnippet>1064</a>/// let flag = Arc::new(AtomicBool::new(false));
+<a href=#1065 id=1065 data-nosnippet>1065</a>/// let flag2 = Arc::clone(&amp;flag);
+<a href=#1066 id=1066 data-nosnippet>1066</a>///
+<a href=#1067 id=1067 data-nosnippet>1067</a>/// let parked_thread = thread::spawn(move || {
+<a href=#1068 id=1068 data-nosnippet>1068</a>///     // We want to wait until the flag is set. We *could* just spin, but using
+<a href=#1069 id=1069 data-nosnippet>1069</a>///     // park/unpark is more efficient.
+<a href=#1070 id=1070 data-nosnippet>1070</a>///     while !flag2.load(Ordering::Relaxed) {
+<a href=#1071 id=1071 data-nosnippet>1071</a>///         println!("Parking thread");
+<a href=#1072 id=1072 data-nosnippet>1072</a>///         thread::park();
+<a href=#1073 id=1073 data-nosnippet>1073</a>///         // We *could* get here spuriously, i.e., way before the 10ms below are over!
+<a href=#1074 id=1074 data-nosnippet>1074</a>///         // But that is no problem, we are in a loop until the flag is set anyway.
+<a href=#1075 id=1075 data-nosnippet>1075</a>///         println!("Thread unparked");
+<a href=#1076 id=1076 data-nosnippet>1076</a>///     }
+<a href=#1077 id=1077 data-nosnippet>1077</a>///     println!("Flag received");
+<a href=#1078 id=1078 data-nosnippet>1078</a>/// });
+<a href=#1079 id=1079 data-nosnippet>1079</a>///
+<a href=#1080 id=1080 data-nosnippet>1080</a>/// // Let some time pass for the thread to be spawned.
+<a href=#1081 id=1081 data-nosnippet>1081</a>/// thread::sleep(Duration::from_millis(10));
+<a href=#1082 id=1082 data-nosnippet>1082</a>///
+<a href=#1083 id=1083 data-nosnippet>1083</a>/// // Set the flag, and let the thread wake up.
+<a href=#1084 id=1084 data-nosnippet>1084</a>/// // There is no race condition here, if `unpark`
+<a href=#1085 id=1085 data-nosnippet>1085</a>/// // happens first, `park` will return immediately.
+<a href=#1086 id=1086 data-nosnippet>1086</a>/// // Hence there is no risk of a deadlock.
+<a href=#1087 id=1087 data-nosnippet>1087</a>/// flag.store(true, Ordering::Relaxed);
+<a href=#1088 id=1088 data-nosnippet>1088</a>/// println!("Unpark the thread");
+<a href=#1089 id=1089 data-nosnippet>1089</a>/// parked_thread.thread().unpark();
+<a href=#1090 id=1090 data-nosnippet>1090</a>///
+<a href=#1091 id=1091 data-nosnippet>1091</a>/// parked_thread.join().unwrap();
+<a href=#1092 id=1092 data-nosnippet>1092</a>/// ```
+<a href=#1093 id=1093 data-nosnippet>1093</a>///
+<a href=#1094 id=1094 data-nosnippet>1094</a>/// [`unpark`]: Thread::unpark
+<a href=#1095 id=1095 data-nosnippet>1095</a>/// [`thread::park_timeout`]: park_timeout
+<a href=#1096 id=1096 data-nosnippet>1096</a>/// [release sequence]: https://en.cppreference.com/w/cpp/atomic/memory_order#Release_sequence
+<a href=#1097 id=1097 data-nosnippet>1097</a></span><span class="attr">#[stable(feature = <span class="string">"rust1"</span>, since = <span class="string">"1.0.0"</span>)]
+<a href=#1098 id=1098 data-nosnippet>1098</a></span><span class="kw">pub fn </span>park() {
+<a href=#1099 id=1099 data-nosnippet>1099</a>    <span class="kw">let </span>guard = PanicGuard;
+<a href=#1100 id=1100 data-nosnippet>1100</a>    <span class="comment">// SAFETY: park_timeout is called on the parker owned by this thread.
+<a href=#1101 id=1101 data-nosnippet>1101</a>    </span><span class="kw">unsafe </span>{
+<a href=#1102 id=1102 data-nosnippet>1102</a>        current().park();
+<a href=#1103 id=1103 data-nosnippet>1103</a>    }
+<a href=#1104 id=1104 data-nosnippet>1104</a>    <span class="comment">// No panic occurred, do not abort.
+<a href=#1105 id=1105 data-nosnippet>1105</a>    </span>forget(guard);
+<a href=#1106 id=1106 data-nosnippet>1106</a>}
+<a href=#1107 id=1107 data-nosnippet>1107</a>
+<a href=#1108 id=1108 data-nosnippet>1108</a><span class="doccomment">/// Uses [`park_timeout`].
+<a href=#1109 id=1109 data-nosnippet>1109</a>///
+<a href=#1110 id=1110 data-nosnippet>1110</a>/// Blocks unless or until the current thread's token is made available or
+<a href=#1111 id=1111 data-nosnippet>1111</a>/// the specified duration has been reached (may wake spuriously).
+<a href=#1112 id=1112 data-nosnippet>1112</a>///
+<a href=#1113 id=1113 data-nosnippet>1113</a>/// The semantics of this function are equivalent to [`park`] except
+<a href=#1114 id=1114 data-nosnippet>1114</a>/// that the thread will be blocked for roughly no longer than `dur`. This
+<a href=#1115 id=1115 data-nosnippet>1115</a>/// method should not be used for precise timing due to anomalies such as
+<a href=#1116 id=1116 data-nosnippet>1116</a>/// preemption or platform differences that might not cause the maximum
+<a href=#1117 id=1117 data-nosnippet>1117</a>/// amount of time waited to be precisely `ms` long.
+<a href=#1118 id=1118 data-nosnippet>1118</a>///
+<a href=#1119 id=1119 data-nosnippet>1119</a>/// See the [park documentation][`park`] for more detail.
+<a href=#1120 id=1120 data-nosnippet>1120</a></span><span class="attr">#[stable(feature = <span class="string">"rust1"</span>, since = <span class="string">"1.0.0"</span>)]
+<a href=#1121 id=1121 data-nosnippet>1121</a>#[deprecated(since = <span class="string">"1.6.0"</span>, note = <span class="string">"replaced by `std::thread::park_timeout`"</span>)]
+<a href=#1122 id=1122 data-nosnippet>1122</a></span><span class="kw">pub fn </span>park_timeout_ms(ms: u32) {
+<a href=#1123 id=1123 data-nosnippet>1123</a>    park_timeout(Duration::from_millis(ms <span class="kw">as </span>u64))
+<a href=#1124 id=1124 data-nosnippet>1124</a>}
+<a href=#1125 id=1125 data-nosnippet>1125</a>
+<a href=#1126 id=1126 data-nosnippet>1126</a><span class="doccomment">/// Blocks unless or until the current thread's token is made available or
+<a href=#1127 id=1127 data-nosnippet>1127</a>/// the specified duration has been reached (may wake spuriously).
+<a href=#1128 id=1128 data-nosnippet>1128</a>///
+<a href=#1129 id=1129 data-nosnippet>1129</a>/// The semantics of this function are equivalent to [`park`][park] except
+<a href=#1130 id=1130 data-nosnippet>1130</a>/// that the thread will be blocked for roughly no longer than `dur`. This
+<a href=#1131 id=1131 data-nosnippet>1131</a>/// method should not be used for precise timing due to anomalies such as
+<a href=#1132 id=1132 data-nosnippet>1132</a>/// preemption or platform differences that might not cause the maximum
+<a href=#1133 id=1133 data-nosnippet>1133</a>/// amount of time waited to be precisely `dur` long.
+<a href=#1134 id=1134 data-nosnippet>1134</a>///
+<a href=#1135 id=1135 data-nosnippet>1135</a>/// See the [park documentation][park] for more details.
+<a href=#1136 id=1136 data-nosnippet>1136</a>///
+<a href=#1137 id=1137 data-nosnippet>1137</a>/// # Platform-specific behavior
+<a href=#1138 id=1138 data-nosnippet>1138</a>///
+<a href=#1139 id=1139 data-nosnippet>1139</a>/// Platforms which do not support nanosecond precision for sleeping will have
+<a href=#1140 id=1140 data-nosnippet>1140</a>/// `dur` rounded up to the nearest granularity of time they can sleep for.
+<a href=#1141 id=1141 data-nosnippet>1141</a>///
+<a href=#1142 id=1142 data-nosnippet>1142</a>/// # Examples
+<a href=#1143 id=1143 data-nosnippet>1143</a>///
+<a href=#1144 id=1144 data-nosnippet>1144</a>/// Waiting for the complete expiration of the timeout:
+<a href=#1145 id=1145 data-nosnippet>1145</a>///
+<a href=#1146 id=1146 data-nosnippet>1146</a>/// ```rust,no_run
+<a href=#1147 id=1147 data-nosnippet>1147</a>/// use std::thread::park_timeout;
+<a href=#1148 id=1148 data-nosnippet>1148</a>/// use std::time::{Instant, Duration};
+<a href=#1149 id=1149 data-nosnippet>1149</a>///
+<a href=#1150 id=1150 data-nosnippet>1150</a>/// let timeout = Duration::from_secs(2);
+<a href=#1151 id=1151 data-nosnippet>1151</a>/// let beginning_park = Instant::now();
+<a href=#1152 id=1152 data-nosnippet>1152</a>///
+<a href=#1153 id=1153 data-nosnippet>1153</a>/// let mut timeout_remaining = timeout;
+<a href=#1154 id=1154 data-nosnippet>1154</a>/// loop {
+<a href=#1155 id=1155 data-nosnippet>1155</a>///     park_timeout(timeout_remaining);
+<a href=#1156 id=1156 data-nosnippet>1156</a>///     let elapsed = beginning_park.elapsed();
+<a href=#1157 id=1157 data-nosnippet>1157</a>///     if elapsed &gt;= timeout {
+<a href=#1158 id=1158 data-nosnippet>1158</a>///         break;
+<a href=#1159 id=1159 data-nosnippet>1159</a>///     }
+<a href=#1160 id=1160 data-nosnippet>1160</a>///     println!("restarting park_timeout after {elapsed:?}");
+<a href=#1161 id=1161 data-nosnippet>1161</a>///     timeout_remaining = timeout - elapsed;
+<a href=#1162 id=1162 data-nosnippet>1162</a>/// }
+<a href=#1163 id=1163 data-nosnippet>1163</a>/// ```
+<a href=#1164 id=1164 data-nosnippet>1164</a></span><span class="attr">#[stable(feature = <span class="string">"park_timeout"</span>, since = <span class="string">"1.4.0"</span>)]
+<a href=#1165 id=1165 data-nosnippet>1165</a></span><span class="kw">pub fn </span>park_timeout(dur: Duration) {
+<a href=#1166 id=1166 data-nosnippet>1166</a>    <span class="kw">let </span>guard = PanicGuard;
+<a href=#1167 id=1167 data-nosnippet>1167</a>    <span class="comment">// SAFETY: park_timeout is called on a handle owned by this thread.
+<a href=#1168 id=1168 data-nosnippet>1168</a>    </span><span class="kw">unsafe </span>{
+<a href=#1169 id=1169 data-nosnippet>1169</a>        current().park_timeout(dur);
+<a href=#1170 id=1170 data-nosnippet>1170</a>    }
+<a href=#1171 id=1171 data-nosnippet>1171</a>    <span class="comment">// No panic occurred, do not abort.
+<a href=#1172 id=1172 data-nosnippet>1172</a>    </span>forget(guard);
+<a href=#1173 id=1173 data-nosnippet>1173</a>}
+<a href=#1174 id=1174 data-nosnippet>1174</a>
+<a href=#1175 id=1175 data-nosnippet>1175</a><span class="comment">////////////////////////////////////////////////////////////////////////////////
+<a href=#1176 id=1176 data-nosnippet>1176</a>// ThreadId
+<a href=#1177 id=1177 data-nosnippet>1177</a>////////////////////////////////////////////////////////////////////////////////
+<a href=#1178 id=1178 data-nosnippet>1178</a>
+<a href=#1179 id=1179 data-nosnippet>1179</a></span><span class="doccomment">/// A unique identifier for a running thread.
+<a href=#1180 id=1180 data-nosnippet>1180</a>///
+<a href=#1181 id=1181 data-nosnippet>1181</a>/// A `ThreadId` is an opaque object that uniquely identifies each thread
+<a href=#1182 id=1182 data-nosnippet>1182</a>/// created during the lifetime of a process. `ThreadId`s are guaranteed not to
+<a href=#1183 id=1183 data-nosnippet>1183</a>/// be reused, even when a thread terminates. `ThreadId`s are under the control
+<a href=#1184 id=1184 data-nosnippet>1184</a>/// of Rust's standard library and there may not be any relationship between
+<a href=#1185 id=1185 data-nosnippet>1185</a>/// `ThreadId` and the underlying platform's notion of a thread identifier --
+<a href=#1186 id=1186 data-nosnippet>1186</a>/// the two concepts cannot, therefore, be used interchangeably. A `ThreadId`
+<a href=#1187 id=1187 data-nosnippet>1187</a>/// can be retrieved from the [`id`] method on a [`Thread`].
+<a href=#1188 id=1188 data-nosnippet>1188</a>///
+<a href=#1189 id=1189 data-nosnippet>1189</a>/// # Examples
+<a href=#1190 id=1190 data-nosnippet>1190</a>///
+<a href=#1191 id=1191 data-nosnippet>1191</a>/// ```
+<a href=#1192 id=1192 data-nosnippet>1192</a>/// use std::thread;
+<a href=#1193 id=1193 data-nosnippet>1193</a>///
+<a href=#1194 id=1194 data-nosnippet>1194</a>/// let other_thread = thread::spawn(|| {
+<a href=#1195 id=1195 data-nosnippet>1195</a>///     thread::current().id()
+<a href=#1196 id=1196 data-nosnippet>1196</a>/// });
+<a href=#1197 id=1197 data-nosnippet>1197</a>///
+<a href=#1198 id=1198 data-nosnippet>1198</a>/// let other_thread_id = other_thread.join().unwrap();
+<a href=#1199 id=1199 data-nosnippet>1199</a>/// assert!(thread::current().id() != other_thread_id);
+<a href=#1200 id=1200 data-nosnippet>1200</a>/// ```
+<a href=#1201 id=1201 data-nosnippet>1201</a>///
+<a href=#1202 id=1202 data-nosnippet>1202</a>/// [`id`]: Thread::id
+<a href=#1203 id=1203 data-nosnippet>1203</a></span><span class="attr">#[stable(feature = <span class="string">"thread_id"</span>, since = <span class="string">"1.19.0"</span>)]
+<a href=#1204 id=1204 data-nosnippet>1204</a>#[derive(Eq, PartialEq, Clone, Copy, Hash, Debug)]
+<a href=#1205 id=1205 data-nosnippet>1205</a></span><span class="kw">pub struct </span>ThreadId(NonZero&lt;u64&gt;);
+<a href=#1206 id=1206 data-nosnippet>1206</a>
+<a href=#1207 id=1207 data-nosnippet>1207</a><span class="kw">impl </span>ThreadId {
+<a href=#1208 id=1208 data-nosnippet>1208</a>    <span class="comment">// Generate a new unique thread ID.
+<a href=#1209 id=1209 data-nosnippet>1209</a>    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>new() -&gt; ThreadId {
+<a href=#1210 id=1210 data-nosnippet>1210</a>        <span class="attr">#[cold]
+<a href=#1211 id=1211 data-nosnippet>1211</a>        </span><span class="kw">fn </span>exhausted() -&gt; ! {
+<a href=#1212 id=1212 data-nosnippet>1212</a>            <span class="macro">panic!</span>(<span class="string">"failed to generate unique thread ID: bitspace exhausted"</span>)
+<a href=#1213 id=1213 data-nosnippet>1213</a>        }
+<a href=#1214 id=1214 data-nosnippet>1214</a>
+<a href=#1215 id=1215 data-nosnippet>1215</a>        <span class="macro">cfg_if::cfg_if!</span> {
+<a href=#1216 id=1216 data-nosnippet>1216</a>            <span class="kw">if </span><span class="attr">#[cfg(target_has_atomic = <span class="string">"64"</span>)] </span>{
+<a href=#1217 id=1217 data-nosnippet>1217</a>                <span class="kw">use </span><span class="kw">crate</span>::sync::atomic::{Atomic, AtomicU64};
+<a href=#1218 id=1218 data-nosnippet>1218</a>
+<a href=#1219 id=1219 data-nosnippet>1219</a>                <span class="kw">static </span>COUNTER: Atomic&lt;u64&gt; = AtomicU64::new(<span class="number">0</span>);
+<a href=#1220 id=1220 data-nosnippet>1220</a>
+<a href=#1221 id=1221 data-nosnippet>1221</a>                <span class="kw">let </span><span class="kw-2">mut </span>last = COUNTER.load(Ordering::Relaxed);
+<a href=#1222 id=1222 data-nosnippet>1222</a>                <span class="kw">loop </span>{
+<a href=#1223 id=1223 data-nosnippet>1223</a>                    <span class="kw">let </span><span class="prelude-val">Some</span>(id) = last.checked_add(<span class="number">1</span>) <span class="kw">else </span>{
+<a href=#1224 id=1224 data-nosnippet>1224</a>                        exhausted();
+<a href=#1225 id=1225 data-nosnippet>1225</a>                    };
+<a href=#1226 id=1226 data-nosnippet>1226</a>
+<a href=#1227 id=1227 data-nosnippet>1227</a>                    <span class="kw">match </span>COUNTER.compare_exchange_weak(last, id, Ordering::Relaxed, Ordering::Relaxed) {
+<a href=#1228 id=1228 data-nosnippet>1228</a>                        <span class="prelude-val">Ok</span>(<span class="kw">_</span>) =&gt; <span class="kw">return </span>ThreadId(NonZero::new(id).unwrap()),
+<a href=#1229 id=1229 data-nosnippet>1229</a>                        <span class="prelude-val">Err</span>(id) =&gt; last = id,
+<a href=#1230 id=1230 data-nosnippet>1230</a>                    }
+<a href=#1231 id=1231 data-nosnippet>1231</a>                }
+<a href=#1232 id=1232 data-nosnippet>1232</a>            } <span class="kw">else </span>{
+<a href=#1233 id=1233 data-nosnippet>1233</a>                <span class="kw">use </span><span class="kw">crate</span>::sync::{Mutex, PoisonError};
+<a href=#1234 id=1234 data-nosnippet>1234</a>
+<a href=#1235 id=1235 data-nosnippet>1235</a>                <span class="kw">static </span>COUNTER: Mutex&lt;u64&gt; = Mutex::new(<span class="number">0</span>);
+<a href=#1236 id=1236 data-nosnippet>1236</a>
+<a href=#1237 id=1237 data-nosnippet>1237</a>                <span class="kw">let </span><span class="kw-2">mut </span>counter = COUNTER.lock().unwrap_or_else(PoisonError::into_inner);
+<a href=#1238 id=1238 data-nosnippet>1238</a>                <span class="kw">let </span><span class="prelude-val">Some</span>(id) = counter.checked_add(<span class="number">1</span>) <span class="kw">else </span>{
+<a href=#1239 id=1239 data-nosnippet>1239</a>                    <span class="comment">// in case the panic handler ends up calling `ThreadId::new()`,
+<a href=#1240 id=1240 data-nosnippet>1240</a>                    // avoid reentrant lock acquire.
+<a href=#1241 id=1241 data-nosnippet>1241</a>                    </span>drop(counter);
+<a href=#1242 id=1242 data-nosnippet>1242</a>                    exhausted();
+<a href=#1243 id=1243 data-nosnippet>1243</a>                };
+<a href=#1244 id=1244 data-nosnippet>1244</a>
+<a href=#1245 id=1245 data-nosnippet>1245</a>                <span class="kw-2">*</span>counter = id;
+<a href=#1246 id=1246 data-nosnippet>1246</a>                drop(counter);
+<a href=#1247 id=1247 data-nosnippet>1247</a>                ThreadId(NonZero::new(id).unwrap())
+<a href=#1248 id=1248 data-nosnippet>1248</a>            }
+<a href=#1249 id=1249 data-nosnippet>1249</a>        }
+<a href=#1250 id=1250 data-nosnippet>1250</a>    }
+<a href=#1251 id=1251 data-nosnippet>1251</a>
+<a href=#1252 id=1252 data-nosnippet>1252</a>    <span class="attr">#[cfg(any(not(target_thread_local), target_has_atomic = <span class="string">"64"</span>))]
+<a href=#1253 id=1253 data-nosnippet>1253</a>    </span><span class="kw">fn </span>from_u64(v: u64) -&gt; <span class="prelude-ty">Option</span>&lt;ThreadId&gt; {
+<a href=#1254 id=1254 data-nosnippet>1254</a>        NonZero::new(v).map(ThreadId)
+<a href=#1255 id=1255 data-nosnippet>1255</a>    }
+<a href=#1256 id=1256 data-nosnippet>1256</a>
+<a href=#1257 id=1257 data-nosnippet>1257</a>    <span class="doccomment">/// This returns a numeric identifier for the thread identified by this
+<a href=#1258 id=1258 data-nosnippet>1258</a>    /// `ThreadId`.
+<a href=#1259 id=1259 data-nosnippet>1259</a>    ///
+<a href=#1260 id=1260 data-nosnippet>1260</a>    /// As noted in the documentation for the type itself, it is essentially an
+<a href=#1261 id=1261 data-nosnippet>1261</a>    /// opaque ID, but is guaranteed to be unique for each thread. The returned
+<a href=#1262 id=1262 data-nosnippet>1262</a>    /// value is entirely opaque -- only equality testing is stable. Note that
+<a href=#1263 id=1263 data-nosnippet>1263</a>    /// it is not guaranteed which values new threads will return, and this may
+<a href=#1264 id=1264 data-nosnippet>1264</a>    /// change across Rust versions.
+<a href=#1265 id=1265 data-nosnippet>1265</a>    </span><span class="attr">#[must_use]
+<a href=#1266 id=1266 data-nosnippet>1266</a>    #[unstable(feature = <span class="string">"thread_id_value"</span>, issue = <span class="string">"67939"</span>)]
+<a href=#1267 id=1267 data-nosnippet>1267</a>    </span><span class="kw">pub fn </span>as_u64(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; NonZero&lt;u64&gt; {
+<a href=#1268 id=1268 data-nosnippet>1268</a>        <span class="self">self</span>.<span class="number">0
+<a href=#1269 id=1269 data-nosnippet>1269</a>    </span>}
+<a href=#1270 id=1270 data-nosnippet>1270</a>}
+<a href=#1271 id=1271 data-nosnippet>1271</a>
+<a href=#1272 id=1272 data-nosnippet>1272</a><span class="comment">////////////////////////////////////////////////////////////////////////////////
+<a href=#1273 id=1273 data-nosnippet>1273</a>// Thread
+<a href=#1274 id=1274 data-nosnippet>1274</a>////////////////////////////////////////////////////////////////////////////////
+<a href=#1275 id=1275 data-nosnippet>1275</a>
+<a href=#1276 id=1276 data-nosnippet>1276</a>// This module ensures private fields are kept private, which is necessary to enforce the safety requirements.
+<a href=#1277 id=1277 data-nosnippet>1277</a></span><span class="kw">mod </span>thread_name_string {
+<a href=#1278 id=1278 data-nosnippet>1278</a>    <span class="kw">use </span><span class="kw">crate</span>::ffi::{CStr, CString};
+<a href=#1279 id=1279 data-nosnippet>1279</a>    <span class="kw">use </span><span class="kw">crate</span>::str;
+<a href=#1280 id=1280 data-nosnippet>1280</a>
+<a href=#1281 id=1281 data-nosnippet>1281</a>    <span class="doccomment">/// Like a `String` it's guaranteed UTF-8 and like a `CString` it's null terminated.
+<a href=#1282 id=1282 data-nosnippet>1282</a>    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct </span>ThreadNameString {
+<a href=#1283 id=1283 data-nosnippet>1283</a>        inner: CString,
+<a href=#1284 id=1284 data-nosnippet>1284</a>    }
+<a href=#1285 id=1285 data-nosnippet>1285</a>
+<a href=#1286 id=1286 data-nosnippet>1286</a>    <span class="kw">impl </span>From&lt;String&gt; <span class="kw">for </span>ThreadNameString {
+<a href=#1287 id=1287 data-nosnippet>1287</a>        <span class="kw">fn </span>from(s: String) -&gt; <span class="self">Self </span>{
+<a href=#1288 id=1288 data-nosnippet>1288</a>            <span class="self">Self </span>{
+<a href=#1289 id=1289 data-nosnippet>1289</a>                inner: CString::new(s).expect(<span class="string">"thread name may not contain interior null bytes"</span>),
+<a href=#1290 id=1290 data-nosnippet>1290</a>            }
+<a href=#1291 id=1291 data-nosnippet>1291</a>        }
+<a href=#1292 id=1292 data-nosnippet>1292</a>    }
+<a href=#1293 id=1293 data-nosnippet>1293</a>
+<a href=#1294 id=1294 data-nosnippet>1294</a>    <span class="kw">impl </span>ThreadNameString {
+<a href=#1295 id=1295 data-nosnippet>1295</a>        <span class="kw">pub fn </span>as_cstr(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>CStr {
+<a href=#1296 id=1296 data-nosnippet>1296</a>            <span class="kw-2">&amp;</span><span class="self">self</span>.inner
+<a href=#1297 id=1297 data-nosnippet>1297</a>        }
+<a href=#1298 id=1298 data-nosnippet>1298</a>
+<a href=#1299 id=1299 data-nosnippet>1299</a>        <span class="kw">pub fn </span>as_str(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>str {
+<a href=#1300 id=1300 data-nosnippet>1300</a>            <span class="comment">// SAFETY: `ThreadNameString` is guaranteed to be UTF-8.
+<a href=#1301 id=1301 data-nosnippet>1301</a>            </span><span class="kw">unsafe </span>{ str::from_utf8_unchecked(<span class="self">self</span>.inner.to_bytes()) }
+<a href=#1302 id=1302 data-nosnippet>1302</a>        }
+<a href=#1303 id=1303 data-nosnippet>1303</a>    }
+<a href=#1304 id=1304 data-nosnippet>1304</a>}
+<a href=#1305 id=1305 data-nosnippet>1305</a>
+<a href=#1306 id=1306 data-nosnippet>1306</a><span class="kw">use </span>thread_name_string::ThreadNameString;
+<a href=#1307 id=1307 data-nosnippet>1307</a>
+<a href=#1308 id=1308 data-nosnippet>1308</a><span class="doccomment">/// Store the ID of the main thread.
+<a href=#1309 id=1309 data-nosnippet>1309</a>///
+<a href=#1310 id=1310 data-nosnippet>1310</a>/// The thread handle for the main thread is created lazily, and this might even
+<a href=#1311 id=1311 data-nosnippet>1311</a>/// happen pre-main. Since not every platform has a way to identify the main
+<a href=#1312 id=1312 data-nosnippet>1312</a>/// thread when that happens – macOS's `pthread_main_np` function being a notable
+<a href=#1313 id=1313 data-nosnippet>1313</a>/// exception – we cannot assign it the right name right then. Instead, in our
+<a href=#1314 id=1314 data-nosnippet>1314</a>/// runtime startup code, we remember the thread ID of the main thread (through
+<a href=#1315 id=1315 data-nosnippet>1315</a>/// this modules `set` function) and use it to identify the main thread from then
+<a href=#1316 id=1316 data-nosnippet>1316</a>/// on. This works reliably and has the additional advantage that we can report
+<a href=#1317 id=1317 data-nosnippet>1317</a>/// the right thread name on main even after the thread handle has been destroyed.
+<a href=#1318 id=1318 data-nosnippet>1318</a>/// Note however that this also means that the name reported in pre-main functions
+<a href=#1319 id=1319 data-nosnippet>1319</a>/// will be incorrect, but that's just something we have to live with.
+<a href=#1320 id=1320 data-nosnippet>1320</a></span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod </span>main_thread {
+<a href=#1321 id=1321 data-nosnippet>1321</a>    <span class="macro">cfg_if::cfg_if!</span> {
+<a href=#1322 id=1322 data-nosnippet>1322</a>        <span class="kw">if </span><span class="attr">#[cfg(target_has_atomic = <span class="string">"64"</span>)] </span>{
+<a href=#1323 id=1323 data-nosnippet>1323</a>            <span class="kw">use </span><span class="kw">super</span>::ThreadId;
+<a href=#1324 id=1324 data-nosnippet>1324</a>            <span class="kw">use </span><span class="kw">crate</span>::sync::atomic::{Atomic, AtomicU64};
+<a href=#1325 id=1325 data-nosnippet>1325</a>            <span class="kw">use </span><span class="kw">crate</span>::sync::atomic::Ordering::Relaxed;
+<a href=#1326 id=1326 data-nosnippet>1326</a>
+<a href=#1327 id=1327 data-nosnippet>1327</a>            <span class="kw">static </span>MAIN: Atomic&lt;u64&gt; = AtomicU64::new(<span class="number">0</span>);
+<a href=#1328 id=1328 data-nosnippet>1328</a>
+<a href=#1329 id=1329 data-nosnippet>1329</a>            <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>get() -&gt; <span class="prelude-ty">Option</span>&lt;ThreadId&gt; {
+<a href=#1330 id=1330 data-nosnippet>1330</a>                ThreadId::from_u64(MAIN.load(Relaxed))
+<a href=#1331 id=1331 data-nosnippet>1331</a>            }
+<a href=#1332 id=1332 data-nosnippet>1332</a>
+<a href=#1333 id=1333 data-nosnippet>1333</a>            <span class="doccomment">/// # Safety
+<a href=#1334 id=1334 data-nosnippet>1334</a>            /// May only be called once.
+<a href=#1335 id=1335 data-nosnippet>1335</a>            </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">unsafe fn </span>set(id: ThreadId) {
+<a href=#1336 id=1336 data-nosnippet>1336</a>                MAIN.store(id.as_u64().get(), Relaxed)
+<a href=#1337 id=1337 data-nosnippet>1337</a>            }
+<a href=#1338 id=1338 data-nosnippet>1338</a>        } <span class="kw">else </span>{
+<a href=#1339 id=1339 data-nosnippet>1339</a>            <span class="kw">use </span><span class="kw">super</span>::ThreadId;
+<a href=#1340 id=1340 data-nosnippet>1340</a>            <span class="kw">use </span><span class="kw">crate</span>::mem::MaybeUninit;
+<a href=#1341 id=1341 data-nosnippet>1341</a>            <span class="kw">use </span><span class="kw">crate</span>::sync::atomic::{Atomic, AtomicBool};
+<a href=#1342 id=1342 data-nosnippet>1342</a>            <span class="kw">use </span><span class="kw">crate</span>::sync::atomic::Ordering::{Acquire, Release};
+<a href=#1343 id=1343 data-nosnippet>1343</a>
+<a href=#1344 id=1344 data-nosnippet>1344</a>            <span class="kw">static </span>INIT: Atomic&lt;bool&gt; = AtomicBool::new(<span class="bool-val">false</span>);
+<a href=#1345 id=1345 data-nosnippet>1345</a>            <span class="kw">static </span><span class="kw-2">mut </span>MAIN: MaybeUninit&lt;ThreadId&gt; = MaybeUninit::uninit();
+<a href=#1346 id=1346 data-nosnippet>1346</a>
+<a href=#1347 id=1347 data-nosnippet>1347</a>            <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>get() -&gt; <span class="prelude-ty">Option</span>&lt;ThreadId&gt; {
+<a href=#1348 id=1348 data-nosnippet>1348</a>                <span class="kw">if </span>INIT.load(Acquire) {
+<a href=#1349 id=1349 data-nosnippet>1349</a>                    <span class="prelude-val">Some</span>(<span class="kw">unsafe </span>{ MAIN.assume_init() })
+<a href=#1350 id=1350 data-nosnippet>1350</a>                } <span class="kw">else </span>{
+<a href=#1351 id=1351 data-nosnippet>1351</a>                    <span class="prelude-val">None
+<a href=#1352 id=1352 data-nosnippet>1352</a>                </span>}
+<a href=#1353 id=1353 data-nosnippet>1353</a>            }
+<a href=#1354 id=1354 data-nosnippet>1354</a>
+<a href=#1355 id=1355 data-nosnippet>1355</a>            <span class="doccomment">/// # Safety
+<a href=#1356 id=1356 data-nosnippet>1356</a>            /// May only be called once.
+<a href=#1357 id=1357 data-nosnippet>1357</a>            </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">unsafe fn </span>set(id: ThreadId) {
+<a href=#1358 id=1358 data-nosnippet>1358</a>                <span class="kw">unsafe </span>{ MAIN = MaybeUninit::new(id) };
+<a href=#1359 id=1359 data-nosnippet>1359</a>                INIT.store(<span class="bool-val">true</span>, Release);
+<a href=#1360 id=1360 data-nosnippet>1360</a>            }
+<a href=#1361 id=1361 data-nosnippet>1361</a>        }
+<a href=#1362 id=1362 data-nosnippet>1362</a>    }
+<a href=#1363 id=1363 data-nosnippet>1363</a>}
+<a href=#1364 id=1364 data-nosnippet>1364</a>
+<a href=#1365 id=1365 data-nosnippet>1365</a><span class="doccomment">/// Run a function with the current thread's name.
+<a href=#1366 id=1366 data-nosnippet>1366</a>///
+<a href=#1367 id=1367 data-nosnippet>1367</a>/// Modulo thread local accesses, this function is safe to call from signal
+<a href=#1368 id=1368 data-nosnippet>1368</a>/// handlers and in similar circumstances where allocations are not possible.
+<a href=#1369 id=1369 data-nosnippet>1369</a></span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>with_current_name&lt;F, R&gt;(f: F) -&gt; R
+<a href=#1370 id=1370 data-nosnippet>1370</a><span class="kw">where
+<a href=#1371 id=1371 data-nosnippet>1371</a>    </span>F: FnOnce(<span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>str&gt;) -&gt; R,
+<a href=#1372 id=1372 data-nosnippet>1372</a>{
+<a href=#1373 id=1373 data-nosnippet>1373</a>    try_with_current(|thread| {
+<a href=#1374 id=1374 data-nosnippet>1374</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(thread) = thread {
+<a href=#1375 id=1375 data-nosnippet>1375</a>            <span class="comment">// If there is a current thread handle, try to use the name stored
+<a href=#1376 id=1376 data-nosnippet>1376</a>            // there.
+<a href=#1377 id=1377 data-nosnippet>1377</a>            </span><span class="kw">if let </span><span class="prelude-val">Some</span>(name) = <span class="kw-2">&amp;</span>thread.inner.name {
+<a href=#1378 id=1378 data-nosnippet>1378</a>                <span class="kw">return </span>f(<span class="prelude-val">Some</span>(name.as_str()));
+<a href=#1379 id=1379 data-nosnippet>1379</a>            } <span class="kw">else if </span><span class="prelude-val">Some</span>(thread.inner.id) == main_thread::get() {
+<a href=#1380 id=1380 data-nosnippet>1380</a>                <span class="comment">// The main thread doesn't store its name in the handle, we must
+<a href=#1381 id=1381 data-nosnippet>1381</a>                // identify it through its ID. Since we already have the `Thread`,
+<a href=#1382 id=1382 data-nosnippet>1382</a>                // we can retrieve the ID from it instead of going through another
+<a href=#1383 id=1383 data-nosnippet>1383</a>                // thread local.
+<a href=#1384 id=1384 data-nosnippet>1384</a>                </span><span class="kw">return </span>f(<span class="prelude-val">Some</span>(<span class="string">"main"</span>));
+<a href=#1385 id=1385 data-nosnippet>1385</a>            }
+<a href=#1386 id=1386 data-nosnippet>1386</a>        } <span class="kw">else if let </span><span class="prelude-val">Some</span>(main) = main_thread::get()
+<a href=#1387 id=1387 data-nosnippet>1387</a>            &amp;&amp; <span class="kw">let </span><span class="prelude-val">Some</span>(id) = current::id::get()
+<a href=#1388 id=1388 data-nosnippet>1388</a>            &amp;&amp; id == main
+<a href=#1389 id=1389 data-nosnippet>1389</a>        {
+<a href=#1390 id=1390 data-nosnippet>1390</a>            <span class="comment">// The main thread doesn't always have a thread handle, we must
+<a href=#1391 id=1391 data-nosnippet>1391</a>            // identify it through its ID instead. The checks are ordered so
+<a href=#1392 id=1392 data-nosnippet>1392</a>            // that the current ID is only loaded if it is actually needed,
+<a href=#1393 id=1393 data-nosnippet>1393</a>            // since loading it from TLS might need multiple expensive accesses.
+<a href=#1394 id=1394 data-nosnippet>1394</a>            </span><span class="kw">return </span>f(<span class="prelude-val">Some</span>(<span class="string">"main"</span>));
+<a href=#1395 id=1395 data-nosnippet>1395</a>        }
+<a href=#1396 id=1396 data-nosnippet>1396</a>
+<a href=#1397 id=1397 data-nosnippet>1397</a>        f(<span class="prelude-val">None</span>)
+<a href=#1398 id=1398 data-nosnippet>1398</a>    })
+<a href=#1399 id=1399 data-nosnippet>1399</a>}
+<a href=#1400 id=1400 data-nosnippet>1400</a>
+<a href=#1401 id=1401 data-nosnippet>1401</a><span class="doccomment">/// The internal representation of a `Thread` handle
+<a href=#1402 id=1402 data-nosnippet>1402</a>///
+<a href=#1403 id=1403 data-nosnippet>1403</a>/// We explicitly set the alignment for our guarantee in Thread::into_raw. This
+<a href=#1404 id=1404 data-nosnippet>1404</a>/// allows applications to stuff extra metadata bits into the alignment, which
+<a href=#1405 id=1405 data-nosnippet>1405</a>/// can be rather useful when working with atomics.
+<a href=#1406 id=1406 data-nosnippet>1406</a></span><span class="attr">#[repr(align(<span class="number">8</span>))]
+<a href=#1407 id=1407 data-nosnippet>1407</a></span><span class="kw">struct </span>Inner {
+<a href=#1408 id=1408 data-nosnippet>1408</a>    name: <span class="prelude-ty">Option</span>&lt;ThreadNameString&gt;,
+<a href=#1409 id=1409 data-nosnippet>1409</a>    id: ThreadId,
+<a href=#1410 id=1410 data-nosnippet>1410</a>    parker: Parker,
+<a href=#1411 id=1411 data-nosnippet>1411</a>}
+<a href=#1412 id=1412 data-nosnippet>1412</a>
+<a href=#1413 id=1413 data-nosnippet>1413</a><span class="kw">impl </span>Inner {
+<a href=#1414 id=1414 data-nosnippet>1414</a>    <span class="kw">fn </span>parker(<span class="self">self</span>: Pin&lt;<span class="kw-2">&amp;</span><span class="self">Self</span>&gt;) -&gt; Pin&lt;<span class="kw-2">&amp;</span>Parker&gt; {
+<a href=#1415 id=1415 data-nosnippet>1415</a>        <span class="kw">unsafe </span>{ Pin::map_unchecked(<span class="self">self</span>, |inner| <span class="kw-2">&amp;</span>inner.parker) }
+<a href=#1416 id=1416 data-nosnippet>1416</a>    }
+<a href=#1417 id=1417 data-nosnippet>1417</a>}
+<a href=#1418 id=1418 data-nosnippet>1418</a>
+<a href=#1419 id=1419 data-nosnippet>1419</a><span class="attr">#[derive(Clone)]
+<a href=#1420 id=1420 data-nosnippet>1420</a>#[stable(feature = <span class="string">"rust1"</span>, since = <span class="string">"1.0.0"</span>)]
+<a href=#1421 id=1421 data-nosnippet>1421</a></span><span class="doccomment">/// A handle to a thread.
+<a href=#1422 id=1422 data-nosnippet>1422</a>///
+<a href=#1423 id=1423 data-nosnippet>1423</a>/// Threads are represented via the `Thread` type, which you can get in one of
+<a href=#1424 id=1424 data-nosnippet>1424</a>/// two ways:
+<a href=#1425 id=1425 data-nosnippet>1425</a>///
+<a href=#1426 id=1426 data-nosnippet>1426</a>/// * By spawning a new thread, e.g., using the [`thread::spawn`][`spawn`]
+<a href=#1427 id=1427 data-nosnippet>1427</a>///   function, and calling [`thread`][`JoinHandle::thread`] on the
+<a href=#1428 id=1428 data-nosnippet>1428</a>///   [`JoinHandle`].
+<a href=#1429 id=1429 data-nosnippet>1429</a>/// * By requesting the current thread, using the [`thread::current`] function.
+<a href=#1430 id=1430 data-nosnippet>1430</a>///
+<a href=#1431 id=1431 data-nosnippet>1431</a>/// The [`thread::current`] function is available even for threads not spawned
+<a href=#1432 id=1432 data-nosnippet>1432</a>/// by the APIs of this module.
+<a href=#1433 id=1433 data-nosnippet>1433</a>///
+<a href=#1434 id=1434 data-nosnippet>1434</a>/// There is usually no need to create a `Thread` struct yourself, one
+<a href=#1435 id=1435 data-nosnippet>1435</a>/// should instead use a function like `spawn` to create new threads, see the
+<a href=#1436 id=1436 data-nosnippet>1436</a>/// docs of [`Builder`] and [`spawn`] for more details.
+<a href=#1437 id=1437 data-nosnippet>1437</a>///
+<a href=#1438 id=1438 data-nosnippet>1438</a>/// [`thread::current`]: current::current
+<a href=#1439 id=1439 data-nosnippet>1439</a></span><span class="kw">pub struct </span>Thread {
+<a href=#1440 id=1440 data-nosnippet>1440</a>    inner: Pin&lt;Arc&lt;Inner&gt;&gt;,
+<a href=#1441 id=1441 data-nosnippet>1441</a>}
+<a href=#1442 id=1442 data-nosnippet>1442</a>
+<a href=#1443 id=1443 data-nosnippet>1443</a><span class="kw">impl </span>Thread {
+<a href=#1444 id=1444 data-nosnippet>1444</a>    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>new(id: ThreadId, name: <span class="prelude-ty">Option</span>&lt;String&gt;) -&gt; Thread {
+<a href=#1445 id=1445 data-nosnippet>1445</a>        <span class="kw">let </span>name = name.map(ThreadNameString::from);
+<a href=#1446 id=1446 data-nosnippet>1446</a>
+<a href=#1447 id=1447 data-nosnippet>1447</a>        <span class="comment">// We have to use `unsafe` here to construct the `Parker` in-place,
+<a href=#1448 id=1448 data-nosnippet>1448</a>        // which is required for the UNIX implementation.
+<a href=#1449 id=1449 data-nosnippet>1449</a>        //
+<a href=#1450 id=1450 data-nosnippet>1450</a>        // SAFETY: We pin the Arc immediately after creation, so its address never
+<a href=#1451 id=1451 data-nosnippet>1451</a>        // changes.
+<a href=#1452 id=1452 data-nosnippet>1452</a>        </span><span class="kw">let </span>inner = <span class="kw">unsafe </span>{
+<a href=#1453 id=1453 data-nosnippet>1453</a>            <span class="kw">let </span><span class="kw-2">mut </span>arc = Arc::&lt;Inner&gt;::new_uninit();
+<a href=#1454 id=1454 data-nosnippet>1454</a>            <span class="kw">let </span>ptr = Arc::get_mut_unchecked(<span class="kw-2">&amp;mut </span>arc).as_mut_ptr();
+<a href=#1455 id=1455 data-nosnippet>1455</a>            (<span class="kw-2">&amp;</span>raw <span class="kw-2">mut </span>(<span class="kw-2">*</span>ptr).name).write(name);
+<a href=#1456 id=1456 data-nosnippet>1456</a>            (<span class="kw-2">&amp;</span>raw <span class="kw-2">mut </span>(<span class="kw-2">*</span>ptr).id).write(id);
+<a href=#1457 id=1457 data-nosnippet>1457</a>            Parker::new_in_place(<span class="kw-2">&amp;</span>raw <span class="kw-2">mut </span>(<span class="kw-2">*</span>ptr).parker);
+<a href=#1458 id=1458 data-nosnippet>1458</a>            Pin::new_unchecked(arc.assume_init())
+<a href=#1459 id=1459 data-nosnippet>1459</a>        };
+<a href=#1460 id=1460 data-nosnippet>1460</a>
+<a href=#1461 id=1461 data-nosnippet>1461</a>        Thread { inner }
+<a href=#1462 id=1462 data-nosnippet>1462</a>    }
+<a href=#1463 id=1463 data-nosnippet>1463</a>
+<a href=#1464 id=1464 data-nosnippet>1464</a>    <span class="doccomment">/// Like the public [`park`], but callable on any handle. This is used to
+<a href=#1465 id=1465 data-nosnippet>1465</a>    /// allow parking in TLS destructors.
+<a href=#1466 id=1466 data-nosnippet>1466</a>    ///
+<a href=#1467 id=1467 data-nosnippet>1467</a>    /// # Safety
+<a href=#1468 id=1468 data-nosnippet>1468</a>    /// May only be called from the thread to which this handle belongs.
+<a href=#1469 id=1469 data-nosnippet>1469</a>    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">unsafe fn </span>park(<span class="kw-2">&amp;</span><span class="self">self</span>) {
+<a href=#1470 id=1470 data-nosnippet>1470</a>        <span class="kw">unsafe </span>{ <span class="self">self</span>.inner.as_ref().parker().park() }
+<a href=#1471 id=1471 data-nosnippet>1471</a>    }
+<a href=#1472 id=1472 data-nosnippet>1472</a>
+<a href=#1473 id=1473 data-nosnippet>1473</a>    <span class="doccomment">/// Like the public [`park_timeout`], but callable on any handle. This is
+<a href=#1474 id=1474 data-nosnippet>1474</a>    /// used to allow parking in TLS destructors.
+<a href=#1475 id=1475 data-nosnippet>1475</a>    ///
+<a href=#1476 id=1476 data-nosnippet>1476</a>    /// # Safety
+<a href=#1477 id=1477 data-nosnippet>1477</a>    /// May only be called from the thread to which this handle belongs.
+<a href=#1478 id=1478 data-nosnippet>1478</a>    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">unsafe fn </span>park_timeout(<span class="kw-2">&amp;</span><span class="self">self</span>, dur: Duration) {
+<a href=#1479 id=1479 data-nosnippet>1479</a>        <span class="kw">unsafe </span>{ <span class="self">self</span>.inner.as_ref().parker().park_timeout(dur) }
+<a href=#1480 id=1480 data-nosnippet>1480</a>    }
+<a href=#1481 id=1481 data-nosnippet>1481</a>
+<a href=#1482 id=1482 data-nosnippet>1482</a>    <span class="doccomment">/// Atomically makes the handle's token available if it is not already.
+<a href=#1483 id=1483 data-nosnippet>1483</a>    ///
+<a href=#1484 id=1484 data-nosnippet>1484</a>    /// Every thread is equipped with some basic low-level blocking support, via
+<a href=#1485 id=1485 data-nosnippet>1485</a>    /// the [`park`][park] function and the `unpark()` method. These can be
+<a href=#1486 id=1486 data-nosnippet>1486</a>    /// used as a more CPU-efficient implementation of a spinlock.
+<a href=#1487 id=1487 data-nosnippet>1487</a>    ///
+<a href=#1488 id=1488 data-nosnippet>1488</a>    /// See the [park documentation][park] for more details.
+<a href=#1489 id=1489 data-nosnippet>1489</a>    ///
+<a href=#1490 id=1490 data-nosnippet>1490</a>    /// # Examples
+<a href=#1491 id=1491 data-nosnippet>1491</a>    ///
+<a href=#1492 id=1492 data-nosnippet>1492</a>    /// ```
+<a href=#1493 id=1493 data-nosnippet>1493</a>    /// use std::thread;
+<a href=#1494 id=1494 data-nosnippet>1494</a>    /// use std::time::Duration;
+<a href=#1495 id=1495 data-nosnippet>1495</a>    ///
+<a href=#1496 id=1496 data-nosnippet>1496</a>    /// let parked_thread = thread::Builder::new()
+<a href=#1497 id=1497 data-nosnippet>1497</a>    ///     .spawn(|| {
+<a href=#1498 id=1498 data-nosnippet>1498</a>    ///         println!("Parking thread");
+<a href=#1499 id=1499 data-nosnippet>1499</a>    ///         thread::park();
+<a href=#1500 id=1500 data-nosnippet>1500</a>    ///         println!("Thread unparked");
+<a href=#1501 id=1501 data-nosnippet>1501</a>    ///     })
+<a href=#1502 id=1502 data-nosnippet>1502</a>    ///     .unwrap();
+<a href=#1503 id=1503 data-nosnippet>1503</a>    ///
+<a href=#1504 id=1504 data-nosnippet>1504</a>    /// // Let some time pass for the thread to be spawned.
+<a href=#1505 id=1505 data-nosnippet>1505</a>    /// thread::sleep(Duration::from_millis(10));
+<a href=#1506 id=1506 data-nosnippet>1506</a>    ///
+<a href=#1507 id=1507 data-nosnippet>1507</a>    /// println!("Unpark the thread");
+<a href=#1508 id=1508 data-nosnippet>1508</a>    /// parked_thread.thread().unpark();
+<a href=#1509 id=1509 data-nosnippet>1509</a>    ///
+<a href=#1510 id=1510 data-nosnippet>1510</a>    /// parked_thread.join().unwrap();
+<a href=#1511 id=1511 data-nosnippet>1511</a>    /// ```
+<a href=#1512 id=1512 data-nosnippet>1512</a>    </span><span class="attr">#[stable(feature = <span class="string">"rust1"</span>, since = <span class="string">"1.0.0"</span>)]
+<a href=#1513 id=1513 data-nosnippet>1513</a>    #[inline]
+<a href=#1514 id=1514 data-nosnippet>1514</a>    </span><span class="kw">pub fn </span>unpark(<span class="kw-2">&amp;</span><span class="self">self</span>) {
+<a href=#1515 id=1515 data-nosnippet>1515</a>        <span class="self">self</span>.inner.as_ref().parker().unpark();
+<a href=#1516 id=1516 data-nosnippet>1516</a>    }
+<a href=#1517 id=1517 data-nosnippet>1517</a>
+<a href=#1518 id=1518 data-nosnippet>1518</a>    <span class="doccomment">/// Gets the thread's unique identifier.
+<a href=#1519 id=1519 data-nosnippet>1519</a>    ///
+<a href=#1520 id=1520 data-nosnippet>1520</a>    /// # Examples
+<a href=#1521 id=1521 data-nosnippet>1521</a>    ///
+<a href=#1522 id=1522 data-nosnippet>1522</a>    /// ```
+<a href=#1523 id=1523 data-nosnippet>1523</a>    /// use std::thread;
+<a href=#1524 id=1524 data-nosnippet>1524</a>    ///
+<a href=#1525 id=1525 data-nosnippet>1525</a>    /// let other_thread = thread::spawn(|| {
+<a href=#1526 id=1526 data-nosnippet>1526</a>    ///     thread::current().id()
+<a href=#1527 id=1527 data-nosnippet>1527</a>    /// });
+<a href=#1528 id=1528 data-nosnippet>1528</a>    ///
+<a href=#1529 id=1529 data-nosnippet>1529</a>    /// let other_thread_id = other_thread.join().unwrap();
+<a href=#1530 id=1530 data-nosnippet>1530</a>    /// assert!(thread::current().id() != other_thread_id);
+<a href=#1531 id=1531 data-nosnippet>1531</a>    /// ```
+<a href=#1532 id=1532 data-nosnippet>1532</a>    </span><span class="attr">#[stable(feature = <span class="string">"thread_id"</span>, since = <span class="string">"1.19.0"</span>)]
+<a href=#1533 id=1533 data-nosnippet>1533</a>    #[must_use]
+<a href=#1534 id=1534 data-nosnippet>1534</a>    </span><span class="kw">pub fn </span>id(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ThreadId {
+<a href=#1535 id=1535 data-nosnippet>1535</a>        <span class="self">self</span>.inner.id
+<a href=#1536 id=1536 data-nosnippet>1536</a>    }
+<a href=#1537 id=1537 data-nosnippet>1537</a>
+<a href=#1538 id=1538 data-nosnippet>1538</a>    <span class="doccomment">/// Gets the thread's name.
+<a href=#1539 id=1539 data-nosnippet>1539</a>    ///
+<a href=#1540 id=1540 data-nosnippet>1540</a>    /// For more information about named threads, see
+<a href=#1541 id=1541 data-nosnippet>1541</a>    /// [this module-level documentation][naming-threads].
+<a href=#1542 id=1542 data-nosnippet>1542</a>    ///
+<a href=#1543 id=1543 data-nosnippet>1543</a>    /// # Examples
+<a href=#1544 id=1544 data-nosnippet>1544</a>    ///
+<a href=#1545 id=1545 data-nosnippet>1545</a>    /// Threads by default have no name specified:
+<a href=#1546 id=1546 data-nosnippet>1546</a>    ///
+<a href=#1547 id=1547 data-nosnippet>1547</a>    /// ```
+<a href=#1548 id=1548 data-nosnippet>1548</a>    /// use std::thread;
+<a href=#1549 id=1549 data-nosnippet>1549</a>    ///
+<a href=#1550 id=1550 data-nosnippet>1550</a>    /// let builder = thread::Builder::new();
+<a href=#1551 id=1551 data-nosnippet>1551</a>    ///
+<a href=#1552 id=1552 data-nosnippet>1552</a>    /// let handler = builder.spawn(|| {
+<a href=#1553 id=1553 data-nosnippet>1553</a>    ///     assert!(thread::current().name().is_none());
+<a href=#1554 id=1554 data-nosnippet>1554</a>    /// }).unwrap();
+<a href=#1555 id=1555 data-nosnippet>1555</a>    ///
+<a href=#1556 id=1556 data-nosnippet>1556</a>    /// handler.join().unwrap();
+<a href=#1557 id=1557 data-nosnippet>1557</a>    /// ```
+<a href=#1558 id=1558 data-nosnippet>1558</a>    ///
+<a href=#1559 id=1559 data-nosnippet>1559</a>    /// Thread with a specified name:
+<a href=#1560 id=1560 data-nosnippet>1560</a>    ///
+<a href=#1561 id=1561 data-nosnippet>1561</a>    /// ```
+<a href=#1562 id=1562 data-nosnippet>1562</a>    /// use std::thread;
+<a href=#1563 id=1563 data-nosnippet>1563</a>    ///
+<a href=#1564 id=1564 data-nosnippet>1564</a>    /// let builder = thread::Builder::new()
+<a href=#1565 id=1565 data-nosnippet>1565</a>    ///     .name("foo".into());
+<a href=#1566 id=1566 data-nosnippet>1566</a>    ///
+<a href=#1567 id=1567 data-nosnippet>1567</a>    /// let handler = builder.spawn(|| {
+<a href=#1568 id=1568 data-nosnippet>1568</a>    ///     assert_eq!(thread::current().name(), Some("foo"))
+<a href=#1569 id=1569 data-nosnippet>1569</a>    /// }).unwrap();
+<a href=#1570 id=1570 data-nosnippet>1570</a>    ///
+<a href=#1571 id=1571 data-nosnippet>1571</a>    /// handler.join().unwrap();
+<a href=#1572 id=1572 data-nosnippet>1572</a>    /// ```
+<a href=#1573 id=1573 data-nosnippet>1573</a>    ///
+<a href=#1574 id=1574 data-nosnippet>1574</a>    /// [naming-threads]: ./index.html#naming-threads
+<a href=#1575 id=1575 data-nosnippet>1575</a>    </span><span class="attr">#[stable(feature = <span class="string">"rust1"</span>, since = <span class="string">"1.0.0"</span>)]
+<a href=#1576 id=1576 data-nosnippet>1576</a>    #[must_use]
+<a href=#1577 id=1577 data-nosnippet>1577</a>    </span><span class="kw">pub fn </span>name(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>str&gt; {
+<a href=#1578 id=1578 data-nosnippet>1578</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(name) = <span class="kw-2">&amp;</span><span class="self">self</span>.inner.name {
+<a href=#1579 id=1579 data-nosnippet>1579</a>            <span class="prelude-val">Some</span>(name.as_str())
+<a href=#1580 id=1580 data-nosnippet>1580</a>        } <span class="kw">else if </span>main_thread::get() == <span class="prelude-val">Some</span>(<span class="self">self</span>.inner.id) {
+<a href=#1581 id=1581 data-nosnippet>1581</a>            <span class="prelude-val">Some</span>(<span class="string">"main"</span>)
+<a href=#1582 id=1582 data-nosnippet>1582</a>        } <span class="kw">else </span>{
+<a href=#1583 id=1583 data-nosnippet>1583</a>            <span class="prelude-val">None
+<a href=#1584 id=1584 data-nosnippet>1584</a>        </span>}
+<a href=#1585 id=1585 data-nosnippet>1585</a>    }
+<a href=#1586 id=1586 data-nosnippet>1586</a>
+<a href=#1587 id=1587 data-nosnippet>1587</a>    <span class="doccomment">/// Consumes the `Thread`, returning a raw pointer.
+<a href=#1588 id=1588 data-nosnippet>1588</a>    ///
+<a href=#1589 id=1589 data-nosnippet>1589</a>    /// To avoid a memory leak the pointer must be converted
+<a href=#1590 id=1590 data-nosnippet>1590</a>    /// back into a `Thread` using [`Thread::from_raw`]. The pointer is
+<a href=#1591 id=1591 data-nosnippet>1591</a>    /// guaranteed to be aligned to at least 8 bytes.
+<a href=#1592 id=1592 data-nosnippet>1592</a>    ///
+<a href=#1593 id=1593 data-nosnippet>1593</a>    /// # Examples
+<a href=#1594 id=1594 data-nosnippet>1594</a>    ///
+<a href=#1595 id=1595 data-nosnippet>1595</a>    /// ```
+<a href=#1596 id=1596 data-nosnippet>1596</a>    /// #![feature(thread_raw)]
+<a href=#1597 id=1597 data-nosnippet>1597</a>    ///
+<a href=#1598 id=1598 data-nosnippet>1598</a>    /// use std::thread::{self, Thread};
+<a href=#1599 id=1599 data-nosnippet>1599</a>    ///
+<a href=#1600 id=1600 data-nosnippet>1600</a>    /// let thread = thread::current();
+<a href=#1601 id=1601 data-nosnippet>1601</a>    /// let id = thread.id();
+<a href=#1602 id=1602 data-nosnippet>1602</a>    /// let ptr = Thread::into_raw(thread);
+<a href=#1603 id=1603 data-nosnippet>1603</a>    /// unsafe {
+<a href=#1604 id=1604 data-nosnippet>1604</a>    ///     assert_eq!(Thread::from_raw(ptr).id(), id);
+<a href=#1605 id=1605 data-nosnippet>1605</a>    /// }
+<a href=#1606 id=1606 data-nosnippet>1606</a>    /// ```
+<a href=#1607 id=1607 data-nosnippet>1607</a>    </span><span class="attr">#[unstable(feature = <span class="string">"thread_raw"</span>, issue = <span class="string">"97523"</span>)]
+<a href=#1608 id=1608 data-nosnippet>1608</a>    </span><span class="kw">pub fn </span>into_raw(<span class="self">self</span>) -&gt; <span class="kw-2">*const </span>() {
+<a href=#1609 id=1609 data-nosnippet>1609</a>        <span class="comment">// Safety: We only expose an opaque pointer, which maintains the `Pin` invariant.
+<a href=#1610 id=1610 data-nosnippet>1610</a>        </span><span class="kw">let </span>inner = <span class="kw">unsafe </span>{ Pin::into_inner_unchecked(<span class="self">self</span>.inner) };
+<a href=#1611 id=1611 data-nosnippet>1611</a>        Arc::into_raw(inner) <span class="kw">as </span><span class="kw-2">*const </span>()
+<a href=#1612 id=1612 data-nosnippet>1612</a>    }
+<a href=#1613 id=1613 data-nosnippet>1613</a>
+<a href=#1614 id=1614 data-nosnippet>1614</a>    <span class="doccomment">/// Constructs a `Thread` from a raw pointer.
+<a href=#1615 id=1615 data-nosnippet>1615</a>    ///
+<a href=#1616 id=1616 data-nosnippet>1616</a>    /// The raw pointer must have been previously returned
+<a href=#1617 id=1617 data-nosnippet>1617</a>    /// by a call to [`Thread::into_raw`].
+<a href=#1618 id=1618 data-nosnippet>1618</a>    ///
+<a href=#1619 id=1619 data-nosnippet>1619</a>    /// # Safety
+<a href=#1620 id=1620 data-nosnippet>1620</a>    ///
+<a href=#1621 id=1621 data-nosnippet>1621</a>    /// This function is unsafe because improper use may lead
+<a href=#1622 id=1622 data-nosnippet>1622</a>    /// to memory unsafety, even if the returned `Thread` is never
+<a href=#1623 id=1623 data-nosnippet>1623</a>    /// accessed.
+<a href=#1624 id=1624 data-nosnippet>1624</a>    ///
+<a href=#1625 id=1625 data-nosnippet>1625</a>    /// Creating a `Thread` from a pointer other than one returned
+<a href=#1626 id=1626 data-nosnippet>1626</a>    /// from [`Thread::into_raw`] is **undefined behavior**.
+<a href=#1627 id=1627 data-nosnippet>1627</a>    ///
+<a href=#1628 id=1628 data-nosnippet>1628</a>    /// Calling this function twice on the same raw pointer can lead
+<a href=#1629 id=1629 data-nosnippet>1629</a>    /// to a double-free if both `Thread` instances are dropped.
+<a href=#1630 id=1630 data-nosnippet>1630</a>    </span><span class="attr">#[unstable(feature = <span class="string">"thread_raw"</span>, issue = <span class="string">"97523"</span>)]
+<a href=#1631 id=1631 data-nosnippet>1631</a>    </span><span class="kw">pub unsafe fn </span>from_raw(ptr: <span class="kw-2">*const </span>()) -&gt; Thread {
+<a href=#1632 id=1632 data-nosnippet>1632</a>        <span class="comment">// Safety: Upheld by caller.
+<a href=#1633 id=1633 data-nosnippet>1633</a>        </span><span class="kw">unsafe </span>{ Thread { inner: Pin::new_unchecked(Arc::from_raw(ptr <span class="kw">as </span><span class="kw-2">*const </span>Inner)) } }
+<a href=#1634 id=1634 data-nosnippet>1634</a>    }
+<a href=#1635 id=1635 data-nosnippet>1635</a>
+<a href=#1636 id=1636 data-nosnippet>1636</a>    <span class="kw">fn </span>cname(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>CStr&gt; {
+<a href=#1637 id=1637 data-nosnippet>1637</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(name) = <span class="kw-2">&amp;</span><span class="self">self</span>.inner.name {
+<a href=#1638 id=1638 data-nosnippet>1638</a>            <span class="prelude-val">Some</span>(name.as_cstr())
+<a href=#1639 id=1639 data-nosnippet>1639</a>        } <span class="kw">else if </span>main_thread::get() == <span class="prelude-val">Some</span>(<span class="self">self</span>.inner.id) {
+<a href=#1640 id=1640 data-nosnippet>1640</a>            <span class="prelude-val">Some</span>(<span class="string">c"main"</span>)
+<a href=#1641 id=1641 data-nosnippet>1641</a>        } <span class="kw">else </span>{
+<a href=#1642 id=1642 data-nosnippet>1642</a>            <span class="prelude-val">None
+<a href=#1643 id=1643 data-nosnippet>1643</a>        </span>}
+<a href=#1644 id=1644 data-nosnippet>1644</a>    }
+<a href=#1645 id=1645 data-nosnippet>1645</a>}
+<a href=#1646 id=1646 data-nosnippet>1646</a>
+<a href=#1647 id=1647 data-nosnippet>1647</a><span class="attr">#[stable(feature = <span class="string">"rust1"</span>, since = <span class="string">"1.0.0"</span>)]
+<a href=#1648 id=1648 data-nosnippet>1648</a></span><span class="kw">impl </span>fmt::Debug <span class="kw">for </span>Thread {
+<a href=#1649 id=1649 data-nosnippet>1649</a>    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
+<a href=#1650 id=1650 data-nosnippet>1650</a>        f.debug_struct(<span class="string">"Thread"</span>)
+<a href=#1651 id=1651 data-nosnippet>1651</a>            .field(<span class="string">"id"</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.id())
+<a href=#1652 id=1652 data-nosnippet>1652</a>            .field(<span class="string">"name"</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.name())
+<a href=#1653 id=1653 data-nosnippet>1653</a>            .finish_non_exhaustive()
+<a href=#1654 id=1654 data-nosnippet>1654</a>    }
+<a href=#1655 id=1655 data-nosnippet>1655</a>}
+<a href=#1656 id=1656 data-nosnippet>1656</a>
+<a href=#1657 id=1657 data-nosnippet>1657</a><span class="comment">////////////////////////////////////////////////////////////////////////////////
+<a href=#1658 id=1658 data-nosnippet>1658</a>// JoinHandle
+<a href=#1659 id=1659 data-nosnippet>1659</a>////////////////////////////////////////////////////////////////////////////////
+<a href=#1660 id=1660 data-nosnippet>1660</a>
+<a href=#1661 id=1661 data-nosnippet>1661</a></span><span class="doccomment">/// A specialized [`Result`] type for threads.
+<a href=#1662 id=1662 data-nosnippet>1662</a>///
+<a href=#1663 id=1663 data-nosnippet>1663</a>/// Indicates the manner in which a thread exited.
+<a href=#1664 id=1664 data-nosnippet>1664</a>///
+<a href=#1665 id=1665 data-nosnippet>1665</a>/// The value contained in the `Result::Err` variant
+<a href=#1666 id=1666 data-nosnippet>1666</a>/// is the value the thread panicked with;
+<a href=#1667 id=1667 data-nosnippet>1667</a>/// that is, the argument the `panic!` macro was called with.
+<a href=#1668 id=1668 data-nosnippet>1668</a>/// Unlike with normal errors, this value doesn't implement
+<a href=#1669 id=1669 data-nosnippet>1669</a>/// the [`Error`](crate::error::Error) trait.
+<a href=#1670 id=1670 data-nosnippet>1670</a>///
+<a href=#1671 id=1671 data-nosnippet>1671</a>/// Thus, a sensible way to handle a thread panic is to either:
+<a href=#1672 id=1672 data-nosnippet>1672</a>///
+<a href=#1673 id=1673 data-nosnippet>1673</a>/// 1. propagate the panic with [`std::panic::resume_unwind`]
+<a href=#1674 id=1674 data-nosnippet>1674</a>/// 2. or in case the thread is intended to be a subsystem boundary
+<a href=#1675 id=1675 data-nosnippet>1675</a>/// that is supposed to isolate system-level failures,
+<a href=#1676 id=1676 data-nosnippet>1676</a>/// match on the `Err` variant and handle the panic in an appropriate way
+<a href=#1677 id=1677 data-nosnippet>1677</a>///
+<a href=#1678 id=1678 data-nosnippet>1678</a>/// A thread that completes without panicking is considered to exit successfully.
+<a href=#1679 id=1679 data-nosnippet>1679</a>///
+<a href=#1680 id=1680 data-nosnippet>1680</a>/// # Examples
+<a href=#1681 id=1681 data-nosnippet>1681</a>///
+<a href=#1682 id=1682 data-nosnippet>1682</a>/// Matching on the result of a joined thread:
+<a href=#1683 id=1683 data-nosnippet>1683</a>///
+<a href=#1684 id=1684 data-nosnippet>1684</a>/// ```no_run
+<a href=#1685 id=1685 data-nosnippet>1685</a>/// use std::{fs, thread, panic};
+<a href=#1686 id=1686 data-nosnippet>1686</a>///
+<a href=#1687 id=1687 data-nosnippet>1687</a>/// fn copy_in_thread() -&gt; thread::Result&lt;()&gt; {
+<a href=#1688 id=1688 data-nosnippet>1688</a>///     thread::spawn(|| {
+<a href=#1689 id=1689 data-nosnippet>1689</a>///         fs::copy("foo.txt", "bar.txt").unwrap();
+<a href=#1690 id=1690 data-nosnippet>1690</a>///     }).join()
+<a href=#1691 id=1691 data-nosnippet>1691</a>/// }
+<a href=#1692 id=1692 data-nosnippet>1692</a>///
+<a href=#1693 id=1693 data-nosnippet>1693</a>/// fn main() {
+<a href=#1694 id=1694 data-nosnippet>1694</a>///     match copy_in_thread() {
+<a href=#1695 id=1695 data-nosnippet>1695</a>///         Ok(_) =&gt; println!("copy succeeded"),
+<a href=#1696 id=1696 data-nosnippet>1696</a>///         Err(e) =&gt; panic::resume_unwind(e),
+<a href=#1697 id=1697 data-nosnippet>1697</a>///     }
+<a href=#1698 id=1698 data-nosnippet>1698</a>/// }
+<a href=#1699 id=1699 data-nosnippet>1699</a>/// ```
+<a href=#1700 id=1700 data-nosnippet>1700</a>///
+<a href=#1701 id=1701 data-nosnippet>1701</a>/// [`Result`]: crate::result::Result
+<a href=#1702 id=1702 data-nosnippet>1702</a>/// [`std::panic::resume_unwind`]: crate::panic::resume_unwind
+<a href=#1703 id=1703 data-nosnippet>1703</a></span><span class="attr">#[stable(feature = <span class="string">"rust1"</span>, since = <span class="string">"1.0.0"</span>)]
+<a href=#1704 id=1704 data-nosnippet>1704</a>#[doc(search_unbox)]
+<a href=#1705 id=1705 data-nosnippet>1705</a></span><span class="kw">pub type </span><span class="prelude-ty">Result</span>&lt;T&gt; = <span class="kw">crate</span>::result::Result&lt;T, Box&lt;<span class="kw">dyn </span>Any + Send + <span class="lifetime">'static</span>&gt;&gt;;
+<a href=#1706 id=1706 data-nosnippet>1706</a>
+<a href=#1707 id=1707 data-nosnippet>1707</a><span class="comment">// This packet is used to communicate the return value between the spawned
+<a href=#1708 id=1708 data-nosnippet>1708</a>// thread and the rest of the program. It is shared through an `Arc` and
+<a href=#1709 id=1709 data-nosnippet>1709</a>// there's no need for a mutex here because synchronization happens with `join()`
+<a href=#1710 id=1710 data-nosnippet>1710</a>// (the caller will never read this packet until the thread has exited).
+<a href=#1711 id=1711 data-nosnippet>1711</a>//
+<a href=#1712 id=1712 data-nosnippet>1712</a>// An Arc to the packet is stored into a `JoinInner` which in turns is placed
+<a href=#1713 id=1713 data-nosnippet>1713</a>// in `JoinHandle`.
+<a href=#1714 id=1714 data-nosnippet>1714</a></span><span class="kw">struct </span>Packet&lt;<span class="lifetime">'scope</span>, T&gt; {
+<a href=#1715 id=1715 data-nosnippet>1715</a>    scope: <span class="prelude-ty">Option</span>&lt;Arc&lt;scoped::ScopeData&gt;&gt;,
+<a href=#1716 id=1716 data-nosnippet>1716</a>    result: UnsafeCell&lt;<span class="prelude-ty">Option</span>&lt;<span class="prelude-ty">Result</span>&lt;T&gt;&gt;&gt;,
+<a href=#1717 id=1717 data-nosnippet>1717</a>    _marker: PhantomData&lt;<span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">'scope </span>scoped::ScopeData&gt;&gt;,
+<a href=#1718 id=1718 data-nosnippet>1718</a>}
+<a href=#1719 id=1719 data-nosnippet>1719</a>
+<a href=#1720 id=1720 data-nosnippet>1720</a><span class="comment">// Due to the usage of `UnsafeCell` we need to manually implement Sync.
+<a href=#1721 id=1721 data-nosnippet>1721</a>// The type `T` should already always be Send (otherwise the thread could not
+<a href=#1722 id=1722 data-nosnippet>1722</a>// have been created) and the Packet is Sync because all access to the
+<a href=#1723 id=1723 data-nosnippet>1723</a>// `UnsafeCell` synchronized (by the `join()` boundary), and `ScopeData` is Sync.
+<a href=#1724 id=1724 data-nosnippet>1724</a></span><span class="kw">unsafe impl</span>&lt;<span class="lifetime">'scope</span>, T: Send&gt; Sync <span class="kw">for </span>Packet&lt;<span class="lifetime">'scope</span>, T&gt; {}
+<a href=#1725 id=1725 data-nosnippet>1725</a>
+<a href=#1726 id=1726 data-nosnippet>1726</a><span class="kw">impl</span>&lt;<span class="lifetime">'scope</span>, T&gt; Drop <span class="kw">for </span>Packet&lt;<span class="lifetime">'scope</span>, T&gt; {
+<a href=#1727 id=1727 data-nosnippet>1727</a>    <span class="kw">fn </span>drop(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+<a href=#1728 id=1728 data-nosnippet>1728</a>        <span class="comment">// If this packet was for a thread that ran in a scope, the thread
+<a href=#1729 id=1729 data-nosnippet>1729</a>        // panicked, and nobody consumed the panic payload, we make sure
+<a href=#1730 id=1730 data-nosnippet>1730</a>        // the scope function will panic.
+<a href=#1731 id=1731 data-nosnippet>1731</a>        </span><span class="kw">let </span>unhandled_panic = <span class="macro">matches!</span>(<span class="self">self</span>.result.get_mut(), <span class="prelude-val">Some</span>(<span class="prelude-val">Err</span>(<span class="kw">_</span>)));
+<a href=#1732 id=1732 data-nosnippet>1732</a>        <span class="comment">// Drop the result without causing unwinding.
+<a href=#1733 id=1733 data-nosnippet>1733</a>        // This is only relevant for threads that aren't join()ed, as
+<a href=#1734 id=1734 data-nosnippet>1734</a>        // join() will take the `result` and set it to None, such that
+<a href=#1735 id=1735 data-nosnippet>1735</a>        // there is nothing left to drop here.
+<a href=#1736 id=1736 data-nosnippet>1736</a>        // If this panics, we should handle that, because we're outside the
+<a href=#1737 id=1737 data-nosnippet>1737</a>        // outermost `catch_unwind` of our thread.
+<a href=#1738 id=1738 data-nosnippet>1738</a>        // We just abort in that case, since there's nothing else we can do.
+<a href=#1739 id=1739 data-nosnippet>1739</a>        // (And even if we tried to handle it somehow, we'd also need to handle
+<a href=#1740 id=1740 data-nosnippet>1740</a>        // the case where the panic payload we get out of it also panics on
+<a href=#1741 id=1741 data-nosnippet>1741</a>        // drop, and so on. See issue #86027.)
+<a href=#1742 id=1742 data-nosnippet>1742</a>        </span><span class="kw">if let </span><span class="prelude-val">Err</span>(<span class="kw">_</span>) = panic::catch_unwind(panic::AssertUnwindSafe(|| {
+<a href=#1743 id=1743 data-nosnippet>1743</a>            <span class="kw-2">*</span><span class="self">self</span>.result.get_mut() = <span class="prelude-val">None</span>;
+<a href=#1744 id=1744 data-nosnippet>1744</a>        })) {
+<a href=#1745 id=1745 data-nosnippet>1745</a>            <span class="macro">rtabort!</span>(<span class="string">"thread result panicked on drop"</span>);
+<a href=#1746 id=1746 data-nosnippet>1746</a>        }
+<a href=#1747 id=1747 data-nosnippet>1747</a>        <span class="comment">// Book-keeping so the scope knows when it's done.
+<a href=#1748 id=1748 data-nosnippet>1748</a>        </span><span class="kw">if let </span><span class="prelude-val">Some</span>(scope) = <span class="kw-2">&amp;</span><span class="self">self</span>.scope {
+<a href=#1749 id=1749 data-nosnippet>1749</a>            <span class="comment">// Now that there will be no more user code running on this thread
+<a href=#1750 id=1750 data-nosnippet>1750</a>            // that can use 'scope, mark the thread as 'finished'.
+<a href=#1751 id=1751 data-nosnippet>1751</a>            // It's important we only do this after the `result` has been dropped,
+<a href=#1752 id=1752 data-nosnippet>1752</a>            // since dropping it might still use things it borrowed from 'scope.
+<a href=#1753 id=1753 data-nosnippet>1753</a>            </span>scope.decrement_num_running_threads(unhandled_panic);
+<a href=#1754 id=1754 data-nosnippet>1754</a>        }
+<a href=#1755 id=1755 data-nosnippet>1755</a>    }
+<a href=#1756 id=1756 data-nosnippet>1756</a>}
+<a href=#1757 id=1757 data-nosnippet>1757</a>
+<a href=#1758 id=1758 data-nosnippet>1758</a><span class="doccomment">/// Inner representation for JoinHandle
+<a href=#1759 id=1759 data-nosnippet>1759</a></span><span class="kw">struct </span>JoinInner&lt;<span class="lifetime">'scope</span>, T&gt; {
+<a href=#1760 id=1760 data-nosnippet>1760</a>    native: imp::Thread,
+<a href=#1761 id=1761 data-nosnippet>1761</a>    thread: Thread,
+<a href=#1762 id=1762 data-nosnippet>1762</a>    packet: Arc&lt;Packet&lt;<span class="lifetime">'scope</span>, T&gt;&gt;,
+<a href=#1763 id=1763 data-nosnippet>1763</a>}
+<a href=#1764 id=1764 data-nosnippet>1764</a>
+<a href=#1765 id=1765 data-nosnippet>1765</a><span class="kw">impl</span>&lt;<span class="lifetime">'scope</span>, T&gt; JoinInner&lt;<span class="lifetime">'scope</span>, T&gt; {
+<a href=#1766 id=1766 data-nosnippet>1766</a>    <span class="kw">fn </span>join(<span class="kw-2">mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;T&gt; {
+<a href=#1767 id=1767 data-nosnippet>1767</a>        <span class="self">self</span>.native.join();
+<a href=#1768 id=1768 data-nosnippet>1768</a>        Arc::get_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>.packet)
+<a href=#1769 id=1769 data-nosnippet>1769</a>            <span class="comment">// FIXME(fuzzypixelz): returning an error instead of panicking here
+<a href=#1770 id=1770 data-nosnippet>1770</a>            // would require updating the documentation of
+<a href=#1771 id=1771 data-nosnippet>1771</a>            // `std::thread::Result`; currently we can return `Err` if and only
+<a href=#1772 id=1772 data-nosnippet>1772</a>            // if the thread had panicked.
+<a href=#1773 id=1773 data-nosnippet>1773</a>            </span>.expect(<span class="string">"threads should not terminate unexpectedly"</span>)
+<a href=#1774 id=1774 data-nosnippet>1774</a>            .result
+<a href=#1775 id=1775 data-nosnippet>1775</a>            .get_mut()
+<a href=#1776 id=1776 data-nosnippet>1776</a>            .take()
+<a href=#1777 id=1777 data-nosnippet>1777</a>            .unwrap()
+<a href=#1778 id=1778 data-nosnippet>1778</a>    }
+<a href=#1779 id=1779 data-nosnippet>1779</a>}
+<a href=#1780 id=1780 data-nosnippet>1780</a>
+<a href=#1781 id=1781 data-nosnippet>1781</a><span class="doccomment">/// An owned permission to join on a thread (block on its termination).
+<a href=#1782 id=1782 data-nosnippet>1782</a>///
+<a href=#1783 id=1783 data-nosnippet>1783</a>/// A `JoinHandle` *detaches* the associated thread when it is dropped, which
+<a href=#1784 id=1784 data-nosnippet>1784</a>/// means that there is no longer any handle to the thread and no way to `join`
+<a href=#1785 id=1785 data-nosnippet>1785</a>/// on it.
+<a href=#1786 id=1786 data-nosnippet>1786</a>///
+<a href=#1787 id=1787 data-nosnippet>1787</a>/// Due to platform restrictions, it is not possible to [`Clone`] this
+<a href=#1788 id=1788 data-nosnippet>1788</a>/// handle: the ability to join a thread is a uniquely-owned permission.
+<a href=#1789 id=1789 data-nosnippet>1789</a>///
+<a href=#1790 id=1790 data-nosnippet>1790</a>/// This `struct` is created by the [`thread::spawn`] function and the
+<a href=#1791 id=1791 data-nosnippet>1791</a>/// [`thread::Builder::spawn`] method.
+<a href=#1792 id=1792 data-nosnippet>1792</a>///
+<a href=#1793 id=1793 data-nosnippet>1793</a>/// # Examples
+<a href=#1794 id=1794 data-nosnippet>1794</a>///
+<a href=#1795 id=1795 data-nosnippet>1795</a>/// Creation from [`thread::spawn`]:
+<a href=#1796 id=1796 data-nosnippet>1796</a>///
+<a href=#1797 id=1797 data-nosnippet>1797</a>/// ```
+<a href=#1798 id=1798 data-nosnippet>1798</a>/// use std::thread;
+<a href=#1799 id=1799 data-nosnippet>1799</a>///
+<a href=#1800 id=1800 data-nosnippet>1800</a>/// let join_handle: thread::JoinHandle&lt;_&gt; = thread::spawn(|| {
+<a href=#1801 id=1801 data-nosnippet>1801</a>///     // some work here
+<a href=#1802 id=1802 data-nosnippet>1802</a>/// });
+<a href=#1803 id=1803 data-nosnippet>1803</a>/// ```
+<a href=#1804 id=1804 data-nosnippet>1804</a>///
+<a href=#1805 id=1805 data-nosnippet>1805</a>/// Creation from [`thread::Builder::spawn`]:
+<a href=#1806 id=1806 data-nosnippet>1806</a>///
+<a href=#1807 id=1807 data-nosnippet>1807</a>/// ```
+<a href=#1808 id=1808 data-nosnippet>1808</a>/// use std::thread;
+<a href=#1809 id=1809 data-nosnippet>1809</a>///
+<a href=#1810 id=1810 data-nosnippet>1810</a>/// let builder = thread::Builder::new();
+<a href=#1811 id=1811 data-nosnippet>1811</a>///
+<a href=#1812 id=1812 data-nosnippet>1812</a>/// let join_handle: thread::JoinHandle&lt;_&gt; = builder.spawn(|| {
+<a href=#1813 id=1813 data-nosnippet>1813</a>///     // some work here
+<a href=#1814 id=1814 data-nosnippet>1814</a>/// }).unwrap();
+<a href=#1815 id=1815 data-nosnippet>1815</a>/// ```
+<a href=#1816 id=1816 data-nosnippet>1816</a>///
+<a href=#1817 id=1817 data-nosnippet>1817</a>/// A thread being detached and outliving the thread that spawned it:
+<a href=#1818 id=1818 data-nosnippet>1818</a>///
+<a href=#1819 id=1819 data-nosnippet>1819</a>/// ```no_run
+<a href=#1820 id=1820 data-nosnippet>1820</a>/// use std::thread;
+<a href=#1821 id=1821 data-nosnippet>1821</a>/// use std::time::Duration;
+<a href=#1822 id=1822 data-nosnippet>1822</a>///
+<a href=#1823 id=1823 data-nosnippet>1823</a>/// let original_thread = thread::spawn(|| {
+<a href=#1824 id=1824 data-nosnippet>1824</a>///     let _detached_thread = thread::spawn(|| {
+<a href=#1825 id=1825 data-nosnippet>1825</a>///         // Here we sleep to make sure that the first thread returns before.
+<a href=#1826 id=1826 data-nosnippet>1826</a>///         thread::sleep(Duration::from_millis(10));
+<a href=#1827 id=1827 data-nosnippet>1827</a>///         // This will be called, even though the JoinHandle is dropped.
+<a href=#1828 id=1828 data-nosnippet>1828</a>///         println!("♫ Still alive ♫");
+<a href=#1829 id=1829 data-nosnippet>1829</a>///     });
+<a href=#1830 id=1830 data-nosnippet>1830</a>/// });
+<a href=#1831 id=1831 data-nosnippet>1831</a>///
+<a href=#1832 id=1832 data-nosnippet>1832</a>/// original_thread.join().expect("The thread being joined has panicked");
+<a href=#1833 id=1833 data-nosnippet>1833</a>/// println!("Original thread is joined.");
+<a href=#1834 id=1834 data-nosnippet>1834</a>///
+<a href=#1835 id=1835 data-nosnippet>1835</a>/// // We make sure that the new thread has time to run, before the main
+<a href=#1836 id=1836 data-nosnippet>1836</a>/// // thread returns.
+<a href=#1837 id=1837 data-nosnippet>1837</a>///
+<a href=#1838 id=1838 data-nosnippet>1838</a>/// thread::sleep(Duration::from_millis(1000));
+<a href=#1839 id=1839 data-nosnippet>1839</a>/// ```
+<a href=#1840 id=1840 data-nosnippet>1840</a>///
+<a href=#1841 id=1841 data-nosnippet>1841</a>/// [`thread::Builder::spawn`]: Builder::spawn
+<a href=#1842 id=1842 data-nosnippet>1842</a>/// [`thread::spawn`]: spawn
+<a href=#1843 id=1843 data-nosnippet>1843</a></span><span class="attr">#[stable(feature = <span class="string">"rust1"</span>, since = <span class="string">"1.0.0"</span>)]
+<a href=#1844 id=1844 data-nosnippet>1844</a>#[cfg_attr(target_os = <span class="string">"teeos"</span>, must_use)]
+<a href=#1845 id=1845 data-nosnippet>1845</a></span><span class="kw">pub struct </span>JoinHandle&lt;T&gt;(JoinInner&lt;<span class="lifetime">'static</span>, T&gt;);
+<a href=#1846 id=1846 data-nosnippet>1846</a>
+<a href=#1847 id=1847 data-nosnippet>1847</a><span class="attr">#[stable(feature = <span class="string">"joinhandle_impl_send_sync"</span>, since = <span class="string">"1.29.0"</span>)]
+<a href=#1848 id=1848 data-nosnippet>1848</a></span><span class="kw">unsafe impl</span>&lt;T&gt; Send <span class="kw">for </span>JoinHandle&lt;T&gt; {}
+<a href=#1849 id=1849 data-nosnippet>1849</a><span class="attr">#[stable(feature = <span class="string">"joinhandle_impl_send_sync"</span>, since = <span class="string">"1.29.0"</span>)]
+<a href=#1850 id=1850 data-nosnippet>1850</a></span><span class="kw">unsafe impl</span>&lt;T&gt; Sync <span class="kw">for </span>JoinHandle&lt;T&gt; {}
+<a href=#1851 id=1851 data-nosnippet>1851</a>
+<a href=#1852 id=1852 data-nosnippet>1852</a><span class="kw">impl</span>&lt;T&gt; JoinHandle&lt;T&gt; {
+<a href=#1853 id=1853 data-nosnippet>1853</a>    <span class="doccomment">/// Extracts a handle to the underlying thread.
+<a href=#1854 id=1854 data-nosnippet>1854</a>    ///
+<a href=#1855 id=1855 data-nosnippet>1855</a>    /// # Examples
+<a href=#1856 id=1856 data-nosnippet>1856</a>    ///
+<a href=#1857 id=1857 data-nosnippet>1857</a>    /// ```
+<a href=#1858 id=1858 data-nosnippet>1858</a>    /// use std::thread;
+<a href=#1859 id=1859 data-nosnippet>1859</a>    ///
+<a href=#1860 id=1860 data-nosnippet>1860</a>    /// let builder = thread::Builder::new();
+<a href=#1861 id=1861 data-nosnippet>1861</a>    ///
+<a href=#1862 id=1862 data-nosnippet>1862</a>    /// let join_handle: thread::JoinHandle&lt;_&gt; = builder.spawn(|| {
+<a href=#1863 id=1863 data-nosnippet>1863</a>    ///     // some work here
+<a href=#1864 id=1864 data-nosnippet>1864</a>    /// }).unwrap();
+<a href=#1865 id=1865 data-nosnippet>1865</a>    ///
+<a href=#1866 id=1866 data-nosnippet>1866</a>    /// let thread = join_handle.thread();
+<a href=#1867 id=1867 data-nosnippet>1867</a>    /// println!("thread id: {:?}", thread.id());
+<a href=#1868 id=1868 data-nosnippet>1868</a>    /// ```
+<a href=#1869 id=1869 data-nosnippet>1869</a>    </span><span class="attr">#[stable(feature = <span class="string">"rust1"</span>, since = <span class="string">"1.0.0"</span>)]
+<a href=#1870 id=1870 data-nosnippet>1870</a>    #[must_use]
+<a href=#1871 id=1871 data-nosnippet>1871</a>    </span><span class="kw">pub fn </span>thread(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>Thread {
+<a href=#1872 id=1872 data-nosnippet>1872</a>        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>.thread
+<a href=#1873 id=1873 data-nosnippet>1873</a>    }
+<a href=#1874 id=1874 data-nosnippet>1874</a>
+<a href=#1875 id=1875 data-nosnippet>1875</a>    <span class="doccomment">/// Waits for the associated thread to finish.
+<a href=#1876 id=1876 data-nosnippet>1876</a>    ///
+<a href=#1877 id=1877 data-nosnippet>1877</a>    /// This function will return immediately if the associated thread has already finished.
+<a href=#1878 id=1878 data-nosnippet>1878</a>    ///
+<a href=#1879 id=1879 data-nosnippet>1879</a>    /// In terms of [atomic memory orderings],  the completion of the associated
+<a href=#1880 id=1880 data-nosnippet>1880</a>    /// thread synchronizes with this function returning. In other words, all
+<a href=#1881 id=1881 data-nosnippet>1881</a>    /// operations performed by that thread [happen
+<a href=#1882 id=1882 data-nosnippet>1882</a>    /// before](https://doc.rust-lang.org/nomicon/atomics.html#data-accesses) all
+<a href=#1883 id=1883 data-nosnippet>1883</a>    /// operations that happen after `join` returns.
+<a href=#1884 id=1884 data-nosnippet>1884</a>    ///
+<a href=#1885 id=1885 data-nosnippet>1885</a>    /// If the associated thread panics, [`Err`] is returned with the parameter given
+<a href=#1886 id=1886 data-nosnippet>1886</a>    /// to [`panic!`] (though see the Notes below).
+<a href=#1887 id=1887 data-nosnippet>1887</a>    ///
+<a href=#1888 id=1888 data-nosnippet>1888</a>    /// [`Err`]: crate::result::Result::Err
+<a href=#1889 id=1889 data-nosnippet>1889</a>    /// [atomic memory orderings]: crate::sync::atomic
+<a href=#1890 id=1890 data-nosnippet>1890</a>    ///
+<a href=#1891 id=1891 data-nosnippet>1891</a>    /// # Panics
+<a href=#1892 id=1892 data-nosnippet>1892</a>    ///
+<a href=#1893 id=1893 data-nosnippet>1893</a>    /// This function may panic on some platforms if a thread attempts to join
+<a href=#1894 id=1894 data-nosnippet>1894</a>    /// itself or otherwise may create a deadlock with joining threads.
+<a href=#1895 id=1895 data-nosnippet>1895</a>    ///
+<a href=#1896 id=1896 data-nosnippet>1896</a>    /// # Examples
+<a href=#1897 id=1897 data-nosnippet>1897</a>    ///
+<a href=#1898 id=1898 data-nosnippet>1898</a>    /// ```
+<a href=#1899 id=1899 data-nosnippet>1899</a>    /// use std::thread;
+<a href=#1900 id=1900 data-nosnippet>1900</a>    ///
+<a href=#1901 id=1901 data-nosnippet>1901</a>    /// let builder = thread::Builder::new();
+<a href=#1902 id=1902 data-nosnippet>1902</a>    ///
+<a href=#1903 id=1903 data-nosnippet>1903</a>    /// let join_handle: thread::JoinHandle&lt;_&gt; = builder.spawn(|| {
+<a href=#1904 id=1904 data-nosnippet>1904</a>    ///     // some work here
+<a href=#1905 id=1905 data-nosnippet>1905</a>    /// }).unwrap();
+<a href=#1906 id=1906 data-nosnippet>1906</a>    /// join_handle.join().expect("Couldn't join on the associated thread");
+<a href=#1907 id=1907 data-nosnippet>1907</a>    /// ```
+<a href=#1908 id=1908 data-nosnippet>1908</a>    ///
+<a href=#1909 id=1909 data-nosnippet>1909</a>    /// # Notes
+<a href=#1910 id=1910 data-nosnippet>1910</a>    ///
+<a href=#1911 id=1911 data-nosnippet>1911</a>    /// If a "foreign" unwinding operation (e.g. an exception thrown from C++
+<a href=#1912 id=1912 data-nosnippet>1912</a>    /// code, or a `panic!` in Rust code compiled or linked with a different
+<a href=#1913 id=1913 data-nosnippet>1913</a>    /// runtime) unwinds all the way to the thread root, the process may be
+<a href=#1914 id=1914 data-nosnippet>1914</a>    /// aborted; see the Notes on [`thread::spawn`]. If the process is not
+<a href=#1915 id=1915 data-nosnippet>1915</a>    /// aborted, this function will return a `Result::Err` containing an opaque
+<a href=#1916 id=1916 data-nosnippet>1916</a>    /// type.
+<a href=#1917 id=1917 data-nosnippet>1917</a>    ///
+<a href=#1918 id=1918 data-nosnippet>1918</a>    /// [`catch_unwind`]: ../../std/panic/fn.catch_unwind.html
+<a href=#1919 id=1919 data-nosnippet>1919</a>    /// [`thread::spawn`]: spawn
+<a href=#1920 id=1920 data-nosnippet>1920</a>    </span><span class="attr">#[stable(feature = <span class="string">"rust1"</span>, since = <span class="string">"1.0.0"</span>)]
+<a href=#1921 id=1921 data-nosnippet>1921</a>    </span><span class="kw">pub fn </span>join(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;T&gt; {
+<a href=#1922 id=1922 data-nosnippet>1922</a>        <span class="self">self</span>.<span class="number">0</span>.join()
+<a href=#1923 id=1923 data-nosnippet>1923</a>    }
+<a href=#1924 id=1924 data-nosnippet>1924</a>
+<a href=#1925 id=1925 data-nosnippet>1925</a>    <span class="doccomment">/// Checks if the associated thread has finished running its main function.
+<a href=#1926 id=1926 data-nosnippet>1926</a>    ///
+<a href=#1927 id=1927 data-nosnippet>1927</a>    /// `is_finished` supports implementing a non-blocking join operation, by checking
+<a href=#1928 id=1928 data-nosnippet>1928</a>    /// `is_finished`, and calling `join` if it returns `true`. This function does not block. To
+<a href=#1929 id=1929 data-nosnippet>1929</a>    /// block while waiting on the thread to finish, use [`join`][Self::join].
+<a href=#1930 id=1930 data-nosnippet>1930</a>    ///
+<a href=#1931 id=1931 data-nosnippet>1931</a>    /// This might return `true` for a brief moment after the thread's main
+<a href=#1932 id=1932 data-nosnippet>1932</a>    /// function has returned, but before the thread itself has stopped running.
+<a href=#1933 id=1933 data-nosnippet>1933</a>    /// However, once this returns `true`, [`join`][Self::join] can be expected
+<a href=#1934 id=1934 data-nosnippet>1934</a>    /// to return quickly, without blocking for any significant amount of time.
+<a href=#1935 id=1935 data-nosnippet>1935</a>    </span><span class="attr">#[stable(feature = <span class="string">"thread_is_running"</span>, since = <span class="string">"1.61.0"</span>)]
+<a href=#1936 id=1936 data-nosnippet>1936</a>    </span><span class="kw">pub fn </span>is_finished(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+<a href=#1937 id=1937 data-nosnippet>1937</a>        Arc::strong_count(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>.packet) == <span class="number">1
+<a href=#1938 id=1938 data-nosnippet>1938</a>    </span>}
+<a href=#1939 id=1939 data-nosnippet>1939</a>}
+<a href=#1940 id=1940 data-nosnippet>1940</a>
+<a href=#1941 id=1941 data-nosnippet>1941</a><span class="kw">impl</span>&lt;T&gt; AsInner&lt;imp::Thread&gt; <span class="kw">for </span>JoinHandle&lt;T&gt; {
+<a href=#1942 id=1942 data-nosnippet>1942</a>    <span class="kw">fn </span>as_inner(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>imp::Thread {
+<a href=#1943 id=1943 data-nosnippet>1943</a>        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>.native
+<a href=#1944 id=1944 data-nosnippet>1944</a>    }
+<a href=#1945 id=1945 data-nosnippet>1945</a>}
+<a href=#1946 id=1946 data-nosnippet>1946</a>
+<a href=#1947 id=1947 data-nosnippet>1947</a><span class="kw">impl</span>&lt;T&gt; IntoInner&lt;imp::Thread&gt; <span class="kw">for </span>JoinHandle&lt;T&gt; {
+<a href=#1948 id=1948 data-nosnippet>1948</a>    <span class="kw">fn </span>into_inner(<span class="self">self</span>) -&gt; imp::Thread {
+<a href=#1949 id=1949 data-nosnippet>1949</a>        <span class="self">self</span>.<span class="number">0</span>.native
+<a href=#1950 id=1950 data-nosnippet>1950</a>    }
+<a href=#1951 id=1951 data-nosnippet>1951</a>}
+<a href=#1952 id=1952 data-nosnippet>1952</a>
+<a href=#1953 id=1953 data-nosnippet>1953</a><span class="attr">#[stable(feature = <span class="string">"std_debug"</span>, since = <span class="string">"1.16.0"</span>)]
+<a href=#1954 id=1954 data-nosnippet>1954</a></span><span class="kw">impl</span>&lt;T&gt; fmt::Debug <span class="kw">for </span>JoinHandle&lt;T&gt; {
+<a href=#1955 id=1955 data-nosnippet>1955</a>    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
+<a href=#1956 id=1956 data-nosnippet>1956</a>        f.debug_struct(<span class="string">"JoinHandle"</span>).finish_non_exhaustive()
+<a href=#1957 id=1957 data-nosnippet>1957</a>    }
+<a href=#1958 id=1958 data-nosnippet>1958</a>}
+<a href=#1959 id=1959 data-nosnippet>1959</a>
+<a href=#1960 id=1960 data-nosnippet>1960</a><span class="kw">fn </span>_assert_sync_and_send() {
+<a href=#1961 id=1961 data-nosnippet>1961</a>    <span class="kw">fn </span>_assert_both&lt;T: Send + Sync&gt;() {}
+<a href=#1962 id=1962 data-nosnippet>1962</a>    _assert_both::&lt;JoinHandle&lt;()&gt;&gt;();
+<a href=#1963 id=1963 data-nosnippet>1963</a>    _assert_both::&lt;Thread&gt;();
+<a href=#1964 id=1964 data-nosnippet>1964</a>}
+<a href=#1965 id=1965 data-nosnippet>1965</a>
+<a href=#1966 id=1966 data-nosnippet>1966</a><span class="doccomment">/// Returns an estimate of the default amount of parallelism a program should use.
+<a href=#1967 id=1967 data-nosnippet>1967</a>///
+<a href=#1968 id=1968 data-nosnippet>1968</a>/// Parallelism is a resource. A given machine provides a certain capacity for
+<a href=#1969 id=1969 data-nosnippet>1969</a>/// parallelism, i.e., a bound on the number of computations it can perform
+<a href=#1970 id=1970 data-nosnippet>1970</a>/// simultaneously. This number often corresponds to the amount of CPUs a
+<a href=#1971 id=1971 data-nosnippet>1971</a>/// computer has, but it may diverge in various cases.
+<a href=#1972 id=1972 data-nosnippet>1972</a>///
+<a href=#1973 id=1973 data-nosnippet>1973</a>/// Host environments such as VMs or container orchestrators may want to
+<a href=#1974 id=1974 data-nosnippet>1974</a>/// restrict the amount of parallelism made available to programs in them. This
+<a href=#1975 id=1975 data-nosnippet>1975</a>/// is often done to limit the potential impact of (unintentionally)
+<a href=#1976 id=1976 data-nosnippet>1976</a>/// resource-intensive programs on other programs running on the same machine.
+<a href=#1977 id=1977 data-nosnippet>1977</a>///
+<a href=#1978 id=1978 data-nosnippet>1978</a>/// # Limitations
+<a href=#1979 id=1979 data-nosnippet>1979</a>///
+<a href=#1980 id=1980 data-nosnippet>1980</a>/// The purpose of this API is to provide an easy and portable way to query
+<a href=#1981 id=1981 data-nosnippet>1981</a>/// the default amount of parallelism the program should use. Among other things it
+<a href=#1982 id=1982 data-nosnippet>1982</a>/// does not expose information on NUMA regions, does not account for
+<a href=#1983 id=1983 data-nosnippet>1983</a>/// differences in (co)processor capabilities or current system load,
+<a href=#1984 id=1984 data-nosnippet>1984</a>/// and will not modify the program's global state in order to more accurately
+<a href=#1985 id=1985 data-nosnippet>1985</a>/// query the amount of available parallelism.
+<a href=#1986 id=1986 data-nosnippet>1986</a>///
+<a href=#1987 id=1987 data-nosnippet>1987</a>/// Where both fixed steady-state and burst limits are available the steady-state
+<a href=#1988 id=1988 data-nosnippet>1988</a>/// capacity will be used to ensure more predictable latencies.
+<a href=#1989 id=1989 data-nosnippet>1989</a>///
+<a href=#1990 id=1990 data-nosnippet>1990</a>/// Resource limits can be changed during the runtime of a program, therefore the value is
+<a href=#1991 id=1991 data-nosnippet>1991</a>/// not cached and instead recomputed every time this function is called. It should not be
+<a href=#1992 id=1992 data-nosnippet>1992</a>/// called from hot code.
+<a href=#1993 id=1993 data-nosnippet>1993</a>///
+<a href=#1994 id=1994 data-nosnippet>1994</a>/// The value returned by this function should be considered a simplified
+<a href=#1995 id=1995 data-nosnippet>1995</a>/// approximation of the actual amount of parallelism available at any given
+<a href=#1996 id=1996 data-nosnippet>1996</a>/// time. To get a more detailed or precise overview of the amount of
+<a href=#1997 id=1997 data-nosnippet>1997</a>/// parallelism available to the program, you may wish to use
+<a href=#1998 id=1998 data-nosnippet>1998</a>/// platform-specific APIs as well. The following platform limitations currently
+<a href=#1999 id=1999 data-nosnippet>1999</a>/// apply to `available_parallelism`:
+<a href=#2000 id=2000 data-nosnippet>2000</a>///
+<a href=#2001 id=2001 data-nosnippet>2001</a>/// On Windows:
+<a href=#2002 id=2002 data-nosnippet>2002</a>/// - It may undercount the amount of parallelism available on systems with more
+<a href=#2003 id=2003 data-nosnippet>2003</a>///   than 64 logical CPUs. However, programs typically need specific support to
+<a href=#2004 id=2004 data-nosnippet>2004</a>///   take advantage of more than 64 logical CPUs, and in the absence of such
+<a href=#2005 id=2005 data-nosnippet>2005</a>///   support, the number returned by this function accurately reflects the
+<a href=#2006 id=2006 data-nosnippet>2006</a>///   number of logical CPUs the program can use by default.
+<a href=#2007 id=2007 data-nosnippet>2007</a>/// - It may overcount the amount of parallelism available on systems limited by
+<a href=#2008 id=2008 data-nosnippet>2008</a>///   process-wide affinity masks, or job object limitations.
+<a href=#2009 id=2009 data-nosnippet>2009</a>///
+<a href=#2010 id=2010 data-nosnippet>2010</a>/// On Linux:
+<a href=#2011 id=2011 data-nosnippet>2011</a>/// - It may overcount the amount of parallelism available when limited by a
+<a href=#2012 id=2012 data-nosnippet>2012</a>///   process-wide affinity mask or cgroup quotas and `sched_getaffinity()` or cgroup fs can't be
+<a href=#2013 id=2013 data-nosnippet>2013</a>///   queried, e.g. due to sandboxing.
+<a href=#2014 id=2014 data-nosnippet>2014</a>/// - It may undercount the amount of parallelism if the current thread's affinity mask
+<a href=#2015 id=2015 data-nosnippet>2015</a>///   does not reflect the process' cpuset, e.g. due to pinned threads.
+<a href=#2016 id=2016 data-nosnippet>2016</a>/// - If the process is in a cgroup v1 cpu controller, this may need to
+<a href=#2017 id=2017 data-nosnippet>2017</a>///   scan mountpoints to find the corresponding cgroup v1 controller,
+<a href=#2018 id=2018 data-nosnippet>2018</a>///   which may take time on systems with large numbers of mountpoints.
+<a href=#2019 id=2019 data-nosnippet>2019</a>///   (This does not apply to cgroup v2, or to processes not in a
+<a href=#2020 id=2020 data-nosnippet>2020</a>///   cgroup.)
+<a href=#2021 id=2021 data-nosnippet>2021</a>///
+<a href=#2022 id=2022 data-nosnippet>2022</a>/// On all targets:
+<a href=#2023 id=2023 data-nosnippet>2023</a>/// - It may overcount the amount of parallelism available when running in a VM
+<a href=#2024 id=2024 data-nosnippet>2024</a>/// with CPU usage limits (e.g. an overcommitted host).
+<a href=#2025 id=2025 data-nosnippet>2025</a>///
+<a href=#2026 id=2026 data-nosnippet>2026</a>/// # Errors
+<a href=#2027 id=2027 data-nosnippet>2027</a>///
+<a href=#2028 id=2028 data-nosnippet>2028</a>/// This function will, but is not limited to, return errors in the following
+<a href=#2029 id=2029 data-nosnippet>2029</a>/// cases:
+<a href=#2030 id=2030 data-nosnippet>2030</a>///
+<a href=#2031 id=2031 data-nosnippet>2031</a>/// - If the amount of parallelism is not known for the target platform.
+<a href=#2032 id=2032 data-nosnippet>2032</a>/// - If the program lacks permission to query the amount of parallelism made
+<a href=#2033 id=2033 data-nosnippet>2033</a>///   available to it.
+<a href=#2034 id=2034 data-nosnippet>2034</a>///
+<a href=#2035 id=2035 data-nosnippet>2035</a>/// # Examples
+<a href=#2036 id=2036 data-nosnippet>2036</a>///
+<a href=#2037 id=2037 data-nosnippet>2037</a>/// ```
+<a href=#2038 id=2038 data-nosnippet>2038</a>/// # #![allow(dead_code)]
+<a href=#2039 id=2039 data-nosnippet>2039</a>/// use std::{io, thread};
+<a href=#2040 id=2040 data-nosnippet>2040</a>///
+<a href=#2041 id=2041 data-nosnippet>2041</a>/// fn main() -&gt; io::Result&lt;()&gt; {
+<a href=#2042 id=2042 data-nosnippet>2042</a>///     let count = thread::available_parallelism()?.get();
+<a href=#2043 id=2043 data-nosnippet>2043</a>///     assert!(count &gt;= 1_usize);
+<a href=#2044 id=2044 data-nosnippet>2044</a>///     Ok(())
+<a href=#2045 id=2045 data-nosnippet>2045</a>/// }
+<a href=#2046 id=2046 data-nosnippet>2046</a>/// ```
+<a href=#2047 id=2047 data-nosnippet>2047</a></span><span class="attr">#[doc(alias = <span class="string">"available_concurrency"</span>)] </span><span class="comment">// Alias for a previous name we gave this API on unstable.
+<a href=#2048 id=2048 data-nosnippet>2048</a></span><span class="attr">#[doc(alias = <span class="string">"hardware_concurrency"</span>)] </span><span class="comment">// Alias for C++ `std::thread::hardware_concurrency`.
+<a href=#2049 id=2049 data-nosnippet>2049</a></span><span class="attr">#[doc(alias = <span class="string">"num_cpus"</span>)] </span><span class="comment">// Alias for a popular ecosystem crate which provides similar functionality.
+<a href=#2050 id=2050 data-nosnippet>2050</a></span><span class="attr">#[stable(feature = <span class="string">"available_parallelism"</span>, since = <span class="string">"1.59.0"</span>)]
+<a href=#2051 id=2051 data-nosnippet>2051</a></span><span class="kw">pub fn </span>available_parallelism() -&gt; io::Result&lt;NonZero&lt;usize&gt;&gt; {
+<a href=#2052 id=2052 data-nosnippet>2052</a>    imp::available_parallelism()
+<a href=#2053 id=2053 data-nosnippet>2053</a>}</code></pre></div></section></main></body></html>

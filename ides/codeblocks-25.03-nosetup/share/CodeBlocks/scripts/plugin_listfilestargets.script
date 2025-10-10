@@ -1,0 +1,122 @@
+/*******************************************************************************
+ * Name:      listfilestargets.script
+ * Purpose:   Script plugin in CODE::BLOCKS
+ * Author:    LETARTARE	(http://forums.codeblocks.org)
+ * Created:   2011-12-17
+ * Version    0.5.0
+ * Copyright: LETARTARE
+ * License:   GPL
+ ******************************************************************************/
+///							ATTENTION
+///-----------------------------------------------------------------------------
+/// ** for svn r7639 ** (by 'jens')
+///-----------------------------------------------------------------------------
+///  ** for svn in r7588..r7639 **, 'GetFile(int)' was deleted !!!
+/// patch 'reimplement_GetFile_index_20111212-1.patch' in r7639 (by 'jens')
+/// this script use two new methods of patch :
+///  	 add => 'wxArrayString ProjectFile::buildTargets' <=
+/// use, add ====> 'int ProjectBuildTarget::GetFilesCount()' <====
+/// use, add ====> 'ProjectFile* ProjectBuildTarget* GetFile(int)' <====
+///  	 add => 'ProjectFile * cbProject::GetFile(int)'   <=
+///-----------------------------------------------------------------------------
+///  ** for svn < r7588 **  (release 10.05, svn7550, ..)
+/// no official patch : 'projectbuildtarget_GetFiles.patch'
+/// this script use two new methods of patch :
+/// 	 add => 'wxArrayString ProjectFile::buildTargets' <===
+/// use, add ====> 'int ProjectBuildTarget::GetFilesCount()' <==== use
+/// use, add ====> 'ProjectFile* ProjectBuildTarget* GetFile(int)' <==== use
+///-----------------------------------------------------------------------------
+
+///-----------------------------------------------------------------------------
+/// display all files targets
+///-----------------------------------------------------------------------------
+class DisplayAllFilesTargets extends cbScriptPlugin {
+/// members
+	VERSION = _T("0.5.0");
+///-----------------------------------------------------------------------------
+/// mandatory to init script plugin
+///-----------------------------------------------------------------------------
+	constructor()	{
+	/// constructor base class
+		cbScriptPlugin.constructor();
+	/// setup the plugin's info
+		info.name = _T("DisplayAllFilesTargets");
+		info.title = _("Display files targets");
+		info.version = VERSION;
+		info.license = _T("GPL");
+	}
+///-----------------------------------------------------------------------------
+/// to create context menu entries
+///-----------------------------------------------------------------------------
+	function GetModuleMenu(who, data)	{
+		local entries = ::wxArrayString();
+	    if (who == ::mtProjectManager)   {
+            entries.Add(_("Display files targets only"), 1);
+	    }
+		return entries;
+	}
+///-----------------------------------------------------------------------------
+/// calback for context menu items clicking
+///-----------------------------------------------------------------------------
+	function OnModuleMenuClicked(index)	{
+		main();
+	}
+///-----------------------------------------------------------------------------
+///displays all files of each target on script console
+///-----------------------------------------------------------------------------
+	function main() {
+	/// general
+		local Project = GetProjectManager().GetActiveProject();
+		if (IsNull(Project)) {
+			ShowError( _("Currently no project is loaded/activated. Cannot continue.") );
+			return 0;
+		}
+		local Ntargets = Project.GetBuildTargetsCount() ;
+		if (Ntargets == 0) {
+			ShowError( _("No target in this project. Cannot continue.") );
+			return 0;
+		}
+		local Nfiles = Project.GetFilesCount() ;
+		if (Nfiles == 0) {
+			ShowError( _("No file in this project. Cannot continue.") );
+			return 0;
+		}
+	/// file relative name
+		local file;
+		local target;
+		local nfilestarget;
+		local i=0;
+	/// informations
+		local Mes = _T("Project : '") + Project.GetTitle() + _T("' : ") ;
+		Mes += Nfiles.tostring() + _T(" files, ") ;
+		Mes +=  Ntargets.tostring() + _T(" targets : ") ;
+		::print(Mes );
+	/// all project targets
+		for (local ti=0; ti < Ntargets ; ti++ ) {
+			target = Project.GetBuildTarget(ti) ;
+			Mes = _T("\nTarget ") + ti.tostring() + _T(" : '") ;
+			Mes += target.GetFullTitle() + _T("'") ;
+			::print(Mes);
+///------------- patch to 'ProjectBuildTarget' class ---------------------------
+			nfilestarget = target.GetFilesCount();
+///-----------------------------------------------------------------------------
+			if (nfilestarget == 0)
+				continue;
+		/// all files target
+			for (local nf =0 ; nf < nfilestarget ; nf++) {
+///------------- patch to 'ProjectBuildTarget' class ---------------------------
+				file = target.GetFile(nf).relativeFilename;;
+///-----------------------------------------------------------------------------
+				::print (_T("   ") + nf.tostring() + _T(" : '") + file + _T("'"));
+				i++;
+			}
+		}
+		::print(_T("\nTotal files associated to targets : ") + i.tostring());
+	} /// end main()
+
+}	/// class end
+///-----------------------------------------------------------------------------
+/// this call actually registers the script plugin with Code::Blocks
+///-----------------------------------------------------------------------------
+RegisterPlugin(DisplayAllFilesTargets());
+///-----------------------------------------------------------------------------

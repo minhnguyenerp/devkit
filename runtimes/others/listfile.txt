@@ -1,0 +1,16 @@
+../../runtimes/node-v22.20.0-win-x64/node.exe
+../../runtimes/jdk-25/lib/modules
+../../programs/beekeeper/beekeeper-5.4.1/beekeeper.exe
+../../ides/VSCode-win32-x64-1.104.3/Code.exe
+../../compilers/rust-1.90.0-x86_64-pc-windows-gnu/cargo/bin/cargo.exe
+../../compilers/rust-1.90.0-x86_64-pc-windows-gnu/llvm-tools-preview/lib/rustlib/x86_64-pc-windows-gnu/bin/llc.exe
+../../compilers/rust-1.90.0-x86_64-pc-windows-gnu/llvm-tools-preview/lib/rustlib/x86_64-pc-windows-gnu/bin/llvm-ar.exe
+../../compilers/rust-1.90.0-x86_64-pc-windows-gnu/llvm-tools-preview/lib/rustlib/x86_64-pc-windows-gnu/bin/llvm-nm.exe
+../../compilers/rust-1.90.0-x86_64-pc-windows-gnu/llvm-tools-preview/lib/rustlib/x86_64-pc-windows-gnu/bin/llvm-objdump.exe
+../../compilers/rust-1.90.0-x86_64-pc-windows-gnu/llvm-tools-preview/lib/rustlib/x86_64-pc-windows-gnu/bin/opt.exe
+../../compilers/rust-1.90.0-x86_64-pc-windows-gnu/rust-analyzer-preview/bin/rust-analyzer.exe
+../../compilers/rust-1.90.0-x86_64-pc-windows-gnu/rust-docs-json-preview/share/doc/rust/json/core.json
+../../compilers/rust-1.90.0-x86_64-pc-windows-gnu/rust-std-x86_64-pc-windows-gnu/lib/rustlib/x86_64-pc-windows-gnu/lib/libcore-b157dee3e3857bfa.rlib
+../../compilers/rust-1.90.0-x86_64-pc-windows-gnu/rustc/bin/rustc_driver-27d41d28a14a753d.dll
+../../compilers/rust-1.90.0-x86_64-pc-windows-gnu/rustc/lib/rustlib/x86_64-pc-windows-gnu/bin/rust-lld.exe
+../../compilers/zig-x86_64-windows-0.16.0-dev.660+27aba2d77/zig.exe
