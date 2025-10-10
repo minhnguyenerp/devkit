@@ -30,6 +30,6 @@ _(If your repo clones to a different folder name, adjust the next step according
 ## 5) Launch DevKit
 ```bat
 cd C:\Data\devkit
-start
+start.bat
 ```
 You’re all set—DevKit will initialize and open a ready-to-use shell. Next time, you can start by running `C:\Data\devkit\start.bat`.
