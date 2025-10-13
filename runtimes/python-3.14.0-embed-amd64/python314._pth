@@ -1,5 +1,5 @@
 python314.zip
 .
-
+.\Lib
 # Uncomment to run site.main() automatically
 import site
