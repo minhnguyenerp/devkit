@@ -1,6 +1,6 @@
 # Use DevKit to create a NextJS project
 
-Open [DevKit](./../Readme.md) terminal, navigate to your project container folder e.g `C:\Data\projects`. Run this command to create a new NextJS application <code>npx create-next-app@latest</code>. When prompted, simply press **Enter** to accept all default settings.
+Open [DevKit](../README.md) terminal, navigate to your project container folder e.g `C:\Data\projects`. Run this command to create a new NextJS application <code>npx create-next-app@latest</code>. When prompted, simply press **Enter** to accept all default settings.
 
 ```
 √ What is your project named? ... hello-next
