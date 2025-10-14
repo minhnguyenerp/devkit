@@ -1,4 +1,4 @@
-# Use DevKit with Cursor
+# Use Minh Nguyen DevKit with Cursor
 
 This guide walks you through setting up and using [**Minh Nguyen DevKit**](../README.md) with **Cursor** to quickly start a Python project.
 
@@ -20,3 +20,5 @@ cursor .
 5. Once the Cursor editor opens (with the compiler ready), you can ask Cursor to create a new Python project. For example, type in the chat: `"Create a Hello World project in Python"`.
 
 7. You can run your Python file directly from the Cursor terminal, or DevKit terminal: `python <file_name>.py`. Or simply ask Cursor to execute it `"Run the project"`.
+
+[Watch on YouTube](https://www.youtube.com/watch?v=LPxxP2Xddu4)
