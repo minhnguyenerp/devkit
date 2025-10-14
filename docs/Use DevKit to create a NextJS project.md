@@ -1,4 +1,4 @@
-# Use DevKit to create a NextJS project
+# Use Minh Nguyen DevKit to create a NextJS project
 
 Open [**Minh Nguyen DevKit**](../README.md) terminal, navigate to your project container folder e.g `C:\Data\projects`. Run this command to create a new NextJS application <code>npx create-next-app@latest</code>. When prompted, simply press **Enter** to accept all default settings.
 
