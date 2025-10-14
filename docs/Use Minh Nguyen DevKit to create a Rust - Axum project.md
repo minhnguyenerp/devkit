@@ -2,7 +2,7 @@
 
 Open [**Minh Nguyen DevKit**](../README.md) terminal, navigate to your project container folder e.g `C:\Data\projects`.
 
-Run this command <code>cargo new hello-rust-axum</code> to create the new project. Change the current directory to `C:\Data\projects\hello-rust-axum`, the type `code .` and press **Enter** to open project in vscode.
+Run this command <code>cargo new hello-rust-axum</code> to create the new project. Change the current directory to `C:\Data\projects\hello-rust-axum`, the type `code .` and press **Enter** to open project in VSCode.
 
 In VSCode modify *Cargo.toml* and *main.rs* files as following:
 
