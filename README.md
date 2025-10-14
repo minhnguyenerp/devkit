@@ -1,6 +1,6 @@
 # Minh Nguyen DevKit
 
-Minh Nguyen DevKit is a portable development environment for Windows. Here’s a quick-start guide to get you up and running.
+Minh Nguyen DevKit is a portable development environment for Windows. DevKit support golang, nim, rust, zig, winlibs (c/c++), java, node, php, composer, python, caddy, git, geany, vscode, codeblocks, beekeeper, dbeaver, heidisql, notepad++, sqlitestudio, winmerge runtimes. Here’s a quick-start guide to get you up and running.
 
 ## 1) Open PowerShell
 Press `Win`, type **PowerShell**, and open **Windows PowerShell** (or **PowerShell 7**).
