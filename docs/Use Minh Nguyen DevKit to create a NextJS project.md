@@ -18,4 +18,4 @@ npm run dev
 
 Open the browser at http://locahost:3000 to see the result.
 
-You can also use Cursor to create a NextJS application. The instructions can be found [here](Use%20DevKit%20with%20Cursor.md).
+You can also use Cursor to create a NextJS application. The instructions can be found [here](Use%20Minh%20Nguyen%20DevKit%20with%20Cursor.md).
