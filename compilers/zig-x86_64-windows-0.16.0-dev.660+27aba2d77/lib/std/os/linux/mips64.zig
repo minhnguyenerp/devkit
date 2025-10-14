@@ -9,6 +9,8 @@ const iovec_const = std.posix.iovec_const;
 const uid_t = linux.uid_t;
 const gid_t = linux.gid_t;
 const pid_t = linux.pid_t;
+const stack_t = linux.stack_t;
+const sigset_t = linux.sigset_t;
 const sockaddr = linux.sockaddr;
 const timespec = linux.timespec;
 
@@ -325,6 +327,3 @@ pub const timezone = extern struct {
 };
 
 pub const Elf_Symndx = u32;
-
-/// TODO
-pub const ucontext_t = void;
