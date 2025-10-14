@@ -33,3 +33,8 @@ cd C:\Data\devkit
 start.bat
 ```
 You’re all set—DevKit will initialize and open a ready-to-use shell. Next time, you can start by running `C:\Data\devkit\start.bat`.
+
+## 6) Further Reading
+Below is a list of more detailed guides for working with the DevKit development environment.
+
+[Use DevKit with Cursor](docs/Use%20DevKit%20with%20Cursor.md)
