@@ -4,7 +4,7 @@ This guide walks you through setting up and using [**Minh Nguyen DevKit**](../RE
 
 1. Download and install the Cursor editor from the official website, then sign in to your account.
 
-2. Install DevKit, then run the `start.bat` script to initialize the environment.
+2. [**Install Minh Nguyen DevKit**](../README.md), then run the `start.bat` script to initialize the environment.
 
 3. Create a new project directory, for example
 ```bat
