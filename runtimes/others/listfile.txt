@@ -13,5 +13,5 @@
 ../../compilers/rust-1.90.0-x86_64-pc-windows-gnu/rust-std-x86_64-pc-windows-gnu/lib/rustlib/x86_64-pc-windows-gnu/lib/libcore-b157dee3e3857bfa.rlib
 ../../compilers/rust-1.90.0-x86_64-pc-windows-gnu/rustc/bin/rustc_driver-27d41d28a14a753d.dll
 ../../compilers/rust-1.90.0-x86_64-pc-windows-gnu/rustc/lib/rustlib/x86_64-pc-windows-gnu/bin/rust-lld.exe
-../../compilers/zig-x86_64-windows-0.16.0-dev.660+27aba2d77/zig.exe
+../../compilers/zig-x86_64-windows-0.16.0-dev.731+958faa703/zig.exe
 ../../runtimes/python-3.14.0-embed-amd64/uv.exe
