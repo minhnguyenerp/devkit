@@ -10,7 +10,7 @@ Run <code>go get github.com/gin-gonic/gin</code>
 
 Type `code .` and press **Enter** to open project in VSCode
 
-Create main.go file as following:
+In VSCode, create *hello-gin/main.go* file as following:
 
 <h5><strong><code>main.go</code></strong></h5>
 
