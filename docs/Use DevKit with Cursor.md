@@ -1,6 +1,6 @@
 # Use Minh Nguyen DevKit with Cursor
 
-This guide walks you through setting up and using [**Minh Nguyen DevKit**](../README.md) with **Cursor** to quickly start a Python project.
+This guide walks you through setting up and using **Minh Nguyen DevKit** with **Cursor** to quickly start a Python project.
 
 1. Download and install the Cursor editor from the official website, then sign in to your account.
 
