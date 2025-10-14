@@ -24,7 +24,7 @@
 
 Questa funzione disabilita le protezioni di sicurezza critiche e rende molto più facile per un utente malintenzionato compromettere il computer.</string>
 			<string id="ChatMCP">ChatMCP</string>
-			<string id="ChatMCP_chat_mcp_access">Determina l'accesso ai server MCP.</string>
+			<string id="ChatMCP_chat_mcp_access">Controlla l'accesso ai server Model Context Protocol installati.</string>
 			<string id="ChatAgentExtensionTools">ChatAgentExtensionTools</string>
 			<string id="ChatAgentExtensionTools_chat_extensionToolsPolicy">Abilita l'uso degli strumenti forniti dalle estensioni di terze parti.</string>
 			<string id="ChatAgentMode">ChatAgentMode</string>

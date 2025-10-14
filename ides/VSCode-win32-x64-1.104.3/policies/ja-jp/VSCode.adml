@@ -24,7 +24,7 @@
 
 この機能により、重要なセキュリティ保護が無効になり、攻撃者がマシンを侵害しやすくなります。</string>
 			<string id="ChatMCP">ChatMCP</string>
-			<string id="ChatMCP_chat_mcp_access">モデル コンテキスト プロトコル サーバーへのアクセスを制御します。</string>
+			<string id="ChatMCP_chat_mcp_access">インストールされたモデル コンテキスト プロトコル サーバーへのアクセスを制御します。</string>
 			<string id="ChatAgentExtensionTools">ChatAgentExtensionTools</string>
 			<string id="ChatAgentExtensionTools_chat_extensionToolsPolicy">サード パーティの拡張機能によって提供されるツールの使用を有効にします。</string>
 			<string id="ChatAgentMode">ChatAgentMode</string>

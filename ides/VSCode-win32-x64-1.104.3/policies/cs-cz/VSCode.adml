@@ -24,7 +24,7 @@
 
 Tato funkce vypíná klíčové bezpečnostní ochrany a výrazně usnadňuje útočníkovi kompromitaci zařízení.</string>
 			<string id="ChatMCP">ChatMCP</string>
-			<string id="ChatMCP_chat_mcp_access">Řídí přístup k serverům protokolu kontextu modelu.</string>
+			<string id="ChatMCP_chat_mcp_access">Řídí přístup k nainstalovaným serverům protokolu Model Context Protocol.</string>
 			<string id="ChatAgentExtensionTools">ChatAgentExtensionTools</string>
 			<string id="ChatAgentExtensionTools_chat_extensionToolsPolicy">Umožňuje používat nástroje z rozšíření třetích stran.</string>
 			<string id="ChatAgentMode">ChatAgentMode</string>

@@ -24,7 +24,7 @@
 
 Эта функция отключает критически важные средства защиты и значительно упрощает злоумышленнику возможность компрометации компьютера.</string>
 			<string id="ChatMCP">ChatMCP</string>
-			<string id="ChatMCP_chat_mcp_access">Управляет доступом к серверам протокола контекста модели.</string>
+			<string id="ChatMCP_chat_mcp_access">Управляет доступом к установленным серверам протокола контекста модели.</string>
 			<string id="ChatAgentExtensionTools">ChatAgentExtensionTools</string>
 			<string id="ChatAgentExtensionTools_chat_extensionToolsPolicy">Включите использование инструментов, предоставленных сторонними расширениями.</string>
 			<string id="ChatAgentMode">ChatAgentMode</string>

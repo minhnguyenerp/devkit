@@ -24,7 +24,7 @@
 
 Ta funkcja wyłącza krytyczne zabezpieczenia i znacznie ułatwia osobie atakującej naruszenie zabezpieczeń maszyny.</string>
 			<string id="ChatMCP">ChatMCP</string>
-			<string id="ChatMCP_chat_mcp_access">Kontroluje dostęp do serwerów Model Context Protocol.</string>
+			<string id="ChatMCP_chat_mcp_access">Steruje dostępem do zainstalowanych serwerów protokołu kontekstowego modelu.</string>
 			<string id="ChatAgentExtensionTools">ChatAgentExtensionTools</string>
 			<string id="ChatAgentExtensionTools_chat_extensionToolsPolicy">Włącz korzystanie z narzędzi dostarczonych przez rozszerzenia innych firm.</string>
 			<string id="ChatAgentMode">ChatAgentMode</string>

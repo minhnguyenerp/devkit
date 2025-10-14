@@ -24,7 +24,7 @@
 
 此功能会禁用关键安全保护，并导致攻击者能够更容易地入侵计算机。</string>
 			<string id="ChatMCP">ChatMCP</string>
-			<string id="ChatMCP_chat_mcp_access">控制对模型上下文协议服务器的访问。</string>
+			<string id="ChatMCP_chat_mcp_access">控制对已安装的模型上下文协议服务器的访问。</string>
 			<string id="ChatAgentExtensionTools">ChatAgentExtensionTools</string>
 			<string id="ChatAgentExtensionTools_chat_extensionToolsPolicy">使用由第三方扩展提供的工具启用。</string>
 			<string id="ChatAgentMode">ChatAgentMode</string>

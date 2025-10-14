@@ -24,7 +24,7 @@
 
 Bu özellik, kritik güvenlik korumalarını devre dışı bırakarak bir saldırganın makineyi ele geçirmesini çok daha kolay hale getirir.</string>
 			<string id="ChatMCP">ChatMCP</string>
-			<string id="ChatMCP_chat_mcp_access">Model Bağlam Protokolü sunucularına erişimi kontrol eder.</string>
+			<string id="ChatMCP_chat_mcp_access">Yüklü Model Bağlam Protokolü sunucularına erişimi denetler.</string>
 			<string id="ChatAgentExtensionTools">ChatAgentExtensionTools</string>
 			<string id="ChatAgentExtensionTools_chat_extensionToolsPolicy">Üçüncü taraf uzantıları tarafından sağlanan araçların kullanımını etkinleştirin.</string>
 			<string id="ChatAgentMode">ChatAgentMode</string>

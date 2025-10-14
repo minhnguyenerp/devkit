@@ -24,7 +24,7 @@
 
 此功能會停用重大安全性保護，並使攻擊者更容易入侵機器。</string>
 			<string id="ChatMCP">ChatMCP</string>
-			<string id="ChatMCP_chat_mcp_access">控制對模型內容通訊協定伺服器的存取。</string>
+			<string id="ChatMCP_chat_mcp_access">控制對安裝的模型內容通訊協定伺服器的存取。</string>
 			<string id="ChatAgentExtensionTools">ChatAgentExtensionTools</string>
 			<string id="ChatAgentExtensionTools_chat_extensionToolsPolicy">啟用使用第三方延伸模組所提供的工具。</string>
 			<string id="ChatAgentMode">ChatAgentMode</string>

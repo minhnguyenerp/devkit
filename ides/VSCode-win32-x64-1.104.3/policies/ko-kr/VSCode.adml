@@ -24,7 +24,7 @@
 
 이 기능은 중요한 보안 보호를 사용하지 않도록 설정하고 공격자가 컴퓨터를 훨씬 쉽게 손상시킬 수 있도록 합니다.</string>
 			<string id="ChatMCP">ChatMCP</string>
-			<string id="ChatMCP_chat_mcp_access">모델 컨텍스트 프로토콜 서버에 대한 액세스를 제어합니다.</string>
+			<string id="ChatMCP_chat_mcp_access">설치된 모델 컨텍스트 프로토콜 서버에 대한 액세스를 제어합니다.</string>
 			<string id="ChatAgentExtensionTools">ChatAgentExtensionTools</string>
 			<string id="ChatAgentExtensionTools_chat_extensionToolsPolicy">타사 확장에서 제공하는 도구를 사용하여 사용하도록 설정합니다.</string>
 			<string id="ChatAgentMode">ChatAgentMode</string>

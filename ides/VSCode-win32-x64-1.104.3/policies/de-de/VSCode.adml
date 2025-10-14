@@ -24,7 +24,7 @@
 
 Diese Funktion deaktiviert wichtige Sicherheitsvorkehrungen und erleichtert es Angreifern erheblich, den Computer zu kompromittieren.</string>
 			<string id="ChatMCP">ChatMCP</string>
-			<string id="ChatMCP_chat_mcp_access">Steuert den Zugriff auf Server des Modellkontextprotokolls.</string>
+			<string id="ChatMCP_chat_mcp_access">Steuert den Zugriff auf installierte Server des Modellkontextprotokolls.</string>
 			<string id="ChatAgentExtensionTools">ChatAgentExtensionTools</string>
 			<string id="ChatAgentExtensionTools_chat_extensionToolsPolicy">Aktivieren Sie die Verwendung von Tools, die von Drittanbietererweiterungen bereitgestellt wurden.</string>
 			<string id="ChatAgentMode">ChatAgentMode</string>

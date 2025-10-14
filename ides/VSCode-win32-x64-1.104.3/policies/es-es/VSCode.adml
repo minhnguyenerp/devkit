@@ -24,7 +24,7 @@
 
 Esta característica deshabilita las protecciones de seguridad críticas y facilita mucho a un atacante poner en peligro la máquina.</string>
 			<string id="ChatMCP">ChatMCP</string>
-			<string id="ChatMCP_chat_mcp_access">Controla el acceso a los servidores del Protocolo de Contexto del Modelo.</string>
+			<string id="ChatMCP_chat_mcp_access">Controla el acceso para los servidores del Protocolo de Contexto del Modelo instalados.</string>
 			<string id="ChatAgentExtensionTools">ChatAgentExtensionTools</string>
 			<string id="ChatAgentExtensionTools_chat_extensionToolsPolicy">Habilite el uso de herramientas aportadas por extensiones de terceros.</string>
 			<string id="ChatAgentMode">ChatAgentMode</string>
