@@ -1,7 +1,7 @@
 ../../runtimes/node-v22.20.0-win-x64/node.exe
 ../../runtimes/jdk-25/lib/modules
 ../../programs/beekeeper/beekeeper-5.4.1/beekeeper.exe
-../../ides/VSCode-win32-x64-1.104.3/Code.exe
+../../ides/VSCode-win32-x64-1.105.0/Code.exe
 ../../compilers/rust-1.90.0-x86_64-pc-windows-gnu/cargo/bin/cargo.exe
 ../../compilers/rust-1.90.0-x86_64-pc-windows-gnu/llvm-tools-preview/lib/rustlib/x86_64-pc-windows-gnu/bin/llc.exe
 ../../compilers/rust-1.90.0-x86_64-pc-windows-gnu/llvm-tools-preview/lib/rustlib/x86_64-pc-windows-gnu/bin/llvm-ar.exe
