@@ -42,3 +42,5 @@ Below is a list of more detailed guides for working with the DevKit development 
 [Use Minh Nguyen DevKit to create a NextJS project](docs/Use%20Minh%20Nguyen%20DevKit%20to%20create%20a%20NextJS%20project.md)
 
 [Use Minh Nguyen DevKit to create a Rust - Axum project](docs/Use%20Minh%20Nguyen%20DevKit%20to%20create%20a%20Rust%20-%20Axum%20project.md)
+
+[Use Minh Nguyen DevKit to create a Go - Gin project](docs/Use%20Minh%20Nguyen%20DevKit%20to%20create%20a%20Go%20-%20Gin%20project.md)
