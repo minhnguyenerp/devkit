@@ -37,6 +37,6 @@ You’re all set—DevKit will initialize and open a ready-to-use shell. Next ti
 ## 6) Further Reading
 Below is a list of more detailed guides for working with the DevKit development environment.
 
-[Use DevKit with Cursor](docs/Use%20DevKit%20with%20Cursor.md)
+[Use Minh Nguyen DevKit with Cursor](docs/Use%20Minh%20Nguyen%20DevKit%20with%20Cursor.md)
 
-[Use DevKit to create a NextJS project](docs/Use%20DevKit%20to%20create%20a%20NextJS%20project.md)
+[Use Minh Nguyen DevKit to create a NextJS project](docs/Use%20Minh%20Nguyen%20DevKit%20to%20create%20a%20NextJS%20project.md)
