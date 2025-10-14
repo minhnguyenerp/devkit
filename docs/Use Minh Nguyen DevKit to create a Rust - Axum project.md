@@ -51,6 +51,6 @@ async fn main() {
 }
 ```
 
-Open the VSCode Terminal or DevKit terminal to run program <code>cargo run</code> then open browser http://localhost:3000/
+Open the VSCode Terminal or DevKit terminal to run program <code>cargo run</code>, then open browser and navigate to `http://localhost:3000/` to see the result.
 
 You can build release by <code>cargo build --release</code>
