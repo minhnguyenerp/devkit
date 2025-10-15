@@ -4,23 +4,23 @@ setlocal EnableExtensions EnableDelayedExpansion
 rem ===== Settings =====
 set "LIST=%~dp0listfile.txt"
 
-rem ===== Check list file =====
+rem ===== Check for list file =====
 if not exist "%LIST%" (
   echo [ERR] listfile.txt not found at: "%LIST%"
   exit /b 1
 )
 
-rem ===== Fixed temp PS1 path =====
+rem ===== Temporary PowerShell script path =====
 set "TMP=%TEMP%\split_45mb.ps1"
 if exist "%TMP%" del /f /q "%TMP%" >nul 2>&1
 
-rem ===== Create PowerShell splitter (45MB, delete original after verified split) =====
+rem ===== Create PowerShell splitter (45MB chunks, delete original after verified split) =====
 > "%TMP%" echo param([Parameter(Mandatory=$true)][string]$InPath)
 >>"%TMP%" echo $ErrorActionPreference = 'Stop'
 >>"%TMP%" echo function Split-File45MB([string]$In) {
 >>"%TMP%" echo   if (-not (Test-Path -LiteralPath $In -PathType Leaf)) { throw "Input file not found: $In" }
 >>"%TMP%" echo   $dir  = Split-Path -LiteralPath $In
->>"%TMP%" echo   $name = [System.IO.Path]::GetFileName($In)   # full name with extension
+>>"%TMP%" echo   $name = [System.IO.Path]::GetFileName($In)
 >>"%TMP%" echo   $chunkSize  = 45MB
 >>"%TMP%" echo   $bufferSize = 4MB
 >>"%TMP%" echo   $ifs = [System.IO.File]::OpenRead($In)
@@ -51,7 +51,7 @@ rem ===== Create PowerShell splitter (45MB, delete original after verified split
 >>"%TMP%" echo     }
 >>"%TMP%" echo   } finally { $ifs.Dispose() }
 >>"%TMP%" echo
->>"%TMP%" echo   # Verify: sum(parts) == original length
+>>"%TMP%" echo   # Verify file size
 >>"%TMP%" echo   [int64]$sum = 0
 >>"%TMP%" echo   foreach ($p in $created) { $sum += (Get-Item -LiteralPath $p).Length }
 >>"%TMP%" echo   if ($created.Count -eq 0) { throw "No parts were created." }
@@ -69,33 +69,46 @@ rem ===== Create PowerShell splitter (45MB, delete original after verified split
 >>"%TMP%" echo   [Environment]::Exit(1)
 >>"%TMP%" echo }
 
-rem ===== Iterate list: first token per line, normalize slashes, resolve relative to listfile folder, split =====
-for /f "usebackq tokens=1 delims= " %%A in ("%LIST%") do (
-  set "RAW=%%~A"
-  if defined RAW (
+rem ===== Iterate list (keep spaces), normalize, resolve, split =====
+for /f "usebackq delims=" %%A in ("%LIST%") do (
+  set "RAW=%%A"
+
+  rem Trim leading spaces
+  for /f "tokens=* delims= " %%Z in ("!RAW!") do set "RAW=%%Z"
+
+  rem Skip empty or comment lines (# or ;)
+  if defined RAW if not "!RAW:~0,1!"=="#" if not "!RAW:~0,1!"==";" (
+
+    rem Remove all double quotes
+    set "RAW=!RAW:"=!"
+
+    rem Normalize slashes
     set "RAW=!RAW:/=\!"
-    set "FULL="
+
+    rem Resolve to absolute path
     set "FIRST2=!RAW:~0,2!"
     if "!FIRST2:~1,1!"==":" (
+      rem Absolute path
+      for %%I in ("!RAW!") do set "FULL=%%~fI"
+    ) else if "!FIRST2!"=="\\" (
+      rem UNC path \\server\share
       for %%I in ("!RAW!") do set "FULL=%%~fI"
     ) else (
-      if "!FIRST2!"=="\\" (
-        for %%I in ("!RAW!") do set "FULL=%%~fI"
-      ) else (
-        for %%I in ("%~dp0!RAW!") do set "FULL=%%~fI"
-      )
+      rem Relative to listfile folder
+      for %%I in ("%~dp0.\!RAW!") do set "FULL=%%~fI"
     )
+
     if exist "!FULL!" (
       echo [SPLIT] "!FULL!"
       powershell -NoProfile -ExecutionPolicy Bypass -File "%TMP%" -InPath "!FULL!"
       if errorlevel 1 echo [ERR] Split failed: "!FULL!"
     ) else (
-      echo [WARN] File not found, skip: "!FULL!"
+      echo [WARN] File not found, skipped: "!FULL!"
     )
   )
 )
 
-rem ===== Cleanup temp PS1 =====
+rem ===== Cleanup temporary PowerShell file =====
 if exist "%TMP%" del /f /q "%TMP%" >nul 2>&1
 
 exit /b 0

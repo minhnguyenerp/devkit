@@ -4,40 +4,41 @@ setlocal EnableExtensions EnableDelayedExpansion
 rem ===== Settings =====
 set "LIST=%~dp0listfile.txt"
 
-rem ===== Check list file =====
+rem ===== Check for list file =====
 if not exist "%LIST%" (
   echo [ERR] listfile.txt not found at: "%LIST%"
   exit /b 1
 )
 
-rem ===== Resolve first line (gate check) =====
+rem ===== Resolve first line to detect if join is needed =====
 set "FIRSTRAW="
-for /f "usebackq tokens=1 delims= " %%A in ("%LIST%") do (
-  set "FIRSTRAW=%%~A"
+for /f "usebackq delims=" %%A in ("%LIST%") do (
+  set "FIRSTRAW=%%A"
   goto :got_first
 )
 :got_first
+
 if not defined FIRSTRAW (
   echo [WARN] listfile.txt is empty.
-  echo Runtimes ready.
+  echo Nothing to join.
   exit /b 0
 )
+
+rem Normalize and resolve path
+set "FIRSTRAW=%FIRSTRAW:"=%"
 set "FIRSTRAW=%FIRSTRAW:/=\%"
 
-rem Resolve to absolute based on this .bat folder if relative
 set "FIRSTABS="
 set "H2=%FIRSTRAW:~0,2%"
 if "%H2:~1,1%"==":" (
   for %%I in ("%FIRSTRAW%") do set "FIRSTABS=%%~fI"
+) else if "%H2%"=="\\" (
+  for %%I in ("%FIRSTRAW%") do set "FIRSTABS=%%~fI"
 ) else (
-  if "%H2%"=="\\" (
-    for %%I in ("%FIRSTRAW%") do set "FIRSTABS=%%~fI"
-  ) else (
-    for %%I in ("%~dp0%FIRSTRAW%") do set "FIRSTABS=%%~fI"
-  )
+  for %%I in ("%~dp0.\%FIRSTRAW%") do set "FIRSTABS=%%~fI"
 )
 
-rem Get dir + name and check for .part####
+rem Get folder and filename
 set "FIRSTDIR="
 set "FIRSTNAME="
 for %%I in ("%FIRSTABS%") do (
@@ -45,6 +46,7 @@ for %%I in ("%FIRSTABS%") do (
   set "FIRSTNAME=%%~nxI"
 )
 
+rem Detect if .part files exist
 set "NEEDJOIN="
 for %%P in ("%FIRSTDIR%%FIRSTNAME%.part*") do (
   set "NEEDJOIN=1"
@@ -53,19 +55,18 @@ for %%P in ("%FIRSTDIR%%FIRSTNAME%.part*") do (
 :after_probe
 
 if not defined NEEDJOIN (
-  echo Runtimes ready.
+  echo [INFO] No .part files found. Nothing to join.
   exit /b 0
 )
 
-rem ===== Fixed temp PS1 path =====
+rem ===== Temporary PowerShell script path =====
 set "TMP=%TEMP%\join_overwrite.ps1"
 if exist "%TMP%" del /f /q "%TMP%" >nul 2>&1
 
-rem ===== Create PowerShell joiner (auto-detect parts *.part####, overwrite, then delete parts) =====
+rem ===== Create PowerShell joiner =====
 > "%TMP%" echo param([Parameter(Mandatory=$true)][string]$BasePath)
 >>"%TMP%" echo $ErrorActionPreference = 'Stop'
 >>"%TMP%" echo function Join-Parts-Overwrite([string]$Base) {
->>"%TMP%" echo   # Derive dir and name; then look for "<name>.part####" in same dir
 >>"%TMP%" echo   $dir  = Split-Path -Path $Base -Parent
 >>"%TMP%" echo   $name = [System.IO.Path]::GetFileName($Base)
 >>"%TMP%" echo   if ([string]::IsNullOrWhiteSpace($dir) -or [string]::IsNullOrWhiteSpace($name)) { throw "Invalid base path: $Base" }
@@ -91,7 +92,6 @@ rem ===== Create PowerShell joiner (auto-detect parts *.part####, overwrite, the
 >>"%TMP%" echo     }
 >>"%TMP%" echo   } finally { $ofs.Dispose() }
 >>"%TMP%" echo   Write-Host ("[OK] Rebuilt: " + $outPath + " (" + $total + " bytes)")
->>"%TMP%" echo   # Delete parts after successful rebuild
 >>"%TMP%" echo   foreach ($p in $ordered) {
 >>"%TMP%" echo     try {
 >>"%TMP%" echo       Remove-Item -LiteralPath $p.FullName -Force
@@ -107,28 +107,30 @@ rem ===== Create PowerShell joiner (auto-detect parts *.part####, overwrite, the
 >>"%TMP%" echo   [Environment]::Exit(1)
 >>"%TMP%" echo }
 
-rem ===== Iterate list: first token, normalize slashes, resolve relative to listfile folder, try join =====
-for /f "usebackq tokens=1 delims= " %%A in ("%LIST%") do (
-  set "RAW=%%~A"
-  if defined RAW (
+rem ===== Iterate list and join each =====
+for /f "usebackq delims=" %%A in ("%LIST%") do (
+  set "RAW=%%A"
+  for /f "tokens=* delims= " %%Z in ("!RAW!") do set "RAW=%%Z"
+
+  if defined RAW if not "!RAW:~0,1!"=="#" if not "!RAW:~0,1!"==";" (
+    set "RAW=!RAW:"=!"
     set "RAW=!RAW:/=\!"
-    set "FULL="
+
     set "FIRST2=!RAW:~0,2!"
     if "!FIRST2:~1,1!"==":" (
       for %%I in ("!RAW!") do set "FULL=%%~fI"
+    ) else if "!FIRST2!"=="\\" (
+      for %%I in ("!RAW!") do set "FULL=%%~fI"
     ) else (
-      if "!FIRST2!"=="\\" (
-        for %%I in ("!RAW!") do set "FULL=%%~fI"
-      ) else (
-        for %%I in ("%~dp0!RAW!") do set "FULL=%%~fI"
-      )
+      for %%I in ("%~dp0.\!RAW!") do set "FULL=%%~fI"
     )
+
     echo [CHECK/JOIN] "!FULL!"
     powershell -NoProfile -ExecutionPolicy Bypass -File "%TMP%" -BasePath "!FULL!"
   )
 )
 
-rem ===== Cleanup temp PS1 =====
+rem ===== Cleanup =====
 if exist "%TMP%" del /f /q "%TMP%" >nul 2>&1
-
+echo Done.
 exit /b 0
