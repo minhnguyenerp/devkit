@@ -1,0 +1,5 @@
+configuration/*
+!configuration/
+!configuration/config.ini
+!configuration/org.eclipse.update/
+!configuration/org.eclipse.equinox.simpleconfigurator/
