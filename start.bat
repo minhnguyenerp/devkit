@@ -1,4 +1,5 @@
 @echo off
+title DevKit Shell
 set "ROOT=%~dp0"
 call "%ROOT%runtimes\others\joinfiles.bat"
 cls
