@@ -1,1 +1,3 @@
 data
+etcd.out.log
+etcd.err.log
