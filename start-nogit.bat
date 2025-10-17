@@ -3,6 +3,9 @@ title DevKit No Git
 set "ROOT=%~dp0"
 call "%ROOT%runtimes\others\joinfiles.bat"
 cls
+set "PATH=%ROOT%runtimes\consul_1.21.5_windows_amd64;%PATH%"
+set "PATH=%ROOT%runtimes\curl-8.16.0_7-win64-mingw\bin;%PATH%"
+set "PATH=%ROOT%runtimes\etcd-v3.6.5-windows-amd64;%PATH%"
 set "PATH=%ROOT%programs\npp\npp.8.8.6.portable.x64;%PATH%"
 set "PATH=%ROOT%programs\dbeaver\dbeaver-ce-25.2.2-win32.win32.x86_64;%PATH%"
 set "PATH=%ROOT%programs\beekeeper\beekeeper-5.4.1;%PATH%"
