@@ -60,7 +60,7 @@ if not defined NEEDJOIN (
 )
 
 rem ===== Temporary PowerShell script path =====
-set "TMP=%TEMP%\join_overwrite.ps1"
+set "TMP=%TEMP%\join_overwrite%RANDOM%.ps1"
 if exist "%TMP%" del /f /q "%TMP%" >nul 2>&1
 
 rem ===== Create PowerShell joiner =====

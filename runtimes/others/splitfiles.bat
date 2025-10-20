@@ -11,7 +11,7 @@ if not exist "%LIST%" (
 )
 
 rem ===== Temporary PowerShell script path =====
-set "TMP=%TEMP%\split_45mb.ps1"
+set "TMP=%TEMP%\split_45mb%RANDOM%.ps1"
 if exist "%TMP%" del /f /q "%TMP%" >nul 2>&1
 
 rem ===== Create PowerShell splitter (45MB chunks, delete original after verified split) =====
