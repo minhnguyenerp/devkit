@@ -1734,15 +1734,15 @@
 			"publisherDisplayName": "Microsoft"
 		}
 	}],
-	"commit": "03c265b1adee71ac88f833e065f7bb956b60550a",
-	"date": "2025-10-08T14:09:35.891Z",
+	"commit": "7d842fb85a0275a4a8e4d7e040d2625abbf7f084",
+	"date": "2025-10-14T22:33:36.618Z",
 	"checksums": {
-		"vs/base/parts/sandbox/electron-browser/preload.js": "ve3nCQtHnJt8v+O7dfFg1Dg0b7miIGr1wvgwvrM2wUo",
-		"vs/workbench/workbench.desktop.main.js": "SzAUvHTOtWnwPY4fryVJp/p7ZknUByHA4BmuT0L1ysE",
-		"vs/workbench/workbench.desktop.main.css": "g4wl+Qts0Sk+Nq5ZI+DnzliQ6ttp7s5bhO9UFCMTrzc",
-		"vs/workbench/api/node/extensionHostProcess.js": "WU/W1Z8JY4YRaWU9648Sr5TrZoQ6vq4by/oi/iqXkFc",
+		"vs/base/parts/sandbox/electron-browser/preload.js": "qAqeGY+Nf/PGqH4sVXyr7aErR2Kn3sAB40WsHDIwsWU",
+		"vs/workbench/workbench.desktop.main.js": "u1/iVkuqsxmbUup6h+e/FRii2RJsHmuwz4mvLQ77CWc",
+		"vs/workbench/workbench.desktop.main.css": "wGRdtcnmi+74TG270z4ztDVrPZskw1JhLgLdT5nA9Mc",
+		"vs/workbench/api/node/extensionHostProcess.js": "11d7SQfILsWQIIthZHcehxLxItb7MfVMZIybiq+DfyA",
 		"vs/code/electron-browser/workbench/workbench.html": "IXs56lnAOq4GkszLUTUuuJyCTmeRFMqF0kDm+OuRpPQ",
-		"vs/code/electron-browser/workbench/workbench.js": "2zFYS6tJV78oKTWhvvMEwLZoEQwINNMITvZWopIwbZQ"
+		"vs/code/electron-browser/workbench/workbench.js": "Kg264eWm28mvgtoaNf2SDylNiAg2ri5bOPV8wZSgwFc"
 	},
-	"version": "1.105.0"
+	"version": "1.105.1"
 }
