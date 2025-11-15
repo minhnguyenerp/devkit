@@ -1,4 +1,4 @@
-../../runtimes/node-v22.21.0-win-x64/node.exe
+../../runtimes/node-v24.11.1-win-x64/node.exe
 ../../runtimes/jdk-25/lib/modules
 ../../programs/beekeeper/beekeeper-5.4.10/beekeeper.exe
 ../../ides/VSCode-win32-x64-1.106.0/Code.exe

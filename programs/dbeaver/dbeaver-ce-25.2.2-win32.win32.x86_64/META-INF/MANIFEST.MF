@@ -22,16 +22,16 @@ SHA-384-Digest: II9e1ieUDl5AxyiVq3/FflTua1Sr0kMJ25e6imG7rXg7SiAsA2VemsvE
  qVsLqM7/
 
 Name: .eclipseproduct
-SHA-384-Digest: kjsVe5aWkU9ZF4ie3JMi+yhplVC1vBQ3L4FhHuORyN+sVPdAMcdKs0Xt
- HscDewTO
+SHA-384-Digest: Qm1ZV/os6wf64Gsfh62yN2Kyfzt01ZBanowm3hdjAz86c+RKcY1FT42o
+ a8hDMG2s
 
 Name: licenses/external/readme.txt
 SHA-384-Digest: YaWq4yNHdcsxdNRytq75qN6zh29c3N9/ppxVuxm9eVpo/YBLGazwvpsi
  G4cgCLBr
 
 Name: readme.txt
-SHA-384-Digest: glUSnoO3NY5FkMSLn9nnLAbRcicIWf45+2NnuBStCIWPKA3fESGUKF59
- Gghx8Lig
+SHA-384-Digest: TAhGad+g5x2qf3pl9WJbCwee1nUisuihEBKFb1o7yeIKYobd+NJqSI+f
+ gtcJfNz6
 
 Name: licenses/external/lgpl-3.0.txt
 SHA-384-Digest: Io9/eyPWtrlOgLOOJ8IPrbwtdSJs285seV8nBpSwa8PzLBgx6nx4xsp6
