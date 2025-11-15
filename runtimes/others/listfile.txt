@@ -16,3 +16,4 @@
 ../../compilers/zig-x86_64-windows-0.16.0-dev.747+493ad58ff/zig.exe
 ../../runtimes/python-3.14.0-embed-amd64/uv.exe
 ../../runtimes/consul_1.21.5_windows_amd64/consul.exe
+../../ides/Zed/Zed.exe
