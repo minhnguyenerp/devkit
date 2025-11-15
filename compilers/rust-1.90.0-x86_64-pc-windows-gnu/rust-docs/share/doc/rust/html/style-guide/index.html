@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-fcab7854.js";
+            window.path_to_searchindex_js = "searchindex-de59ff89.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-281b99ce.js"></script>
@@ -270,6 +270,11 @@ two newlines). E.g,</p>
 fn bar() {}
 fn baz() {}
 <span class="boring">}</span></code></pre></pre>
+<h3 id="trailing-whitespace"><a class="header" href="#trailing-whitespace">Trailing whitespace</a></h3>
+<p>Do not include trailing whitespace on the end of any line. This includes blank
+lines, comment lines, code lines, and string literals.</p>
+<p>Note that avoiding trailing whitespace in string literals requires care to
+preserve the value of the literal.</p>
 <h3 id="sorting"><a class="header" href="#sorting">Sorting</a></h3>
 <p>In various cases, the default Rust style specifies to sort things. If not
 otherwise specified, such sorting should be "version sorting", which ensures
@@ -378,9 +383,8 @@ sigil and before the closing sigil. For multi-line block comments, put a
 newline after the opening sigil, and a newline before the closing sigil.</p>
 <p>Prefer to put a comment on its own line. Where a comment follows code, put a
 single space before it. Where a block comment appears inline, use surrounding
-whitespace as if it were an identifier or keyword. Do not include trailing
-whitespace after a comment or at the end of any line in a multi-line comment.
-Examples:</p>
+whitespace as if it were an identifier or keyword.</p>
+<p>Examples:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>// A comment on an item.

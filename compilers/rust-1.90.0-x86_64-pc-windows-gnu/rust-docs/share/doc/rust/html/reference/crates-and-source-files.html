@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-3109fce4.js";
+            window.path_to_searchindex_js = "searchindex-5e2787cc.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-4adb5027.js"></script>
@@ -385,19 +385,6 @@ name of the crate with the <a href="attributes.html#grammar-MetaNameValueStr">Me
 </div>
 <p>The crate name must not be empty, and must only contain <a href="../std/primitive.char.html#method.is_alphanumeric">Unicode alphanumeric</a>
 or <code>_</code> (U+005F) characters.</p>
-<script>
-(function() {
-    var fragments = {
-        "#preludes-and-no_std": "names/preludes.html",
-    };
-    var target = fragments[window.location.hash];
-    if (target) {
-        var url = window.location.toString();
-        var base = url.substring(0, url.lastIndexOf('/'));
-        window.location.replace(base + "/" + target);
-    }
-})();
-</script>
 <hr>
 <ol class="footnote-definition"><li id="footnote-phase-distinction">
 <p>This distinction would also exist in an interpreter.
@@ -456,9 +443,21 @@ in the Owens and Flatt module system, or a <em>configuration</em> in Mesa. <a hr
         <script src="book-9576a2db.js"></script>
 
         <!-- Custom JS scripts -->
-        <script src="theme/reference-cfed9ca5.js"></script>
+        <script src="theme/reference-da60281b.js"></script>
 
 
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const fragmentMap =
+                    {"#preludes-and-no_std":"names/preludes.html"}
+                ;
+                const target = fragmentMap[window.location.hash];
+                if (target) {
+                    let url = new URL(target, window.location.href);
+                    window.location.replace(url.href);
+                }
+            });
+        </script>
 
     </div>
     </body>

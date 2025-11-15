@@ -180,14 +180,15 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="error-code-e0756"><a class="header" href="#error-code-e0756">Error code E0756</a></h1>
+<h4 id="note-this-error-code-is-no-longer-emitted-by-the-compiler"><a class="header" href="#note-this-error-code-is-no-longer-emitted-by-the-compiler">Note: this error code is no longer emitted by the compiler.</a></h4>
 <p>The <code>ffi_const</code> attribute was used on something other than a foreign function
 declaration.</p>
 <p>Erroneous code example:</p>
-<pre><pre class="playground"><code class="language-rust compile_fail E0756">#![feature(ffi_const)]
+<pre><code class="language-rust ignore (no longer emitted)">#![feature(ffi_const)]
 
 #[unsafe(ffi_const)] // error!
 pub fn foo() {}
-<span class="boring">fn main() {}</span></code></pre></pre>
+<span class="boring">fn main() {}</span></code></pre>
 <p>The <code>ffi_const</code> attribute can only be used on foreign function declarations
 which have no side effects except for their return value:</p>
 <pre><pre class="playground"><code class="language-rust">#![feature(ffi_const)]

@@ -37,10 +37,10 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-a3e21844.js";
+            window.path_to_searchindex_js = "../searchindex-cd34eb16.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-2441f1f0.js"></script>
+        <script src="../toc-59e61e94.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -479,12 +479,12 @@ linking time. It takes one of the following values:</p>
 <ul>
 <li><code>y</code>, <code>yes</code>, <code>on</code>, <code>true</code>, <code>fat</code>, or no value: perform "fat" LTO which attempts to
 perform optimizations across all crates within the dependency graph.</li>
-<li><code>n</code>, <code>no</code>, <code>off</code>, <code>false</code>: disables LTO.</li>
 <li><code>thin</code>: perform <a href="http://blog.llvm.org/2016/06/thinlto-scalable-and-incremental-lto.html">"thin"
 LTO</a>.
 This is similar to "fat", but takes substantially less time to run while
 still achieving performance gains similar to "fat".
 For larger projects like the Rust compiler, ThinLTO can even result in better performance than fat LTO.</li>
+<li><code>n</code>, <code>no</code>, <code>off</code>, <code>false</code>: disables LTO.</li>
 </ul>
 <p>If <code>-C lto</code> is not specified, then the compiler will attempt to perform "thin
 local LTO" which performs "thin" LTO on the local crate only across its

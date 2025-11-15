@@ -40,7 +40,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-ac51862c.js";
+            window.path_to_searchindex_js = "searchindex-3a180665.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-18422fb5.js"></script>
@@ -293,9 +293,9 @@ parentheses that captures values that match the pattern within the parentheses
 for use in the replacement code. Within <code>$()</code> is <code>$x:expr</code>, which matches any
 Rust expression and gives the expression the name <code>$x</code>.</p>
 <p>The comma following <code>$()</code> indicates that a literal comma separator character
-must appear between each instance of the code that matches the code within
-<code>$()</code>. The <code>*</code> specifies that the pattern matches zero or more of whatever
-precedes the <code>*</code>.</p>
+must appear between each instance of the code that matches the code in <code>$()</code>.
+The <code>*</code> specifies that the pattern matches zero or more of whatever precedes
+the <code>*</code>.</p>
 <p>When we call this macro with <code>vec![1, 2, 3];</code>, the <code>$x</code> pattern matches three
 times with the three expressions <code>1</code>, <code>2</code>, and <code>3</code>.</p>
 <p>Now let’s look at the pattern in the body of the code associated with this arm:
@@ -374,7 +374,8 @@ fn main() {
 first step is to make a new library crate, like this:</p>
 <pre><code class="language-console">$ cargo new hello_macro --lib
 </code></pre>
-<p>Next, we’ll define the <code>HelloMacro</code> trait and its associated function:</p>
+<p>Next, in Listing 20-38, we’ll define the <code>HelloMacro</code> trait and its associated
+function.</p>
 <figure class="listing" id="listing-20-38">
 <span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground">pub trait HelloMacro {
@@ -467,10 +468,11 @@ writing a procedural macro more convenient. The code in the outer function
 procedural macro crate you see or create. The code you specify in the body of
 the inner function (<code>impl_hello_macro</code> in this case) will be different
 depending on your procedural macro’s purpose.</p>
-<p>We’ve introduced three new crates: <code>proc_macro</code>, <a href="https://crates.io/crates/syn"><code>syn</code></a>, and <a href="https://crates.io/crates/quote"><code>quote</code></a>. The
-<code>proc_macro</code> crate comes with Rust, so we didn’t need to add that to the
-dependencies in <em>Cargo.toml</em>. The <code>proc_macro</code> crate is the compiler’s API that
-allows us to read and manipulate Rust code from our code.</p>
+<p>We’ve introduced three new crates: <code>proc_macro</code>, <a href="https://crates.io/crates/syn"><code>syn</code></a><!--ignore -->,
+and <a href="https://crates.io/crates/quote"><code>quote</code></a><!-- ignore -->. The <code>proc_macro</code> crate comes with Rust,
+so we didn’t need to add that to the dependencies in <em>Cargo.toml</em>. The
+<code>proc_macro</code> crate is the compiler’s API that allows us to read and manipulate
+Rust code from our code.</p>
 <p>The <code>syn</code> crate parses Rust code from a string into a data structure that we
 can perform operations on. The <code>quote</code> crate turns <code>syn</code> data structures back
 into Rust code. These crates make it much simpler to parse any sort of Rust
@@ -556,10 +558,10 @@ into a <code>DeriveInput</code> instance, let’s generate the code that impleme
 <figcaption><a href="#listing-20-42">Listing 20-42</a>: Implementing the <code>HelloMacro</code> trait using the parsed Rust code</figcaption>
 </figure>
 <p>We get an <code>Ident</code> struct instance containing the name (identifier) of the
-annotated type using <code>ast.ident</code>. The struct in Listing 20-33 shows that when
-we run the <code>impl_hello_macro</code> function on the code in Listing 20-31, the
-<code>ident</code> we get will have the <code>ident</code> field with a value of <code>"Pancakes"</code>. Thus,
-the <code>name</code> variable in Listing 20-34 will contain an <code>Ident</code> struct instance
+annotated type using <code>ast.ident</code>. The struct in Listing 20-41 shows that when
+we run the <code>impl_hello_macro</code> function on the code in Listing 20-37, the
+<code>ident</code> we get will have the <code>ident</code> field with a value of <code>"Pancakes"</code>. Thus
+the <code>name</code> variable in Listing 20-42 will contain an <code>Ident</code> struct instance
 that, when printed, will be the string <code>"Pancakes"</code>, the name of the struct in
 Listing 20-37.</p>
 <p>The <code>quote!</code> macro lets us define the Rust code that we want to return. The
@@ -585,13 +587,15 @@ expression to print literally, so we use <code>stringify!</code>. Using <code>st
 saves an allocation by converting <code>#name</code> to a string literal at compile time.</p>
 <p>At this point, <code>cargo build</code> should complete successfully in both <code>hello_macro</code>
 and <code>hello_macro_derive</code>. Let’s hook up these crates to the code in Listing
-20-31 to see the procedural macro in action! Create a new binary project in
+20-37 to see the procedural macro in action! Create a new binary project in
 your <em>projects</em> directory using <code>cargo new pancakes</code>. We need to add
 <code>hello_macro</code> and <code>hello_macro_derive</code> as dependencies in the <code>pancakes</code>
 crate’s <em>Cargo.toml</em>. If you’re publishing your versions of <code>hello_macro</code> and
-<code>hello_macro_derive</code> to <a href="https://crates.io/">crates.io</a>, they would be regular
-dependencies; if not, you can specify them as <code>path</code> dependencies as follows:</p>
-<pre><code class="language-toml">hello_macro = { path = "../hello_macro" }
+<code>hello_macro_derive</code> to <a href="https://crates.io/">crates.io</a><!-- ignore -->, they
+would be regular dependencies; if not, you can specify them as <code>path</code>
+dependencies as follows:</p>
+<pre><code class="language-toml">[dependencies]
+hello_macro = { path = "../hello_macro" }
 hello_macro_derive = { path = "../hello_macro/hello_macro_derive" }
 </code></pre>
 <p>Put the code in Listing 20-37 into <em>src/main.rs</em>, and run <code>cargo run</code>: it
@@ -601,7 +605,7 @@ should print <code>Hello, Macro! My name is Pancakes!</code> The implementation 
 trait implementation.</p>
 <p>Next, let’s explore how the other kinds of procedural macros differ from custom
 <code>derive</code> macros.</p>
-<h3 id="attribute-like-macros"><a class="header" href="#attribute-like-macros">Attribute-Like macros</a></h3>
+<h3 id="attribute-like-macros"><a class="header" href="#attribute-like-macros">Attribute-Like Macros</a></h3>
 <p>Attribute-like macros are similar to custom <code>derive</code> macros, but instead of
 generating code for the <code>derive</code> attribute, they allow you to create new
 attributes. They’re also more flexible: <code>derive</code> only works for structs and
@@ -621,13 +625,13 @@ of the function’s body.</p>
 <p>Other than that, attribute-like macros work the same way as custom <code>derive</code>
 macros: you create a crate with the <code>proc-macro</code> crate type and implement a
 function that generates the code you want!</p>
-<h3 id="function-like-macros"><a class="header" href="#function-like-macros">Function-Like macros</a></h3>
+<h3 id="function-like-macros"><a class="header" href="#function-like-macros">Function-Like Macros</a></h3>
 <p>Function-like macros define macros that look like function calls. Similarly to
 <code>macro_rules!</code> macros, they’re more flexible than functions; for example, they
 can take an unknown number of arguments. However, <code>macro_rules!</code> macros can only
 be defined using the match-like syntax we discussed in <a href="#declarative-macros-with-macro_rules-for-general-metaprogramming">“Declarative Macros with
 <code>macro_rules!</code> for General Metaprogramming”</a><!-- ignore --> earlier.
-Function-like macros take a <code>TokenStream</code> parameter and their definition
+Function-like macros take a <code>TokenStream</code> parameter, and their definition
 manipulates that <code>TokenStream</code> using Rust code as the other two types of
 procedural macros do. An example of a function-like macro is an <code>sql!</code> macro
 that might be called like so:</p>

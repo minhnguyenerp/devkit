@@ -180,8 +180,7 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="error-code-e0562"><a class="header" href="#error-code-e0562">Error code E0562</a></h1>
-<p>Abstract return types (written <code>impl Trait</code> for some trait <code>Trait</code>) are only
-allowed as function and inherent impl return types.</p>
+<p><code>impl Trait</code> is only allowed as a function return and argument type.</p>
 <p>Erroneous code example:</p>
 <pre><pre class="playground"><code class="language-rust compile_fail E0562">fn main() {
     let count_to_ten: impl Iterator&lt;Item=usize&gt; = 0..10;
@@ -191,7 +190,7 @@ allowed as function and inherent impl return types.</p>
         println!("{}", i);
     }
 }</code></pre></pre>
-<p>Make sure <code>impl Trait</code> only appears in return-type position.</p>
+<p>Make sure <code>impl Trait</code> appears in a function signature.</p>
 <pre><pre class="playground"><code class="language-rust">fn count_to_n(n: usize) -&gt; impl Iterator&lt;Item=usize&gt; {
     0..n
 }
@@ -201,7 +200,7 @@ fn main() {
         println!("{}", i);
     }
 }</code></pre></pre>
-<p>See <a href="https://github.com/rust-lang/rfcs/blob/master/text/1522-conservative-impl-trait.md">RFC 1522</a> for more details.</p>
+<p>See the <a href="https://doc.rust-lang.org/stable/reference/types/impl-trait.html">reference</a> for more details on <code>impl Trait</code>.</p>
 
                     </main>
 

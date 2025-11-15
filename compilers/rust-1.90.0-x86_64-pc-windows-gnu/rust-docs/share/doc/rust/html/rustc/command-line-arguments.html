@@ -37,10 +37,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-a3e21844.js";
+            window.path_to_searchindex_js = "searchindex-cd34eb16.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-2441f1f0.js"></script>
+        <script src="toc-59e61e94.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -488,19 +488,13 @@ are:</p>
 <p>This flag takes a number that specifies the width of the terminal in characters.
 Formatting of diagnostics will take the width into consideration to make them better fit on the screen.</p>
 <p><a id="option-remap-path-prefix"></a></p>
-<h2 id="--remap-path-prefix-remap-source-names-in-output"><a class="header" href="#--remap-path-prefix-remap-source-names-in-output"><code>--remap-path-prefix</code>: remap source names in output</a></h2>
+<h2 id="--remap-path-prefix-remap-source-paths-in-output"><a class="header" href="#--remap-path-prefix-remap-source-paths-in-output"><code>--remap-path-prefix</code>: remap source paths in output</a></h2>
 <p>Remap source path prefixes in all output, including compiler diagnostics,
-debug information, macro expansions, etc. It takes a value of the form
-<code>FROM=TO</code> where a path prefix equal to <code>FROM</code> is rewritten to the value <code>TO</code>.
-The <code>FROM</code> may itself contain an <code>=</code> symbol, but the <code>TO</code> value may not. This
-flag may be specified multiple times.</p>
-<p>This is useful for normalizing build products, for example by removing the
-current directory out of pathnames emitted into the object files. The
-replacement is purely textual, with no consideration of the current system's
-pathname syntax. For example <code>--remap-path-prefix foo=bar</code> will match
-<code>foo/lib.rs</code> but not <code>./foo/lib.rs</code>.</p>
-<p>When multiple remappings are given and several of them match, the <strong>last</strong>
-matching one is applied.</p>
+debug information, macro expansions, etc. It takes a value of the form <code>FROM=TO</code>
+where a path prefix equal to <code>FROM</code> is rewritten to the value <code>TO</code>. This flag may be
+specified multiple times.</p>
+<p>Refer to the <a href="remap-source-paths.html">Remap source paths</a> section of this book for
+further details and explanation.</p>
 <p><a id="option-json"></a></p>
 <h2 id="--json-configure-json-messages-printed-by-the-compiler"><a class="header" href="#--json-configure-json-messages-printed-by-the-compiler"><code>--json</code>: configure json messages printed by the compiler</a></h2>
 <p>When the <a href="#option-error-format"><code>--error-format=json</code> option</a> is passed to

@@ -41,7 +41,7 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-ee4246b4.js";
+            window.path_to_searchindex_js = "../../searchindex-adf886c2.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../toc-a1ce3eb6.js"></script>
@@ -209,25 +209,25 @@ fn failed_borrow&lt;'a&gt;() {
 
     // エラー：`_x`の寿命が短すぎる。
     let _y: &amp;'a i32 = &amp;_x;
-    // `&amp;_x`のライフタイムは`y`のそれよりも短いため、関数内で`'a`を使用して
-    // 変数のライフタイムを指定しようとすると失敗します。つまり、短いライフタイム
-    // を持つ参照をより長いものに強制的に代入することはできません。
+    // Attempting to use the lifetime `'a` as an explicit type annotation
+    // inside the function will fail because the lifetime of `&amp;_x` is shorter
+    // than that of `_y`. A short lifetime cannot be coerced into a longer one.
 }
 
 fn main() {
     // 下で借用するための変数を作成。
     let (four, nine) = (4, 9);
-    
+
     // 2つの変数の借用（`&amp;`）が関数に渡されます。
     print_refs(&amp;four, &amp;nine);
-    // 借用された変数の寿命は、借り手のそれよりも長くなくてはなりません。
-    // つまり、`four`、`nine`のライフタイムは`print_refs`のそれよりも
-    // 長くなくてはなりません。
-    
+    // Any input which is borrowed must outlive the borrower.
+    // In other words, the lifetime of `four` and `nine` must
+    // be longer than that of `print_refs`.
+
     failed_borrow();
-    // `failed_borrow`は関数のライフタイムよりも`'a`を長くさせるような
-    // 参照を持ちませんが、それでも`'a`のほうが長くなります。なぜならそのような
-    // 場合`'a`はデフォルトで`'static`になるからです。
+    // `failed_borrow` contains no references to force `'a` to be
+    // longer than the lifetime of the function, but `'a` is longer.
+    // Because the lifetime is never constrained, it defaults to `'static`.
 }</code></pre></pre>
 <h3 id="参照"><a class="header" href="#参照">参照</a></h3>
 <p><a href="../../generics.html">ジェネリクス</a>, <a href="../../fn/closures.html">クロージャ</a></p>

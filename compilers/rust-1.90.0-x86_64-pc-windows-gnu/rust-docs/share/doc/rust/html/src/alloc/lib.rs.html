@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `library\alloc\src\lib.rs`."><title>lib.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-aa0817cf.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="alloc" data-themes="" data-resource-suffix="1.90.0" data-rustdoc-version="1.90.0 (1159e78c4 2025-09-14)" data-channel="1.90.0" data-search-js="search-fa3e91e5.js" data-settings-js="settings-5514c975.js" ><script src="../../static.files/storage-68b7e25d.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files1.90.0.js"></script><script defer src="../../static.files/main-eebb9057.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-32bb7600.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-6580c154.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-044be391.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">alloc/</div>lib.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="doccomment">//! # The Rust core allocation and collections library
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `library\alloc\src\lib.rs`."><title>lib.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-e56847b5.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="alloc" data-themes="" data-resource-suffix="1.91.1" data-rustdoc-version="1.91.1 (ed61e7d7e 2025-11-07)" data-channel="1.91.1" data-search-js="search-e256b49e.js" data-stringdex-js="stringdex-c3e638e9.js" data-settings-js="settings-c38705f0.js" ><script src="../../static.files/storage-e2aeef58.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files1.91.1.js"></script><script defer src="../../static.files/main-6dc2a7f3.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-263c88ec.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-eab170b8.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-044be391.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">alloc/</div>lib.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="doccomment">//! # The Rust core allocation and collections library
 <a href=#2 id=2 data-nosnippet>2</a>//!
 <a href=#3 id=3 data-nosnippet>3</a>//! This library provides smart pointers and collections for managing
 <a href=#4 id=4 data-nosnippet>4</a>//! heap-allocated values.
@@ -102,139 +102,144 @@
 <a href=#102 id=102 data-nosnippet>102</a>#![feature(async_iterator)]
 <a href=#103 id=103 data-nosnippet>103</a>#![feature(bstr)]
 <a href=#104 id=104 data-nosnippet>104</a>#![feature(bstr_internals)]
-<a href=#105 id=105 data-nosnippet>105</a>#![feature(char_internals)]
-<a href=#106 id=106 data-nosnippet>106</a>#![feature(char_max_len)]
-<a href=#107 id=107 data-nosnippet>107</a>#![feature(clone_to_uninit)]
-<a href=#108 id=108 data-nosnippet>108</a>#![feature(coerce_unsized)]
-<a href=#109 id=109 data-nosnippet>109</a>#![feature(const_default)]
-<a href=#110 id=110 data-nosnippet>110</a>#![feature(const_eval_select)]
-<a href=#111 id=111 data-nosnippet>111</a>#![feature(const_heap)]
-<a href=#112 id=112 data-nosnippet>112</a>#![feature(const_trait_impl)]
-<a href=#113 id=113 data-nosnippet>113</a>#![feature(core_intrinsics)]
-<a href=#114 id=114 data-nosnippet>114</a>#![feature(deprecated_suggestion)]
-<a href=#115 id=115 data-nosnippet>115</a>#![feature(deref_pure_trait)]
-<a href=#116 id=116 data-nosnippet>116</a>#![feature(dispatch_from_dyn)]
-<a href=#117 id=117 data-nosnippet>117</a>#![feature(ergonomic_clones)]
-<a href=#118 id=118 data-nosnippet>118</a>#![feature(error_generic_member_access)]
-<a href=#119 id=119 data-nosnippet>119</a>#![feature(exact_size_is_empty)]
-<a href=#120 id=120 data-nosnippet>120</a>#![feature(extend_one)]
-<a href=#121 id=121 data-nosnippet>121</a>#![feature(extend_one_unchecked)]
-<a href=#122 id=122 data-nosnippet>122</a>#![feature(fmt_internals)]
-<a href=#123 id=123 data-nosnippet>123</a>#![feature(fn_traits)]
-<a href=#124 id=124 data-nosnippet>124</a>#![feature(formatting_options)]
-<a href=#125 id=125 data-nosnippet>125</a>#![feature(generic_atomic)]
-<a href=#126 id=126 data-nosnippet>126</a>#![feature(hasher_prefixfree_extras)]
-<a href=#127 id=127 data-nosnippet>127</a>#![feature(inplace_iteration)]
-<a href=#128 id=128 data-nosnippet>128</a>#![feature(iter_advance_by)]
-<a href=#129 id=129 data-nosnippet>129</a>#![feature(iter_next_chunk)]
-<a href=#130 id=130 data-nosnippet>130</a>#![feature(layout_for_ptr)]
-<a href=#131 id=131 data-nosnippet>131</a>#![feature(legacy_receiver_trait)]
-<a href=#132 id=132 data-nosnippet>132</a>#![feature(local_waker)]
-<a href=#133 id=133 data-nosnippet>133</a>#![feature(maybe_uninit_slice)]
-<a href=#134 id=134 data-nosnippet>134</a>#![feature(maybe_uninit_uninit_array_transpose)]
-<a href=#135 id=135 data-nosnippet>135</a>#![feature(panic_internals)]
-<a href=#136 id=136 data-nosnippet>136</a>#![feature(pattern)]
-<a href=#137 id=137 data-nosnippet>137</a>#![feature(pin_coerce_unsized_trait)]
-<a href=#138 id=138 data-nosnippet>138</a>#![feature(ptr_alignment_type)]
-<a href=#139 id=139 data-nosnippet>139</a>#![feature(ptr_internals)]
-<a href=#140 id=140 data-nosnippet>140</a>#![feature(ptr_metadata)]
-<a href=#141 id=141 data-nosnippet>141</a>#![feature(set_ptr_value)]
-<a href=#142 id=142 data-nosnippet>142</a>#![feature(sized_type_properties)]
-<a href=#143 id=143 data-nosnippet>143</a>#![feature(slice_from_ptr_range)]
-<a href=#144 id=144 data-nosnippet>144</a>#![feature(slice_index_methods)]
-<a href=#145 id=145 data-nosnippet>145</a>#![feature(slice_iter_mut_as_mut_slice)]
-<a href=#146 id=146 data-nosnippet>146</a>#![feature(slice_ptr_get)]
-<a href=#147 id=147 data-nosnippet>147</a>#![feature(slice_range)]
-<a href=#148 id=148 data-nosnippet>148</a>#![feature(std_internals)]
-<a href=#149 id=149 data-nosnippet>149</a>#![feature(str_internals)]
-<a href=#150 id=150 data-nosnippet>150</a>#![feature(temporary_niche_types)]
-<a href=#151 id=151 data-nosnippet>151</a>#![feature(trusted_fused)]
-<a href=#152 id=152 data-nosnippet>152</a>#![feature(trusted_len)]
-<a href=#153 id=153 data-nosnippet>153</a>#![feature(trusted_random_access)]
-<a href=#154 id=154 data-nosnippet>154</a>#![feature(try_trait_v2)]
-<a href=#155 id=155 data-nosnippet>155</a>#![feature(try_with_capacity)]
-<a href=#156 id=156 data-nosnippet>156</a>#![feature(tuple_trait)]
-<a href=#157 id=157 data-nosnippet>157</a>#![feature(ub_checks)]
-<a href=#158 id=158 data-nosnippet>158</a>#![feature(unicode_internals)]
-<a href=#159 id=159 data-nosnippet>159</a>#![feature(unsize)]
-<a href=#160 id=160 data-nosnippet>160</a>#![feature(unwrap_infallible)]
-<a href=#161 id=161 data-nosnippet>161</a></span><span class="comment">// tidy-alphabetical-end
-<a href=#162 id=162 data-nosnippet>162</a>//
-<a href=#163 id=163 data-nosnippet>163</a>// Language features:
-<a href=#164 id=164 data-nosnippet>164</a>// tidy-alphabetical-start
-<a href=#165 id=165 data-nosnippet>165</a></span><span class="attr">#![feature(allocator_internals)]
-<a href=#166 id=166 data-nosnippet>166</a>#![feature(allow_internal_unstable)]
-<a href=#167 id=167 data-nosnippet>167</a>#![feature(cfg_sanitize)]
-<a href=#168 id=168 data-nosnippet>168</a>#![feature(const_precise_live_drops)]
-<a href=#169 id=169 data-nosnippet>169</a>#![feature(coroutine_trait)]
-<a href=#170 id=170 data-nosnippet>170</a>#![feature(decl_macro)]
-<a href=#171 id=171 data-nosnippet>171</a>#![feature(dropck_eyepatch)]
-<a href=#172 id=172 data-nosnippet>172</a>#![feature(fundamental)]
-<a href=#173 id=173 data-nosnippet>173</a>#![feature(hashmap_internals)]
-<a href=#174 id=174 data-nosnippet>174</a>#![feature(intrinsics)]
-<a href=#175 id=175 data-nosnippet>175</a>#![feature(lang_items)]
-<a href=#176 id=176 data-nosnippet>176</a>#![feature(min_specialization)]
-<a href=#177 id=177 data-nosnippet>177</a>#![feature(multiple_supertrait_upcastable)]
-<a href=#178 id=178 data-nosnippet>178</a>#![feature(negative_impls)]
-<a href=#179 id=179 data-nosnippet>179</a>#![feature(never_type)]
-<a href=#180 id=180 data-nosnippet>180</a>#![feature(optimize_attribute)]
-<a href=#181 id=181 data-nosnippet>181</a>#![feature(rustc_allow_const_fn_unstable)]
-<a href=#182 id=182 data-nosnippet>182</a>#![feature(rustc_attrs)]
-<a href=#183 id=183 data-nosnippet>183</a>#![feature(slice_internals)]
-<a href=#184 id=184 data-nosnippet>184</a>#![feature(staged_api)]
-<a href=#185 id=185 data-nosnippet>185</a>#![feature(stmt_expr_attributes)]
-<a href=#186 id=186 data-nosnippet>186</a>#![feature(strict_provenance_lints)]
-<a href=#187 id=187 data-nosnippet>187</a>#![feature(unboxed_closures)]
-<a href=#188 id=188 data-nosnippet>188</a>#![feature(unsized_fn_params)]
-<a href=#189 id=189 data-nosnippet>189</a>#![feature(with_negative_coherence)]
-<a href=#190 id=190 data-nosnippet>190</a>#![rustc_preserve_ub_checks]
-<a href=#191 id=191 data-nosnippet>191</a></span><span class="comment">// tidy-alphabetical-end
-<a href=#192 id=192 data-nosnippet>192</a>//
-<a href=#193 id=193 data-nosnippet>193</a>// Rustdoc features:
-<a href=#194 id=194 data-nosnippet>194</a></span><span class="attr">#![feature(doc_cfg)]
-<a href=#195 id=195 data-nosnippet>195</a>#![feature(doc_cfg_hide)]
-<a href=#196 id=196 data-nosnippet>196</a></span><span class="comment">// Technically, this is a bug in rustdoc: rustdoc sees the documentation on `#[lang = slice_alloc]`
-<a href=#197 id=197 data-nosnippet>197</a>// blocks is for `&amp;[T]`, which also has documentation using this feature in `core`, and gets mad
-<a href=#198 id=198 data-nosnippet>198</a>// that the feature-gate isn't enabled. Ideally, it wouldn't check for the feature gate for docs
-<a href=#199 id=199 data-nosnippet>199</a>// from other crates, but since this can only appear for lang items, it doesn't seem worth fixing.
-<a href=#200 id=200 data-nosnippet>200</a></span><span class="attr">#![feature(intra_doc_pointers)]
-<a href=#201 id=201 data-nosnippet>201</a>
-<a href=#202 id=202 data-nosnippet>202</a></span><span class="comment">// Module with internal macros used by other modules (needs to be included before other modules).
-<a href=#203 id=203 data-nosnippet>203</a></span><span class="attr">#[macro_use]
-<a href=#204 id=204 data-nosnippet>204</a></span><span class="kw">mod </span>macros;
-<a href=#205 id=205 data-nosnippet>205</a>
-<a href=#206 id=206 data-nosnippet>206</a><span class="kw">mod </span>raw_vec;
-<a href=#207 id=207 data-nosnippet>207</a>
-<a href=#208 id=208 data-nosnippet>208</a><span class="comment">// Heaps provided for low-level allocation strategies
-<a href=#209 id=209 data-nosnippet>209</a></span><span class="kw">pub mod </span>alloc;
+<a href=#105 id=105 data-nosnippet>105</a>#![feature(cast_maybe_uninit)]
+<a href=#106 id=106 data-nosnippet>106</a>#![feature(char_internals)]
+<a href=#107 id=107 data-nosnippet>107</a>#![feature(char_max_len)]
+<a href=#108 id=108 data-nosnippet>108</a>#![feature(clone_to_uninit)]
+<a href=#109 id=109 data-nosnippet>109</a>#![feature(coerce_unsized)]
+<a href=#110 id=110 data-nosnippet>110</a>#![feature(const_convert)]
+<a href=#111 id=111 data-nosnippet>111</a>#![feature(const_default)]
+<a href=#112 id=112 data-nosnippet>112</a>#![feature(const_eval_select)]
+<a href=#113 id=113 data-nosnippet>113</a>#![feature(const_heap)]
+<a href=#114 id=114 data-nosnippet>114</a>#![feature(core_intrinsics)]
+<a href=#115 id=115 data-nosnippet>115</a>#![feature(deprecated_suggestion)]
+<a href=#116 id=116 data-nosnippet>116</a>#![feature(deref_pure_trait)]
+<a href=#117 id=117 data-nosnippet>117</a>#![feature(dispatch_from_dyn)]
+<a href=#118 id=118 data-nosnippet>118</a>#![feature(ergonomic_clones)]
+<a href=#119 id=119 data-nosnippet>119</a>#![feature(error_generic_member_access)]
+<a href=#120 id=120 data-nosnippet>120</a>#![feature(exact_size_is_empty)]
+<a href=#121 id=121 data-nosnippet>121</a>#![feature(extend_one)]
+<a href=#122 id=122 data-nosnippet>122</a>#![feature(extend_one_unchecked)]
+<a href=#123 id=123 data-nosnippet>123</a>#![feature(fmt_internals)]
+<a href=#124 id=124 data-nosnippet>124</a>#![feature(fn_traits)]
+<a href=#125 id=125 data-nosnippet>125</a>#![feature(formatting_options)]
+<a href=#126 id=126 data-nosnippet>126</a>#![feature(generic_atomic)]
+<a href=#127 id=127 data-nosnippet>127</a>#![feature(hasher_prefixfree_extras)]
+<a href=#128 id=128 data-nosnippet>128</a>#![feature(inplace_iteration)]
+<a href=#129 id=129 data-nosnippet>129</a>#![feature(iter_advance_by)]
+<a href=#130 id=130 data-nosnippet>130</a>#![feature(iter_next_chunk)]
+<a href=#131 id=131 data-nosnippet>131</a>#![feature(layout_for_ptr)]
+<a href=#132 id=132 data-nosnippet>132</a>#![feature(legacy_receiver_trait)]
+<a href=#133 id=133 data-nosnippet>133</a>#![feature(local_waker)]
+<a href=#134 id=134 data-nosnippet>134</a>#![feature(maybe_uninit_slice)]
+<a href=#135 id=135 data-nosnippet>135</a>#![feature(maybe_uninit_uninit_array_transpose)]
+<a href=#136 id=136 data-nosnippet>136</a>#![feature(panic_internals)]
+<a href=#137 id=137 data-nosnippet>137</a>#![feature(pattern)]
+<a href=#138 id=138 data-nosnippet>138</a>#![feature(pin_coerce_unsized_trait)]
+<a href=#139 id=139 data-nosnippet>139</a>#![feature(ptr_alignment_type)]
+<a href=#140 id=140 data-nosnippet>140</a>#![feature(ptr_internals)]
+<a href=#141 id=141 data-nosnippet>141</a>#![feature(ptr_metadata)]
+<a href=#142 id=142 data-nosnippet>142</a>#![feature(set_ptr_value)]
+<a href=#143 id=143 data-nosnippet>143</a>#![feature(sized_type_properties)]
+<a href=#144 id=144 data-nosnippet>144</a>#![feature(slice_from_ptr_range)]
+<a href=#145 id=145 data-nosnippet>145</a>#![feature(slice_index_methods)]
+<a href=#146 id=146 data-nosnippet>146</a>#![feature(slice_iter_mut_as_mut_slice)]
+<a href=#147 id=147 data-nosnippet>147</a>#![feature(slice_ptr_get)]
+<a href=#148 id=148 data-nosnippet>148</a>#![feature(slice_range)]
+<a href=#149 id=149 data-nosnippet>149</a>#![feature(std_internals)]
+<a href=#150 id=150 data-nosnippet>150</a>#![feature(str_internals)]
+<a href=#151 id=151 data-nosnippet>151</a>#![feature(temporary_niche_types)]
+<a href=#152 id=152 data-nosnippet>152</a>#![feature(trusted_fused)]
+<a href=#153 id=153 data-nosnippet>153</a>#![feature(trusted_len)]
+<a href=#154 id=154 data-nosnippet>154</a>#![feature(trusted_random_access)]
+<a href=#155 id=155 data-nosnippet>155</a>#![feature(try_trait_v2)]
+<a href=#156 id=156 data-nosnippet>156</a>#![feature(try_with_capacity)]
+<a href=#157 id=157 data-nosnippet>157</a>#![feature(tuple_trait)]
+<a href=#158 id=158 data-nosnippet>158</a>#![feature(ub_checks)]
+<a href=#159 id=159 data-nosnippet>159</a>#![feature(unicode_internals)]
+<a href=#160 id=160 data-nosnippet>160</a>#![feature(unsize)]
+<a href=#161 id=161 data-nosnippet>161</a>#![feature(unwrap_infallible)]
+<a href=#162 id=162 data-nosnippet>162</a>#![feature(wtf8_internals)]
+<a href=#163 id=163 data-nosnippet>163</a></span><span class="comment">// tidy-alphabetical-end
+<a href=#164 id=164 data-nosnippet>164</a>//
+<a href=#165 id=165 data-nosnippet>165</a>// Language features:
+<a href=#166 id=166 data-nosnippet>166</a>// tidy-alphabetical-start
+<a href=#167 id=167 data-nosnippet>167</a></span><span class="attr">#![feature(allocator_internals)]
+<a href=#168 id=168 data-nosnippet>168</a>#![feature(allow_internal_unstable)]
+<a href=#169 id=169 data-nosnippet>169</a>#![feature(cfg_sanitize)]
+<a href=#170 id=170 data-nosnippet>170</a>#![feature(const_precise_live_drops)]
+<a href=#171 id=171 data-nosnippet>171</a>#![feature(const_trait_impl)]
+<a href=#172 id=172 data-nosnippet>172</a>#![feature(coroutine_trait)]
+<a href=#173 id=173 data-nosnippet>173</a>#![feature(decl_macro)]
+<a href=#174 id=174 data-nosnippet>174</a>#![feature(dropck_eyepatch)]
+<a href=#175 id=175 data-nosnippet>175</a>#![feature(fundamental)]
+<a href=#176 id=176 data-nosnippet>176</a>#![feature(hashmap_internals)]
+<a href=#177 id=177 data-nosnippet>177</a>#![feature(intrinsics)]
+<a href=#178 id=178 data-nosnippet>178</a>#![feature(lang_items)]
+<a href=#179 id=179 data-nosnippet>179</a>#![feature(min_specialization)]
+<a href=#180 id=180 data-nosnippet>180</a>#![feature(multiple_supertrait_upcastable)]
+<a href=#181 id=181 data-nosnippet>181</a>#![feature(negative_impls)]
+<a href=#182 id=182 data-nosnippet>182</a>#![feature(never_type)]
+<a href=#183 id=183 data-nosnippet>183</a>#![feature(optimize_attribute)]
+<a href=#184 id=184 data-nosnippet>184</a>#![feature(rustc_allow_const_fn_unstable)]
+<a href=#185 id=185 data-nosnippet>185</a>#![feature(rustc_attrs)]
+<a href=#186 id=186 data-nosnippet>186</a>#![feature(slice_internals)]
+<a href=#187 id=187 data-nosnippet>187</a>#![feature(staged_api)]
+<a href=#188 id=188 data-nosnippet>188</a>#![feature(stmt_expr_attributes)]
+<a href=#189 id=189 data-nosnippet>189</a>#![feature(strict_provenance_lints)]
+<a href=#190 id=190 data-nosnippet>190</a>#![feature(unboxed_closures)]
+<a href=#191 id=191 data-nosnippet>191</a>#![feature(unsized_fn_params)]
+<a href=#192 id=192 data-nosnippet>192</a>#![feature(with_negative_coherence)]
+<a href=#193 id=193 data-nosnippet>193</a>#![rustc_preserve_ub_checks]
+<a href=#194 id=194 data-nosnippet>194</a></span><span class="comment">// tidy-alphabetical-end
+<a href=#195 id=195 data-nosnippet>195</a>//
+<a href=#196 id=196 data-nosnippet>196</a>// Rustdoc features:
+<a href=#197 id=197 data-nosnippet>197</a></span><span class="attr">#![feature(doc_cfg)]
+<a href=#198 id=198 data-nosnippet>198</a>#![feature(doc_cfg_hide)]
+<a href=#199 id=199 data-nosnippet>199</a></span><span class="comment">// Technically, this is a bug in rustdoc: rustdoc sees the documentation on `#[lang = slice_alloc]`
+<a href=#200 id=200 data-nosnippet>200</a>// blocks is for `&amp;[T]`, which also has documentation using this feature in `core`, and gets mad
+<a href=#201 id=201 data-nosnippet>201</a>// that the feature-gate isn't enabled. Ideally, it wouldn't check for the feature gate for docs
+<a href=#202 id=202 data-nosnippet>202</a>// from other crates, but since this can only appear for lang items, it doesn't seem worth fixing.
+<a href=#203 id=203 data-nosnippet>203</a></span><span class="attr">#![feature(intra_doc_pointers)]
+<a href=#204 id=204 data-nosnippet>204</a>
+<a href=#205 id=205 data-nosnippet>205</a></span><span class="comment">// Module with internal macros used by other modules (needs to be included before other modules).
+<a href=#206 id=206 data-nosnippet>206</a></span><span class="attr">#[macro_use]
+<a href=#207 id=207 data-nosnippet>207</a></span><span class="kw">mod </span>macros;
+<a href=#208 id=208 data-nosnippet>208</a>
+<a href=#209 id=209 data-nosnippet>209</a><span class="kw">mod </span>raw_vec;
 <a href=#210 id=210 data-nosnippet>210</a>
-<a href=#211 id=211 data-nosnippet>211</a><span class="comment">// Primitive types using the heaps above
-<a href=#212 id=212 data-nosnippet>212</a>
-<a href=#213 id=213 data-nosnippet>213</a>// Need to conditionally define the mod from `boxed.rs` to avoid
-<a href=#214 id=214 data-nosnippet>214</a>// duplicating the lang-items when building in test cfg; but also need
-<a href=#215 id=215 data-nosnippet>215</a>// to allow code to have `use boxed::Box;` declarations.
-<a href=#216 id=216 data-nosnippet>216</a></span><span class="kw">pub mod </span>borrow;
-<a href=#217 id=217 data-nosnippet>217</a><span class="kw">pub mod </span>boxed;
-<a href=#218 id=218 data-nosnippet>218</a><span class="attr">#[unstable(feature = <span class="string">"bstr"</span>, issue = <span class="string">"134915"</span>)]
-<a href=#219 id=219 data-nosnippet>219</a></span><span class="kw">pub mod </span>bstr;
-<a href=#220 id=220 data-nosnippet>220</a><span class="kw">pub mod </span>collections;
-<a href=#221 id=221 data-nosnippet>221</a><span class="attr">#[cfg(all(not(no_rc), not(no_sync), not(no_global_oom_handling)))]
-<a href=#222 id=222 data-nosnippet>222</a></span><span class="kw">pub mod </span>ffi;
-<a href=#223 id=223 data-nosnippet>223</a><span class="kw">pub mod </span>fmt;
-<a href=#224 id=224 data-nosnippet>224</a><span class="attr">#[cfg(not(no_rc))]
-<a href=#225 id=225 data-nosnippet>225</a></span><span class="kw">pub mod </span>rc;
-<a href=#226 id=226 data-nosnippet>226</a><span class="kw">pub mod </span>slice;
-<a href=#227 id=227 data-nosnippet>227</a><span class="kw">pub mod </span>str;
-<a href=#228 id=228 data-nosnippet>228</a><span class="kw">pub mod </span>string;
-<a href=#229 id=229 data-nosnippet>229</a><span class="attr">#[cfg(all(not(no_rc), not(no_sync), target_has_atomic = <span class="string">"ptr"</span>))]
-<a href=#230 id=230 data-nosnippet>230</a></span><span class="kw">pub mod </span>sync;
-<a href=#231 id=231 data-nosnippet>231</a><span class="attr">#[cfg(all(not(no_global_oom_handling), not(no_rc), not(no_sync)))]
-<a href=#232 id=232 data-nosnippet>232</a></span><span class="kw">pub mod </span>task;
-<a href=#233 id=233 data-nosnippet>233</a><span class="kw">pub mod </span>vec;
-<a href=#234 id=234 data-nosnippet>234</a>
-<a href=#235 id=235 data-nosnippet>235</a><span class="attr">#[doc(hidden)]
-<a href=#236 id=236 data-nosnippet>236</a>#[unstable(feature = <span class="string">"liballoc_internals"</span>, issue = <span class="string">"none"</span>, reason = <span class="string">"implementation detail"</span>)]
-<a href=#237 id=237 data-nosnippet>237</a></span><span class="kw">pub mod </span>__export {
-<a href=#238 id=238 data-nosnippet>238</a>    <span class="kw">pub use </span>core::format_args;
-<a href=#239 id=239 data-nosnippet>239</a>    <span class="kw">pub use </span>core::hint::must_use;
-<a href=#240 id=240 data-nosnippet>240</a>}</code></pre></div></section></main></body></html>
+<a href=#211 id=211 data-nosnippet>211</a><span class="comment">// Heaps provided for low-level allocation strategies
+<a href=#212 id=212 data-nosnippet>212</a></span><span class="kw">pub mod </span>alloc;
+<a href=#213 id=213 data-nosnippet>213</a>
+<a href=#214 id=214 data-nosnippet>214</a><span class="comment">// Primitive types using the heaps above
+<a href=#215 id=215 data-nosnippet>215</a>
+<a href=#216 id=216 data-nosnippet>216</a>// Need to conditionally define the mod from `boxed.rs` to avoid
+<a href=#217 id=217 data-nosnippet>217</a>// duplicating the lang-items when building in test cfg; but also need
+<a href=#218 id=218 data-nosnippet>218</a>// to allow code to have `use boxed::Box;` declarations.
+<a href=#219 id=219 data-nosnippet>219</a></span><span class="kw">pub mod </span>borrow;
+<a href=#220 id=220 data-nosnippet>220</a><span class="kw">pub mod </span>boxed;
+<a href=#221 id=221 data-nosnippet>221</a><span class="attr">#[unstable(feature = <span class="string">"bstr"</span>, issue = <span class="string">"134915"</span>)]
+<a href=#222 id=222 data-nosnippet>222</a></span><span class="kw">pub mod </span>bstr;
+<a href=#223 id=223 data-nosnippet>223</a><span class="kw">pub mod </span>collections;
+<a href=#224 id=224 data-nosnippet>224</a><span class="attr">#[cfg(all(not(no_rc), not(no_sync), not(no_global_oom_handling)))]
+<a href=#225 id=225 data-nosnippet>225</a></span><span class="kw">pub mod </span>ffi;
+<a href=#226 id=226 data-nosnippet>226</a><span class="kw">pub mod </span>fmt;
+<a href=#227 id=227 data-nosnippet>227</a><span class="attr">#[cfg(not(no_rc))]
+<a href=#228 id=228 data-nosnippet>228</a></span><span class="kw">pub mod </span>rc;
+<a href=#229 id=229 data-nosnippet>229</a><span class="kw">pub mod </span>slice;
+<a href=#230 id=230 data-nosnippet>230</a><span class="kw">pub mod </span>str;
+<a href=#231 id=231 data-nosnippet>231</a><span class="kw">pub mod </span>string;
+<a href=#232 id=232 data-nosnippet>232</a><span class="attr">#[cfg(all(not(no_rc), not(no_sync), target_has_atomic = <span class="string">"ptr"</span>))]
+<a href=#233 id=233 data-nosnippet>233</a></span><span class="kw">pub mod </span>sync;
+<a href=#234 id=234 data-nosnippet>234</a><span class="attr">#[cfg(all(not(no_global_oom_handling), not(no_rc), not(no_sync)))]
+<a href=#235 id=235 data-nosnippet>235</a></span><span class="kw">pub mod </span>task;
+<a href=#236 id=236 data-nosnippet>236</a><span class="kw">pub mod </span>vec;
+<a href=#237 id=237 data-nosnippet>237</a><span class="attr">#[cfg(all(not(no_rc), not(no_sync), not(no_global_oom_handling)))]
+<a href=#238 id=238 data-nosnippet>238</a></span><span class="kw">pub mod </span>wtf8;
+<a href=#239 id=239 data-nosnippet>239</a>
+<a href=#240 id=240 data-nosnippet>240</a><span class="attr">#[doc(hidden)]
+<a href=#241 id=241 data-nosnippet>241</a>#[unstable(feature = <span class="string">"liballoc_internals"</span>, issue = <span class="string">"none"</span>, reason = <span class="string">"implementation detail"</span>)]
+<a href=#242 id=242 data-nosnippet>242</a></span><span class="kw">pub mod </span>__export {
+<a href=#243 id=243 data-nosnippet>243</a>    <span class="kw">pub use </span>core::format_args;
+<a href=#244 id=244 data-nosnippet>244</a>    <span class="kw">pub use </span>core::hint::must_use;
+<a href=#245 id=245 data-nosnippet>245</a>}</code></pre></div></section></main></body></html>

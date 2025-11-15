@@ -41,7 +41,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-c56a0a1a.js";
+            window.path_to_searchindex_js = "../searchindex-ed98a07e.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-32872d2c.js"></script>
@@ -248,18 +248,18 @@ fn main() {
     let a = Foo::Bar;
     let b = Foo::Baz;
     let c = Foo::Qux(100);
-    
+
     // 变量 a 匹配 Foo::Bar
     if let Foo::Bar = a {
         println!("a 是 foobar");
     }
-    
+
     // 变量 b 不匹配 Foo::Bar
     // 所以这里不会打印任何内容
     if let Foo::Bar = b {
         println!("b 是 foobar");
     }
-    
+
     // 变量 c 匹配 Foo::Qux，它包含一个值
     // 类似于前面例子中的 Some()
     if let Foo::Qux(value) = c {

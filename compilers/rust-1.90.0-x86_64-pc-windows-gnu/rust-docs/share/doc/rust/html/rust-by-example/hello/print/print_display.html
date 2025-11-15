@@ -41,7 +41,7 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-8b5e0132.js";
+            window.path_to_searchindex_js = "../../searchindex-25f31b91.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../toc-10049a44.js"></script>
@@ -288,9 +288,18 @@ its own implementation. This is detailed further in <a href="https://doc.rust-la
 <p>After checking the output of the above example, use the <code>Point2D</code> struct as a
 guide to add a <code>Complex</code> struct to the example. When printed in the same
 way, the output should be:</p>
-<pre><code class="language-txt">Display: 3.3 + 7.2i
+<pre><code class="language-txt">Display: 3.3 +7.2i
 Debug: Complex { real: 3.3, imag: 7.2 }
+
+Display: 4.7 -2.3i
+Debug: Complex { real: 4.7, imag: -2.3 }
 </code></pre>
+<p>Bonus: Add a space before the <code>+</code>/<code>-</code> signs.</p>
+<p>Hints in case you get stuck:</p>
+<ul>
+<li>Check the documentation for <a href="https://doc.rust-lang.org/std/fmt/#sign0"><code>Sign/#/0</code></a> in <code>std::fmt</code>.</li>
+<li>Bonus: Check <a href="../../flow_control/if_else.html"><code>if</code>-<code>else</code></a> branching and the <a href="https://doc.rust-lang.org/std/primitive.f64.html#method.abs"><code>abs</code></a> function.</li>
+</ul>
 <h3 id="see-also"><a class="header" href="#see-also">See also:</a></h3>
 <p><a href="../../trait/derive.html"><code>derive</code></a>, <a href="https://doc.rust-lang.org/std/fmt/"><code>std::fmt</code></a>, <a href="../../macros.html"><code>macros</code></a>, <a href="../../custom_types/structs.html"><code>struct</code></a>,
 <a href="https://doc.rust-lang.org/std/fmt/#formatting-traits"><code>trait</code></a>, and <a href="../../mod/use.html"><code>use</code></a></p>

@@ -180,19 +180,17 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="error-code-e0518"><a class="header" href="#error-code-e0518">Error code E0518</a></h1>
+<h4 id="note-this-error-code-is-no-longer-emitted-by-the-compiler"><a class="header" href="#note-this-error-code-is-no-longer-emitted-by-the-compiler">Note: this error code is no longer emitted by the compiler.</a></h4>
 <p>An <code>#[inline(..)]</code> attribute was incorrectly placed on something other than a
 function or method.</p>
 <p>Example of erroneous code:</p>
-<pre><pre class="playground"><code class="language-rust compile_fail E0518"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>#[inline(always)]
+<pre><code class="language-rust ignore (no longer emitted)">#[inline(always)]
 struct Foo;
 
 #[inline(never)]
 impl Foo {
     // ...
-}
-<span class="boring">}</span></code></pre></pre>
+}</code></pre>
 <p><code>#[inline]</code> hints the compiler whether or not to attempt to inline a method or
 function. By default, the compiler does a pretty good job of figuring this out
 itself, but if you feel the need for annotations, <code>#[inline(always)]</code> and

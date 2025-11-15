@@ -41,7 +41,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-ee4246b4.js";
+            window.path_to_searchindex_js = "../searchindex-adf886c2.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-a1ce3eb6.js"></script>
@@ -287,8 +287,7 @@ fn main() {
     fs::remove_dir("a/c/d").unwrap_or_else(|why| {
         println!("! {:?}", why.kind());
     });
-}
-</code></pre>
+}</code></pre>
 <p>以下が成功時に期待されるアウトプットです。</p>
 <pre><code class="language-shell">$ rustc fs.rs &amp;&amp; ./fs
 `mkdir a`

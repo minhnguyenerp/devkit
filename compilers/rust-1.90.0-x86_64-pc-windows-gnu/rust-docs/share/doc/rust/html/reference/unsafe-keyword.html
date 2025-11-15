@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-3109fce4.js";
+            window.path_to_searchindex_js = "searchindex-5e2787cc.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-4adb5027.js"></script>
@@ -187,15 +187,33 @@
 <h1 id="the-unsafe-keyword"><a class="header" href="#the-unsafe-keyword">The <code>unsafe</code> keyword</a></h1>
 <div class="rule" id="r-unsafe.intro"><a class="rule-link" href="#r-unsafe.intro" title="unsafe.intro"><span>[unsafe<wbr>.intro]</span/></a>
 </div>
-<p>The <code>unsafe</code> keyword can occur in several different contexts:
-unsafe functions (<code>unsafe fn</code>), unsafe blocks (<code>unsafe {}</code>), unsafe traits (<code>unsafe trait</code>), unsafe trait implementations (<code>unsafe impl</code>), unsafe external blocks (<code>unsafe extern</code>), and unsafe attributes (<code>#[unsafe(attr)]</code>).
-It plays several different roles, depending on where it is used and whether the <code>unsafe_op_in_unsafe_fn</code> lint is enabled:</p>
+<p>The <code>unsafe</code> keyword is used to create or discharge the obligation to prove something safe. Specifically:</p>
 <ul>
-<li>it is used to mark code that <em>defines</em> extra safety conditions (<code>unsafe fn</code>, <code>unsafe trait</code>)</li>
-<li>it is used to mark code that needs to <em>satisfy</em> extra safety conditions (<code>unsafe {}</code>, <code>unsafe impl</code>, <code>unsafe fn</code> without <a href="../rustc/lints/listing/allowed-by-default.html#unsafe-op-in-unsafe-fn"><code>unsafe_op_in_unsafe_fn</code></a>, <code>unsafe extern</code>, <code>#[unsafe(attr)]</code>)</li>
+<li>It is used to mark code that <em>defines</em> extra safety conditions that must be upheld elsewhere.
+<ul>
+<li>This includes <code>unsafe fn</code>, <code>unsafe static</code>, and <code>unsafe trait</code>.</li>
+</ul>
+</li>
+<li>It is used to mark code that the programmer <em>asserts</em> satisfies safety conditions defined elsewhere.
+<ul>
+<li>This includes <code>unsafe {}</code>, <code>unsafe impl</code>, <code>unsafe fn</code> without <a href="../rustc/lints/listing/allowed-by-default.html#unsafe-op-in-unsafe-fn"><code>unsafe_op_in_unsafe_fn</code></a>, <code>unsafe extern</code>, and <code>#[unsafe(attr)]</code>.</li>
+</ul>
+</li>
 </ul>
 <p>The following discusses each of these cases.
 See the <a href="../std/keyword.unsafe.html">keyword documentation</a> for some illustrative examples.</p>
+<div class="rule" id="r-unsafe.positions"><a class="rule-link" href="#r-unsafe.positions" title="unsafe.positions"><span>[unsafe<wbr>.positions]</span/></a>
+</div>
+<p>The <code>unsafe</code> keyword can occur in several different contexts:</p>
+<ul>
+<li>unsafe functions (<code>unsafe fn</code>)</li>
+<li>unsafe blocks (<code>unsafe {}</code>)</li>
+<li>unsafe traits (<code>unsafe trait</code>)</li>
+<li>unsafe trait implementations (<code>unsafe impl</code>)</li>
+<li>unsafe external blocks (<code>unsafe extern</code>)</li>
+<li>unsafe external statics (<code>unsafe static</code>)</li>
+<li>unsafe attributes (<code>#[unsafe(attr)]</code>)</li>
+</ul>
 <div class="rule" id="r-unsafe.fn"><a class="rule-link" href="#r-unsafe.fn" title="unsafe.fn"><span>[unsafe<wbr>.fn]</span/></a>
 </div>
 <h2 id="unsafe-functions-unsafe-fn"><a class="header" href="#unsafe-functions-unsafe-fn">Unsafe functions (<code>unsafe fn</code>)</a></h2>
@@ -308,7 +326,7 @@ By writing <code>unsafe impl</code>, the programmer states that they have taken 
         <script src="book-9576a2db.js"></script>
 
         <!-- Custom JS scripts -->
-        <script src="theme/reference-cfed9ca5.js"></script>
+        <script src="theme/reference-da60281b.js"></script>
 
 
 

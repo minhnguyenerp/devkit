@@ -40,7 +40,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-7dbf6f40.js";
+            window.path_to_searchindex_js = "../searchindex-b96ec0af.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-ff85ecd7.js"></script>
@@ -695,48 +695,6 @@ information on the <code>[dependencies]</code>, <code>[dev-dependencies]</code>,
 <p>The <code>[profile]</code> tables provide a way to customize compiler settings such as
 optimizations and debug settings. See <a href="profiles.html">the Profiles chapter</a> for
 more detail.</p>
-<script>
-(function() {
-    var fragments = {
-        "#the-project-layout": "../guide/project-layout.html",
-        "#examples": "cargo-targets.html#examples",
-        "#tests": "cargo-targets.html#tests",
-        "#integration-tests": "cargo-targets.html#integration-tests",
-        "#configuring-a-target": "cargo-targets.html#configuring-a-target",
-        "#target-auto-discovery": "cargo-targets.html#target-auto-discovery",
-        "#the-required-features-field-optional": "cargo-targets.html#the-required-features-field",
-        "#building-dynamic-or-static-libraries": "cargo-targets.html#the-crate-type-field",
-        "#the-workspace-section": "workspaces.html#the-workspace-section",
-        "#virtual-workspace": "workspaces.html",
-        "#package-selection": "workspaces.html#package-selection",
-        "#the-features-section": "features.html#the-features-section",
-        "#rules": "features.html",
-        "#usage-in-end-products": "features.html",
-        "#usage-in-packages": "features.html",
-        "#the-patch-section": "overriding-dependencies.html#the-patch-section",
-        "#using-patch-with-multiple-versions": "overriding-dependencies.html#using-patch-with-multiple-versions",
-        "#the-replace-section": "overriding-dependencies.html#the-replace-section",
-        "#package-metadata": "manifest.html#the-package-section",
-        "#the-authors-field-optional": "manifest.html#the-authors-field",
-        "#the-edition-field-optional": "manifest.html#the-edition-field",
-        "#the-documentation-field-optional": "manifest.html#the-documentation-field",
-        "#the-workspace--field-optional": "manifest.html#the-workspace-field",
-        "#package-build": "manifest.html#the-build-field",
-        "#the-build-field-optional": "manifest.html#the-build-field",
-        "#the-links-field-optional": "manifest.html#the-links-field",
-        "#the-exclude-and-include-fields-optional": "manifest.html#the-exclude-and-include-fields",
-        "#the-publish--field-optional": "manifest.html#the-publish-field",
-        "#the-metadata-table-optional": "manifest.html#the-metadata-table",
-        "#rust-version": "rust-version.html",
-    };
-    var target = fragments[window.location.hash];
-    if (target) {
-        var url = window.location.toString();
-        var base = url.substring(0, url.lastIndexOf('/'));
-        window.location.replace(base + "/" + target);
-    }
-})();
-</script>
 <hr>
 <ol class="footnote-definition"><li id="footnote-slash">
 <p>Previously multiple licenses could be separated with a <code>/</code>, but that
@@ -791,6 +749,18 @@ usage is deprecated. <a href="#fr-slash-1">↩</a></p>
         <!-- Custom JS scripts -->
 
 
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const fragmentMap =
+                    {"#building-dynamic-or-static-libraries":"cargo-targets.html#the-crate-type-field","#configuring-a-target":"cargo-targets.html#configuring-a-target","#examples":"cargo-targets.html#examples","#integration-tests":"cargo-targets.html#integration-tests","#package-build":"manifest.html#the-build-field","#package-metadata":"manifest.html#the-package-section","#package-selection":"workspaces.html#package-selection","#rules":"features.html","#rust-version":"rust-version.html","#target-auto-discovery":"cargo-targets.html#target-auto-discovery","#tests":"cargo-targets.html#tests","#the-authors-field-optional":"manifest.html#the-authors-field","#the-build-field-optional":"manifest.html#the-build-field","#the-documentation-field-optional":"manifest.html#the-documentation-field","#the-edition-field-optional":"manifest.html#the-edition-field","#the-exclude-and-include-fields-optional":"manifest.html#the-exclude-and-include-fields","#the-features-section":"features.html#the-features-section","#the-links-field-optional":"manifest.html#the-links-field","#the-metadata-table-optional":"manifest.html#the-metadata-table","#the-patch-section":"overriding-dependencies.html#the-patch-section","#the-project-layout":"../guide/project-layout.html","#the-publish--field-optional":"manifest.html#the-publish-field","#the-replace-section":"overriding-dependencies.html#the-replace-section","#the-required-features-field-optional":"cargo-targets.html#the-required-features-field","#the-workspace--field-optional":"manifest.html#the-workspace-field","#the-workspace-section":"workspaces.html#the-workspace-section","#usage-in-end-products":"features.html","#usage-in-packages":"features.html","#using-patch-with-multiple-versions":"overriding-dependencies.html#using-patch-with-multiple-versions","#virtual-workspace":"workspaces.html"}
+                ;
+                const target = fragmentMap[window.location.hash];
+                if (target) {
+                    let url = new URL(target, window.location.href);
+                    window.location.replace(url.href);
+                }
+            });
+        </script>
 
     </div>
     </body>

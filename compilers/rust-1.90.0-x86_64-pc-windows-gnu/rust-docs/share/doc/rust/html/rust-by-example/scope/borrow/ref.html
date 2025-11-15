@@ -41,7 +41,7 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-8b5e0132.js";
+            window.path_to_searchindex_js = "../../searchindex-25f31b91.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../toc-10049a44.js"></script>
@@ -230,13 +230,13 @@ fn main() {
 
     // A mutable tuple that includes a pointer
     let mut mutable_tuple = (Box::new(5u32), 3u32);
-    
+
     {
         // Destructure `mutable_tuple` to change the value of `last`.
         let (_, ref mut last) = mutable_tuple;
         *last = 2u32;
     }
-    
+
     println!("tuple is {:?}", mutable_tuple);
 }</code></pre></pre>
 

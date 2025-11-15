@@ -37,10 +37,10 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-a3e21844.js";
+            window.path_to_searchindex_js = "../../searchindex-cd34eb16.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../../toc-2441f1f0.js"></script>
+        <script src="../../toc-59e61e94.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -206,16 +206,20 @@
 <li><a href="#invalid-null-arguments"><code>invalid_null_arguments</code></a></li>
 <li><a href="#invalid-reference-casting"><code>invalid_reference_casting</code></a></li>
 <li><a href="#invalid-type-param-default"><code>invalid_type_param_default</code></a></li>
+<li><a href="#legacy-derive-helpers"><code>legacy_derive_helpers</code></a></li>
 <li><a href="#let-underscore-lock"><code>let_underscore_lock</code></a></li>
 <li><a href="#long-running-const-eval"><code>long_running_const_eval</code></a></li>
 <li><a href="#macro-expanded-macro-exports-accessed-by-absolute-paths"><code>macro_expanded_macro_exports_accessed_by_absolute_paths</code></a></li>
 <li><a href="#mutable-transmutes"><code>mutable_transmutes</code></a></li>
 <li><a href="#named-asm-labels"><code>named_asm_labels</code></a></li>
 <li><a href="#no-mangle-const-items"><code>no_mangle_const_items</code></a></li>
+<li><a href="#out-of-scope-macro-calls"><code>out_of_scope_macro_calls</code></a></li>
 <li><a href="#overflowing-literals"><code>overflowing_literals</code></a></li>
 <li><a href="#patterns-in-fns-without-body"><code>patterns_in_fns_without_body</code></a></li>
+<li><a href="#private-macro-use"><code>private_macro_use</code></a></li>
 <li><a href="#proc-macro-derive-resolution-fallback"><code>proc_macro_derive_resolution_fallback</code></a></li>
 <li><a href="#pub-use-of-private-extern-crate"><code>pub_use_of_private_extern_crate</code></a></li>
+<li><a href="#semicolon-in-expressions-from-macros"><code>semicolon_in_expressions_from_macros</code></a></li>
 <li><a href="#soft-unstable"><code>soft_unstable</code></a></li>
 <li><a href="#test-unstable-lint"><code>test_unstable_lint</code></a></li>
 <li><a href="#text-direction-codepoint-in-comment"><code>text_direction_codepoint_in_comment</code></a></li>
@@ -263,7 +267,7 @@ note: `V` could also refer to the associated type defined here
    |
  7 |     type V;
    |     ^^^^^^
-   = note: `#[deny(ambiguous_associated_items)]` on by default
+   = note: `#[deny(ambiguous_associated_items)]` (part of `#[deny(future_incompatible)]`) on by default
 
 </code></pre>
 <h3 id="explanation"><a class="header" href="#explanation">Explanation</a></h3>
@@ -435,7 +439,7 @@ enum Foo {
   |
   = warning: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
   = note: for more information, see issue #68585 &lt;https://github.com/rust-lang/rust/issues/68585&gt;
-  = note: `#[deny(conflicting_repr_hints)]` on by default
+  = note: `#[deny(conflicting_repr_hints)]` (part of `#[deny(future_incompatible)]`) on by default
 
 </code></pre>
 <h3 id="explanation-5"><a class="header" href="#explanation-5">Explanation</a></h3>
@@ -639,7 +643,7 @@ inputs that were previously accepted and used in practice.</p>
 <pre><code class="language-rust compile_fail">#[inline = "this is not valid"]
 fn foo() {}</code></pre>
 <p>This will produce:</p>
-<pre><code class="language-text">error: valid forms for the attribute are `#[inline(always|never)]` and `#[inline]`
+<pre><code class="language-text">error: valid forms for the attribute are `#[inline(always)]`, `#[inline(never)]`, and `#[inline]`
  --&gt; lint_example.rs:2:1
   |
 2 | #[inline = "this is not valid"]
@@ -647,7 +651,7 @@ fn foo() {}</code></pre>
   |
   = warning: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
   = note: for more information, see issue #57571 &lt;https://github.com/rust-lang/rust/issues/57571&gt;
-  = note: `#[deny(ill_formed_attribute_input)]` on by default
+  = note: `#[deny(ill_formed_attribute_input)]` (part of `#[deny(future_incompatible)]`) on by default
 
 </code></pre>
 <h3 id="explanation-11"><a class="header" href="#explanation-11">Explanation</a></h3>
@@ -865,7 +869,7 @@ erroneously allowed in an invalid location.</p>
 <h3 id="example-19"><a class="header" href="#example-19">Example</a></h3>
 <pre><code class="language-rust compile_fail">fn foo&lt;T=i32&gt;(t: T) {}</code></pre>
 <p>This will produce:</p>
-<pre><code class="language-text">error: defaults for type parameters are only allowed in `struct`, `enum`, `type`, or `trait` definitions
+<pre><code class="language-text">error: defaults for generic parameters are not allowed here
  --&gt; lint_example.rs:2:8
   |
 2 | fn foo&lt;T=i32&gt;(t: T) {}
@@ -873,7 +877,7 @@ erroneously allowed in an invalid location.</p>
   |
   = warning: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
   = note: for more information, see issue #36887 &lt;https://github.com/rust-lang/rust/issues/36887&gt;
-  = note: `#[deny(invalid_type_param_default)]` on by default
+  = note: `#[deny(invalid_type_param_default)]` (part of `#[deny(future_incompatible)]`) on by default
 
 </code></pre>
 <h3 id="explanation-19"><a class="header" href="#explanation-19">Explanation</a></h3>
@@ -881,11 +885,37 @@ erroneously allowed in an invalid location.</p>
 situations, but historically the compiler allowed them everywhere.
 This is a <a href="../index.html#future-incompatible-lints">future-incompatible</a> lint to transition this to a hard
 error in the future. See <a href="https://github.com/rust-lang/rust/issues/36887">issue #36887</a> for more details.</p>
+<h2 id="legacy-derive-helpers"><a class="header" href="#legacy-derive-helpers">legacy-derive-helpers</a></h2>
+<p>The <code>legacy_derive_helpers</code> lint detects derive helper attributes
+that are used before they are introduced.</p>
+<h3 id="example-20"><a class="header" href="#example-20">Example</a></h3>
+<pre><code class="language-rust ignore (needs extern crate)">#[serde(rename_all = "camelCase")]
+#[derive(Deserialize)]
+struct S { /* fields */ }</code></pre>
+<p>produces:</p>
+<pre><code class="language-text">warning: derive helper attribute is used before it is introduced
+  --&gt; $DIR/legacy-derive-helpers.rs:1:3
+   |
+ 1 | #[serde(rename_all = "camelCase")]
+   |   ^^^^^
+...
+ 2 | #[derive(Deserialize)]
+   |          ----------- the attribute is introduced here
+</code></pre>
+<h3 id="explanation-20"><a class="header" href="#explanation-20">Explanation</a></h3>
+<p>Attributes like this work for historical reasons, but attribute expansion works in
+left-to-right order in general, so, to resolve <code>#[serde]</code>, compiler has to try to "look
+into the future" at not yet expanded part of the item , but such attempts are not always
+reliable.</p>
+<p>To fix the warning place the helper attribute after its corresponding derive.</p>
+<pre><code class="language-rust ignore (needs extern crate)">#[derive(Deserialize)]
+#[serde(rename_all = "camelCase")]
+struct S { /* fields */ }</code></pre>
 <h2 id="let-underscore-lock"><a class="header" href="#let-underscore-lock">let-underscore-lock</a></h2>
 <p>The <code>let_underscore_lock</code> lint checks for statements which don't bind
 a mutex to anything, causing the lock to be released immediately instead
 of at end of scope, which is typically incorrect.</p>
-<h3 id="example-20"><a class="header" href="#example-20">Example</a></h3>
+<h3 id="example-21"><a class="header" href="#example-21">Example</a></h3>
 <pre><code class="language-rust compile_fail">use std::sync::{Arc, Mutex};
 use std::thread;
 let data = Arc::new(Mutex::new(0));
@@ -905,7 +935,7 @@ thread::spawn(move || {
 9 |     let _ = data.lock().unwrap();
   |         ^ this lock is not assigned to a binding and is immediately dropped
   |
-  = note: `#[deny(let_underscore_lock)]` on by default
+  = note: `#[deny(let_underscore_lock)]` (part of `#[deny(let_underscore)]`) on by default
 help: consider binding to an unused variable to avoid immediately dropping the value
   |
 9 |     let _unused = data.lock().unwrap();
@@ -917,7 +947,7 @@ help: consider immediately dropping the value
   |
 
 </code></pre>
-<h3 id="explanation-20"><a class="header" href="#explanation-20">Explanation</a></h3>
+<h3 id="explanation-21"><a class="header" href="#explanation-21">Explanation</a></h3>
 <p>Statements which assign an expression to an underscore causes the
 expression to immediately drop instead of extending the expression's
 lifetime to the end of the scope. This is usually unintended,
@@ -932,7 +962,7 @@ intent.</p>
 <p>The <code>long_running_const_eval</code> lint is emitted when const
 eval is running for a long time to ensure rustc terminates
 even if you accidentally wrote an infinite loop.</p>
-<h3 id="example-21"><a class="header" href="#example-21">Example</a></h3>
+<h3 id="example-22"><a class="header" href="#example-22">Example</a></h3>
 <pre><code class="language-rust compile_fail">const FOO: () = loop {};</code></pre>
 <p>This will produce:</p>
 <pre><code class="language-text">error: constant evaluation is taking a long time
@@ -951,7 +981,7 @@ help: the constant being evaluated
   = note: `#[deny(long_running_const_eval)]` on by default
 
 </code></pre>
-<h3 id="explanation-21"><a class="header" href="#explanation-21">Explanation</a></h3>
+<h3 id="explanation-22"><a class="header" href="#explanation-22">Explanation</a></h3>
 <p>Loops allow const evaluation to compute arbitrary code, but may also
 cause infinite loops or just very long running computations.
 Users can enable long running computations by allowing the lint
@@ -971,7 +1001,7 @@ out an update in your own time.</p>
 <p>The <code>macro_expanded_macro_exports_accessed_by_absolute_paths</code> lint
 detects macro-expanded <a href="https://doc.rust-lang.org/reference/macros-by-example.html#path-based-scope"><code>macro_export</code></a> macros from the current crate
 that cannot be referred to by absolute paths.</p>
-<h3 id="example-22"><a class="header" href="#example-22">Example</a></h3>
+<h3 id="example-23"><a class="header" href="#example-23">Example</a></h3>
 <pre><code class="language-rust compile_fail">macro_rules! define_exported {
     () =&gt; {
         #[macro_export]
@@ -1005,11 +1035,11 @@ note: the macro is defined here
 ...
 10 |   define_exported!();
    |   ------------------ in this macro invocation
-   = note: `#[deny(macro_expanded_macro_exports_accessed_by_absolute_paths)]` on by default
+   = note: `#[deny(macro_expanded_macro_exports_accessed_by_absolute_paths)]` (part of `#[deny(future_incompatible)]`) on by default
    = note: this error originates in the macro `define_exported` (in Nightly builds, run with -Z macro-backtrace for more info)
 
 </code></pre>
-<h3 id="explanation-22"><a class="header" href="#explanation-22">Explanation</a></h3>
+<h3 id="explanation-23"><a class="header" href="#explanation-23">Explanation</a></h3>
 <p>The intent is that all macros marked with the <code>#[macro_export]</code>
 attribute are made available in the root of the crate. However, when a
 <code>macro_rules!</code> definition is generated by another macro, the macro
@@ -1018,7 +1048,7 @@ expansion is unable to uphold this rule. This is a
 future. See <a href="https://github.com/rust-lang/rust/issues/53495">issue #53495</a> for more details.</p>
 <h2 id="mutable-transmutes"><a class="header" href="#mutable-transmutes">mutable-transmutes</a></h2>
 <p>The <code>mutable_transmutes</code> lint catches transmuting from <code>&amp;T</code> to <code>&amp;mut T</code> because it is <a href="https://doc.rust-lang.org/reference/behavior-considered-undefined.html">undefined behavior</a>.</p>
-<h3 id="example-23"><a class="header" href="#example-23">Example</a></h3>
+<h3 id="example-24"><a class="header" href="#example-24">Example</a></h3>
 <pre><code class="language-rust compile_fail">unsafe {
     let y = std::mem::transmute::&lt;&amp;i32, &amp;mut i32&gt;(&amp;5);
 }</code></pre>
@@ -1032,13 +1062,13 @@ future. See <a href="https://github.com/rust-lang/rust/issues/53495">issue #5349
   = note: `#[deny(mutable_transmutes)]` on by default
 
 </code></pre>
-<h3 id="explanation-23"><a class="header" href="#explanation-23">Explanation</a></h3>
+<h3 id="explanation-24"><a class="header" href="#explanation-24">Explanation</a></h3>
 <p>Certain assumptions are made about aliasing of data, and this transmute
 violates those assumptions. Consider using <a href="https://doc.rust-lang.org/std/cell/struct.UnsafeCell.html"><code>UnsafeCell</code></a> instead.</p>
 <h2 id="named-asm-labels"><a class="header" href="#named-asm-labels">named-asm-labels</a></h2>
 <p>The <code>named_asm_labels</code> lint detects the use of named labels in the
 inline <code>asm!</code> macro.</p>
-<h3 id="example-24"><a class="header" href="#example-24">Example</a></h3>
+<h3 id="example-25"><a class="header" href="#example-25">Example</a></h3>
 <pre><code class="language-rust compile_fail"><span class="boring">#![feature(asm_experimental_arch)]
 </span>use std::arch::asm;
 
@@ -1059,7 +1089,7 @@ fn main() {
   = note: `#[deny(named_asm_labels)]` on by default
 
 </code></pre>
-<h3 id="explanation-24"><a class="header" href="#explanation-24">Explanation</a></h3>
+<h3 id="explanation-25"><a class="header" href="#explanation-25">Explanation</a></h3>
 <p>LLVM is allowed to duplicate inline assembly blocks for any
 reason, for example when it is in a function that gets inlined. Because
 of this, GNU assembler <a href="https://sourceware.org/binutils/docs/as/Symbol-Names.html#Local-Labels">local labels</a> <em>must</em> be used instead of labels
@@ -1068,7 +1098,7 @@ with a name. Using named labels might cause assembler or linker errors.</p>
 <h2 id="no-mangle-const-items"><a class="header" href="#no-mangle-const-items">no-mangle-const-items</a></h2>
 <p>The <code>no_mangle_const_items</code> lint detects any <code>const</code> items with the
 <a href="https://doc.rust-lang.org/reference/abi.html#the-no_mangle-attribute"><code>no_mangle</code> attribute</a>.</p>
-<h3 id="example-25"><a class="header" href="#example-25">Example</a></h3>
+<h3 id="example-26"><a class="header" href="#example-26">Example</a></h3>
 <pre><code class="language-rust compile_fail edition2021">#[no_mangle]
 const FOO: i32 = 5;</code></pre>
 <p>This will produce:</p>
@@ -1083,12 +1113,44 @@ const FOO: i32 = 5;</code></pre>
   = note: `#[deny(no_mangle_const_items)]` on by default
 
 </code></pre>
-<h3 id="explanation-25"><a class="header" href="#explanation-25">Explanation</a></h3>
+<h3 id="explanation-26"><a class="header" href="#explanation-26">Explanation</a></h3>
 <p>Constants do not have their symbols exported, and therefore, this
 probably means you meant to use a <a href="https://doc.rust-lang.org/reference/items/static-items.html"><code>static</code></a>, not a <a href="https://doc.rust-lang.org/reference/items/constant-items.html"><code>const</code></a>.</p>
+<h2 id="out-of-scope-macro-calls"><a class="header" href="#out-of-scope-macro-calls">out-of-scope-macro-calls</a></h2>
+<p>The <code>out_of_scope_macro_calls</code> lint detects <code>macro_rules</code> called when they are not in scope,
+above their definition, which may happen in key-value attributes.</p>
+<h3 id="example-27"><a class="header" href="#example-27">Example</a></h3>
+<pre><code class="language-rust compile_fail">#![doc = in_root!()]
+
+macro_rules! in_root { () =&gt; { "" } }
+
+fn main() {}</code></pre>
+<p>This will produce:</p>
+<pre><code class="language-text">error: cannot find macro `in_root` in the current scope when looking from the crate root
+ --&gt; lint_example.rs:1:10
+  |
+1 | #![doc = in_root!()]
+  |          ^^^^^^^ not found from the crate root
+  |
+  = warning: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
+  = note: for more information, see issue #124535 &lt;https://github.com/rust-lang/rust/issues/124535&gt;
+  = help: import `macro_rules` with `use` to make it callable above its definition
+  = note: `#[deny(out_of_scope_macro_calls)]` (part of `#[deny(future_incompatible)]`) on by default
+
+</code></pre>
+<h3 id="explanation-27"><a class="header" href="#explanation-27">Explanation</a></h3>
+<p>The scope in which a <code>macro_rules</code> item is visible starts at that item and continues
+below it. This is more similar to <code>let</code> than to other items, which are in scope both above
+and below their definition.
+Due to a bug <code>macro_rules</code> were accidentally in scope inside some key-value attributes
+above their definition. The lint catches such cases.
+To address the issue turn the <code>macro_rules</code> into a regularly scoped item by importing it
+with <code>use</code>.</p>
+<p>This is a <a href="../index.html#future-incompatible-lints">future-incompatible</a> lint to transition this to a
+hard error in the future.</p>
 <h2 id="overflowing-literals"><a class="header" href="#overflowing-literals">overflowing-literals</a></h2>
 <p>The <code>overflowing_literals</code> lint detects literals out of range for their type.</p>
-<h3 id="example-26"><a class="header" href="#example-26">Example</a></h3>
+<h3 id="example-28"><a class="header" href="#example-28">Example</a></h3>
 <pre><code class="language-rust compile_fail">let x: u8 = 1000;</code></pre>
 <p>This will produce:</p>
 <pre><code class="language-text">error: literal out of range for `u8`
@@ -1101,14 +1163,14 @@ probably means you meant to use a <a href="https://doc.rust-lang.org/reference/i
   = note: `#[deny(overflowing_literals)]` on by default
 
 </code></pre>
-<h3 id="explanation-26"><a class="header" href="#explanation-26">Explanation</a></h3>
+<h3 id="explanation-28"><a class="header" href="#explanation-28">Explanation</a></h3>
 <p>It is usually a mistake to use a literal that overflows its type
 Change either the literal or its type such that the literal is
 within the range of its type.</p>
 <h2 id="patterns-in-fns-without-body"><a class="header" href="#patterns-in-fns-without-body">patterns-in-fns-without-body</a></h2>
 <p>The <code>patterns_in_fns_without_body</code> lint detects <code>mut</code> identifier
 patterns as a parameter in functions without a body.</p>
-<h3 id="example-27"><a class="header" href="#example-27">Example</a></h3>
+<h3 id="example-29"><a class="header" href="#example-29">Example</a></h3>
 <pre><code class="language-rust compile_fail">trait Trait {
     fn foo(mut arg: u8);
 }</code></pre>
@@ -1121,10 +1183,10 @@ patterns as a parameter in functions without a body.</p>
   |
   = warning: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
   = note: for more information, see issue #35203 &lt;https://github.com/rust-lang/rust/issues/35203&gt;
-  = note: `#[deny(patterns_in_fns_without_body)]` on by default
+  = note: `#[deny(patterns_in_fns_without_body)]` (part of `#[deny(future_incompatible)]`) on by default
 
 </code></pre>
-<h3 id="explanation-27"><a class="header" href="#explanation-27">Explanation</a></h3>
+<h3 id="explanation-29"><a class="header" href="#explanation-29">Explanation</a></h3>
 <p>To fix this, remove <code>mut</code> from the parameter in the trait definition;
 it can be used in the implementation. That is, the following is OK:</p>
 <pre><code class="language-rust">trait Trait {
@@ -1144,10 +1206,36 @@ of the compiler erroneously allowed <a href="https://doc.rust-lang.org/reference
 <code>mut</code> keyword, but this was not intended to be allowed. This is a
 <a href="../index.html#future-incompatible-lints">future-incompatible</a> lint to transition this to a hard error in the
 future. See <a href="https://github.com/rust-lang/rust/issues/35203">issue #35203</a> for more details.</p>
+<h2 id="private-macro-use"><a class="header" href="#private-macro-use">private-macro-use</a></h2>
+<p>The <code>private_macro_use</code> lint detects private macros that are imported
+with <code>#[macro_use]</code>.</p>
+<h3 id="example-30"><a class="header" href="#example-30">Example</a></h3>
+<pre><code class="language-rust ignore (needs extern crate)">// extern_macro.rs
+macro_rules! foo_ { () =&gt; {}; }
+use foo_ as foo;
+
+// code.rs
+
+#![deny(private_macro_use)]
+
+#[macro_use]
+extern crate extern_macro;
+
+fn main() {
+    foo!();
+}</code></pre>
+<p>This will produce:</p>
+<pre><code class="language-text">error: cannot find macro `foo` in this scope
+</code></pre>
+<h3 id="explanation-30"><a class="header" href="#explanation-30">Explanation</a></h3>
+<p>This lint arises from overlooking visibility checks for macros
+in an external crate.</p>
+<p>This is a <a href="../index.html#future-incompatible-lints">future-incompatible</a> lint to transition this to a
+hard error in the future.</p>
 <h2 id="proc-macro-derive-resolution-fallback"><a class="header" href="#proc-macro-derive-resolution-fallback">proc-macro-derive-resolution-fallback</a></h2>
 <p>The <code>proc_macro_derive_resolution_fallback</code> lint detects proc macro
 derives using inaccessible names from parent modules.</p>
-<h3 id="example-28"><a class="header" href="#example-28">Example</a></h3>
+<h3 id="example-31"><a class="header" href="#example-31">Example</a></h3>
 <pre><code class="language-rust ignore (proc-macro)">// foo.rs
 #![crate_type = "proc-macro"]
 
@@ -1181,7 +1269,7 @@ fn main() {}</code></pre>
   = warning: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
   = note: for more information, see issue #50504 &lt;https://github.com/rust-lang/rust/issues/50504&gt;
 </code></pre>
-<h3 id="explanation-28"><a class="header" href="#explanation-28">Explanation</a></h3>
+<h3 id="explanation-31"><a class="header" href="#explanation-31">Explanation</a></h3>
 <p>If a proc-macro generates a module, the compiler unintentionally
 allowed items in that module to refer to items in the crate root
 without importing them. This is a <a href="../index.html#future-incompatible-lints">future-incompatible</a> lint to
@@ -1190,7 +1278,7 @@ more details.</p>
 <h2 id="pub-use-of-private-extern-crate"><a class="header" href="#pub-use-of-private-extern-crate">pub-use-of-private-extern-crate</a></h2>
 <p>The <code>pub_use_of_private_extern_crate</code> lint detects a specific
 situation of re-exporting a private <code>extern crate</code>.</p>
-<h3 id="example-29"><a class="header" href="#example-29">Example</a></h3>
+<h3 id="example-32"><a class="header" href="#example-32">Example</a></h3>
 <pre><code class="language-rust compile_fail">extern crate core;
 pub use core as reexported_core;</code></pre>
 <p>This will produce:</p>
@@ -1202,27 +1290,72 @@ pub use core as reexported_core;</code></pre>
   |
   = warning: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
   = note: for more information, see issue #127909 &lt;https://github.com/rust-lang/rust/issues/127909&gt;
-  = note: `#[deny(pub_use_of_private_extern_crate)]` on by default
+  = note: `#[deny(pub_use_of_private_extern_crate)]` (part of `#[deny(future_incompatible)]`) on by default
 help: consider making the `extern crate` item publicly accessible
   |
 2 | pub extern crate core;
   | +++
 
 </code></pre>
-<h3 id="explanation-29"><a class="header" href="#explanation-29">Explanation</a></h3>
+<h3 id="explanation-32"><a class="header" href="#explanation-32">Explanation</a></h3>
 <p>A public <code>use</code> declaration should not be used to publically re-export a
 private <code>extern crate</code>. <code>pub extern crate</code> should be used instead.</p>
 <p>This was historically allowed, but is not the intended behavior
 according to the visibility rules. This is a <a href="../index.html#future-incompatible-lints">future-incompatible</a>
 lint to transition this to a hard error in the future. See <a href="https://github.com/rust-lang/rust/issues/127909">issue
 #127909</a> for more details.</p>
+<h2 id="semicolon-in-expressions-from-macros"><a class="header" href="#semicolon-in-expressions-from-macros">semicolon-in-expressions-from-macros</a></h2>
+<p>The <code>semicolon_in_expressions_from_macros</code> lint detects trailing semicolons
+in macro bodies when the macro is invoked in expression position.
+This was previous accepted, but is being phased out.</p>
+<h3 id="example-33"><a class="header" href="#example-33">Example</a></h3>
+<pre><code class="language-rust compile_fail">#![deny(semicolon_in_expressions_from_macros)]
+macro_rules! foo {
+    () =&gt; { true; }
+}
+
+fn main() {
+    let val = match true {
+        true =&gt; false,
+        _ =&gt; foo!()
+    };
+}</code></pre>
+<p>This will produce:</p>
+<pre><code class="language-text">error: trailing semicolon in macro used in expression position
+ --&gt; lint_example.rs:3:17
+  |
+3 |     () =&gt; { true; }
+  |                 ^
+...
+9 |         _ =&gt; foo!()
+  |              ------ in this macro invocation
+  |
+  = warning: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
+  = note: for more information, see issue #79813 &lt;https://github.com/rust-lang/rust/issues/79813&gt;
+note: the lint level is defined here
+ --&gt; lint_example.rs:1:9
+  |
+1 | #![deny(semicolon_in_expressions_from_macros)]
+  |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  = note: this error originates in the macro `foo` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+</code></pre>
+<h3 id="explanation-33"><a class="header" href="#explanation-33">Explanation</a></h3>
+<p>Previous, Rust ignored trailing semicolon in a macro
+body when a macro was invoked in expression position.
+However, this makes the treatment of semicolons in the language
+inconsistent, and could lead to unexpected runtime behavior
+in some circumstances (e.g. if the macro author expects
+a value to be dropped).</p>
+<p>This is a <a href="../index.html#future-incompatible-lints">future-incompatible</a> lint to transition this
+to a hard error in the future. See <a href="https://github.com/rust-lang/rust/issues/79813">issue #79813</a> for more details.</p>
 <h2 id="soft-unstable"><a class="header" href="#soft-unstable">soft-unstable</a></h2>
 <p>The <code>soft_unstable</code> lint detects unstable features that were unintentionally allowed on
 stable. This is a <a href="../index.html#future-incompatible-lints">future-incompatible</a> lint to transition this to a hard error in the
 future. See <a href="https://github.com/rust-lang/rust/issues/64266">issue #64266</a> for more details.</p>
 <h2 id="test-unstable-lint"><a class="header" href="#test-unstable-lint">test-unstable-lint</a></h2>
 <p>The <code>test_unstable_lint</code> lint tests unstable lints and is perma-unstable.</p>
-<h3 id="example-30"><a class="header" href="#example-30">Example</a></h3>
+<h3 id="example-34"><a class="header" href="#example-34">Example</a></h3>
 <pre><code class="language-rust">// This lint is intentionally used to test the compiler's behavior
 // when an unstable lint is enabled without the corresponding feature gate.
 #![allow(test_unstable_lint)]</code></pre>
@@ -1235,11 +1368,11 @@ future. See <a href="https://github.com/rust-lang/rust/issues/64266">issue #6426
   |
   = note: the `test_unstable_lint` lint is unstable
   = help: add `#![feature(test_unstable_lint)]` to the crate attributes to enable
-  = note: this compiler was built on 2025-09-14; consider upgrading it if it is out of date
+  = note: this compiler was built on 2025-11-07; consider upgrading it if it is out of date
   = note: `#[warn(unknown_lints)]` on by default
 
 </code></pre>
-<h3 id="explanation-30"><a class="header" href="#explanation-30">Explanation</a></h3>
+<h3 id="explanation-34"><a class="header" href="#explanation-34">Explanation</a></h3>
 <p>In order to test the behavior of unstable lints, a permanently-unstable
 lint is required. This lint can be used to trigger warnings and errors
 from the compiler related to unstable lints.</p>
@@ -1247,7 +1380,7 @@ from the compiler related to unstable lints.</p>
 <p>The <code>text_direction_codepoint_in_comment</code> lint detects Unicode codepoints in comments that
 change the visual representation of text on screen in a way that does not correspond to
 their on memory representation.</p>
-<h3 id="example-31"><a class="header" href="#example-31">Example</a></h3>
+<h3 id="example-35"><a class="header" href="#example-35">Example</a></h3>
 <pre><code class="language-rust compile_fail">#![deny(text_direction_codepoint_in_comment)]
 fn main() {
     println!("{:?}"); // '‮');
@@ -1271,7 +1404,7 @@ note: the lint level is defined here
   = help: if their presence wasn't intentional, you can remove them
 
 </code></pre>
-<h3 id="explanation-31"><a class="header" href="#explanation-31">Explanation</a></h3>
+<h3 id="explanation-35"><a class="header" href="#explanation-35">Explanation</a></h3>
 <p>Unicode allows changing the visual flow of text on screen in order to support scripts that
 are written right-to-left, but a specially crafted comment can make code that will be
 compiled appear to be part of a comment, depending on the software used to read the code.
@@ -1281,7 +1414,7 @@ their use.</p>
 <p>The <code>text_direction_codepoint_in_literal</code> lint detects Unicode codepoints that change the
 visual representation of text on screen in a way that does not correspond to their on
 memory representation.</p>
-<h3 id="explanation-32"><a class="header" href="#explanation-32">Explanation</a></h3>
+<h3 id="explanation-36"><a class="header" href="#explanation-36">Explanation</a></h3>
 <p>The unicode characters <code>\u{202A}</code>, <code>\u{202B}</code>, <code>\u{202D}</code>, <code>\u{202E}</code>, <code>\u{2066}</code>,
 <code>\u{2067}</code>, <code>\u{2068}</code>, <code>\u{202C}</code> and <code>\u{2069}</code> make the flow of text on screen change
 its direction on software that supports these codepoints. This makes the text "abc" display
@@ -1289,7 +1422,7 @@ as "cba" on screen. By leveraging software that supports these, people can write
 crafted literals that make the surrounding code seem like it's performing one action, when
 in reality it is performing another. Because of this, we proactively lint against their
 presence to avoid surprises.</p>
-<h3 id="example-32"><a class="header" href="#example-32">Example</a></h3>
+<h3 id="example-36"><a class="header" href="#example-36">Example</a></h3>
 <pre><code class="language-rust compile_fail">#![deny(text_direction_codepoint_in_literal)]
 fn main() {
     println!("{:?}", '‮');
@@ -1321,7 +1454,7 @@ help: if you want to keep them but make them visible in your source code, you ca
 <h2 id="unconditional-panic"><a class="header" href="#unconditional-panic">unconditional-panic</a></h2>
 <p>The <code>unconditional_panic</code> lint detects an operation that will cause a
 panic at runtime.</p>
-<h3 id="example-33"><a class="header" href="#example-33">Example</a></h3>
+<h3 id="example-37"><a class="header" href="#example-37">Example</a></h3>
 <pre><code class="language-rust compile_fail"><span class="boring">#![allow(unused)]
 </span>let x = 1 / 0;</code></pre>
 <p>This will produce:</p>
@@ -1334,7 +1467,7 @@ panic at runtime.</p>
   = note: `#[deny(unconditional_panic)]` on by default
 
 </code></pre>
-<h3 id="explanation-33"><a class="header" href="#explanation-33">Explanation</a></h3>
+<h3 id="explanation-37"><a class="header" href="#explanation-37">Explanation</a></h3>
 <p>This lint detects code that is very likely incorrect because it will
 always panic, such as division by zero and out-of-bounds array
 accesses. Consider adjusting your code if this is a bug, or using the
@@ -1342,7 +1475,7 @@ accesses. Consider adjusting your code if this is a bug, or using the
 <h2 id="undropped-manually-drops"><a class="header" href="#undropped-manually-drops">undropped-manually-drops</a></h2>
 <p>The <code>undropped_manually_drops</code> lint check for calls to <code>std::mem::drop</code> with
 a value of <code>std::mem::ManuallyDrop</code> which doesn't drop.</p>
-<h3 id="example-34"><a class="header" href="#example-34">Example</a></h3>
+<h3 id="example-38"><a class="header" href="#example-38">Example</a></h3>
 <pre><code class="language-rust compile_fail">struct S;
 drop(std::mem::ManuallyDrop::new(S));</code></pre>
 <p>This will produce:</p>
@@ -1361,13 +1494,13 @@ help: use `std::mem::ManuallyDrop::into_inner` to get the inner value
   |      +++++++++++++++++++++++++++++++++++                              +
 
 </code></pre>
-<h3 id="explanation-34"><a class="header" href="#explanation-34">Explanation</a></h3>
+<h3 id="explanation-38"><a class="header" href="#explanation-38">Explanation</a></h3>
 <p><code>ManuallyDrop</code> does not drop it's inner value so calling <code>std::mem::drop</code> will
 not drop the inner value of the <code>ManuallyDrop</code> either.</p>
 <h2 id="unknown-crate-types"><a class="header" href="#unknown-crate-types">unknown-crate-types</a></h2>
 <p>The <code>unknown_crate_types</code> lint detects an unknown crate type found in
 a <a href="https://doc.rust-lang.org/reference/linkage.html"><code>crate_type</code> attribute</a>.</p>
-<h3 id="example-35"><a class="header" href="#example-35">Example</a></h3>
+<h3 id="example-39"><a class="header" href="#example-39">Example</a></h3>
 <pre><code class="language-rust compile_fail">#![crate_type="lol"]
 fn main() {}</code></pre>
 <p>This will produce:</p>
@@ -1380,12 +1513,12 @@ fn main() {}</code></pre>
   = note: `#[deny(unknown_crate_types)]` on by default
 
 </code></pre>
-<h3 id="explanation-35"><a class="header" href="#explanation-35">Explanation</a></h3>
+<h3 id="explanation-39"><a class="header" href="#explanation-39">Explanation</a></h3>
 <p>An unknown value give to the <code>crate_type</code> attribute is almost
 certainly a mistake.</p>
 <h2 id="useless-deprecated"><a class="header" href="#useless-deprecated">useless-deprecated</a></h2>
 <p>The <code>useless_deprecated</code> lint detects deprecation attributes with no effect.</p>
-<h3 id="example-36"><a class="header" href="#example-36">Example</a></h3>
+<h3 id="example-40"><a class="header" href="#example-40">Example</a></h3>
 <pre><code class="language-rust compile_fail">struct X;
 
 #[deprecated = "message"]
@@ -1395,16 +1528,18 @@ impl Default for X {
     }
 }</code></pre>
 <p>This will produce:</p>
-<pre><code class="language-text">error: this `#[deprecated]` annotation has no effect
+<pre><code class="language-text">error: `#[deprecated]` attribute cannot be used on trait impl blocks
  --&gt; lint_example.rs:4:1
   |
 4 | #[deprecated = "message"]
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^ help: remove the unnecessary deprecation attribute
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^
   |
+  = warning: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
+  = help: `#[deprecated]` can be applied to functions, data types, modules, unions, constants, statics, macro defs, type aliases, use statements, foreign statics, struct fields, traits, associated types, associated consts, enum variants, inherent impl blocks, and crates
   = note: `#[deny(useless_deprecated)]` on by default
 
 </code></pre>
-<h3 id="explanation-36"><a class="header" href="#explanation-36">Explanation</a></h3>
+<h3 id="explanation-40"><a class="header" href="#explanation-40">Explanation</a></h3>
 <p>Deprecation attributes have no effect on trait implementations.</p>
 <script>
 document.addEventListener("DOMContentLoaded", (event) => {

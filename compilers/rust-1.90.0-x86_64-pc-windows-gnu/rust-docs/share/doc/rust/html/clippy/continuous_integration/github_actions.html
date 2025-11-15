@@ -38,7 +38,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-358b6eba.js";
+            window.path_to_searchindex_js = "../searchindex-72365250.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-eeee08c3.js"></script>
@@ -197,7 +197,7 @@ jobs:
   clippy_check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Run Clippy
         run: cargo clippy --all-targets --all-features
 </code></pre>

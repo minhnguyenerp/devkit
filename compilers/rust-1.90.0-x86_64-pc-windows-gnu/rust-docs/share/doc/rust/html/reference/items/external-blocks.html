@@ -37,7 +37,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-3109fce4.js";
+            window.path_to_searchindex_js = "../searchindex-5e2787cc.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-4adb5027.js"></script>
@@ -388,9 +388,9 @@ akin to unchecked imports.</p>
 </div>
 <p>Two kinds of item <em>declarations</em> are allowed in external blocks: <a href="functions.html">functions</a> and
 <a href="static-items.html">statics</a>.</p>
-<div class="rule" id="r-items.extern.fn-safety"><a class="rule-link" href="#r-items.extern.fn-safety" title="items.extern.fn-safety"><span>[items<wbr>.extern<wbr>.fn-safety]</span/></a>
+<div class="rule" id="r-items.extern.safety"><a class="rule-link" href="#r-items.extern.safety" title="items.extern.safety"><span>[items<wbr>.extern<wbr>.safety]</span/></a>
 </div>
-<p>Calling functions or accessing statics that are declared in external blocks is only allowed in an <code>unsafe</code> context.</p>
+<p>Calling unsafe functions or accessing unsafe statics that are declared in external blocks is only allowed in an <a href="../unsafe-keyword.html"><code>unsafe</code> context</a>.</p>
 <div class="rule" id="r-items.extern.namespace"><a class="rule-link" href="#r-items.extern.namespace" title="items.extern.namespace"><span>[items<wbr>.extern<wbr>.namespace]</span/></a>
 </div>
 <p>The external block defines its functions and statics in the <a href="../names/namespaces.html">value namespace</a> of the module or block where it is located.</p>
@@ -785,27 +785,49 @@ how they are named in the generated import library.</p>
 </div>
 <p>The <code>import_name_type</code> key is only supported on x86 Windows. Using it when
 targeting other platforms will result in a compiler error.</p>
+<!-- template:attributes -->
 <div class="rule" id="r-items.extern.attributes.link_name"><a class="rule-link" href="#r-items.extern.attributes.link_name" title="items.extern.attributes.link_name"><span>[items<wbr>.extern<wbr>.attributes<wbr>.link_name]</span/></a>
 </div>
 <h3 id="the-link_name-attribute"><a class="header" href="#the-link_name-attribute">The <code>link_name</code> attribute</a></h3>
 <div class="rule" id="r-items.extern.attributes.link_name.intro"><a class="rule-link" href="#r-items.extern.attributes.link_name.intro" title="items.extern.attributes.link_name.intro"><span>[items<wbr>.extern<wbr>.attributes<wbr>.link_name<wbr>.intro]</span/></a>
 </div>
-<p>The <em><code>link_name</code> attribute</em> may be specified on declarations inside an <code>extern</code>
-block to indicate the symbol to import for the given function or static.</p>
-<div class="rule" id="r-items.extern.attributes.link_name.syntax"><a class="rule-link" href="#r-items.extern.attributes.link_name.syntax" title="items.extern.attributes.link_name.syntax"><span>[items<wbr>.extern<wbr>.attributes<wbr>.link_name<wbr>.syntax]</span/></a>
-</div>
-<p>It uses the <a href="../attributes.html#grammar-MetaNameValueStr">MetaNameValueStr</a> syntax to specify the name of the symbol.</p>
+<p>The <em><code>link_name</code> <a href="../attributes.html">attribute</a></em> may be applied to declarations inside an <code>extern</code> block to specify the symbol to import for the given function or static.</p>
+<div class="alert alert-example">
+<blockquote>
+<p class="alert-title"><svg viewBox="0 0 16 16" width="18" height="18"><path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Zm4.879-2.773 4.264 2.559a.25.25 0 0 1 0 .428l-4.264 2.559A.25.25 0 0 1 6 10.559V5.442a.25.25 0 0 1 .379-.215Z"></path></svg>Example</p>
 <pre><pre class="playground"><code class="language-rust edition2024"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>unsafe extern {
+</span>unsafe extern "C" {
     #[link_name = "actual_symbol_name"]
     safe fn name_in_rust();
 }
 <span class="boring">}</span></code></pre></pre>
-<div class="rule" id="r-items.extern.attributes.link_name.exclusive"><a class="rule-link" href="#r-items.extern.attributes.link_name.exclusive" title="items.extern.attributes.link_name.exclusive"><span>[items<wbr>.extern<wbr>.attributes<wbr>.link_name<wbr>.exclusive]</span/></a>
+</blockquote>
 </div>
-<p>Using this attribute with the <code>link_ordinal</code> attribute will result in a
-compiler error.</p>
+<div class="rule" id="r-items.extern.attributes.link_name.syntax"><a class="rule-link" href="#r-items.extern.attributes.link_name.syntax" title="items.extern.attributes.link_name.syntax"><span>[items<wbr>.extern<wbr>.attributes<wbr>.link_name<wbr>.syntax]</span/></a>
+</div>
+<p>The <code>link_name</code> attribute uses the <a href="../attributes.html#grammar-MetaNameValueStr">MetaNameValueStr</a> syntax.</p>
+<div class="rule" id="r-items.extern.attributes.link_name.allowed-positions"><a class="rule-link" href="#r-items.extern.attributes.link_name.allowed-positions" title="items.extern.attributes.link_name.allowed-positions"><span>[items<wbr>.extern<wbr>.attributes<wbr>.link_name<wbr>.allowed-positions]</span/></a>
+</div>
+<p>The <code>link_name</code> attribute may only be applied to a function or static item in an <code>extern</code> block.</p>
+<div class="alert alert-note">
+<blockquote>
+<p class="alert-title"><svg viewBox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
+<p><code>rustc</code> ignores use in other positions but lints against it. This may become an error in the future.</p>
+</blockquote>
+</div>
+<div class="rule" id="r-items.extern.attributes.link_name.duplicates"><a class="rule-link" href="#r-items.extern.attributes.link_name.duplicates" title="items.extern.attributes.link_name.duplicates"><span>[items<wbr>.extern<wbr>.attributes<wbr>.link_name<wbr>.duplicates]</span/></a>
+</div>
+<p>Only the last use of <code>link_name</code> on an item has effect.</p>
+<div class="alert alert-note">
+<blockquote>
+<p class="alert-title"><svg viewBox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
+<p><code>rustc</code> lints against any use preceding the last. This may become an error in the future.</p>
+</blockquote>
+</div>
+<div class="rule" id="r-items.extern.attributes.link_name.link_ordinal"><a class="rule-link" href="#r-items.extern.attributes.link_name.link_ordinal" title="items.extern.attributes.link_name.link_ordinal"><span>[items<wbr>.extern<wbr>.attributes<wbr>.link_name<wbr>.link_ordinal]</span/></a>
+</div>
+<p>The <code>link_name</code> attribute may not be used with the <a href="external-blocks.html#r-items.extern.attributes.link_ordinal"><code>link_ordinal</code></a> attribute.</p>
 <div class="rule" id="r-items.extern.attributes.link_ordinal"><a class="rule-link" href="#r-items.extern.attributes.link_ordinal" title="items.extern.attributes.link_ordinal"><span>[items<wbr>.extern<wbr>.attributes<wbr>.link_ordinal]</span/></a>
 </div>
 <h3 id="the-link_ordinal-attribute"><a class="header" href="#the-link_ordinal-attribute">The <code>link_ordinal</code> attribute</a></h3>
@@ -895,7 +917,7 @@ restrictions as <a href="functions.html#attributes-on-function-parameters">regul
         <script src="../book-9576a2db.js"></script>
 
         <!-- Custom JS scripts -->
-        <script src="../theme/reference-cfed9ca5.js"></script>
+        <script src="../theme/reference-da60281b.js"></script>
 
 
 

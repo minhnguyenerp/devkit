@@ -41,7 +41,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-ee4246b4.js";
+            window.path_to_searchindex_js = "../searchindex-adf886c2.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-a1ce3eb6.js"></script>
@@ -217,7 +217,7 @@ fn main() {
     // すなわち、`a`の指すメモリ上の番地が`b`にコピーされるため
     // いずれもヒープ上の同じ値を指すポインタとなります。
     // しかし所有権は`b`にあります。
-    
+
     // エラー！`a`は所有権を持たないため、ヒープ上のデータにアクセスできません。
     //println!("a contains: {}", a);
     // TODO ^ 試しにここをアンコメントしてみましょう。

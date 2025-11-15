@@ -41,7 +41,7 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-ee4246b4.js";
+            window.path_to_searchindex_js = "../../searchindex-adf886c2.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../toc-a1ce3eb6.js"></script>
@@ -220,16 +220,16 @@ fn main() {
 
     // `immutabook`のミュータブルなコピーを作成し、`mutabook`と名付けます。
     let mut mutabook = immutabook;
-    
+
     // イミュータブルなオブジェクトをイミュータブルに借用します。
     borrow_book(&amp;immutabook);
 
     // ミュータブルなオブジェクトをイミュータブルに借用します。
     borrow_book(&amp;mutabook);
-    
+
     // ミュータブルなオブジェクトをミュータブルに借用します。
     new_edition(&amp;mut mutabook);
-    
+
     // エラー！イミュータブルなオブジェクトをミュータブルに借用できません。
     new_edition(&amp;mut immutabook);
     // FIXME ^ この行をコメントアウトしましょう

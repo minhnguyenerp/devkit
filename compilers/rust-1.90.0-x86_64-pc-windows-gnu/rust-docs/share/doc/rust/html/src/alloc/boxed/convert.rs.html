@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `library\alloc\src\boxed\convert.rs`."><title>convert.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../../static.files/rustdoc-aa0817cf.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="alloc" data-themes="" data-resource-suffix="1.90.0" data-rustdoc-version="1.90.0 (1159e78c4 2025-09-14)" data-channel="1.90.0" data-search-js="search-fa3e91e5.js" data-settings-js="settings-5514c975.js" ><script src="../../../static.files/storage-68b7e25d.js"></script><script defer src="../../../static.files/src-script-813739b1.js"></script><script defer src="../../../src-files1.90.0.js"></script><script defer src="../../../static.files/main-eebb9057.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-32bb7600.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-6580c154.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-044be391.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">alloc\boxed/</div>convert.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use </span>core::any::Any;
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `library\alloc\src\boxed\convert.rs`."><title>convert.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../../static.files/rustdoc-e56847b5.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="alloc" data-themes="" data-resource-suffix="1.91.1" data-rustdoc-version="1.91.1 (ed61e7d7e 2025-11-07)" data-channel="1.91.1" data-search-js="search-e256b49e.js" data-stringdex-js="stringdex-c3e638e9.js" data-settings-js="settings-c38705f0.js" ><script src="../../../static.files/storage-e2aeef58.js"></script><script defer src="../../../static.files/src-script-813739b1.js"></script><script defer src="../../../src-files1.91.1.js"></script><script defer src="../../../static.files/main-6dc2a7f3.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-263c88ec.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-eab170b8.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-044be391.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">alloc\boxed/</div>convert.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use </span>core::any::Any;
 <a href=#2 id=2 data-nosnippet>2</a><span class="kw">use </span>core::error::Error;
 <a href=#3 id=3 data-nosnippet>3</a><span class="kw">use </span>core::mem;
 <a href=#4 id=4 data-nosnippet>4</a><span class="kw">use </span>core::pin::Pin;
@@ -608,177 +608,172 @@
 <a href=#608 id=608 data-nosnippet>608</a>    </span><span class="kw">fn </span>from(err: String) -&gt; Box&lt;<span class="kw">dyn </span>Error + Send + Sync + <span class="lifetime">'a</span>&gt; {
 <a href=#609 id=609 data-nosnippet>609</a>        <span class="kw">struct </span>StringError(String);
 <a href=#610 id=610 data-nosnippet>610</a>
-<a href=#611 id=611 data-nosnippet>611</a>        <span class="kw">impl </span>Error <span class="kw">for </span>StringError {
-<a href=#612 id=612 data-nosnippet>612</a>            <span class="attr">#[allow(deprecated)]
-<a href=#613 id=613 data-nosnippet>613</a>            </span><span class="kw">fn </span>description(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>str {
-<a href=#614 id=614 data-nosnippet>614</a>                <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0
-<a href=#615 id=615 data-nosnippet>615</a>            </span>}
-<a href=#616 id=616 data-nosnippet>616</a>        }
-<a href=#617 id=617 data-nosnippet>617</a>
-<a href=#618 id=618 data-nosnippet>618</a>        <span class="kw">impl </span>fmt::Display <span class="kw">for </span>StringError {
-<a href=#619 id=619 data-nosnippet>619</a>            <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
-<a href=#620 id=620 data-nosnippet>620</a>                fmt::Display::fmt(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>, f)
-<a href=#621 id=621 data-nosnippet>621</a>            }
-<a href=#622 id=622 data-nosnippet>622</a>        }
-<a href=#623 id=623 data-nosnippet>623</a>
-<a href=#624 id=624 data-nosnippet>624</a>        <span class="comment">// Purposefully skip printing "StringError(..)"
-<a href=#625 id=625 data-nosnippet>625</a>        </span><span class="kw">impl </span>fmt::Debug <span class="kw">for </span>StringError {
-<a href=#626 id=626 data-nosnippet>626</a>            <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
-<a href=#627 id=627 data-nosnippet>627</a>                fmt::Debug::fmt(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>, f)
-<a href=#628 id=628 data-nosnippet>628</a>            }
-<a href=#629 id=629 data-nosnippet>629</a>        }
-<a href=#630 id=630 data-nosnippet>630</a>
-<a href=#631 id=631 data-nosnippet>631</a>        Box::new(StringError(err))
-<a href=#632 id=632 data-nosnippet>632</a>    }
-<a href=#633 id=633 data-nosnippet>633</a>}
-<a href=#634 id=634 data-nosnippet>634</a>
-<a href=#635 id=635 data-nosnippet>635</a><span class="attr">#[cfg(not(no_global_oom_handling))]
-<a href=#636 id=636 data-nosnippet>636</a>#[stable(feature = <span class="string">"string_box_error"</span>, since = <span class="string">"1.6.0"</span>)]
-<a href=#637 id=637 data-nosnippet>637</a></span><span class="kw">impl</span>&lt;<span class="lifetime">'a</span>&gt; From&lt;String&gt; <span class="kw">for </span>Box&lt;<span class="kw">dyn </span>Error + <span class="lifetime">'a</span>&gt; {
-<a href=#638 id=638 data-nosnippet>638</a>    <span class="doccomment">/// Converts a [`String`] into a box of dyn [`Error`].
+<a href=#611 id=611 data-nosnippet>611</a>        <span class="kw">impl </span>Error <span class="kw">for </span>StringError {}
+<a href=#612 id=612 data-nosnippet>612</a>
+<a href=#613 id=613 data-nosnippet>613</a>        <span class="kw">impl </span>fmt::Display <span class="kw">for </span>StringError {
+<a href=#614 id=614 data-nosnippet>614</a>            <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
+<a href=#615 id=615 data-nosnippet>615</a>                fmt::Display::fmt(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>, f)
+<a href=#616 id=616 data-nosnippet>616</a>            }
+<a href=#617 id=617 data-nosnippet>617</a>        }
+<a href=#618 id=618 data-nosnippet>618</a>
+<a href=#619 id=619 data-nosnippet>619</a>        <span class="comment">// Purposefully skip printing "StringError(..)"
+<a href=#620 id=620 data-nosnippet>620</a>        </span><span class="kw">impl </span>fmt::Debug <span class="kw">for </span>StringError {
+<a href=#621 id=621 data-nosnippet>621</a>            <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
+<a href=#622 id=622 data-nosnippet>622</a>                fmt::Debug::fmt(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>, f)
+<a href=#623 id=623 data-nosnippet>623</a>            }
+<a href=#624 id=624 data-nosnippet>624</a>        }
+<a href=#625 id=625 data-nosnippet>625</a>
+<a href=#626 id=626 data-nosnippet>626</a>        Box::new(StringError(err))
+<a href=#627 id=627 data-nosnippet>627</a>    }
+<a href=#628 id=628 data-nosnippet>628</a>}
+<a href=#629 id=629 data-nosnippet>629</a>
+<a href=#630 id=630 data-nosnippet>630</a><span class="attr">#[cfg(not(no_global_oom_handling))]
+<a href=#631 id=631 data-nosnippet>631</a>#[stable(feature = <span class="string">"string_box_error"</span>, since = <span class="string">"1.6.0"</span>)]
+<a href=#632 id=632 data-nosnippet>632</a></span><span class="kw">impl</span>&lt;<span class="lifetime">'a</span>&gt; From&lt;String&gt; <span class="kw">for </span>Box&lt;<span class="kw">dyn </span>Error + <span class="lifetime">'a</span>&gt; {
+<a href=#633 id=633 data-nosnippet>633</a>    <span class="doccomment">/// Converts a [`String`] into a box of dyn [`Error`].
+<a href=#634 id=634 data-nosnippet>634</a>    ///
+<a href=#635 id=635 data-nosnippet>635</a>    /// # Examples
+<a href=#636 id=636 data-nosnippet>636</a>    ///
+<a href=#637 id=637 data-nosnippet>637</a>    /// ```
+<a href=#638 id=638 data-nosnippet>638</a>    /// use std::error::Error;
 <a href=#639 id=639 data-nosnippet>639</a>    ///
-<a href=#640 id=640 data-nosnippet>640</a>    /// # Examples
-<a href=#641 id=641 data-nosnippet>641</a>    ///
-<a href=#642 id=642 data-nosnippet>642</a>    /// ```
-<a href=#643 id=643 data-nosnippet>643</a>    /// use std::error::Error;
-<a href=#644 id=644 data-nosnippet>644</a>    ///
-<a href=#645 id=645 data-nosnippet>645</a>    /// let a_string_error = "a string error".to_string();
-<a href=#646 id=646 data-nosnippet>646</a>    /// let a_boxed_error = Box::&lt;dyn Error&gt;::from(a_string_error);
-<a href=#647 id=647 data-nosnippet>647</a>    /// assert!(size_of::&lt;Box&lt;dyn Error&gt;&gt;() == size_of_val(&amp;a_boxed_error))
-<a href=#648 id=648 data-nosnippet>648</a>    /// ```
-<a href=#649 id=649 data-nosnippet>649</a>    </span><span class="kw">fn </span>from(str_err: String) -&gt; Box&lt;<span class="kw">dyn </span>Error + <span class="lifetime">'a</span>&gt; {
-<a href=#650 id=650 data-nosnippet>650</a>        <span class="kw">let </span>err1: Box&lt;<span class="kw">dyn </span>Error + Send + Sync&gt; = From::from(str_err);
-<a href=#651 id=651 data-nosnippet>651</a>        <span class="kw">let </span>err2: Box&lt;<span class="kw">dyn </span>Error&gt; = err1;
-<a href=#652 id=652 data-nosnippet>652</a>        err2
-<a href=#653 id=653 data-nosnippet>653</a>    }
-<a href=#654 id=654 data-nosnippet>654</a>}
-<a href=#655 id=655 data-nosnippet>655</a>
-<a href=#656 id=656 data-nosnippet>656</a><span class="attr">#[cfg(not(no_global_oom_handling))]
-<a href=#657 id=657 data-nosnippet>657</a>#[stable(feature = <span class="string">"rust1"</span>, since = <span class="string">"1.0.0"</span>)]
-<a href=#658 id=658 data-nosnippet>658</a></span><span class="kw">impl</span>&lt;<span class="lifetime">'a</span>&gt; From&lt;<span class="kw-2">&amp;</span>str&gt; <span class="kw">for </span>Box&lt;<span class="kw">dyn </span>Error + Send + Sync + <span class="lifetime">'a</span>&gt; {
-<a href=#659 id=659 data-nosnippet>659</a>    <span class="doccomment">/// Converts a [`str`] into a box of dyn [`Error`] + [`Send`] + [`Sync`].
-<a href=#660 id=660 data-nosnippet>660</a>    ///
-<a href=#661 id=661 data-nosnippet>661</a>    /// [`str`]: prim@str
+<a href=#640 id=640 data-nosnippet>640</a>    /// let a_string_error = "a string error".to_string();
+<a href=#641 id=641 data-nosnippet>641</a>    /// let a_boxed_error = Box::&lt;dyn Error&gt;::from(a_string_error);
+<a href=#642 id=642 data-nosnippet>642</a>    /// assert!(size_of::&lt;Box&lt;dyn Error&gt;&gt;() == size_of_val(&amp;a_boxed_error))
+<a href=#643 id=643 data-nosnippet>643</a>    /// ```
+<a href=#644 id=644 data-nosnippet>644</a>    </span><span class="kw">fn </span>from(str_err: String) -&gt; Box&lt;<span class="kw">dyn </span>Error + <span class="lifetime">'a</span>&gt; {
+<a href=#645 id=645 data-nosnippet>645</a>        <span class="kw">let </span>err1: Box&lt;<span class="kw">dyn </span>Error + Send + Sync&gt; = From::from(str_err);
+<a href=#646 id=646 data-nosnippet>646</a>        <span class="kw">let </span>err2: Box&lt;<span class="kw">dyn </span>Error&gt; = err1;
+<a href=#647 id=647 data-nosnippet>647</a>        err2
+<a href=#648 id=648 data-nosnippet>648</a>    }
+<a href=#649 id=649 data-nosnippet>649</a>}
+<a href=#650 id=650 data-nosnippet>650</a>
+<a href=#651 id=651 data-nosnippet>651</a><span class="attr">#[cfg(not(no_global_oom_handling))]
+<a href=#652 id=652 data-nosnippet>652</a>#[stable(feature = <span class="string">"rust1"</span>, since = <span class="string">"1.0.0"</span>)]
+<a href=#653 id=653 data-nosnippet>653</a></span><span class="kw">impl</span>&lt;<span class="lifetime">'a</span>&gt; From&lt;<span class="kw-2">&amp;</span>str&gt; <span class="kw">for </span>Box&lt;<span class="kw">dyn </span>Error + Send + Sync + <span class="lifetime">'a</span>&gt; {
+<a href=#654 id=654 data-nosnippet>654</a>    <span class="doccomment">/// Converts a [`str`] into a box of dyn [`Error`] + [`Send`] + [`Sync`].
+<a href=#655 id=655 data-nosnippet>655</a>    ///
+<a href=#656 id=656 data-nosnippet>656</a>    /// [`str`]: prim@str
+<a href=#657 id=657 data-nosnippet>657</a>    ///
+<a href=#658 id=658 data-nosnippet>658</a>    /// # Examples
+<a href=#659 id=659 data-nosnippet>659</a>    ///
+<a href=#660 id=660 data-nosnippet>660</a>    /// ```
+<a href=#661 id=661 data-nosnippet>661</a>    /// use std::error::Error;
 <a href=#662 id=662 data-nosnippet>662</a>    ///
-<a href=#663 id=663 data-nosnippet>663</a>    /// # Examples
-<a href=#664 id=664 data-nosnippet>664</a>    ///
-<a href=#665 id=665 data-nosnippet>665</a>    /// ```
-<a href=#666 id=666 data-nosnippet>666</a>    /// use std::error::Error;
-<a href=#667 id=667 data-nosnippet>667</a>    ///
-<a href=#668 id=668 data-nosnippet>668</a>    /// let a_str_error = "a str error";
-<a href=#669 id=669 data-nosnippet>669</a>    /// let a_boxed_error = Box::&lt;dyn Error + Send + Sync&gt;::from(a_str_error);
-<a href=#670 id=670 data-nosnippet>670</a>    /// assert!(
-<a href=#671 id=671 data-nosnippet>671</a>    ///     size_of::&lt;Box&lt;dyn Error + Send + Sync&gt;&gt;() == size_of_val(&amp;a_boxed_error))
-<a href=#672 id=672 data-nosnippet>672</a>    /// ```
-<a href=#673 id=673 data-nosnippet>673</a>    </span><span class="attr">#[inline]
-<a href=#674 id=674 data-nosnippet>674</a>    </span><span class="kw">fn </span>from(err: <span class="kw-2">&amp;</span>str) -&gt; Box&lt;<span class="kw">dyn </span>Error + Send + Sync + <span class="lifetime">'a</span>&gt; {
-<a href=#675 id=675 data-nosnippet>675</a>        From::from(String::from(err))
-<a href=#676 id=676 data-nosnippet>676</a>    }
-<a href=#677 id=677 data-nosnippet>677</a>}
-<a href=#678 id=678 data-nosnippet>678</a>
-<a href=#679 id=679 data-nosnippet>679</a><span class="attr">#[cfg(not(no_global_oom_handling))]
-<a href=#680 id=680 data-nosnippet>680</a>#[stable(feature = <span class="string">"string_box_error"</span>, since = <span class="string">"1.6.0"</span>)]
-<a href=#681 id=681 data-nosnippet>681</a></span><span class="kw">impl</span>&lt;<span class="lifetime">'a</span>&gt; From&lt;<span class="kw-2">&amp;</span>str&gt; <span class="kw">for </span>Box&lt;<span class="kw">dyn </span>Error + <span class="lifetime">'a</span>&gt; {
-<a href=#682 id=682 data-nosnippet>682</a>    <span class="doccomment">/// Converts a [`str`] into a box of dyn [`Error`].
-<a href=#683 id=683 data-nosnippet>683</a>    ///
-<a href=#684 id=684 data-nosnippet>684</a>    /// [`str`]: prim@str
+<a href=#663 id=663 data-nosnippet>663</a>    /// let a_str_error = "a str error";
+<a href=#664 id=664 data-nosnippet>664</a>    /// let a_boxed_error = Box::&lt;dyn Error + Send + Sync&gt;::from(a_str_error);
+<a href=#665 id=665 data-nosnippet>665</a>    /// assert!(
+<a href=#666 id=666 data-nosnippet>666</a>    ///     size_of::&lt;Box&lt;dyn Error + Send + Sync&gt;&gt;() == size_of_val(&amp;a_boxed_error))
+<a href=#667 id=667 data-nosnippet>667</a>    /// ```
+<a href=#668 id=668 data-nosnippet>668</a>    </span><span class="attr">#[inline]
+<a href=#669 id=669 data-nosnippet>669</a>    </span><span class="kw">fn </span>from(err: <span class="kw-2">&amp;</span>str) -&gt; Box&lt;<span class="kw">dyn </span>Error + Send + Sync + <span class="lifetime">'a</span>&gt; {
+<a href=#670 id=670 data-nosnippet>670</a>        From::from(String::from(err))
+<a href=#671 id=671 data-nosnippet>671</a>    }
+<a href=#672 id=672 data-nosnippet>672</a>}
+<a href=#673 id=673 data-nosnippet>673</a>
+<a href=#674 id=674 data-nosnippet>674</a><span class="attr">#[cfg(not(no_global_oom_handling))]
+<a href=#675 id=675 data-nosnippet>675</a>#[stable(feature = <span class="string">"string_box_error"</span>, since = <span class="string">"1.6.0"</span>)]
+<a href=#676 id=676 data-nosnippet>676</a></span><span class="kw">impl</span>&lt;<span class="lifetime">'a</span>&gt; From&lt;<span class="kw-2">&amp;</span>str&gt; <span class="kw">for </span>Box&lt;<span class="kw">dyn </span>Error + <span class="lifetime">'a</span>&gt; {
+<a href=#677 id=677 data-nosnippet>677</a>    <span class="doccomment">/// Converts a [`str`] into a box of dyn [`Error`].
+<a href=#678 id=678 data-nosnippet>678</a>    ///
+<a href=#679 id=679 data-nosnippet>679</a>    /// [`str`]: prim@str
+<a href=#680 id=680 data-nosnippet>680</a>    ///
+<a href=#681 id=681 data-nosnippet>681</a>    /// # Examples
+<a href=#682 id=682 data-nosnippet>682</a>    ///
+<a href=#683 id=683 data-nosnippet>683</a>    /// ```
+<a href=#684 id=684 data-nosnippet>684</a>    /// use std::error::Error;
 <a href=#685 id=685 data-nosnippet>685</a>    ///
-<a href=#686 id=686 data-nosnippet>686</a>    /// # Examples
-<a href=#687 id=687 data-nosnippet>687</a>    ///
-<a href=#688 id=688 data-nosnippet>688</a>    /// ```
-<a href=#689 id=689 data-nosnippet>689</a>    /// use std::error::Error;
-<a href=#690 id=690 data-nosnippet>690</a>    ///
-<a href=#691 id=691 data-nosnippet>691</a>    /// let a_str_error = "a str error";
-<a href=#692 id=692 data-nosnippet>692</a>    /// let a_boxed_error = Box::&lt;dyn Error&gt;::from(a_str_error);
-<a href=#693 id=693 data-nosnippet>693</a>    /// assert!(size_of::&lt;Box&lt;dyn Error&gt;&gt;() == size_of_val(&amp;a_boxed_error))
-<a href=#694 id=694 data-nosnippet>694</a>    /// ```
-<a href=#695 id=695 data-nosnippet>695</a>    </span><span class="kw">fn </span>from(err: <span class="kw-2">&amp;</span>str) -&gt; Box&lt;<span class="kw">dyn </span>Error + <span class="lifetime">'a</span>&gt; {
-<a href=#696 id=696 data-nosnippet>696</a>        From::from(String::from(err))
-<a href=#697 id=697 data-nosnippet>697</a>    }
-<a href=#698 id=698 data-nosnippet>698</a>}
-<a href=#699 id=699 data-nosnippet>699</a>
-<a href=#700 id=700 data-nosnippet>700</a><span class="attr">#[cfg(not(no_global_oom_handling))]
-<a href=#701 id=701 data-nosnippet>701</a>#[stable(feature = <span class="string">"cow_box_error"</span>, since = <span class="string">"1.22.0"</span>)]
-<a href=#702 id=702 data-nosnippet>702</a></span><span class="kw">impl</span>&lt;<span class="lifetime">'a</span>, <span class="lifetime">'b</span>&gt; From&lt;Cow&lt;<span class="lifetime">'b</span>, str&gt;&gt; <span class="kw">for </span>Box&lt;<span class="kw">dyn </span>Error + Send + Sync + <span class="lifetime">'a</span>&gt; {
-<a href=#703 id=703 data-nosnippet>703</a>    <span class="doccomment">/// Converts a [`Cow`] into a box of dyn [`Error`] + [`Send`] + [`Sync`].
-<a href=#704 id=704 data-nosnippet>704</a>    ///
-<a href=#705 id=705 data-nosnippet>705</a>    /// # Examples
-<a href=#706 id=706 data-nosnippet>706</a>    ///
-<a href=#707 id=707 data-nosnippet>707</a>    /// ```
-<a href=#708 id=708 data-nosnippet>708</a>    /// use std::error::Error;
-<a href=#709 id=709 data-nosnippet>709</a>    /// use std::borrow::Cow;
-<a href=#710 id=710 data-nosnippet>710</a>    ///
-<a href=#711 id=711 data-nosnippet>711</a>    /// let a_cow_str_error = Cow::from("a str error");
-<a href=#712 id=712 data-nosnippet>712</a>    /// let a_boxed_error = Box::&lt;dyn Error + Send + Sync&gt;::from(a_cow_str_error);
-<a href=#713 id=713 data-nosnippet>713</a>    /// assert!(
-<a href=#714 id=714 data-nosnippet>714</a>    ///     size_of::&lt;Box&lt;dyn Error + Send + Sync&gt;&gt;() == size_of_val(&amp;a_boxed_error))
-<a href=#715 id=715 data-nosnippet>715</a>    /// ```
-<a href=#716 id=716 data-nosnippet>716</a>    </span><span class="kw">fn </span>from(err: Cow&lt;<span class="lifetime">'b</span>, str&gt;) -&gt; Box&lt;<span class="kw">dyn </span>Error + Send + Sync + <span class="lifetime">'a</span>&gt; {
-<a href=#717 id=717 data-nosnippet>717</a>        From::from(String::from(err))
-<a href=#718 id=718 data-nosnippet>718</a>    }
-<a href=#719 id=719 data-nosnippet>719</a>}
-<a href=#720 id=720 data-nosnippet>720</a>
-<a href=#721 id=721 data-nosnippet>721</a><span class="attr">#[cfg(not(no_global_oom_handling))]
-<a href=#722 id=722 data-nosnippet>722</a>#[stable(feature = <span class="string">"cow_box_error"</span>, since = <span class="string">"1.22.0"</span>)]
-<a href=#723 id=723 data-nosnippet>723</a></span><span class="kw">impl</span>&lt;<span class="lifetime">'a</span>, <span class="lifetime">'b</span>&gt; From&lt;Cow&lt;<span class="lifetime">'b</span>, str&gt;&gt; <span class="kw">for </span>Box&lt;<span class="kw">dyn </span>Error + <span class="lifetime">'a</span>&gt; {
-<a href=#724 id=724 data-nosnippet>724</a>    <span class="doccomment">/// Converts a [`Cow`] into a box of dyn [`Error`].
-<a href=#725 id=725 data-nosnippet>725</a>    ///
-<a href=#726 id=726 data-nosnippet>726</a>    /// # Examples
-<a href=#727 id=727 data-nosnippet>727</a>    ///
-<a href=#728 id=728 data-nosnippet>728</a>    /// ```
-<a href=#729 id=729 data-nosnippet>729</a>    /// use std::error::Error;
-<a href=#730 id=730 data-nosnippet>730</a>    /// use std::borrow::Cow;
-<a href=#731 id=731 data-nosnippet>731</a>    ///
-<a href=#732 id=732 data-nosnippet>732</a>    /// let a_cow_str_error = Cow::from("a str error");
-<a href=#733 id=733 data-nosnippet>733</a>    /// let a_boxed_error = Box::&lt;dyn Error&gt;::from(a_cow_str_error);
-<a href=#734 id=734 data-nosnippet>734</a>    /// assert!(size_of::&lt;Box&lt;dyn Error&gt;&gt;() == size_of_val(&amp;a_boxed_error))
-<a href=#735 id=735 data-nosnippet>735</a>    /// ```
-<a href=#736 id=736 data-nosnippet>736</a>    </span><span class="kw">fn </span>from(err: Cow&lt;<span class="lifetime">'b</span>, str&gt;) -&gt; Box&lt;<span class="kw">dyn </span>Error + <span class="lifetime">'a</span>&gt; {
-<a href=#737 id=737 data-nosnippet>737</a>        From::from(String::from(err))
-<a href=#738 id=738 data-nosnippet>738</a>    }
-<a href=#739 id=739 data-nosnippet>739</a>}
-<a href=#740 id=740 data-nosnippet>740</a>
-<a href=#741 id=741 data-nosnippet>741</a><span class="kw">impl dyn </span>Error {
-<a href=#742 id=742 data-nosnippet>742</a>    <span class="doccomment">/// Attempts to downcast the box to a concrete type.
-<a href=#743 id=743 data-nosnippet>743</a>    </span><span class="attr">#[inline]
-<a href=#744 id=744 data-nosnippet>744</a>    #[stable(feature = <span class="string">"error_downcast"</span>, since = <span class="string">"1.3.0"</span>)]
-<a href=#745 id=745 data-nosnippet>745</a>    #[rustc_allow_incoherent_impl]
-<a href=#746 id=746 data-nosnippet>746</a>    </span><span class="kw">pub fn </span>downcast&lt;T: Error + <span class="lifetime">'static</span>&gt;(<span class="self">self</span>: Box&lt;<span class="self">Self</span>&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;Box&lt;T&gt;, Box&lt;<span class="kw">dyn </span>Error&gt;&gt; {
-<a href=#747 id=747 data-nosnippet>747</a>        <span class="kw">if </span><span class="self">self</span>.is::&lt;T&gt;() {
-<a href=#748 id=748 data-nosnippet>748</a>            <span class="kw">unsafe </span>{
-<a href=#749 id=749 data-nosnippet>749</a>                <span class="kw">let </span>raw: <span class="kw-2">*mut </span><span class="kw">dyn </span>Error = Box::into_raw(<span class="self">self</span>);
-<a href=#750 id=750 data-nosnippet>750</a>                <span class="prelude-val">Ok</span>(Box::from_raw(raw <span class="kw">as </span><span class="kw-2">*mut </span>T))
-<a href=#751 id=751 data-nosnippet>751</a>            }
-<a href=#752 id=752 data-nosnippet>752</a>        } <span class="kw">else </span>{
-<a href=#753 id=753 data-nosnippet>753</a>            <span class="prelude-val">Err</span>(<span class="self">self</span>)
-<a href=#754 id=754 data-nosnippet>754</a>        }
-<a href=#755 id=755 data-nosnippet>755</a>    }
-<a href=#756 id=756 data-nosnippet>756</a>}
-<a href=#757 id=757 data-nosnippet>757</a>
-<a href=#758 id=758 data-nosnippet>758</a><span class="kw">impl dyn </span>Error + Send {
-<a href=#759 id=759 data-nosnippet>759</a>    <span class="doccomment">/// Attempts to downcast the box to a concrete type.
-<a href=#760 id=760 data-nosnippet>760</a>    </span><span class="attr">#[inline]
-<a href=#761 id=761 data-nosnippet>761</a>    #[stable(feature = <span class="string">"error_downcast"</span>, since = <span class="string">"1.3.0"</span>)]
-<a href=#762 id=762 data-nosnippet>762</a>    #[rustc_allow_incoherent_impl]
-<a href=#763 id=763 data-nosnippet>763</a>    </span><span class="kw">pub fn </span>downcast&lt;T: Error + <span class="lifetime">'static</span>&gt;(<span class="self">self</span>: Box&lt;<span class="self">Self</span>&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;Box&lt;T&gt;, Box&lt;<span class="kw">dyn </span>Error + Send&gt;&gt; {
-<a href=#764 id=764 data-nosnippet>764</a>        <span class="kw">let </span>err: Box&lt;<span class="kw">dyn </span>Error&gt; = <span class="self">self</span>;
-<a href=#765 id=765 data-nosnippet>765</a>        &lt;<span class="kw">dyn </span>Error&gt;::downcast(err).map_err(|s| <span class="kw">unsafe </span>{
-<a href=#766 id=766 data-nosnippet>766</a>            <span class="comment">// Reapply the `Send` marker.
-<a href=#767 id=767 data-nosnippet>767</a>            </span>mem::transmute::&lt;Box&lt;<span class="kw">dyn </span>Error&gt;, Box&lt;<span class="kw">dyn </span>Error + Send&gt;&gt;(s)
-<a href=#768 id=768 data-nosnippet>768</a>        })
-<a href=#769 id=769 data-nosnippet>769</a>    }
-<a href=#770 id=770 data-nosnippet>770</a>}
-<a href=#771 id=771 data-nosnippet>771</a>
-<a href=#772 id=772 data-nosnippet>772</a><span class="kw">impl dyn </span>Error + Send + Sync {
-<a href=#773 id=773 data-nosnippet>773</a>    <span class="doccomment">/// Attempts to downcast the box to a concrete type.
-<a href=#774 id=774 data-nosnippet>774</a>    </span><span class="attr">#[inline]
-<a href=#775 id=775 data-nosnippet>775</a>    #[stable(feature = <span class="string">"error_downcast"</span>, since = <span class="string">"1.3.0"</span>)]
-<a href=#776 id=776 data-nosnippet>776</a>    #[rustc_allow_incoherent_impl]
-<a href=#777 id=777 data-nosnippet>777</a>    </span><span class="kw">pub fn </span>downcast&lt;T: Error + <span class="lifetime">'static</span>&gt;(<span class="self">self</span>: Box&lt;<span class="self">Self</span>&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;Box&lt;T&gt;, Box&lt;<span class="self">Self</span>&gt;&gt; {
-<a href=#778 id=778 data-nosnippet>778</a>        <span class="kw">let </span>err: Box&lt;<span class="kw">dyn </span>Error&gt; = <span class="self">self</span>;
-<a href=#779 id=779 data-nosnippet>779</a>        &lt;<span class="kw">dyn </span>Error&gt;::downcast(err).map_err(|s| <span class="kw">unsafe </span>{
-<a href=#780 id=780 data-nosnippet>780</a>            <span class="comment">// Reapply the `Send + Sync` markers.
-<a href=#781 id=781 data-nosnippet>781</a>            </span>mem::transmute::&lt;Box&lt;<span class="kw">dyn </span>Error&gt;, Box&lt;<span class="kw">dyn </span>Error + Send + Sync&gt;&gt;(s)
-<a href=#782 id=782 data-nosnippet>782</a>        })
-<a href=#783 id=783 data-nosnippet>783</a>    }
-<a href=#784 id=784 data-nosnippet>784</a>}</code></pre></div></section></main></body></html>
+<a href=#686 id=686 data-nosnippet>686</a>    /// let a_str_error = "a str error";
+<a href=#687 id=687 data-nosnippet>687</a>    /// let a_boxed_error = Box::&lt;dyn Error&gt;::from(a_str_error);
+<a href=#688 id=688 data-nosnippet>688</a>    /// assert!(size_of::&lt;Box&lt;dyn Error&gt;&gt;() == size_of_val(&amp;a_boxed_error))
+<a href=#689 id=689 data-nosnippet>689</a>    /// ```
+<a href=#690 id=690 data-nosnippet>690</a>    </span><span class="kw">fn </span>from(err: <span class="kw-2">&amp;</span>str) -&gt; Box&lt;<span class="kw">dyn </span>Error + <span class="lifetime">'a</span>&gt; {
+<a href=#691 id=691 data-nosnippet>691</a>        From::from(String::from(err))
+<a href=#692 id=692 data-nosnippet>692</a>    }
+<a href=#693 id=693 data-nosnippet>693</a>}
+<a href=#694 id=694 data-nosnippet>694</a>
+<a href=#695 id=695 data-nosnippet>695</a><span class="attr">#[cfg(not(no_global_oom_handling))]
+<a href=#696 id=696 data-nosnippet>696</a>#[stable(feature = <span class="string">"cow_box_error"</span>, since = <span class="string">"1.22.0"</span>)]
+<a href=#697 id=697 data-nosnippet>697</a></span><span class="kw">impl</span>&lt;<span class="lifetime">'a</span>, <span class="lifetime">'b</span>&gt; From&lt;Cow&lt;<span class="lifetime">'b</span>, str&gt;&gt; <span class="kw">for </span>Box&lt;<span class="kw">dyn </span>Error + Send + Sync + <span class="lifetime">'a</span>&gt; {
+<a href=#698 id=698 data-nosnippet>698</a>    <span class="doccomment">/// Converts a [`Cow`] into a box of dyn [`Error`] + [`Send`] + [`Sync`].
+<a href=#699 id=699 data-nosnippet>699</a>    ///
+<a href=#700 id=700 data-nosnippet>700</a>    /// # Examples
+<a href=#701 id=701 data-nosnippet>701</a>    ///
+<a href=#702 id=702 data-nosnippet>702</a>    /// ```
+<a href=#703 id=703 data-nosnippet>703</a>    /// use std::error::Error;
+<a href=#704 id=704 data-nosnippet>704</a>    /// use std::borrow::Cow;
+<a href=#705 id=705 data-nosnippet>705</a>    ///
+<a href=#706 id=706 data-nosnippet>706</a>    /// let a_cow_str_error = Cow::from("a str error");
+<a href=#707 id=707 data-nosnippet>707</a>    /// let a_boxed_error = Box::&lt;dyn Error + Send + Sync&gt;::from(a_cow_str_error);
+<a href=#708 id=708 data-nosnippet>708</a>    /// assert!(
+<a href=#709 id=709 data-nosnippet>709</a>    ///     size_of::&lt;Box&lt;dyn Error + Send + Sync&gt;&gt;() == size_of_val(&amp;a_boxed_error))
+<a href=#710 id=710 data-nosnippet>710</a>    /// ```
+<a href=#711 id=711 data-nosnippet>711</a>    </span><span class="kw">fn </span>from(err: Cow&lt;<span class="lifetime">'b</span>, str&gt;) -&gt; Box&lt;<span class="kw">dyn </span>Error + Send + Sync + <span class="lifetime">'a</span>&gt; {
+<a href=#712 id=712 data-nosnippet>712</a>        From::from(String::from(err))
+<a href=#713 id=713 data-nosnippet>713</a>    }
+<a href=#714 id=714 data-nosnippet>714</a>}
+<a href=#715 id=715 data-nosnippet>715</a>
+<a href=#716 id=716 data-nosnippet>716</a><span class="attr">#[cfg(not(no_global_oom_handling))]
+<a href=#717 id=717 data-nosnippet>717</a>#[stable(feature = <span class="string">"cow_box_error"</span>, since = <span class="string">"1.22.0"</span>)]
+<a href=#718 id=718 data-nosnippet>718</a></span><span class="kw">impl</span>&lt;<span class="lifetime">'a</span>, <span class="lifetime">'b</span>&gt; From&lt;Cow&lt;<span class="lifetime">'b</span>, str&gt;&gt; <span class="kw">for </span>Box&lt;<span class="kw">dyn </span>Error + <span class="lifetime">'a</span>&gt; {
+<a href=#719 id=719 data-nosnippet>719</a>    <span class="doccomment">/// Converts a [`Cow`] into a box of dyn [`Error`].
+<a href=#720 id=720 data-nosnippet>720</a>    ///
+<a href=#721 id=721 data-nosnippet>721</a>    /// # Examples
+<a href=#722 id=722 data-nosnippet>722</a>    ///
+<a href=#723 id=723 data-nosnippet>723</a>    /// ```
+<a href=#724 id=724 data-nosnippet>724</a>    /// use std::error::Error;
+<a href=#725 id=725 data-nosnippet>725</a>    /// use std::borrow::Cow;
+<a href=#726 id=726 data-nosnippet>726</a>    ///
+<a href=#727 id=727 data-nosnippet>727</a>    /// let a_cow_str_error = Cow::from("a str error");
+<a href=#728 id=728 data-nosnippet>728</a>    /// let a_boxed_error = Box::&lt;dyn Error&gt;::from(a_cow_str_error);
+<a href=#729 id=729 data-nosnippet>729</a>    /// assert!(size_of::&lt;Box&lt;dyn Error&gt;&gt;() == size_of_val(&amp;a_boxed_error))
+<a href=#730 id=730 data-nosnippet>730</a>    /// ```
+<a href=#731 id=731 data-nosnippet>731</a>    </span><span class="kw">fn </span>from(err: Cow&lt;<span class="lifetime">'b</span>, str&gt;) -&gt; Box&lt;<span class="kw">dyn </span>Error + <span class="lifetime">'a</span>&gt; {
+<a href=#732 id=732 data-nosnippet>732</a>        From::from(String::from(err))
+<a href=#733 id=733 data-nosnippet>733</a>    }
+<a href=#734 id=734 data-nosnippet>734</a>}
+<a href=#735 id=735 data-nosnippet>735</a>
+<a href=#736 id=736 data-nosnippet>736</a><span class="kw">impl dyn </span>Error {
+<a href=#737 id=737 data-nosnippet>737</a>    <span class="doccomment">/// Attempts to downcast the box to a concrete type.
+<a href=#738 id=738 data-nosnippet>738</a>    </span><span class="attr">#[inline]
+<a href=#739 id=739 data-nosnippet>739</a>    #[stable(feature = <span class="string">"error_downcast"</span>, since = <span class="string">"1.3.0"</span>)]
+<a href=#740 id=740 data-nosnippet>740</a>    #[rustc_allow_incoherent_impl]
+<a href=#741 id=741 data-nosnippet>741</a>    </span><span class="kw">pub fn </span>downcast&lt;T: Error + <span class="lifetime">'static</span>&gt;(<span class="self">self</span>: Box&lt;<span class="self">Self</span>&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;Box&lt;T&gt;, Box&lt;<span class="kw">dyn </span>Error&gt;&gt; {
+<a href=#742 id=742 data-nosnippet>742</a>        <span class="kw">if </span><span class="self">self</span>.is::&lt;T&gt;() {
+<a href=#743 id=743 data-nosnippet>743</a>            <span class="kw">unsafe </span>{
+<a href=#744 id=744 data-nosnippet>744</a>                <span class="kw">let </span>raw: <span class="kw-2">*mut </span><span class="kw">dyn </span>Error = Box::into_raw(<span class="self">self</span>);
+<a href=#745 id=745 data-nosnippet>745</a>                <span class="prelude-val">Ok</span>(Box::from_raw(raw <span class="kw">as </span><span class="kw-2">*mut </span>T))
+<a href=#746 id=746 data-nosnippet>746</a>            }
+<a href=#747 id=747 data-nosnippet>747</a>        } <span class="kw">else </span>{
+<a href=#748 id=748 data-nosnippet>748</a>            <span class="prelude-val">Err</span>(<span class="self">self</span>)
+<a href=#749 id=749 data-nosnippet>749</a>        }
+<a href=#750 id=750 data-nosnippet>750</a>    }
+<a href=#751 id=751 data-nosnippet>751</a>}
+<a href=#752 id=752 data-nosnippet>752</a>
+<a href=#753 id=753 data-nosnippet>753</a><span class="kw">impl dyn </span>Error + Send {
+<a href=#754 id=754 data-nosnippet>754</a>    <span class="doccomment">/// Attempts to downcast the box to a concrete type.
+<a href=#755 id=755 data-nosnippet>755</a>    </span><span class="attr">#[inline]
+<a href=#756 id=756 data-nosnippet>756</a>    #[stable(feature = <span class="string">"error_downcast"</span>, since = <span class="string">"1.3.0"</span>)]
+<a href=#757 id=757 data-nosnippet>757</a>    #[rustc_allow_incoherent_impl]
+<a href=#758 id=758 data-nosnippet>758</a>    </span><span class="kw">pub fn </span>downcast&lt;T: Error + <span class="lifetime">'static</span>&gt;(<span class="self">self</span>: Box&lt;<span class="self">Self</span>&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;Box&lt;T&gt;, Box&lt;<span class="kw">dyn </span>Error + Send&gt;&gt; {
+<a href=#759 id=759 data-nosnippet>759</a>        <span class="kw">let </span>err: Box&lt;<span class="kw">dyn </span>Error&gt; = <span class="self">self</span>;
+<a href=#760 id=760 data-nosnippet>760</a>        &lt;<span class="kw">dyn </span>Error&gt;::downcast(err).map_err(|s| <span class="kw">unsafe </span>{
+<a href=#761 id=761 data-nosnippet>761</a>            <span class="comment">// Reapply the `Send` marker.
+<a href=#762 id=762 data-nosnippet>762</a>            </span>mem::transmute::&lt;Box&lt;<span class="kw">dyn </span>Error&gt;, Box&lt;<span class="kw">dyn </span>Error + Send&gt;&gt;(s)
+<a href=#763 id=763 data-nosnippet>763</a>        })
+<a href=#764 id=764 data-nosnippet>764</a>    }
+<a href=#765 id=765 data-nosnippet>765</a>}
+<a href=#766 id=766 data-nosnippet>766</a>
+<a href=#767 id=767 data-nosnippet>767</a><span class="kw">impl dyn </span>Error + Send + Sync {
+<a href=#768 id=768 data-nosnippet>768</a>    <span class="doccomment">/// Attempts to downcast the box to a concrete type.
+<a href=#769 id=769 data-nosnippet>769</a>    </span><span class="attr">#[inline]
+<a href=#770 id=770 data-nosnippet>770</a>    #[stable(feature = <span class="string">"error_downcast"</span>, since = <span class="string">"1.3.0"</span>)]
+<a href=#771 id=771 data-nosnippet>771</a>    #[rustc_allow_incoherent_impl]
+<a href=#772 id=772 data-nosnippet>772</a>    </span><span class="kw">pub fn </span>downcast&lt;T: Error + <span class="lifetime">'static</span>&gt;(<span class="self">self</span>: Box&lt;<span class="self">Self</span>&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;Box&lt;T&gt;, Box&lt;<span class="self">Self</span>&gt;&gt; {
+<a href=#773 id=773 data-nosnippet>773</a>        <span class="kw">let </span>err: Box&lt;<span class="kw">dyn </span>Error&gt; = <span class="self">self</span>;
+<a href=#774 id=774 data-nosnippet>774</a>        &lt;<span class="kw">dyn </span>Error&gt;::downcast(err).map_err(|s| <span class="kw">unsafe </span>{
+<a href=#775 id=775 data-nosnippet>775</a>            <span class="comment">// Reapply the `Send + Sync` markers.
+<a href=#776 id=776 data-nosnippet>776</a>            </span>mem::transmute::&lt;Box&lt;<span class="kw">dyn </span>Error&gt;, Box&lt;<span class="kw">dyn </span>Error + Send + Sync&gt;&gt;(s)
+<a href=#777 id=777 data-nosnippet>777</a>        })
+<a href=#778 id=778 data-nosnippet>778</a>    }
+<a href=#779 id=779 data-nosnippet>779</a>}</code></pre></div></section></main></body></html>

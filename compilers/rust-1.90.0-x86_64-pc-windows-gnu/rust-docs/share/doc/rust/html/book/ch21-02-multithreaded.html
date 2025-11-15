@@ -40,7 +40,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-ac51862c.js";
+            window.path_to_searchindex_js = "searchindex-3a180665.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-18422fb5.js"></script>
@@ -190,7 +190,9 @@ less optimal. If the server receives a request that takes a long time to
 process, subsequent requests will have to wait until the long request is
 finished, even if the new requests can be processed quickly. We’ll need to fix
 this, but first we’ll look at the problem in action.</p>
-<h3 id="simulating-a-slow-request-in-the-current-server-implementation"><a class="header" href="#simulating-a-slow-request-in-the-current-server-implementation">Simulating a Slow Request in the Current Server Implementation</a></h3>
+<!-- Old headings. Do not remove or links may break. -->
+<p><a id="simulating-a-slow-request-in-the-current-server-implementation"></a></p>
+<h3 id="simulating-a-slow-request"><a class="header" href="#simulating-a-slow-request">Simulating a Slow Request</a></h3>
 <p>We’ll look at how a slow-processing request can affect other requests made to
 our current server implementation. Listing 21-10 implements handling a request
 to <em>/sleep</em> with a simulated slow response that will cause the server to sleep
@@ -241,10 +243,10 @@ fn handle_connection(mut stream: TcpStream) {
 </span><span class="boring">
 </span><span class="boring">    stream.write_all(response.as_bytes()).unwrap();
 </span>}</code></pre></pre>
-<figcaption><a href="#listing-21-10">Listing 21-10</a>: Simulating a slow request by sleeping for 5 seconds</figcaption>
+<figcaption><a href="#listing-21-10">Listing 21-10</a>: Simulating a slow request by sleeping for five seconds</figcaption>
 </figure>
 <p>We switched from <code>if</code> to <code>match</code> now that we have three cases. We need to
-explicitly match on a slice of <code>request_line</code> to pattern match against the
+explicitly match on a slice of <code>request_line</code> to pattern-match against the
 string literal values; <code>match</code> doesn’t do automatic referencing and
 dereferencing, like the equality method does.</p>
 <p>The first arm is the same as the <code>if</code> block from Listing 21-9. The second arm
@@ -254,7 +256,7 @@ is the same as the <code>else</code> block from Listing 21-9.</p>
 <p>You can see how primitive our server is: real libraries would handle the
 recognition of multiple requests in a much less verbose way!</p>
 <p>Start the server using <code>cargo run</code>. Then open two browser windows: one for
-<em>http://127.0.0.1:7878/</em> and the other for <em>http://127.0.0.1:7878/sleep</em>. If
+<em>http://127.0.0.1:7878</em> and the other for <em>http://127.0.0.1:7878/sleep</em>. If
 you enter the <em>/</em> URI a few times, as before, you’ll see it respond quickly.
 But if you enter <em>/sleep</em> and then load <em>/</em>, you’ll see that <em>/</em> waits until
 <code>sleep</code> has slept for its full five seconds before loading.</p>
@@ -308,9 +310,9 @@ we’ll explore the technique we’re not going to use as a starting point.</p>
 every connection. As mentioned earlier, this isn’t our final plan due to the
 problems with potentially spawning an unlimited number of threads, but it is a
 starting point to get a working multithreaded server first. Then we’ll add the
-thread pool as an improvement, and contrasting the two solutions will be
-easier. Listing 21-11 shows the changes to make to <code>main</code> to spawn a new thread
-to handle each stream within the <code>for</code> loop.</p>
+thread pool as an improvement, and contrasting the two solutions will be easier.</p>
+<p>Listing 21-11 shows the changes to make to <code>main</code> to spawn a new thread to
+handle each stream within the <code>for</code> loop.</p>
 <figure class="listing" id="listing-21-11">
 <span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust no_run edition2024"><span class="boring">use std::{
@@ -423,10 +425,10 @@ of threads, in this case four. Then, in the <code>for</code> loop, <code>pool.ex
 similar interface as <code>thread::spawn</code> in that it takes a closure the pool should
 run for each stream. We need to implement <code>pool.execute</code> so it takes the
 closure and gives it to a thread in the pool to run. This code won’t yet
-compile, but we’ll try so the compiler can guide us in how to fix it.</p>
+compile, but we’ll try so that the compiler can guide us in how to fix it.</p>
 <!-- Old headings. Do not remove or links may break. -->
 <p><a id="building-the-threadpool-struct-using-compiler-driven-development"></a></p>
-<h4 id="building-threadpool-using-compiler-driven-development"><a class="header" href="#building-threadpool-using-compiler-driven-development">Building <code>ThreadPool</code> Using Compiler Driven Development</a></h4>
+<h4 id="building-threadpool-using-compiler-driven-development"><a class="header" href="#building-threadpool-using-compiler-driven-development">Building <code>ThreadPool</code> Using Compiler-Driven Development</a></h4>
 <p>Make the changes in Listing 21-12 to <em>src/main.rs</em>, and then let’s use the
 compiler errors from <code>cargo check</code> to drive our development. Here is the first
 error we get:</p>
@@ -454,7 +456,7 @@ definition of a <code>ThreadPool</code> struct that we can have for now:</p>
 <span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground">pub struct ThreadPool;</code></pre>
 </figure>
-<p>Then edit <em>main.rs</em> file to bring <code>ThreadPool</code> into scope from the library
+<p>Then edit the <em>main.rs</em> file to bring <code>ThreadPool</code> into scope from the library
 crate by adding the following code to the top of <em>src/main.rs</em>:</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
@@ -617,7 +619,7 @@ were building a real, complete project, this would be a good time to start
 writing unit tests to check that the code compiles <em>and</em> has the behavior we
 want.</p>
 </section>
-<p>Consider: what would be different here if we were going to execute a <em>future</em>
+<p>Consider: what would be different here if we were going to execute a future
 instead of a closure?</p>
 <h4 id="validating-the-number-of-threads-in-new"><a class="header" href="#validating-the-number-of-threads-in-new">Validating the Number of Threads in <code>new</code></a></h4>
 <p>We aren’t doing anything with the parameters to <code>new</code> and <code>execute</code>. Let’s
@@ -734,7 +736,9 @@ vector. Because we know we need to store <code>size</code> elements in the vecto
 this allocation up front is slightly more efficient than using <code>Vec::new</code>,
 which resizes itself as elements are inserted.</p>
 <p>When you run <code>cargo check</code> again, it should succeed.</p>
-<h4 id="a-worker-struct-responsible-for-sending-code-from-the-threadpool-to-a-thread"><a class="header" href="#a-worker-struct-responsible-for-sending-code-from-the-threadpool-to-a-thread">A <code>Worker</code> Struct Responsible for Sending Code from the <code>ThreadPool</code> to a Thread</a></h4>
+<!-- Old headings. Do not remove or links may break. -->
+<p><a id ="a-worker-struct-responsible-for-sending-code-from-the-threadpool-to-a-thread"></a></p>
+<h4 id="sending-code-from-the-threadpool-to-a-thread"><a class="header" href="#sending-code-from-the-threadpool-to-a-thread">Sending Code from the <code>ThreadPool</code> to a Thread</a></h4>
 <p>We left a comment in the <code>for</code> loop in Listing 21-14 regarding the creation of
 threads. Here, we’ll look at how we actually create threads. The standard
 library provides <code>thread::spawn</code> as a way to create threads, and
@@ -747,10 +751,10 @@ implement it manually.</p>
 <code>ThreadPool</code> and the threads that will manage this new behavior. We’ll call
 this data structure <em>Worker</em>, which is a common term in pooling
 implementations. The <code>Worker</code> picks up code that needs to be run and runs the
-code in the Worker’s thread.</p>
+code in its thread.</p>
 <p>Think of people working in the kitchen at a restaurant: the workers wait until
 orders come in from customers, and then they’re responsible for taking those
-orders and fulfilling them.</p>
+orders and filling them.</p>
 <p>Instead of storing a vector of <code>JoinHandle&lt;()&gt;</code> instances in the thread pool,
 we’ll store instances of the <code>Worker</code> struct. Each <code>Worker</code> will store a single
 <code>JoinHandle&lt;()&gt;</code> instance. Then we’ll implement a method on <code>Worker</code> that will
@@ -767,7 +771,7 @@ set up in this way:</p>
 <code>Worker</code> instance that holds the <code>id</code> and a thread spawned with an empty
 closure.</li>
 <li>In <code>ThreadPool::new</code>, use the <code>for</code> loop counter to generate an <code>id</code>, create
-a new <code>Worker</code> with that <code>id</code>, and store the worker in the vector.</li>
+a new <code>Worker</code> with that <code>id</code>, and store the <code>Worker</code> in the vector.</li>
 </ol>
 <p>If you’re up for a challenge, try implementing these changes on your own before
 looking at the code in Listing 21-15.</p>
@@ -1344,8 +1348,9 @@ limitation is not caused by our web server.</p>
 and 21-20 would be different if we were using futures instead of a closure for
 the work to be done. What types would change? How would the method signatures be
 different, if at all? What parts of the code would stay the same?</p>
-<p>After learning about the <code>while let</code> loop in Chapters 17 and 18, you might be
-wondering why we didn’t write the worker thread code as shown in Listing 21-21.</p>
+<p>After learning about the <code>while let</code> loop in Chapter 17 and Chapter 19, you
+might be wondering why we didn’t write the <code>Worker</code> thread code as shown in
+Listing 21-21.</p>
 <figure class="listing" id="listing-21-21">
 <span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust ignore not_desired_behavior"><span class="boring">use std::{
@@ -1426,7 +1431,7 @@ lock. However, this implementation can also result in the lock being held
 longer than intended if we aren’t mindful of the lifetime of the
 <code>MutexGuard&lt;T&gt;</code>.</p>
 <p>The code in Listing 21-20 that uses <code>let job = receiver.lock().unwrap().recv().unwrap();</code> works because with <code>let</code>, any
-temporary values used in the expression on the right hand side of the equal
+temporary values used in the expression on the right-hand side of the equal
 sign are immediately dropped when the <code>let</code> statement ends. However, <code>while let</code> (and <code>if let</code> and <code>match</code>) does not drop temporary values until the end of
 the associated block. In Listing 21-21, the lock remains held for the duration
 of the call to <code>job()</code>, meaning other <code>Worker</code> instances cannot receive jobs.</p>

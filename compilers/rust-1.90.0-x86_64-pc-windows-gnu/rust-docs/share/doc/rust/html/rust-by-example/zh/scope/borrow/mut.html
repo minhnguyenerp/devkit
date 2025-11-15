@@ -41,7 +41,7 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-c56a0a1a.js";
+            window.path_to_searchindex_js = "../../searchindex-ed98a07e.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../toc-32872d2c.js"></script>
@@ -219,16 +219,16 @@ fn main() {
 
     // 创建 `immutabook` 的可变副本，并命名为 `mutabook`
     let mut mutabook = immutabook;
-    
+
     // 不可变地借用一个不可变对象
     borrow_book(&amp;immutabook);
 
     // 不可变地借用一个可变对象
     borrow_book(&amp;mutabook);
-    
+
     // 可变地借用一个可变对象
     new_edition(&amp;mut mutabook);
-    
+
     // 错误！不能将不可变对象作为可变对象借用
     new_edition(&amp;mut immutabook);
     // 修复：^ 注释掉此行

@@ -40,7 +40,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-7dbf6f40.js";
+            window.path_to_searchindex_js = "../searchindex-b96ec0af.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-ff85ecd7.js"></script>
@@ -713,7 +713,7 @@ fn main() {
     let p = Packed { a: 1, b: 2 };
     // Some assumption about the size of the type.
     // Without `packed`, this fails since the size is 4.
-    const _: () = assert!(std::mem::size_of::&lt;Packed&gt;() == 3); // Error: evaluation of constant value failed
+    const _: () = assert!(std::mem::size_of::&lt;Packed&gt;() == 3); // Error: assertion failed
 }</code></pre>
 <pre><code class="language-rust ignore">// MAJOR CHANGE
 
@@ -815,7 +815,7 @@ fn main() {
     let p = Packed { a: 1, b: 2 };
     // Some assumption about the size of the type.
     // The alignment has changed from 8 to 4.
-    const _: () = assert!(std::mem::align_of::&lt;Packed&gt;() == 8); // Error: evaluation of constant value failed
+    const _: () = assert!(std::mem::align_of::&lt;Packed&gt;() == 8); // Error: assertion failed
 }</code></pre>
 <h4 id="repr-align-remove"><a class="header" href="#repr-align-remove">Major: Removing <code>repr(align)</code> from a struct, union, or enum</a></h4>
 <p>It is a breaking change to remove <code>repr(align)</code> from a struct, union, or enum, if their layout was well-defined.
@@ -847,7 +847,7 @@ fn main() {
     let p = Packed { a: 1, b: 2 };
     // Some assumption about the size of the type.
     // The alignment has changed from 8 to 4.
-    const _: () = assert!(std::mem::align_of::&lt;Packed&gt;() == 8); // Error: evaluation of constant value failed
+    const _: () = assert!(std::mem::align_of::&lt;Packed&gt;() == 8); // Error: assertion failed
 }</code></pre>
 <h4 id="repr-c-shuffle"><a class="header" href="#repr-c-shuffle">Major: Changing the order of public fields of a <code>repr(C)</code> type</a></h4>
 <p>It is a breaking change to change the order of public fields of a <code>repr(C)</code> type.

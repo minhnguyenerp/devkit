@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `library\test\src\formatters\json.rs`."><title>json.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../../static.files/rustdoc-aa0817cf.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="test" data-themes="" data-resource-suffix="1.90.0" data-rustdoc-version="1.90.0 (1159e78c4 2025-09-14)" data-channel="1.90.0" data-search-js="search-fa3e91e5.js" data-settings-js="settings-5514c975.js" ><script src="../../../static.files/storage-68b7e25d.js"></script><script defer src="../../../static.files/src-script-813739b1.js"></script><script defer src="../../../src-files1.90.0.js"></script><script defer src="../../../static.files/main-eebb9057.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-32bb7600.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-6580c154.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-044be391.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">test\formatters/</div>json.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use </span>std::borrow::Cow;
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `library\test\src\formatters\json.rs`."><title>json.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../../static.files/rustdoc-e56847b5.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="test" data-themes="" data-resource-suffix="1.91.1" data-rustdoc-version="1.91.1 (ed61e7d7e 2025-11-07)" data-channel="1.91.1" data-search-js="search-e256b49e.js" data-stringdex-js="stringdex-c3e638e9.js" data-settings-js="settings-c38705f0.js" ><script src="../../../static.files/storage-e2aeef58.js"></script><script defer src="../../../static.files/src-script-813739b1.js"></script><script defer src="../../../src-files1.91.1.js"></script><script defer src="../../../static.files/main-6dc2a7f3.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-263c88ec.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-eab170b8.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-044be391.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">test\formatters/</div>json.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use </span>std::borrow::Cow;
 <a href=#2 id=2 data-nosnippet>2</a><span class="kw">use </span>std::io;
 <a href=#3 id=3 data-nosnippet>3</a><span class="kw">use </span>std::io::prelude::Write;
 <a href=#4 id=4 data-nosnippet>4</a>
@@ -215,71 +215,82 @@
 <a href=#215 id=215 data-nosnippet>215</a>
 <a href=#216 id=216 data-nosnippet>216</a>        <span class="prelude-val">Ok</span>(state.failed == <span class="number">0</span>)
 <a href=#217 id=217 data-nosnippet>217</a>    }
-<a href=#218 id=218 data-nosnippet>218</a>}
-<a href=#219 id=219 data-nosnippet>219</a>
-<a href=#220 id=220 data-nosnippet>220</a><span class="doccomment">/// A formatting utility used to print strings with characters in need of escaping.
-<a href=#221 id=221 data-nosnippet>221</a>/// Base code taken form `libserialize::json::escape_str`
-<a href=#222 id=222 data-nosnippet>222</a></span><span class="kw">struct </span>EscapedString&lt;S: AsRef&lt;str&gt;&gt;(S);
-<a href=#223 id=223 data-nosnippet>223</a>
-<a href=#224 id=224 data-nosnippet>224</a><span class="kw">impl</span>&lt;S: AsRef&lt;str&gt;&gt; std::fmt::Display <span class="kw">for </span>EscapedString&lt;S&gt; {
-<a href=#225 id=225 data-nosnippet>225</a>    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>std::fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; ::std::fmt::Result {
-<a href=#226 id=226 data-nosnippet>226</a>        <span class="kw">let </span><span class="kw-2">mut </span>start = <span class="number">0</span>;
-<a href=#227 id=227 data-nosnippet>227</a>
-<a href=#228 id=228 data-nosnippet>228</a>        <span class="kw">for </span>(i, byte) <span class="kw">in </span><span class="self">self</span>.<span class="number">0</span>.as_ref().bytes().enumerate() {
-<a href=#229 id=229 data-nosnippet>229</a>            <span class="kw">let </span>escaped = <span class="kw">match </span>byte {
-<a href=#230 id=230 data-nosnippet>230</a>                <span class="string">b'"' </span>=&gt; <span class="string">"\\\""</span>,
-<a href=#231 id=231 data-nosnippet>231</a>                <span class="string">b'\\' </span>=&gt; <span class="string">"\\\\"</span>,
-<a href=#232 id=232 data-nosnippet>232</a>                <span class="string">b'\x00' </span>=&gt; <span class="string">"\\u0000"</span>,
-<a href=#233 id=233 data-nosnippet>233</a>                <span class="string">b'\x01' </span>=&gt; <span class="string">"\\u0001"</span>,
-<a href=#234 id=234 data-nosnippet>234</a>                <span class="string">b'\x02' </span>=&gt; <span class="string">"\\u0002"</span>,
-<a href=#235 id=235 data-nosnippet>235</a>                <span class="string">b'\x03' </span>=&gt; <span class="string">"\\u0003"</span>,
-<a href=#236 id=236 data-nosnippet>236</a>                <span class="string">b'\x04' </span>=&gt; <span class="string">"\\u0004"</span>,
-<a href=#237 id=237 data-nosnippet>237</a>                <span class="string">b'\x05' </span>=&gt; <span class="string">"\\u0005"</span>,
-<a href=#238 id=238 data-nosnippet>238</a>                <span class="string">b'\x06' </span>=&gt; <span class="string">"\\u0006"</span>,
-<a href=#239 id=239 data-nosnippet>239</a>                <span class="string">b'\x07' </span>=&gt; <span class="string">"\\u0007"</span>,
-<a href=#240 id=240 data-nosnippet>240</a>                <span class="string">b'\x08' </span>=&gt; <span class="string">"\\b"</span>,
-<a href=#241 id=241 data-nosnippet>241</a>                <span class="string">b'\t' </span>=&gt; <span class="string">"\\t"</span>,
-<a href=#242 id=242 data-nosnippet>242</a>                <span class="string">b'\n' </span>=&gt; <span class="string">"\\n"</span>,
-<a href=#243 id=243 data-nosnippet>243</a>                <span class="string">b'\x0b' </span>=&gt; <span class="string">"\\u000b"</span>,
-<a href=#244 id=244 data-nosnippet>244</a>                <span class="string">b'\x0c' </span>=&gt; <span class="string">"\\f"</span>,
-<a href=#245 id=245 data-nosnippet>245</a>                <span class="string">b'\r' </span>=&gt; <span class="string">"\\r"</span>,
-<a href=#246 id=246 data-nosnippet>246</a>                <span class="string">b'\x0e' </span>=&gt; <span class="string">"\\u000e"</span>,
-<a href=#247 id=247 data-nosnippet>247</a>                <span class="string">b'\x0f' </span>=&gt; <span class="string">"\\u000f"</span>,
-<a href=#248 id=248 data-nosnippet>248</a>                <span class="string">b'\x10' </span>=&gt; <span class="string">"\\u0010"</span>,
-<a href=#249 id=249 data-nosnippet>249</a>                <span class="string">b'\x11' </span>=&gt; <span class="string">"\\u0011"</span>,
-<a href=#250 id=250 data-nosnippet>250</a>                <span class="string">b'\x12' </span>=&gt; <span class="string">"\\u0012"</span>,
-<a href=#251 id=251 data-nosnippet>251</a>                <span class="string">b'\x13' </span>=&gt; <span class="string">"\\u0013"</span>,
-<a href=#252 id=252 data-nosnippet>252</a>                <span class="string">b'\x14' </span>=&gt; <span class="string">"\\u0014"</span>,
-<a href=#253 id=253 data-nosnippet>253</a>                <span class="string">b'\x15' </span>=&gt; <span class="string">"\\u0015"</span>,
-<a href=#254 id=254 data-nosnippet>254</a>                <span class="string">b'\x16' </span>=&gt; <span class="string">"\\u0016"</span>,
-<a href=#255 id=255 data-nosnippet>255</a>                <span class="string">b'\x17' </span>=&gt; <span class="string">"\\u0017"</span>,
-<a href=#256 id=256 data-nosnippet>256</a>                <span class="string">b'\x18' </span>=&gt; <span class="string">"\\u0018"</span>,
-<a href=#257 id=257 data-nosnippet>257</a>                <span class="string">b'\x19' </span>=&gt; <span class="string">"\\u0019"</span>,
-<a href=#258 id=258 data-nosnippet>258</a>                <span class="string">b'\x1a' </span>=&gt; <span class="string">"\\u001a"</span>,
-<a href=#259 id=259 data-nosnippet>259</a>                <span class="string">b'\x1b' </span>=&gt; <span class="string">"\\u001b"</span>,
-<a href=#260 id=260 data-nosnippet>260</a>                <span class="string">b'\x1c' </span>=&gt; <span class="string">"\\u001c"</span>,
-<a href=#261 id=261 data-nosnippet>261</a>                <span class="string">b'\x1d' </span>=&gt; <span class="string">"\\u001d"</span>,
-<a href=#262 id=262 data-nosnippet>262</a>                <span class="string">b'\x1e' </span>=&gt; <span class="string">"\\u001e"</span>,
-<a href=#263 id=263 data-nosnippet>263</a>                <span class="string">b'\x1f' </span>=&gt; <span class="string">"\\u001f"</span>,
-<a href=#264 id=264 data-nosnippet>264</a>                <span class="string">b'\x7f' </span>=&gt; <span class="string">"\\u007f"</span>,
-<a href=#265 id=265 data-nosnippet>265</a>                <span class="kw">_ </span>=&gt; {
-<a href=#266 id=266 data-nosnippet>266</a>                    <span class="kw">continue</span>;
-<a href=#267 id=267 data-nosnippet>267</a>                }
-<a href=#268 id=268 data-nosnippet>268</a>            };
-<a href=#269 id=269 data-nosnippet>269</a>
-<a href=#270 id=270 data-nosnippet>270</a>            <span class="kw">if </span>start &lt; i {
-<a href=#271 id=271 data-nosnippet>271</a>                f.write_str(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>.as_ref()[start..i])<span class="question-mark">?</span>;
-<a href=#272 id=272 data-nosnippet>272</a>            }
-<a href=#273 id=273 data-nosnippet>273</a>
-<a href=#274 id=274 data-nosnippet>274</a>            f.write_str(escaped)<span class="question-mark">?</span>;
-<a href=#275 id=275 data-nosnippet>275</a>
-<a href=#276 id=276 data-nosnippet>276</a>            start = i + <span class="number">1</span>;
-<a href=#277 id=277 data-nosnippet>277</a>        }
-<a href=#278 id=278 data-nosnippet>278</a>
-<a href=#279 id=279 data-nosnippet>279</a>        <span class="kw">if </span>start != <span class="self">self</span>.<span class="number">0</span>.as_ref().len() {
-<a href=#280 id=280 data-nosnippet>280</a>            f.write_str(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>.as_ref()[start..])<span class="question-mark">?</span>;
-<a href=#281 id=281 data-nosnippet>281</a>        }
-<a href=#282 id=282 data-nosnippet>282</a>
-<a href=#283 id=283 data-nosnippet>283</a>        <span class="prelude-val">Ok</span>(())
-<a href=#284 id=284 data-nosnippet>284</a>    }
-<a href=#285 id=285 data-nosnippet>285</a>}</code></pre></div></section></main></body></html>
+<a href=#218 id=218 data-nosnippet>218</a>
+<a href=#219 id=219 data-nosnippet>219</a>    <span class="kw">fn </span>write_merged_doctests_times(
+<a href=#220 id=220 data-nosnippet>220</a>        <span class="kw-2">&amp;mut </span><span class="self">self</span>,
+<a href=#221 id=221 data-nosnippet>221</a>        total_time: f64,
+<a href=#222 id=222 data-nosnippet>222</a>        compilation_time: f64,
+<a href=#223 id=223 data-nosnippet>223</a>    ) -&gt; io::Result&lt;()&gt; {
+<a href=#224 id=224 data-nosnippet>224</a>        <span class="kw">let </span>newline = <span class="string">"\n"</span>;
+<a href=#225 id=225 data-nosnippet>225</a>        <span class="self">self</span>.writeln_message(<span class="kw-2">&amp;</span><span class="macro">format!</span>(
+<a href=#226 id=226 data-nosnippet>226</a>            <span class="string">r#"{{ "type": "report", "total_time": {total_time}, "compilation_time": {compilation_time} }}{newline}"#</span>,
+<a href=#227 id=227 data-nosnippet>227</a>        ))
+<a href=#228 id=228 data-nosnippet>228</a>    }
+<a href=#229 id=229 data-nosnippet>229</a>}
+<a href=#230 id=230 data-nosnippet>230</a>
+<a href=#231 id=231 data-nosnippet>231</a><span class="doccomment">/// A formatting utility used to print strings with characters in need of escaping.
+<a href=#232 id=232 data-nosnippet>232</a>/// Base code taken form `libserialize::json::escape_str`
+<a href=#233 id=233 data-nosnippet>233</a></span><span class="kw">struct </span>EscapedString&lt;S: AsRef&lt;str&gt;&gt;(S);
+<a href=#234 id=234 data-nosnippet>234</a>
+<a href=#235 id=235 data-nosnippet>235</a><span class="kw">impl</span>&lt;S: AsRef&lt;str&gt;&gt; std::fmt::Display <span class="kw">for </span>EscapedString&lt;S&gt; {
+<a href=#236 id=236 data-nosnippet>236</a>    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>std::fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; ::std::fmt::Result {
+<a href=#237 id=237 data-nosnippet>237</a>        <span class="kw">let </span><span class="kw-2">mut </span>start = <span class="number">0</span>;
+<a href=#238 id=238 data-nosnippet>238</a>
+<a href=#239 id=239 data-nosnippet>239</a>        <span class="kw">for </span>(i, byte) <span class="kw">in </span><span class="self">self</span>.<span class="number">0</span>.as_ref().bytes().enumerate() {
+<a href=#240 id=240 data-nosnippet>240</a>            <span class="kw">let </span>escaped = <span class="kw">match </span>byte {
+<a href=#241 id=241 data-nosnippet>241</a>                <span class="string">b'"' </span>=&gt; <span class="string">"\\\""</span>,
+<a href=#242 id=242 data-nosnippet>242</a>                <span class="string">b'\\' </span>=&gt; <span class="string">"\\\\"</span>,
+<a href=#243 id=243 data-nosnippet>243</a>                <span class="string">b'\x00' </span>=&gt; <span class="string">"\\u0000"</span>,
+<a href=#244 id=244 data-nosnippet>244</a>                <span class="string">b'\x01' </span>=&gt; <span class="string">"\\u0001"</span>,
+<a href=#245 id=245 data-nosnippet>245</a>                <span class="string">b'\x02' </span>=&gt; <span class="string">"\\u0002"</span>,
+<a href=#246 id=246 data-nosnippet>246</a>                <span class="string">b'\x03' </span>=&gt; <span class="string">"\\u0003"</span>,
+<a href=#247 id=247 data-nosnippet>247</a>                <span class="string">b'\x04' </span>=&gt; <span class="string">"\\u0004"</span>,
+<a href=#248 id=248 data-nosnippet>248</a>                <span class="string">b'\x05' </span>=&gt; <span class="string">"\\u0005"</span>,
+<a href=#249 id=249 data-nosnippet>249</a>                <span class="string">b'\x06' </span>=&gt; <span class="string">"\\u0006"</span>,
+<a href=#250 id=250 data-nosnippet>250</a>                <span class="string">b'\x07' </span>=&gt; <span class="string">"\\u0007"</span>,
+<a href=#251 id=251 data-nosnippet>251</a>                <span class="string">b'\x08' </span>=&gt; <span class="string">"\\b"</span>,
+<a href=#252 id=252 data-nosnippet>252</a>                <span class="string">b'\t' </span>=&gt; <span class="string">"\\t"</span>,
+<a href=#253 id=253 data-nosnippet>253</a>                <span class="string">b'\n' </span>=&gt; <span class="string">"\\n"</span>,
+<a href=#254 id=254 data-nosnippet>254</a>                <span class="string">b'\x0b' </span>=&gt; <span class="string">"\\u000b"</span>,
+<a href=#255 id=255 data-nosnippet>255</a>                <span class="string">b'\x0c' </span>=&gt; <span class="string">"\\f"</span>,
+<a href=#256 id=256 data-nosnippet>256</a>                <span class="string">b'\r' </span>=&gt; <span class="string">"\\r"</span>,
+<a href=#257 id=257 data-nosnippet>257</a>                <span class="string">b'\x0e' </span>=&gt; <span class="string">"\\u000e"</span>,
+<a href=#258 id=258 data-nosnippet>258</a>                <span class="string">b'\x0f' </span>=&gt; <span class="string">"\\u000f"</span>,
+<a href=#259 id=259 data-nosnippet>259</a>                <span class="string">b'\x10' </span>=&gt; <span class="string">"\\u0010"</span>,
+<a href=#260 id=260 data-nosnippet>260</a>                <span class="string">b'\x11' </span>=&gt; <span class="string">"\\u0011"</span>,
+<a href=#261 id=261 data-nosnippet>261</a>                <span class="string">b'\x12' </span>=&gt; <span class="string">"\\u0012"</span>,
+<a href=#262 id=262 data-nosnippet>262</a>                <span class="string">b'\x13' </span>=&gt; <span class="string">"\\u0013"</span>,
+<a href=#263 id=263 data-nosnippet>263</a>                <span class="string">b'\x14' </span>=&gt; <span class="string">"\\u0014"</span>,
+<a href=#264 id=264 data-nosnippet>264</a>                <span class="string">b'\x15' </span>=&gt; <span class="string">"\\u0015"</span>,
+<a href=#265 id=265 data-nosnippet>265</a>                <span class="string">b'\x16' </span>=&gt; <span class="string">"\\u0016"</span>,
+<a href=#266 id=266 data-nosnippet>266</a>                <span class="string">b'\x17' </span>=&gt; <span class="string">"\\u0017"</span>,
+<a href=#267 id=267 data-nosnippet>267</a>                <span class="string">b'\x18' </span>=&gt; <span class="string">"\\u0018"</span>,
+<a href=#268 id=268 data-nosnippet>268</a>                <span class="string">b'\x19' </span>=&gt; <span class="string">"\\u0019"</span>,
+<a href=#269 id=269 data-nosnippet>269</a>                <span class="string">b'\x1a' </span>=&gt; <span class="string">"\\u001a"</span>,
+<a href=#270 id=270 data-nosnippet>270</a>                <span class="string">b'\x1b' </span>=&gt; <span class="string">"\\u001b"</span>,
+<a href=#271 id=271 data-nosnippet>271</a>                <span class="string">b'\x1c' </span>=&gt; <span class="string">"\\u001c"</span>,
+<a href=#272 id=272 data-nosnippet>272</a>                <span class="string">b'\x1d' </span>=&gt; <span class="string">"\\u001d"</span>,
+<a href=#273 id=273 data-nosnippet>273</a>                <span class="string">b'\x1e' </span>=&gt; <span class="string">"\\u001e"</span>,
+<a href=#274 id=274 data-nosnippet>274</a>                <span class="string">b'\x1f' </span>=&gt; <span class="string">"\\u001f"</span>,
+<a href=#275 id=275 data-nosnippet>275</a>                <span class="string">b'\x7f' </span>=&gt; <span class="string">"\\u007f"</span>,
+<a href=#276 id=276 data-nosnippet>276</a>                <span class="kw">_ </span>=&gt; {
+<a href=#277 id=277 data-nosnippet>277</a>                    <span class="kw">continue</span>;
+<a href=#278 id=278 data-nosnippet>278</a>                }
+<a href=#279 id=279 data-nosnippet>279</a>            };
+<a href=#280 id=280 data-nosnippet>280</a>
+<a href=#281 id=281 data-nosnippet>281</a>            <span class="kw">if </span>start &lt; i {
+<a href=#282 id=282 data-nosnippet>282</a>                f.write_str(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>.as_ref()[start..i])<span class="question-mark">?</span>;
+<a href=#283 id=283 data-nosnippet>283</a>            }
+<a href=#284 id=284 data-nosnippet>284</a>
+<a href=#285 id=285 data-nosnippet>285</a>            f.write_str(escaped)<span class="question-mark">?</span>;
+<a href=#286 id=286 data-nosnippet>286</a>
+<a href=#287 id=287 data-nosnippet>287</a>            start = i + <span class="number">1</span>;
+<a href=#288 id=288 data-nosnippet>288</a>        }
+<a href=#289 id=289 data-nosnippet>289</a>
+<a href=#290 id=290 data-nosnippet>290</a>        <span class="kw">if </span>start != <span class="self">self</span>.<span class="number">0</span>.as_ref().len() {
+<a href=#291 id=291 data-nosnippet>291</a>            f.write_str(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>.as_ref()[start..])<span class="question-mark">?</span>;
+<a href=#292 id=292 data-nosnippet>292</a>        }
+<a href=#293 id=293 data-nosnippet>293</a>
+<a href=#294 id=294 data-nosnippet>294</a>        <span class="prelude-val">Ok</span>(())
+<a href=#295 id=295 data-nosnippet>295</a>    }
+<a href=#296 id=296 data-nosnippet>296</a>}</code></pre></div></section></main></body></html>

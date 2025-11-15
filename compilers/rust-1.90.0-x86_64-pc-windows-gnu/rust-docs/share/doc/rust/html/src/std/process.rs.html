@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `library\std\src\process.rs`."><title>process.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-aa0817cf.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="std" data-themes="" data-resource-suffix="1.90.0" data-rustdoc-version="1.90.0 (1159e78c4 2025-09-14)" data-channel="1.90.0" data-search-js="search-fa3e91e5.js" data-settings-js="settings-5514c975.js" ><script src="../../static.files/storage-68b7e25d.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files1.90.0.js"></script><script defer src="../../static.files/main-eebb9057.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-32bb7600.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-6580c154.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-044be391.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">std/</div>process.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-4"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="doccomment">//! A module for working with processes.
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `library\std\src\process.rs`."><title>process.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-e56847b5.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="std" data-themes="" data-resource-suffix="1.91.1" data-rustdoc-version="1.91.1 (ed61e7d7e 2025-11-07)" data-channel="1.91.1" data-search-js="search-e256b49e.js" data-stringdex-js="stringdex-c3e638e9.js" data-settings-js="settings-c38705f0.js" ><script src="../../static.files/storage-e2aeef58.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files1.91.1.js"></script><script defer src="../../static.files/main-6dc2a7f3.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-263c88ec.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-eab170b8.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-044be391.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">std/</div>process.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-4"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="doccomment">//! A module for working with processes.
 <a href=#2 id=2 data-nosnippet>2</a>//!
 <a href=#3 id=3 data-nosnippet>3</a>//! This module is mostly concerned with spawning and interacting with child
 <a href=#4 id=4 data-nosnippet>4</a>//! processes, but it also provides [`abort`] and [`exit`] for terminating the
@@ -2495,91 +2495,92 @@
 <a href=#2495 id=2495 data-nosnippet>2495</a></span><span class="attr">#[stable(feature = <span class="string">"process_abort"</span>, since = <span class="string">"1.17.0"</span>)]
 <a href=#2496 id=2496 data-nosnippet>2496</a>#[cold]
 <a href=#2497 id=2497 data-nosnippet>2497</a>#[cfg_attr(not(test), rustc_diagnostic_item = <span class="string">"process_abort"</span>)]
-<a href=#2498 id=2498 data-nosnippet>2498</a></span><span class="kw">pub fn </span>abort() -&gt; ! {
-<a href=#2499 id=2499 data-nosnippet>2499</a>    <span class="kw">crate</span>::sys::abort_internal();
-<a href=#2500 id=2500 data-nosnippet>2500</a>}
-<a href=#2501 id=2501 data-nosnippet>2501</a>
-<a href=#2502 id=2502 data-nosnippet>2502</a><span class="doccomment">/// Returns the OS-assigned process identifier associated with this process.
-<a href=#2503 id=2503 data-nosnippet>2503</a>///
-<a href=#2504 id=2504 data-nosnippet>2504</a>/// # Examples
-<a href=#2505 id=2505 data-nosnippet>2505</a>///
-<a href=#2506 id=2506 data-nosnippet>2506</a>/// ```no_run
-<a href=#2507 id=2507 data-nosnippet>2507</a>/// use std::process;
-<a href=#2508 id=2508 data-nosnippet>2508</a>///
-<a href=#2509 id=2509 data-nosnippet>2509</a>/// println!("My pid is {}", process::id());
-<a href=#2510 id=2510 data-nosnippet>2510</a>/// ```
-<a href=#2511 id=2511 data-nosnippet>2511</a></span><span class="attr">#[must_use]
-<a href=#2512 id=2512 data-nosnippet>2512</a>#[stable(feature = <span class="string">"getpid"</span>, since = <span class="string">"1.26.0"</span>)]
-<a href=#2513 id=2513 data-nosnippet>2513</a></span><span class="kw">pub fn </span>id() -&gt; u32 {
-<a href=#2514 id=2514 data-nosnippet>2514</a>    <span class="kw">crate</span>::sys::os::getpid()
-<a href=#2515 id=2515 data-nosnippet>2515</a>}
-<a href=#2516 id=2516 data-nosnippet>2516</a>
-<a href=#2517 id=2517 data-nosnippet>2517</a><span class="doccomment">/// A trait for implementing arbitrary return types in the `main` function.
-<a href=#2518 id=2518 data-nosnippet>2518</a>///
-<a href=#2519 id=2519 data-nosnippet>2519</a>/// The C-main function only supports returning integers.
-<a href=#2520 id=2520 data-nosnippet>2520</a>/// So, every type implementing the `Termination` trait has to be converted
-<a href=#2521 id=2521 data-nosnippet>2521</a>/// to an integer.
-<a href=#2522 id=2522 data-nosnippet>2522</a>///
-<a href=#2523 id=2523 data-nosnippet>2523</a>/// The default implementations are returning `libc::EXIT_SUCCESS` to indicate
-<a href=#2524 id=2524 data-nosnippet>2524</a>/// a successful execution. In case of a failure, `libc::EXIT_FAILURE` is returned.
-<a href=#2525 id=2525 data-nosnippet>2525</a>///
-<a href=#2526 id=2526 data-nosnippet>2526</a>/// Because different runtimes have different specifications on the return value
-<a href=#2527 id=2527 data-nosnippet>2527</a>/// of the `main` function, this trait is likely to be available only on
-<a href=#2528 id=2528 data-nosnippet>2528</a>/// standard library's runtime for convenience. Other runtimes are not required
-<a href=#2529 id=2529 data-nosnippet>2529</a>/// to provide similar functionality.
-<a href=#2530 id=2530 data-nosnippet>2530</a></span><span class="attr">#[cfg_attr(not(any(test, doctest)), lang = <span class="string">"termination"</span>)]
-<a href=#2531 id=2531 data-nosnippet>2531</a>#[stable(feature = <span class="string">"termination_trait_lib"</span>, since = <span class="string">"1.61.0"</span>)]
-<a href=#2532 id=2532 data-nosnippet>2532</a>#[rustc_on_unimplemented(on(
-<a href=#2533 id=2533 data-nosnippet>2533</a>    cause = <span class="string">"MainFunctionType"</span>,
-<a href=#2534 id=2534 data-nosnippet>2534</a>    message = <span class="string">"`main` has invalid return type `{Self}`"</span>,
-<a href=#2535 id=2535 data-nosnippet>2535</a>    label = <span class="string">"`main` can only return types that implement `{This}`"
-<a href=#2536 id=2536 data-nosnippet>2536</a></span>))]
-<a href=#2537 id=2537 data-nosnippet>2537</a></span><span class="kw">pub trait </span>Termination {
-<a href=#2538 id=2538 data-nosnippet>2538</a>    <span class="doccomment">/// Is called to get the representation of the value as status code.
-<a href=#2539 id=2539 data-nosnippet>2539</a>    /// This status code is returned to the operating system.
-<a href=#2540 id=2540 data-nosnippet>2540</a>    </span><span class="attr">#[stable(feature = <span class="string">"termination_trait_lib"</span>, since = <span class="string">"1.61.0"</span>)]
-<a href=#2541 id=2541 data-nosnippet>2541</a>    </span><span class="kw">fn </span>report(<span class="self">self</span>) -&gt; ExitCode;
-<a href=#2542 id=2542 data-nosnippet>2542</a>}
-<a href=#2543 id=2543 data-nosnippet>2543</a>
-<a href=#2544 id=2544 data-nosnippet>2544</a><span class="attr">#[stable(feature = <span class="string">"termination_trait_lib"</span>, since = <span class="string">"1.61.0"</span>)]
-<a href=#2545 id=2545 data-nosnippet>2545</a></span><span class="kw">impl </span>Termination <span class="kw">for </span>() {
-<a href=#2546 id=2546 data-nosnippet>2546</a>    <span class="attr">#[inline]
-<a href=#2547 id=2547 data-nosnippet>2547</a>    </span><span class="kw">fn </span>report(<span class="self">self</span>) -&gt; ExitCode {
-<a href=#2548 id=2548 data-nosnippet>2548</a>        ExitCode::SUCCESS
-<a href=#2549 id=2549 data-nosnippet>2549</a>    }
-<a href=#2550 id=2550 data-nosnippet>2550</a>}
-<a href=#2551 id=2551 data-nosnippet>2551</a>
-<a href=#2552 id=2552 data-nosnippet>2552</a><span class="attr">#[stable(feature = <span class="string">"termination_trait_lib"</span>, since = <span class="string">"1.61.0"</span>)]
-<a href=#2553 id=2553 data-nosnippet>2553</a></span><span class="kw">impl </span>Termination <span class="kw">for </span>! {
-<a href=#2554 id=2554 data-nosnippet>2554</a>    <span class="kw">fn </span>report(<span class="self">self</span>) -&gt; ExitCode {
-<a href=#2555 id=2555 data-nosnippet>2555</a>        <span class="self">self
-<a href=#2556 id=2556 data-nosnippet>2556</a>    </span>}
-<a href=#2557 id=2557 data-nosnippet>2557</a>}
-<a href=#2558 id=2558 data-nosnippet>2558</a>
-<a href=#2559 id=2559 data-nosnippet>2559</a><span class="attr">#[stable(feature = <span class="string">"termination_trait_lib"</span>, since = <span class="string">"1.61.0"</span>)]
-<a href=#2560 id=2560 data-nosnippet>2560</a></span><span class="kw">impl </span>Termination <span class="kw">for </span>Infallible {
-<a href=#2561 id=2561 data-nosnippet>2561</a>    <span class="kw">fn </span>report(<span class="self">self</span>) -&gt; ExitCode {
-<a href=#2562 id=2562 data-nosnippet>2562</a>        <span class="kw">match </span><span class="self">self </span>{}
-<a href=#2563 id=2563 data-nosnippet>2563</a>    }
-<a href=#2564 id=2564 data-nosnippet>2564</a>}
-<a href=#2565 id=2565 data-nosnippet>2565</a>
-<a href=#2566 id=2566 data-nosnippet>2566</a><span class="attr">#[stable(feature = <span class="string">"termination_trait_lib"</span>, since = <span class="string">"1.61.0"</span>)]
-<a href=#2567 id=2567 data-nosnippet>2567</a></span><span class="kw">impl </span>Termination <span class="kw">for </span>ExitCode {
-<a href=#2568 id=2568 data-nosnippet>2568</a>    <span class="attr">#[inline]
-<a href=#2569 id=2569 data-nosnippet>2569</a>    </span><span class="kw">fn </span>report(<span class="self">self</span>) -&gt; ExitCode {
-<a href=#2570 id=2570 data-nosnippet>2570</a>        <span class="self">self
-<a href=#2571 id=2571 data-nosnippet>2571</a>    </span>}
-<a href=#2572 id=2572 data-nosnippet>2572</a>}
-<a href=#2573 id=2573 data-nosnippet>2573</a>
-<a href=#2574 id=2574 data-nosnippet>2574</a><span class="attr">#[stable(feature = <span class="string">"termination_trait_lib"</span>, since = <span class="string">"1.61.0"</span>)]
-<a href=#2575 id=2575 data-nosnippet>2575</a></span><span class="kw">impl</span>&lt;T: Termination, E: fmt::Debug&gt; Termination <span class="kw">for </span><span class="prelude-ty">Result</span>&lt;T, E&gt; {
-<a href=#2576 id=2576 data-nosnippet>2576</a>    <span class="kw">fn </span>report(<span class="self">self</span>) -&gt; ExitCode {
-<a href=#2577 id=2577 data-nosnippet>2577</a>        <span class="kw">match </span><span class="self">self </span>{
-<a href=#2578 id=2578 data-nosnippet>2578</a>            <span class="prelude-val">Ok</span>(val) =&gt; val.report(),
-<a href=#2579 id=2579 data-nosnippet>2579</a>            <span class="prelude-val">Err</span>(err) =&gt; {
-<a href=#2580 id=2580 data-nosnippet>2580</a>                io::attempt_print_to_stderr(<span class="macro">format_args_nl!</span>(<span class="string">"Error: {err:?}"</span>));
-<a href=#2581 id=2581 data-nosnippet>2581</a>                ExitCode::FAILURE
-<a href=#2582 id=2582 data-nosnippet>2582</a>            }
-<a href=#2583 id=2583 data-nosnippet>2583</a>        }
-<a href=#2584 id=2584 data-nosnippet>2584</a>    }
-<a href=#2585 id=2585 data-nosnippet>2585</a>}</code></pre></div></section></main></body></html>
+<a href=#2498 id=2498 data-nosnippet>2498</a>#[cfg_attr(miri, track_caller)] </span><span class="comment">// even without panics, this helps for Miri backtraces
+<a href=#2499 id=2499 data-nosnippet>2499</a></span><span class="kw">pub fn </span>abort() -&gt; ! {
+<a href=#2500 id=2500 data-nosnippet>2500</a>    <span class="kw">crate</span>::sys::abort_internal();
+<a href=#2501 id=2501 data-nosnippet>2501</a>}
+<a href=#2502 id=2502 data-nosnippet>2502</a>
+<a href=#2503 id=2503 data-nosnippet>2503</a><span class="doccomment">/// Returns the OS-assigned process identifier associated with this process.
+<a href=#2504 id=2504 data-nosnippet>2504</a>///
+<a href=#2505 id=2505 data-nosnippet>2505</a>/// # Examples
+<a href=#2506 id=2506 data-nosnippet>2506</a>///
+<a href=#2507 id=2507 data-nosnippet>2507</a>/// ```no_run
+<a href=#2508 id=2508 data-nosnippet>2508</a>/// use std::process;
+<a href=#2509 id=2509 data-nosnippet>2509</a>///
+<a href=#2510 id=2510 data-nosnippet>2510</a>/// println!("My pid is {}", process::id());
+<a href=#2511 id=2511 data-nosnippet>2511</a>/// ```
+<a href=#2512 id=2512 data-nosnippet>2512</a></span><span class="attr">#[must_use]
+<a href=#2513 id=2513 data-nosnippet>2513</a>#[stable(feature = <span class="string">"getpid"</span>, since = <span class="string">"1.26.0"</span>)]
+<a href=#2514 id=2514 data-nosnippet>2514</a></span><span class="kw">pub fn </span>id() -&gt; u32 {
+<a href=#2515 id=2515 data-nosnippet>2515</a>    <span class="kw">crate</span>::sys::os::getpid()
+<a href=#2516 id=2516 data-nosnippet>2516</a>}
+<a href=#2517 id=2517 data-nosnippet>2517</a>
+<a href=#2518 id=2518 data-nosnippet>2518</a><span class="doccomment">/// A trait for implementing arbitrary return types in the `main` function.
+<a href=#2519 id=2519 data-nosnippet>2519</a>///
+<a href=#2520 id=2520 data-nosnippet>2520</a>/// The C-main function only supports returning integers.
+<a href=#2521 id=2521 data-nosnippet>2521</a>/// So, every type implementing the `Termination` trait has to be converted
+<a href=#2522 id=2522 data-nosnippet>2522</a>/// to an integer.
+<a href=#2523 id=2523 data-nosnippet>2523</a>///
+<a href=#2524 id=2524 data-nosnippet>2524</a>/// The default implementations are returning `libc::EXIT_SUCCESS` to indicate
+<a href=#2525 id=2525 data-nosnippet>2525</a>/// a successful execution. In case of a failure, `libc::EXIT_FAILURE` is returned.
+<a href=#2526 id=2526 data-nosnippet>2526</a>///
+<a href=#2527 id=2527 data-nosnippet>2527</a>/// Because different runtimes have different specifications on the return value
+<a href=#2528 id=2528 data-nosnippet>2528</a>/// of the `main` function, this trait is likely to be available only on
+<a href=#2529 id=2529 data-nosnippet>2529</a>/// standard library's runtime for convenience. Other runtimes are not required
+<a href=#2530 id=2530 data-nosnippet>2530</a>/// to provide similar functionality.
+<a href=#2531 id=2531 data-nosnippet>2531</a></span><span class="attr">#[cfg_attr(not(any(test, doctest)), lang = <span class="string">"termination"</span>)]
+<a href=#2532 id=2532 data-nosnippet>2532</a>#[stable(feature = <span class="string">"termination_trait_lib"</span>, since = <span class="string">"1.61.0"</span>)]
+<a href=#2533 id=2533 data-nosnippet>2533</a>#[rustc_on_unimplemented(on(
+<a href=#2534 id=2534 data-nosnippet>2534</a>    cause = <span class="string">"MainFunctionType"</span>,
+<a href=#2535 id=2535 data-nosnippet>2535</a>    message = <span class="string">"`main` has invalid return type `{Self}`"</span>,
+<a href=#2536 id=2536 data-nosnippet>2536</a>    label = <span class="string">"`main` can only return types that implement `{This}`"
+<a href=#2537 id=2537 data-nosnippet>2537</a></span>))]
+<a href=#2538 id=2538 data-nosnippet>2538</a></span><span class="kw">pub trait </span>Termination {
+<a href=#2539 id=2539 data-nosnippet>2539</a>    <span class="doccomment">/// Is called to get the representation of the value as status code.
+<a href=#2540 id=2540 data-nosnippet>2540</a>    /// This status code is returned to the operating system.
+<a href=#2541 id=2541 data-nosnippet>2541</a>    </span><span class="attr">#[stable(feature = <span class="string">"termination_trait_lib"</span>, since = <span class="string">"1.61.0"</span>)]
+<a href=#2542 id=2542 data-nosnippet>2542</a>    </span><span class="kw">fn </span>report(<span class="self">self</span>) -&gt; ExitCode;
+<a href=#2543 id=2543 data-nosnippet>2543</a>}
+<a href=#2544 id=2544 data-nosnippet>2544</a>
+<a href=#2545 id=2545 data-nosnippet>2545</a><span class="attr">#[stable(feature = <span class="string">"termination_trait_lib"</span>, since = <span class="string">"1.61.0"</span>)]
+<a href=#2546 id=2546 data-nosnippet>2546</a></span><span class="kw">impl </span>Termination <span class="kw">for </span>() {
+<a href=#2547 id=2547 data-nosnippet>2547</a>    <span class="attr">#[inline]
+<a href=#2548 id=2548 data-nosnippet>2548</a>    </span><span class="kw">fn </span>report(<span class="self">self</span>) -&gt; ExitCode {
+<a href=#2549 id=2549 data-nosnippet>2549</a>        ExitCode::SUCCESS
+<a href=#2550 id=2550 data-nosnippet>2550</a>    }
+<a href=#2551 id=2551 data-nosnippet>2551</a>}
+<a href=#2552 id=2552 data-nosnippet>2552</a>
+<a href=#2553 id=2553 data-nosnippet>2553</a><span class="attr">#[stable(feature = <span class="string">"termination_trait_lib"</span>, since = <span class="string">"1.61.0"</span>)]
+<a href=#2554 id=2554 data-nosnippet>2554</a></span><span class="kw">impl </span>Termination <span class="kw">for </span>! {
+<a href=#2555 id=2555 data-nosnippet>2555</a>    <span class="kw">fn </span>report(<span class="self">self</span>) -&gt; ExitCode {
+<a href=#2556 id=2556 data-nosnippet>2556</a>        <span class="self">self
+<a href=#2557 id=2557 data-nosnippet>2557</a>    </span>}
+<a href=#2558 id=2558 data-nosnippet>2558</a>}
+<a href=#2559 id=2559 data-nosnippet>2559</a>
+<a href=#2560 id=2560 data-nosnippet>2560</a><span class="attr">#[stable(feature = <span class="string">"termination_trait_lib"</span>, since = <span class="string">"1.61.0"</span>)]
+<a href=#2561 id=2561 data-nosnippet>2561</a></span><span class="kw">impl </span>Termination <span class="kw">for </span>Infallible {
+<a href=#2562 id=2562 data-nosnippet>2562</a>    <span class="kw">fn </span>report(<span class="self">self</span>) -&gt; ExitCode {
+<a href=#2563 id=2563 data-nosnippet>2563</a>        <span class="kw">match </span><span class="self">self </span>{}
+<a href=#2564 id=2564 data-nosnippet>2564</a>    }
+<a href=#2565 id=2565 data-nosnippet>2565</a>}
+<a href=#2566 id=2566 data-nosnippet>2566</a>
+<a href=#2567 id=2567 data-nosnippet>2567</a><span class="attr">#[stable(feature = <span class="string">"termination_trait_lib"</span>, since = <span class="string">"1.61.0"</span>)]
+<a href=#2568 id=2568 data-nosnippet>2568</a></span><span class="kw">impl </span>Termination <span class="kw">for </span>ExitCode {
+<a href=#2569 id=2569 data-nosnippet>2569</a>    <span class="attr">#[inline]
+<a href=#2570 id=2570 data-nosnippet>2570</a>    </span><span class="kw">fn </span>report(<span class="self">self</span>) -&gt; ExitCode {
+<a href=#2571 id=2571 data-nosnippet>2571</a>        <span class="self">self
+<a href=#2572 id=2572 data-nosnippet>2572</a>    </span>}
+<a href=#2573 id=2573 data-nosnippet>2573</a>}
+<a href=#2574 id=2574 data-nosnippet>2574</a>
+<a href=#2575 id=2575 data-nosnippet>2575</a><span class="attr">#[stable(feature = <span class="string">"termination_trait_lib"</span>, since = <span class="string">"1.61.0"</span>)]
+<a href=#2576 id=2576 data-nosnippet>2576</a></span><span class="kw">impl</span>&lt;T: Termination, E: fmt::Debug&gt; Termination <span class="kw">for </span><span class="prelude-ty">Result</span>&lt;T, E&gt; {
+<a href=#2577 id=2577 data-nosnippet>2577</a>    <span class="kw">fn </span>report(<span class="self">self</span>) -&gt; ExitCode {
+<a href=#2578 id=2578 data-nosnippet>2578</a>        <span class="kw">match </span><span class="self">self </span>{
+<a href=#2579 id=2579 data-nosnippet>2579</a>            <span class="prelude-val">Ok</span>(val) =&gt; val.report(),
+<a href=#2580 id=2580 data-nosnippet>2580</a>            <span class="prelude-val">Err</span>(err) =&gt; {
+<a href=#2581 id=2581 data-nosnippet>2581</a>                io::attempt_print_to_stderr(<span class="macro">format_args_nl!</span>(<span class="string">"Error: {err:?}"</span>));
+<a href=#2582 id=2582 data-nosnippet>2582</a>                ExitCode::FAILURE
+<a href=#2583 id=2583 data-nosnippet>2583</a>            }
+<a href=#2584 id=2584 data-nosnippet>2584</a>        }
+<a href=#2585 id=2585 data-nosnippet>2585</a>    }
+<a href=#2586 id=2586 data-nosnippet>2586</a>}</code></pre></div></section></main></body></html>

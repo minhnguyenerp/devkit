@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `library\std_detect\src\detect\os\x86.rs`."><title>x86.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../..\../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../..\../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../..\../static.files/rustdoc-aa0817cf.css"><meta name="rustdoc-vars" data-root-path="../../..\../" data-static-root-path="../../..\../static.files/" data-current-crate="std_detect" data-themes="" data-resource-suffix="1.90.0" data-rustdoc-version="1.90.0 (1159e78c4 2025-09-14)" data-channel="1.90.0" data-search-js="search-fa3e91e5.js" data-settings-js="settings-5514c975.js" ><script src="../../..\../static.files/storage-68b7e25d.js"></script><script defer src="../../..\../static.files/src-script-813739b1.js"></script><script defer src="../../..\../src-files1.90.0.js"></script><script defer src="../../..\../static.files/main-eebb9057.js"></script><noscript><link rel="stylesheet" href="../../..\../static.files/noscript-32bb7600.css"></noscript><link rel="alternate icon" type="image/png" href="../../..\../static.files/favicon-32x32-6580c154.png"><link rel="icon" type="image/svg+xml" href="../../..\../static.files/favicon-044be391.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">std_detect\detect\os/</div>x86.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="doccomment">//! x86 run-time feature detection is OS independent.
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `library\std_detect\src\detect\os\x86.rs`."><title>x86.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../..\../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../..\../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../..\../static.files/rustdoc-e56847b5.css"><meta name="rustdoc-vars" data-root-path="../../..\../" data-static-root-path="../../..\../static.files/" data-current-crate="std_detect" data-themes="" data-resource-suffix="1.91.1" data-rustdoc-version="1.91.1 (ed61e7d7e 2025-11-07)" data-channel="1.91.1" data-search-js="search-e256b49e.js" data-stringdex-js="stringdex-c3e638e9.js" data-settings-js="settings-c38705f0.js" ><script src="../../..\../static.files/storage-e2aeef58.js"></script><script defer src="../../..\../static.files/src-script-813739b1.js"></script><script defer src="../../..\../src-files1.91.1.js"></script><script defer src="../../..\../static.files/main-6dc2a7f3.js"></script><noscript><link rel="stylesheet" href="../../..\../static.files/noscript-263c88ec.css"></noscript><link rel="alternate icon" type="image/png" href="../../..\../static.files/favicon-32x32-eab170b8.png"><link rel="icon" type="image/svg+xml" href="../../..\../static.files/favicon-044be391.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">std_detect\detect\os/</div>x86.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="doccomment">//! x86 run-time feature detection is OS independent.
 <a href=#2 id=2 data-nosnippet>2</a>
 <a href=#3 id=3 data-nosnippet>3</a></span><span class="attr">#[cfg(target_arch = <span class="string">"x86"</span>)]
 <a href=#4 id=4 data-nosnippet>4</a></span><span class="kw">use </span>core::arch::x86::<span class="kw-2">*</span>;
@@ -137,180 +137,196 @@
 <a href=#137 id=137 data-nosnippet>137</a>            enable(ebx, <span class="number">2</span>, Feature::widekl);
 <a href=#138 id=138 data-nosnippet>138</a>        }
 <a href=#139 id=139 data-nosnippet>139</a>
-<a href=#140 id=140 data-nosnippet>140</a>        <span class="comment">// `XSAVE` and `AVX` support:
-<a href=#141 id=141 data-nosnippet>141</a>        </span><span class="kw">let </span>cpu_xsave = bit::test(proc_info_ecx <span class="kw">as </span>usize, <span class="number">26</span>);
-<a href=#142 id=142 data-nosnippet>142</a>        <span class="kw">if </span>cpu_xsave {
-<a href=#143 id=143 data-nosnippet>143</a>            <span class="comment">// 0. Here the CPU supports `XSAVE`.
-<a href=#144 id=144 data-nosnippet>144</a>
-<a href=#145 id=145 data-nosnippet>145</a>            // 1. Detect `OSXSAVE`, that is, whether the OS is AVX enabled and
-<a href=#146 id=146 data-nosnippet>146</a>            // supports saving the state of the AVX/AVX2 vector registers on
-<a href=#147 id=147 data-nosnippet>147</a>            // context-switches, see:
-<a href=#148 id=148 data-nosnippet>148</a>            //
-<a href=#149 id=149 data-nosnippet>149</a>            // - [intel: is avx enabled?][is_avx_enabled],
-<a href=#150 id=150 data-nosnippet>150</a>            // - [mozilla: sse.cpp][mozilla_sse_cpp].
-<a href=#151 id=151 data-nosnippet>151</a>            //
-<a href=#152 id=152 data-nosnippet>152</a>            // [is_avx_enabled]: https://software.intel.com/en-us/blogs/2011/04/14/is-avx-enabled
-<a href=#153 id=153 data-nosnippet>153</a>            // [mozilla_sse_cpp]: https://hg.mozilla.org/mozilla-central/file/64bab5cbb9b6/mozglue/build/SSE.cpp#l190
-<a href=#154 id=154 data-nosnippet>154</a>            </span><span class="kw">let </span>cpu_osxsave = bit::test(proc_info_ecx <span class="kw">as </span>usize, <span class="number">27</span>);
-<a href=#155 id=155 data-nosnippet>155</a>
-<a href=#156 id=156 data-nosnippet>156</a>            <span class="kw">if </span>cpu_osxsave {
-<a href=#157 id=157 data-nosnippet>157</a>                <span class="comment">// 2. The OS must have signaled the CPU that it supports saving and
-<a href=#158 id=158 data-nosnippet>158</a>                // restoring the:
-<a href=#159 id=159 data-nosnippet>159</a>                //
-<a href=#160 id=160 data-nosnippet>160</a>                // * SSE -&gt; `XCR0.SSE[1]`
-<a href=#161 id=161 data-nosnippet>161</a>                // * AVX -&gt; `XCR0.AVX[2]`
-<a href=#162 id=162 data-nosnippet>162</a>                // * AVX-512 -&gt; `XCR0.AVX-512[7:5]`.
-<a href=#163 id=163 data-nosnippet>163</a>                // * AMX -&gt; `XCR0.AMX[18:17]`
-<a href=#164 id=164 data-nosnippet>164</a>                //
-<a href=#165 id=165 data-nosnippet>165</a>                // by setting the corresponding bits of `XCR0` to `1`.
-<a href=#166 id=166 data-nosnippet>166</a>                //
-<a href=#167 id=167 data-nosnippet>167</a>                // This is safe because the CPU supports `xsave`
-<a href=#168 id=168 data-nosnippet>168</a>                // and the OS has set `osxsave`.
-<a href=#169 id=169 data-nosnippet>169</a>                </span><span class="kw">let </span>xcr0 = <span class="kw">unsafe </span>{ _xgetbv(<span class="number">0</span>) };
-<a href=#170 id=170 data-nosnippet>170</a>                <span class="comment">// Test `XCR0.SSE[1]` and `XCR0.AVX[2]` with the mask `0b110 == 6`:
-<a href=#171 id=171 data-nosnippet>171</a>                </span><span class="kw">let </span>os_avx_support = xcr0 &amp; <span class="number">6 </span>== <span class="number">6</span>;
-<a href=#172 id=172 data-nosnippet>172</a>                <span class="comment">// Test `XCR0.AVX-512[7:5]` with the mask `0b1110_0000 == 0xe0`:
-<a href=#173 id=173 data-nosnippet>173</a>                </span><span class="kw">let </span>os_avx512_support = xcr0 &amp; <span class="number">0xe0 </span>== <span class="number">0xe0</span>;
-<a href=#174 id=174 data-nosnippet>174</a>                <span class="comment">// Test `XCR0.AMX[18:17]` with the mask `0b110_0000_0000_0000_0000 == 0x60000`
-<a href=#175 id=175 data-nosnippet>175</a>                </span><span class="kw">let </span>os_amx_support = xcr0 &amp; <span class="number">0x60000 </span>== <span class="number">0x60000</span>;
-<a href=#176 id=176 data-nosnippet>176</a>
-<a href=#177 id=177 data-nosnippet>177</a>                <span class="comment">// Only if the OS and the CPU support saving/restoring the AVX
-<a href=#178 id=178 data-nosnippet>178</a>                // registers we enable `xsave` support:
-<a href=#179 id=179 data-nosnippet>179</a>                </span><span class="kw">if </span>os_avx_support {
-<a href=#180 id=180 data-nosnippet>180</a>                    <span class="comment">// See "13.3 ENABLING THE XSAVE FEATURE SET AND XSAVE-ENABLED
-<a href=#181 id=181 data-nosnippet>181</a>                    // FEATURES" in the "Intel® 64 and IA-32 Architectures Software
-<a href=#182 id=182 data-nosnippet>182</a>                    // Developer’s Manual, Volume 1: Basic Architecture":
-<a href=#183 id=183 data-nosnippet>183</a>                    //
-<a href=#184 id=184 data-nosnippet>184</a>                    // "Software enables the XSAVE feature set by setting
-<a href=#185 id=185 data-nosnippet>185</a>                    // CR4.OSXSAVE[bit 18] to 1 (e.g., with the MOV to CR4
-<a href=#186 id=186 data-nosnippet>186</a>                    // instruction). If this bit is 0, execution of any of XGETBV,
-<a href=#187 id=187 data-nosnippet>187</a>                    // XRSTOR, XRSTORS, XSAVE, XSAVEC, XSAVEOPT, XSAVES, and XSETBV
-<a href=#188 id=188 data-nosnippet>188</a>                    // causes an invalid-opcode exception (#UD)"
-<a href=#189 id=189 data-nosnippet>189</a>                    //
-<a href=#190 id=190 data-nosnippet>190</a>                    </span>enable(proc_info_ecx, <span class="number">26</span>, Feature::xsave);
-<a href=#191 id=191 data-nosnippet>191</a>
-<a href=#192 id=192 data-nosnippet>192</a>                    <span class="comment">// For `xsaveopt`, `xsavec`, and `xsaves` we need to query:
-<a href=#193 id=193 data-nosnippet>193</a>                    // Processor Extended State Enumeration Sub-leaf (EAX = 0DH,
-<a href=#194 id=194 data-nosnippet>194</a>                    // ECX = 1):
-<a href=#195 id=195 data-nosnippet>195</a>                    </span><span class="kw">if </span>max_basic_leaf &gt;= <span class="number">0xd </span>{
-<a href=#196 id=196 data-nosnippet>196</a>                        <span class="kw">let </span>CpuidResult { eax: proc_extended_state1_eax, .. } =
-<a href=#197 id=197 data-nosnippet>197</a>                            <span class="kw">unsafe </span>{ __cpuid_count(<span class="number">0xd_u32</span>, <span class="number">1</span>) };
-<a href=#198 id=198 data-nosnippet>198</a>                        enable(proc_extended_state1_eax, <span class="number">0</span>, Feature::xsaveopt);
-<a href=#199 id=199 data-nosnippet>199</a>                        enable(proc_extended_state1_eax, <span class="number">1</span>, Feature::xsavec);
-<a href=#200 id=200 data-nosnippet>200</a>                        enable(proc_extended_state1_eax, <span class="number">3</span>, Feature::xsaves);
-<a href=#201 id=201 data-nosnippet>201</a>                    }
-<a href=#202 id=202 data-nosnippet>202</a>
-<a href=#203 id=203 data-nosnippet>203</a>                    <span class="comment">// FMA (uses 256-bit wide registers):
-<a href=#204 id=204 data-nosnippet>204</a>                    </span><span class="kw">let </span>fma = enable(proc_info_ecx, <span class="number">12</span>, Feature::fma);
+<a href=#140 id=140 data-nosnippet>140</a>        <span class="comment">// This detects ABM on AMD CPUs and LZCNT on Intel CPUs.
+<a href=#141 id=141 data-nosnippet>141</a>        // On intel CPUs with popcnt, lzcnt implements the
+<a href=#142 id=142 data-nosnippet>142</a>        // "missing part" of ABM, so we map both to the same
+<a href=#143 id=143 data-nosnippet>143</a>        // internal feature.
+<a href=#144 id=144 data-nosnippet>144</a>        //
+<a href=#145 id=145 data-nosnippet>145</a>        // The `is_x86_feature_detected!("lzcnt")` macro then
+<a href=#146 id=146 data-nosnippet>146</a>        // internally maps to Feature::abm.
+<a href=#147 id=147 data-nosnippet>147</a>        </span>enable(extended_proc_info_ecx, <span class="number">5</span>, Feature::lzcnt);
+<a href=#148 id=148 data-nosnippet>148</a>
+<a href=#149 id=149 data-nosnippet>149</a>        <span class="comment">// As Hygon Dhyana originates from AMD technology and shares most of the architecture with
+<a href=#150 id=150 data-nosnippet>150</a>        // AMD's family 17h, but with different CPU Vendor ID("HygonGenuine")/Family series
+<a href=#151 id=151 data-nosnippet>151</a>        // number(Family 18h).
+<a href=#152 id=152 data-nosnippet>152</a>        //
+<a href=#153 id=153 data-nosnippet>153</a>        // For CPUID feature bits, Hygon Dhyana(family 18h) share the same definition with AMD
+<a href=#154 id=154 data-nosnippet>154</a>        // family 17h.
+<a href=#155 id=155 data-nosnippet>155</a>        //
+<a href=#156 id=156 data-nosnippet>156</a>        // Related AMD CPUID specification is https://www.amd.com/system/files/TechDocs/25481.pdf.
+<a href=#157 id=157 data-nosnippet>157</a>        // Related Hygon kernel patch can be found on
+<a href=#158 id=158 data-nosnippet>158</a>        // http://lkml.kernel.org/r/5ce86123a7b9dad925ac583d88d2f921040e859b.1538583282.git.puwen@hygon.cn
+<a href=#159 id=159 data-nosnippet>159</a>        </span><span class="kw">if </span>vendor_id == <span class="kw-2">*</span><span class="string">b"AuthenticAMD" </span>|| vendor_id == <span class="kw-2">*</span><span class="string">b"HygonGenuine" </span>{
+<a href=#160 id=160 data-nosnippet>160</a>            <span class="comment">// These features are available on AMD arch CPUs:
+<a href=#161 id=161 data-nosnippet>161</a>            </span>enable(extended_proc_info_ecx, <span class="number">6</span>, Feature::sse4a);
+<a href=#162 id=162 data-nosnippet>162</a>            enable(extended_proc_info_ecx, <span class="number">21</span>, Feature::tbm);
+<a href=#163 id=163 data-nosnippet>163</a>            enable(extended_proc_info_ecx, <span class="number">11</span>, Feature::xop);
+<a href=#164 id=164 data-nosnippet>164</a>        }
+<a href=#165 id=165 data-nosnippet>165</a>
+<a href=#166 id=166 data-nosnippet>166</a>        <span class="comment">// `XSAVE` and `AVX` support:
+<a href=#167 id=167 data-nosnippet>167</a>        </span><span class="kw">let </span>cpu_xsave = bit::test(proc_info_ecx <span class="kw">as </span>usize, <span class="number">26</span>);
+<a href=#168 id=168 data-nosnippet>168</a>        <span class="kw">if </span>cpu_xsave {
+<a href=#169 id=169 data-nosnippet>169</a>            <span class="comment">// 0. Here the CPU supports `XSAVE`.
+<a href=#170 id=170 data-nosnippet>170</a>
+<a href=#171 id=171 data-nosnippet>171</a>            // 1. Detect `OSXSAVE`, that is, whether the OS is AVX enabled and
+<a href=#172 id=172 data-nosnippet>172</a>            // supports saving the state of the AVX/AVX2 vector registers on
+<a href=#173 id=173 data-nosnippet>173</a>            // context-switches, see:
+<a href=#174 id=174 data-nosnippet>174</a>            //
+<a href=#175 id=175 data-nosnippet>175</a>            // - [intel: is avx enabled?][is_avx_enabled],
+<a href=#176 id=176 data-nosnippet>176</a>            // - [mozilla: sse.cpp][mozilla_sse_cpp].
+<a href=#177 id=177 data-nosnippet>177</a>            //
+<a href=#178 id=178 data-nosnippet>178</a>            // [is_avx_enabled]: https://software.intel.com/en-us/blogs/2011/04/14/is-avx-enabled
+<a href=#179 id=179 data-nosnippet>179</a>            // [mozilla_sse_cpp]: https://hg.mozilla.org/mozilla-central/file/64bab5cbb9b6/mozglue/build/SSE.cpp#l190
+<a href=#180 id=180 data-nosnippet>180</a>            </span><span class="kw">let </span>cpu_osxsave = bit::test(proc_info_ecx <span class="kw">as </span>usize, <span class="number">27</span>);
+<a href=#181 id=181 data-nosnippet>181</a>
+<a href=#182 id=182 data-nosnippet>182</a>            <span class="kw">if </span>cpu_osxsave {
+<a href=#183 id=183 data-nosnippet>183</a>                <span class="comment">// 2. The OS must have signaled the CPU that it supports saving and
+<a href=#184 id=184 data-nosnippet>184</a>                // restoring the:
+<a href=#185 id=185 data-nosnippet>185</a>                //
+<a href=#186 id=186 data-nosnippet>186</a>                // * SSE -&gt; `XCR0.SSE[1]`
+<a href=#187 id=187 data-nosnippet>187</a>                // * AVX -&gt; `XCR0.AVX[2]`
+<a href=#188 id=188 data-nosnippet>188</a>                // * AVX-512 -&gt; `XCR0.AVX-512[7:5]`.
+<a href=#189 id=189 data-nosnippet>189</a>                // * AMX -&gt; `XCR0.AMX[18:17]`
+<a href=#190 id=190 data-nosnippet>190</a>                // * APX -&gt; `XCR0.APX[19]`
+<a href=#191 id=191 data-nosnippet>191</a>                //
+<a href=#192 id=192 data-nosnippet>192</a>                // by setting the corresponding bits of `XCR0` to `1`.
+<a href=#193 id=193 data-nosnippet>193</a>                //
+<a href=#194 id=194 data-nosnippet>194</a>                // This is safe because the CPU supports `xsave`
+<a href=#195 id=195 data-nosnippet>195</a>                // and the OS has set `osxsave`.
+<a href=#196 id=196 data-nosnippet>196</a>                </span><span class="kw">let </span>xcr0 = <span class="kw">unsafe </span>{ _xgetbv(<span class="number">0</span>) };
+<a href=#197 id=197 data-nosnippet>197</a>                <span class="comment">// Test `XCR0.SSE[1]` and `XCR0.AVX[2]` with the mask `0b110 == 6`:
+<a href=#198 id=198 data-nosnippet>198</a>                </span><span class="kw">let </span>os_avx_support = xcr0 &amp; <span class="number">6 </span>== <span class="number">6</span>;
+<a href=#199 id=199 data-nosnippet>199</a>                <span class="comment">// Test `XCR0.AVX-512[7:5]` with the mask `0b1110_0000 == 0xe0`:
+<a href=#200 id=200 data-nosnippet>200</a>                </span><span class="kw">let </span>os_avx512_support = xcr0 &amp; <span class="number">0xe0 </span>== <span class="number">0xe0</span>;
+<a href=#201 id=201 data-nosnippet>201</a>                <span class="comment">// Test `XCR0.AMX[18:17]` with the mask `0b110_0000_0000_0000_0000 == 0x60000`
+<a href=#202 id=202 data-nosnippet>202</a>                </span><span class="kw">let </span>os_amx_support = xcr0 &amp; <span class="number">0x60000 </span>== <span class="number">0x60000</span>;
+<a href=#203 id=203 data-nosnippet>203</a>                <span class="comment">// Test `XCR0.APX[19]` with the mask `0b1000_0000_0000_0000_0000 == 0x80000`
+<a href=#204 id=204 data-nosnippet>204</a>                </span><span class="kw">let </span>os_apx_support = xcr0 &amp; <span class="number">0x80000 </span>== <span class="number">0x80000</span>;
 <a href=#205 id=205 data-nosnippet>205</a>
-<a href=#206 id=206 data-nosnippet>206</a>                    <span class="comment">// And AVX/AVX2:
-<a href=#207 id=207 data-nosnippet>207</a>                    </span>enable(proc_info_ecx, <span class="number">28</span>, Feature::avx);
-<a href=#208 id=208 data-nosnippet>208</a>                    enable(extended_features_ebx, <span class="number">5</span>, Feature::avx2);
-<a href=#209 id=209 data-nosnippet>209</a>
-<a href=#210 id=210 data-nosnippet>210</a>                    <span class="comment">// "Short" versions of AVX512 instructions
-<a href=#211 id=211 data-nosnippet>211</a>                    </span>enable(extended_features_eax_leaf_1, <span class="number">4</span>, Feature::avxvnni);
-<a href=#212 id=212 data-nosnippet>212</a>                    enable(extended_features_eax_leaf_1, <span class="number">23</span>, Feature::avxifma);
-<a href=#213 id=213 data-nosnippet>213</a>                    enable(extended_features_edx_leaf_1, <span class="number">4</span>, Feature::avxvnniint8);
-<a href=#214 id=214 data-nosnippet>214</a>                    enable(extended_features_edx_leaf_1, <span class="number">5</span>, Feature::avxneconvert);
-<a href=#215 id=215 data-nosnippet>215</a>                    enable(extended_features_edx_leaf_1, <span class="number">10</span>, Feature::avxvnniint16);
-<a href=#216 id=216 data-nosnippet>216</a>
-<a href=#217 id=217 data-nosnippet>217</a>                    enable(extended_features_eax_leaf_1, <span class="number">0</span>, Feature::sha512);
-<a href=#218 id=218 data-nosnippet>218</a>                    enable(extended_features_eax_leaf_1, <span class="number">1</span>, Feature::sm3);
-<a href=#219 id=219 data-nosnippet>219</a>                    enable(extended_features_eax_leaf_1, <span class="number">2</span>, Feature::sm4);
+<a href=#206 id=206 data-nosnippet>206</a>                <span class="comment">// Only if the OS and the CPU support saving/restoring the AVX
+<a href=#207 id=207 data-nosnippet>207</a>                // registers we enable `xsave` support:
+<a href=#208 id=208 data-nosnippet>208</a>                </span><span class="kw">if </span>os_avx_support {
+<a href=#209 id=209 data-nosnippet>209</a>                    <span class="comment">// See "13.3 ENABLING THE XSAVE FEATURE SET AND XSAVE-ENABLED
+<a href=#210 id=210 data-nosnippet>210</a>                    // FEATURES" in the "Intel® 64 and IA-32 Architectures Software
+<a href=#211 id=211 data-nosnippet>211</a>                    // Developer’s Manual, Volume 1: Basic Architecture":
+<a href=#212 id=212 data-nosnippet>212</a>                    //
+<a href=#213 id=213 data-nosnippet>213</a>                    // "Software enables the XSAVE feature set by setting
+<a href=#214 id=214 data-nosnippet>214</a>                    // CR4.OSXSAVE[bit 18] to 1 (e.g., with the MOV to CR4
+<a href=#215 id=215 data-nosnippet>215</a>                    // instruction). If this bit is 0, execution of any of XGETBV,
+<a href=#216 id=216 data-nosnippet>216</a>                    // XRSTOR, XRSTORS, XSAVE, XSAVEC, XSAVEOPT, XSAVES, and XSETBV
+<a href=#217 id=217 data-nosnippet>217</a>                    // causes an invalid-opcode exception (#UD)"
+<a href=#218 id=218 data-nosnippet>218</a>                    //
+<a href=#219 id=219 data-nosnippet>219</a>                    </span>enable(proc_info_ecx, <span class="number">26</span>, Feature::xsave);
 <a href=#220 id=220 data-nosnippet>220</a>
-<a href=#221 id=221 data-nosnippet>221</a>                    <span class="comment">// For AVX-512 the OS also needs to support saving/restoring
-<a href=#222 id=222 data-nosnippet>222</a>                    // the extended state, only then we enable AVX-512 support:
-<a href=#223 id=223 data-nosnippet>223</a>                    // Also, Rust makes `avx512f` imply `fma` and `f16c`, because
-<a href=#224 id=224 data-nosnippet>224</a>                    // otherwise the assembler is broken. But Intel doesn't guarantee
-<a href=#225 id=225 data-nosnippet>225</a>                    // that `fma` and `f16c` are available with `avx512f`, so we
-<a href=#226 id=226 data-nosnippet>226</a>                    // need to check for them separately.
-<a href=#227 id=227 data-nosnippet>227</a>                    </span><span class="kw">if </span>os_avx512_support &amp;&amp; f16c &amp;&amp; fma {
-<a href=#228 id=228 data-nosnippet>228</a>                        enable(extended_features_ebx, <span class="number">16</span>, Feature::avx512f);
-<a href=#229 id=229 data-nosnippet>229</a>                        enable(extended_features_ebx, <span class="number">17</span>, Feature::avx512dq);
-<a href=#230 id=230 data-nosnippet>230</a>                        enable(extended_features_ebx, <span class="number">21</span>, Feature::avx512ifma);
-<a href=#231 id=231 data-nosnippet>231</a>                        enable(extended_features_ebx, <span class="number">26</span>, Feature::avx512pf);
-<a href=#232 id=232 data-nosnippet>232</a>                        enable(extended_features_ebx, <span class="number">27</span>, Feature::avx512er);
-<a href=#233 id=233 data-nosnippet>233</a>                        enable(extended_features_ebx, <span class="number">28</span>, Feature::avx512cd);
-<a href=#234 id=234 data-nosnippet>234</a>                        enable(extended_features_ebx, <span class="number">30</span>, Feature::avx512bw);
-<a href=#235 id=235 data-nosnippet>235</a>                        enable(extended_features_ebx, <span class="number">31</span>, Feature::avx512vl);
-<a href=#236 id=236 data-nosnippet>236</a>                        enable(extended_features_ecx, <span class="number">1</span>, Feature::avx512vbmi);
-<a href=#237 id=237 data-nosnippet>237</a>                        enable(extended_features_ecx, <span class="number">6</span>, Feature::avx512vbmi2);
-<a href=#238 id=238 data-nosnippet>238</a>                        enable(extended_features_ecx, <span class="number">11</span>, Feature::avx512vnni);
-<a href=#239 id=239 data-nosnippet>239</a>                        enable(extended_features_ecx, <span class="number">12</span>, Feature::avx512bitalg);
-<a href=#240 id=240 data-nosnippet>240</a>                        enable(extended_features_ecx, <span class="number">14</span>, Feature::avx512vpopcntdq);
-<a href=#241 id=241 data-nosnippet>241</a>                        enable(extended_features_edx, <span class="number">8</span>, Feature::avx512vp2intersect);
-<a href=#242 id=242 data-nosnippet>242</a>                        enable(extended_features_edx, <span class="number">23</span>, Feature::avx512fp16);
-<a href=#243 id=243 data-nosnippet>243</a>                        enable(extended_features_eax_leaf_1, <span class="number">5</span>, Feature::avx512bf16);
-<a href=#244 id=244 data-nosnippet>244</a>                    }
-<a href=#245 id=245 data-nosnippet>245</a>                }
-<a href=#246 id=246 data-nosnippet>246</a>
-<a href=#247 id=247 data-nosnippet>247</a>                <span class="kw">if </span>os_amx_support {
-<a href=#248 id=248 data-nosnippet>248</a>                    enable(extended_features_edx, <span class="number">24</span>, Feature::amx_tile);
-<a href=#249 id=249 data-nosnippet>249</a>                    enable(extended_features_edx, <span class="number">25</span>, Feature::amx_int8);
-<a href=#250 id=250 data-nosnippet>250</a>                    enable(extended_features_edx, <span class="number">22</span>, Feature::amx_bf16);
-<a href=#251 id=251 data-nosnippet>251</a>                    enable(extended_features_eax_leaf_1, <span class="number">21</span>, Feature::amx_fp16);
-<a href=#252 id=252 data-nosnippet>252</a>                    enable(extended_features_edx_leaf_1, <span class="number">8</span>, Feature::amx_complex);
-<a href=#253 id=253 data-nosnippet>253</a>
-<a href=#254 id=254 data-nosnippet>254</a>                    <span class="kw">if </span>max_basic_leaf &gt;= <span class="number">0x1e </span>{
-<a href=#255 id=255 data-nosnippet>255</a>                        <span class="kw">let </span>CpuidResult { eax: amx_feature_flags_eax, .. } =
-<a href=#256 id=256 data-nosnippet>256</a>                            <span class="kw">unsafe </span>{ __cpuid_count(<span class="number">0x1e_u32</span>, <span class="number">1</span>) };
-<a href=#257 id=257 data-nosnippet>257</a>
-<a href=#258 id=258 data-nosnippet>258</a>                        enable(amx_feature_flags_eax, <span class="number">4</span>, Feature::amx_fp8);
-<a href=#259 id=259 data-nosnippet>259</a>                        enable(amx_feature_flags_eax, <span class="number">5</span>, Feature::amx_transpose);
-<a href=#260 id=260 data-nosnippet>260</a>                        enable(amx_feature_flags_eax, <span class="number">6</span>, Feature::amx_tf32);
-<a href=#261 id=261 data-nosnippet>261</a>                        enable(amx_feature_flags_eax, <span class="number">7</span>, Feature::amx_avx512);
-<a href=#262 id=262 data-nosnippet>262</a>                        enable(amx_feature_flags_eax, <span class="number">8</span>, Feature::amx_movrs);
-<a href=#263 id=263 data-nosnippet>263</a>                    }
-<a href=#264 id=264 data-nosnippet>264</a>                }
-<a href=#265 id=265 data-nosnippet>265</a>            }
-<a href=#266 id=266 data-nosnippet>266</a>        }
-<a href=#267 id=267 data-nosnippet>267</a>
-<a href=#268 id=268 data-nosnippet>268</a>        <span class="comment">// This detects ABM on AMD CPUs and LZCNT on Intel CPUs.
-<a href=#269 id=269 data-nosnippet>269</a>        // On intel CPUs with popcnt, lzcnt implements the
-<a href=#270 id=270 data-nosnippet>270</a>        // "missing part" of ABM, so we map both to the same
-<a href=#271 id=271 data-nosnippet>271</a>        // internal feature.
-<a href=#272 id=272 data-nosnippet>272</a>        //
-<a href=#273 id=273 data-nosnippet>273</a>        // The `is_x86_feature_detected!("lzcnt")` macro then
-<a href=#274 id=274 data-nosnippet>274</a>        // internally maps to Feature::abm.
-<a href=#275 id=275 data-nosnippet>275</a>        </span>enable(extended_proc_info_ecx, <span class="number">5</span>, Feature::lzcnt);
-<a href=#276 id=276 data-nosnippet>276</a>
-<a href=#277 id=277 data-nosnippet>277</a>        <span class="comment">// As Hygon Dhyana originates from AMD technology and shares most of the architecture with
-<a href=#278 id=278 data-nosnippet>278</a>        // AMD's family 17h, but with different CPU Vendor ID("HygonGenuine")/Family series
-<a href=#279 id=279 data-nosnippet>279</a>        // number(Family 18h).
-<a href=#280 id=280 data-nosnippet>280</a>        //
-<a href=#281 id=281 data-nosnippet>281</a>        // For CPUID feature bits, Hygon Dhyana(family 18h) share the same definition with AMD
-<a href=#282 id=282 data-nosnippet>282</a>        // family 17h.
-<a href=#283 id=283 data-nosnippet>283</a>        //
-<a href=#284 id=284 data-nosnippet>284</a>        // Related AMD CPUID specification is https://www.amd.com/system/files/TechDocs/25481.pdf.
-<a href=#285 id=285 data-nosnippet>285</a>        // Related Hygon kernel patch can be found on
-<a href=#286 id=286 data-nosnippet>286</a>        // http://lkml.kernel.org/r/5ce86123a7b9dad925ac583d88d2f921040e859b.1538583282.git.puwen@hygon.cn
-<a href=#287 id=287 data-nosnippet>287</a>        </span><span class="kw">if </span>vendor_id == <span class="kw-2">*</span><span class="string">b"AuthenticAMD" </span>|| vendor_id == <span class="kw-2">*</span><span class="string">b"HygonGenuine" </span>{
-<a href=#288 id=288 data-nosnippet>288</a>            <span class="comment">// These features are available on AMD arch CPUs:
-<a href=#289 id=289 data-nosnippet>289</a>            </span>enable(extended_proc_info_ecx, <span class="number">6</span>, Feature::sse4a);
-<a href=#290 id=290 data-nosnippet>290</a>            enable(extended_proc_info_ecx, <span class="number">21</span>, Feature::tbm);
-<a href=#291 id=291 data-nosnippet>291</a>            enable(extended_proc_info_ecx, <span class="number">11</span>, Feature::xop);
-<a href=#292 id=292 data-nosnippet>292</a>        }
-<a href=#293 id=293 data-nosnippet>293</a>    }
+<a href=#221 id=221 data-nosnippet>221</a>                    <span class="comment">// For `xsaveopt`, `xsavec`, and `xsaves` we need to query:
+<a href=#222 id=222 data-nosnippet>222</a>                    // Processor Extended State Enumeration Sub-leaf (EAX = 0DH,
+<a href=#223 id=223 data-nosnippet>223</a>                    // ECX = 1):
+<a href=#224 id=224 data-nosnippet>224</a>                    </span><span class="kw">if </span>max_basic_leaf &gt;= <span class="number">0xd </span>{
+<a href=#225 id=225 data-nosnippet>225</a>                        <span class="kw">let </span>CpuidResult { eax: proc_extended_state1_eax, .. } =
+<a href=#226 id=226 data-nosnippet>226</a>                            <span class="kw">unsafe </span>{ __cpuid_count(<span class="number">0xd_u32</span>, <span class="number">1</span>) };
+<a href=#227 id=227 data-nosnippet>227</a>                        enable(proc_extended_state1_eax, <span class="number">0</span>, Feature::xsaveopt);
+<a href=#228 id=228 data-nosnippet>228</a>                        enable(proc_extended_state1_eax, <span class="number">1</span>, Feature::xsavec);
+<a href=#229 id=229 data-nosnippet>229</a>                        enable(proc_extended_state1_eax, <span class="number">3</span>, Feature::xsaves);
+<a href=#230 id=230 data-nosnippet>230</a>                    }
+<a href=#231 id=231 data-nosnippet>231</a>
+<a href=#232 id=232 data-nosnippet>232</a>                    <span class="comment">// FMA (uses 256-bit wide registers):
+<a href=#233 id=233 data-nosnippet>233</a>                    </span><span class="kw">let </span>fma = enable(proc_info_ecx, <span class="number">12</span>, Feature::fma);
+<a href=#234 id=234 data-nosnippet>234</a>
+<a href=#235 id=235 data-nosnippet>235</a>                    <span class="comment">// And AVX/AVX2:
+<a href=#236 id=236 data-nosnippet>236</a>                    </span>enable(proc_info_ecx, <span class="number">28</span>, Feature::avx);
+<a href=#237 id=237 data-nosnippet>237</a>                    enable(extended_features_ebx, <span class="number">5</span>, Feature::avx2);
+<a href=#238 id=238 data-nosnippet>238</a>
+<a href=#239 id=239 data-nosnippet>239</a>                    <span class="comment">// "Short" versions of AVX512 instructions
+<a href=#240 id=240 data-nosnippet>240</a>                    </span>enable(extended_features_eax_leaf_1, <span class="number">4</span>, Feature::avxvnni);
+<a href=#241 id=241 data-nosnippet>241</a>                    enable(extended_features_eax_leaf_1, <span class="number">23</span>, Feature::avxifma);
+<a href=#242 id=242 data-nosnippet>242</a>                    enable(extended_features_edx_leaf_1, <span class="number">4</span>, Feature::avxvnniint8);
+<a href=#243 id=243 data-nosnippet>243</a>                    enable(extended_features_edx_leaf_1, <span class="number">5</span>, Feature::avxneconvert);
+<a href=#244 id=244 data-nosnippet>244</a>                    enable(extended_features_edx_leaf_1, <span class="number">10</span>, Feature::avxvnniint16);
+<a href=#245 id=245 data-nosnippet>245</a>
+<a href=#246 id=246 data-nosnippet>246</a>                    enable(extended_features_eax_leaf_1, <span class="number">0</span>, Feature::sha512);
+<a href=#247 id=247 data-nosnippet>247</a>                    enable(extended_features_eax_leaf_1, <span class="number">1</span>, Feature::sm3);
+<a href=#248 id=248 data-nosnippet>248</a>                    enable(extended_features_eax_leaf_1, <span class="number">2</span>, Feature::sm4);
+<a href=#249 id=249 data-nosnippet>249</a>
+<a href=#250 id=250 data-nosnippet>250</a>                    <span class="comment">// For AVX-512 the OS also needs to support saving/restoring
+<a href=#251 id=251 data-nosnippet>251</a>                    // the extended state, only then we enable AVX-512 support:
+<a href=#252 id=252 data-nosnippet>252</a>                    // Also, Rust makes `avx512f` imply `fma` and `f16c`, because
+<a href=#253 id=253 data-nosnippet>253</a>                    // otherwise the assembler is broken. But Intel doesn't guarantee
+<a href=#254 id=254 data-nosnippet>254</a>                    // that `fma` and `f16c` are available with `avx512f`, so we
+<a href=#255 id=255 data-nosnippet>255</a>                    // need to check for them separately.
+<a href=#256 id=256 data-nosnippet>256</a>                    </span><span class="kw">if </span>os_avx512_support &amp;&amp; f16c &amp;&amp; fma {
+<a href=#257 id=257 data-nosnippet>257</a>                        enable(extended_features_ebx, <span class="number">16</span>, Feature::avx512f);
+<a href=#258 id=258 data-nosnippet>258</a>                        enable(extended_features_ebx, <span class="number">17</span>, Feature::avx512dq);
+<a href=#259 id=259 data-nosnippet>259</a>                        enable(extended_features_ebx, <span class="number">21</span>, Feature::avx512ifma);
+<a href=#260 id=260 data-nosnippet>260</a>                        enable(extended_features_ebx, <span class="number">26</span>, Feature::avx512pf);
+<a href=#261 id=261 data-nosnippet>261</a>                        enable(extended_features_ebx, <span class="number">27</span>, Feature::avx512er);
+<a href=#262 id=262 data-nosnippet>262</a>                        enable(extended_features_ebx, <span class="number">28</span>, Feature::avx512cd);
+<a href=#263 id=263 data-nosnippet>263</a>                        enable(extended_features_ebx, <span class="number">30</span>, Feature::avx512bw);
+<a href=#264 id=264 data-nosnippet>264</a>                        enable(extended_features_ebx, <span class="number">31</span>, Feature::avx512vl);
+<a href=#265 id=265 data-nosnippet>265</a>                        enable(extended_features_ecx, <span class="number">1</span>, Feature::avx512vbmi);
+<a href=#266 id=266 data-nosnippet>266</a>                        enable(extended_features_ecx, <span class="number">6</span>, Feature::avx512vbmi2);
+<a href=#267 id=267 data-nosnippet>267</a>                        enable(extended_features_ecx, <span class="number">11</span>, Feature::avx512vnni);
+<a href=#268 id=268 data-nosnippet>268</a>                        enable(extended_features_ecx, <span class="number">12</span>, Feature::avx512bitalg);
+<a href=#269 id=269 data-nosnippet>269</a>                        enable(extended_features_ecx, <span class="number">14</span>, Feature::avx512vpopcntdq);
+<a href=#270 id=270 data-nosnippet>270</a>                        enable(extended_features_edx, <span class="number">8</span>, Feature::avx512vp2intersect);
+<a href=#271 id=271 data-nosnippet>271</a>                        enable(extended_features_edx, <span class="number">23</span>, Feature::avx512fp16);
+<a href=#272 id=272 data-nosnippet>272</a>                        enable(extended_features_eax_leaf_1, <span class="number">5</span>, Feature::avx512bf16);
+<a href=#273 id=273 data-nosnippet>273</a>                    }
+<a href=#274 id=274 data-nosnippet>274</a>                }
+<a href=#275 id=275 data-nosnippet>275</a>
+<a href=#276 id=276 data-nosnippet>276</a>                <span class="kw">if </span>os_amx_support {
+<a href=#277 id=277 data-nosnippet>277</a>                    enable(extended_features_edx, <span class="number">24</span>, Feature::amx_tile);
+<a href=#278 id=278 data-nosnippet>278</a>                    enable(extended_features_edx, <span class="number">25</span>, Feature::amx_int8);
+<a href=#279 id=279 data-nosnippet>279</a>                    enable(extended_features_edx, <span class="number">22</span>, Feature::amx_bf16);
+<a href=#280 id=280 data-nosnippet>280</a>                    enable(extended_features_eax_leaf_1, <span class="number">21</span>, Feature::amx_fp16);
+<a href=#281 id=281 data-nosnippet>281</a>                    enable(extended_features_edx_leaf_1, <span class="number">8</span>, Feature::amx_complex);
+<a href=#282 id=282 data-nosnippet>282</a>
+<a href=#283 id=283 data-nosnippet>283</a>                    <span class="kw">if </span>max_basic_leaf &gt;= <span class="number">0x1e </span>{
+<a href=#284 id=284 data-nosnippet>284</a>                        <span class="kw">let </span>CpuidResult { eax: amx_feature_flags_eax, .. } =
+<a href=#285 id=285 data-nosnippet>285</a>                            <span class="kw">unsafe </span>{ __cpuid_count(<span class="number">0x1e_u32</span>, <span class="number">1</span>) };
+<a href=#286 id=286 data-nosnippet>286</a>
+<a href=#287 id=287 data-nosnippet>287</a>                        enable(amx_feature_flags_eax, <span class="number">4</span>, Feature::amx_fp8);
+<a href=#288 id=288 data-nosnippet>288</a>                        enable(amx_feature_flags_eax, <span class="number">5</span>, Feature::amx_transpose);
+<a href=#289 id=289 data-nosnippet>289</a>                        enable(amx_feature_flags_eax, <span class="number">6</span>, Feature::amx_tf32);
+<a href=#290 id=290 data-nosnippet>290</a>                        enable(amx_feature_flags_eax, <span class="number">7</span>, Feature::amx_avx512);
+<a href=#291 id=291 data-nosnippet>291</a>                        enable(amx_feature_flags_eax, <span class="number">8</span>, Feature::amx_movrs);
+<a href=#292 id=292 data-nosnippet>292</a>                    }
+<a href=#293 id=293 data-nosnippet>293</a>                }
 <a href=#294 id=294 data-nosnippet>294</a>
-<a href=#295 id=295 data-nosnippet>295</a>    <span class="comment">// Unfortunately, some Skylake chips erroneously report support for BMI1 and
-<a href=#296 id=296 data-nosnippet>296</a>    // BMI2 without actual support. These chips don't support AVX, and it seems
-<a href=#297 id=297 data-nosnippet>297</a>    // that all Intel chips with non-erroneous support BMI do (I didn't check
-<a href=#298 id=298 data-nosnippet>298</a>    // other vendors), so we can disable these flags for chips that don't also
-<a href=#299 id=299 data-nosnippet>299</a>    // report support for AVX.
-<a href=#300 id=300 data-nosnippet>300</a>    //
-<a href=#301 id=301 data-nosnippet>301</a>    // It's possible this will pessimize future chips that do support BMI and
-<a href=#302 id=302 data-nosnippet>302</a>    // not AVX, but this seems minor compared to a hard crash you get when
-<a href=#303 id=303 data-nosnippet>303</a>    // executing an unsupported instruction (to put it another way, it's safe
-<a href=#304 id=304 data-nosnippet>304</a>    // for us to under-report CPU features, but not to over-report them). Still,
-<a href=#305 id=305 data-nosnippet>305</a>    // to limit any impact this may have in the future, we only do this for
-<a href=#306 id=306 data-nosnippet>306</a>    // Intel chips, as it's a bug only present in their chips.
-<a href=#307 id=307 data-nosnippet>307</a>    //
-<a href=#308 id=308 data-nosnippet>308</a>    // This bug is documented as `SKL052` in the errata section of this document:
-<a href=#309 id=309 data-nosnippet>309</a>    // http://www.intel.com/content/dam/www/public/us/en/documents/specification-updates/desktop-6th-gen-core-family-spec-update.pdf
-<a href=#310 id=310 data-nosnippet>310</a>    </span><span class="kw">if </span>vendor_id == <span class="kw-2">*</span><span class="string">b"GenuineIntel" </span>&amp;&amp; !value.test(Feature::avx <span class="kw">as </span>u32) {
-<a href=#311 id=311 data-nosnippet>311</a>        value.unset(Feature::bmi1 <span class="kw">as </span>u32);
-<a href=#312 id=312 data-nosnippet>312</a>        value.unset(Feature::bmi2 <span class="kw">as </span>u32);
-<a href=#313 id=313 data-nosnippet>313</a>    }
-<a href=#314 id=314 data-nosnippet>314</a>
-<a href=#315 id=315 data-nosnippet>315</a>    value
-<a href=#316 id=316 data-nosnippet>316</a>}</code></pre></div></section></main></body></html>
+<a href=#295 id=295 data-nosnippet>295</a>                <span class="kw">if </span>os_apx_support {
+<a href=#296 id=296 data-nosnippet>296</a>                    enable(extended_features_edx_leaf_1, <span class="number">21</span>, Feature::apxf);
+<a href=#297 id=297 data-nosnippet>297</a>                }
+<a href=#298 id=298 data-nosnippet>298</a>
+<a href=#299 id=299 data-nosnippet>299</a>                <span class="kw">let </span>avx10_1 = enable(extended_features_edx_leaf_1, <span class="number">19</span>, Feature::avx10_1);
+<a href=#300 id=300 data-nosnippet>300</a>                <span class="kw">if </span>avx10_1 {
+<a href=#301 id=301 data-nosnippet>301</a>                    <span class="kw">let </span>CpuidResult { ebx, .. } = <span class="kw">unsafe </span>{ __cpuid(<span class="number">0x24</span>) };
+<a href=#302 id=302 data-nosnippet>302</a>                    <span class="kw">let </span>avx10_version = ebx &amp; <span class="number">0xff</span>;
+<a href=#303 id=303 data-nosnippet>303</a>                    <span class="kw">if </span>avx10_version &gt;= <span class="number">2 </span>{
+<a href=#304 id=304 data-nosnippet>304</a>                        value.set(Feature::avx10_2 <span class="kw">as </span>u32);
+<a href=#305 id=305 data-nosnippet>305</a>                    }
+<a href=#306 id=306 data-nosnippet>306</a>                }
+<a href=#307 id=307 data-nosnippet>307</a>            }
+<a href=#308 id=308 data-nosnippet>308</a>        }
+<a href=#309 id=309 data-nosnippet>309</a>    }
+<a href=#310 id=310 data-nosnippet>310</a>
+<a href=#311 id=311 data-nosnippet>311</a>    <span class="comment">// Unfortunately, some Skylake chips erroneously report support for BMI1 and
+<a href=#312 id=312 data-nosnippet>312</a>    // BMI2 without actual support. These chips don't support AVX, and it seems
+<a href=#313 id=313 data-nosnippet>313</a>    // that all Intel chips with non-erroneous support BMI do (I didn't check
+<a href=#314 id=314 data-nosnippet>314</a>    // other vendors), so we can disable these flags for chips that don't also
+<a href=#315 id=315 data-nosnippet>315</a>    // report support for AVX.
+<a href=#316 id=316 data-nosnippet>316</a>    //
+<a href=#317 id=317 data-nosnippet>317</a>    // It's possible this will pessimize future chips that do support BMI and
+<a href=#318 id=318 data-nosnippet>318</a>    // not AVX, but this seems minor compared to a hard crash you get when
+<a href=#319 id=319 data-nosnippet>319</a>    // executing an unsupported instruction (to put it another way, it's safe
+<a href=#320 id=320 data-nosnippet>320</a>    // for us to under-report CPU features, but not to over-report them). Still,
+<a href=#321 id=321 data-nosnippet>321</a>    // to limit any impact this may have in the future, we only do this for
+<a href=#322 id=322 data-nosnippet>322</a>    // Intel chips, as it's a bug only present in their chips.
+<a href=#323 id=323 data-nosnippet>323</a>    //
+<a href=#324 id=324 data-nosnippet>324</a>    // This bug is documented as `SKL052` in the errata section of this document:
+<a href=#325 id=325 data-nosnippet>325</a>    // http://www.intel.com/content/dam/www/public/us/en/documents/specification-updates/desktop-6th-gen-core-family-spec-update.pdf
+<a href=#326 id=326 data-nosnippet>326</a>    </span><span class="kw">if </span>vendor_id == <span class="kw-2">*</span><span class="string">b"GenuineIntel" </span>&amp;&amp; !value.test(Feature::avx <span class="kw">as </span>u32) {
+<a href=#327 id=327 data-nosnippet>327</a>        value.unset(Feature::bmi1 <span class="kw">as </span>u32);
+<a href=#328 id=328 data-nosnippet>328</a>        value.unset(Feature::bmi2 <span class="kw">as </span>u32);
+<a href=#329 id=329 data-nosnippet>329</a>    }
+<a href=#330 id=330 data-nosnippet>330</a>
+<a href=#331 id=331 data-nosnippet>331</a>    value
+<a href=#332 id=332 data-nosnippet>332</a>}</code></pre></div></section></main></body></html>

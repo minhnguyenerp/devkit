@@ -180,13 +180,11 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="error-code-e0458"><a class="header" href="#error-code-e0458">Error code E0458</a></h1>
+<h4 id="note-this-error-code-is-no-longer-emitted-by-the-compiler"><a class="header" href="#note-this-error-code-is-no-longer-emitted-by-the-compiler">Note: this error code is no longer emitted by the compiler.</a></h4>
 <p>An unknown "kind" was specified for a link attribute.</p>
 <p>Erroneous code example:</p>
-<pre><pre class="playground"><code class="language-rust compile_fail E0458"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>#[link(kind = "wonderful_unicorn")] extern "C" {}
-// error: unknown kind: `wonderful_unicorn`
-<span class="boring">}</span></code></pre></pre>
+<pre><code class="language-rust ignore (no longer emitted)">#[link(kind = "wonderful_unicorn")] extern "C" {}
+// error: unknown kind: `wonderful_unicorn`</code></pre>
 <p>Please specify a valid "kind" value, from one of the following:</p>
 <ul>
 <li>static</li>

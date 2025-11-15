@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-3109fce4.js";
+            window.path_to_searchindex_js = "searchindex-5e2787cc.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-4adb5027.js"></script>
@@ -191,7 +191,7 @@
 Procedural macros come in one of three flavors:</p>
 <ul>
 <li><a href="#function-like-procedural-macros">Function-like macros</a> - <code>custom!(...)</code></li>
-<li><a href="#derive-macros">Derive macros</a> - <code>#[derive(CustomDerive)]</code></li>
+<li><a href="procedural-macros.html#r-macro.proc.derive">Derive macros</a> - <code>#[derive(CustomDerive)]</code></li>
 <li><a href="#attribute-macros">Attribute macros</a> - <code>#[CustomAttribute]</code></li>
 </ul>
 <p>Procedural macros allow you to run code at compile time that operates over Rust
@@ -304,29 +304,17 @@ fn main() {
 position, which includes <a href="statements.html">statements</a>, <a href="expressions.html">expressions</a>, <a href="patterns.html">patterns</a>, <a href="types.html#type-expressions">type
 expressions</a>, <a href="items.html">item</a> positions, including items in <a href="items/external-blocks.html"><code>extern</code> blocks</a>, inherent
 and trait <a href="items/implementations.html">implementations</a>, and <a href="items/traits.html">trait definitions</a>.</p>
+<!-- template:attributes -->
 <div class="rule" id="r-macro.proc.derive"><a class="rule-link" href="#r-macro.proc.derive" title="macro.proc.derive"><span>[macro<wbr>.proc<wbr>.derive]</span/></a>
 </div>
-<h2 id="derive-macros"><a class="header" href="#derive-macros">Derive macros</a></h2>
+<h2 id="the-proc_macro_derive-attribute"><a class="header" href="#the-proc_macro_derive-attribute">The <code>proc_macro_derive</code> attribute</a></h2>
 <div class="rule" id="r-macro.proc.derive.intro"><a class="rule-link" href="#r-macro.proc.derive.intro" title="macro.proc.derive.intro"><span>[macro<wbr>.proc<wbr>.derive<wbr>.intro]</span/></a>
 </div>
-<p><em>Derive macros</em> define new inputs for the <a href="attributes/derive.html"><code>derive</code> attribute</a>. These macros
-can create new <a href="items.html">items</a> given the token stream of a <a href="items/structs.html">struct</a>, <a href="items/enumerations.html">enum</a>, or <a href="items/unions.html">union</a>.
-They can also define <a href="#derive-macro-helper-attributes">derive macro helper attributes</a>.</p>
-<div class="rule" id="r-macro.proc.derive.def"><a class="rule-link" href="#r-macro.proc.derive.def" title="macro.proc.derive.def"><span>[macro<wbr>.proc<wbr>.derive<wbr>.def]</span/></a>
-</div>
-<p>Custom derive macros are defined by a <a href="visibility-and-privacy.html">public</a> <a href="items/functions.html">function</a> with the
-<code>proc_macro_derive</code> attribute and a signature of <code>(TokenStream) -&gt; TokenStream</code>.</p>
-<div class="rule" id="r-macro.proc.derive.namespace"><a class="rule-link" href="#r-macro.proc.derive.namespace" title="macro.proc.derive.namespace"><span>[macro<wbr>.proc<wbr>.derive<wbr>.namespace]</span/></a>
-</div>
-<p>The <code>proc_macro_derive</code> attribute defines the custom derive in the <a href="names/namespaces.html">macro namespace</a> in the root of the crate.</p>
-<div class="rule" id="r-macro.proc.derive.output"><a class="rule-link" href="#r-macro.proc.derive.output" title="macro.proc.derive.output"><span>[macro<wbr>.proc<wbr>.derive<wbr>.output]</span/></a>
-</div>
-<p>The input <a href="../proc_macro/struct.TokenStream.html"><code>TokenStream</code></a> is the token stream of the item that has the <code>derive</code>
-attribute on it. The output <a href="../proc_macro/struct.TokenStream.html"><code>TokenStream</code></a> must be a set of items that are
-then appended to the <a href="items/modules.html">module</a> or <a href="expressions/block-expr.html">block</a> that the item from the input
-<a href="../proc_macro/struct.TokenStream.html"><code>TokenStream</code></a> is in.</p>
-<p>The following is an example of a derive macro. Instead of doing anything
-useful with its input, it just appends a function <code>answer</code>.</p>
+<p>Applying the <em><code>proc_macro_derive</code> <a href="attributes.html">attribute</a></em> to a function defines a <em>derive macro</em> that can be invoked by the <a href="attributes/derive.html"><code>derive</code> attribute</a>. These macros are given the token stream of a <a href="items/structs.html">struct</a>, <a href="items/enumerations.html">enum</a>, or <a href="items/unions.html">union</a> definition and can emit new <a href="items.html">items</a> after it. They can also declare and use <a href="#derive-macro-helper-attributes">derive macro helper attributes</a>.</p>
+<div class="alert alert-example">
+<blockquote>
+<p class="alert-title"><svg viewBox="0 0 16 16" width="18" height="18"><path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Zm4.879-2.773 4.264 2.559a.25.25 0 0 1 0 .428l-4.264 2.559A.25.25 0 0 1 6 10.559V5.442a.25.25 0 0 1 .379-.215Z"></path></svg>Example</p>
+<p>This derive macro ignores its input and appends tokens that define a function.</p>
 <!-- ignore: test doesn't support proc-macro -->
 <pre><code class="language-rust ignore"><span class="boring">#![crate_type = "proc-macro"]
 </span>extern crate proc_macro;
@@ -336,7 +324,7 @@ use proc_macro::TokenStream;
 pub fn derive_answer_fn(_item: TokenStream) -&gt; TokenStream {
     "fn answer() -&gt; u32 { 42 }".parse().unwrap()
 }</code></pre>
-<p>And then using said derive macro:</p>
+<p>To use it, we might write:</p>
 <!-- ignore: requires external crates -->
 <pre><code class="language-rust ignore">extern crate proc_macro_examples;
 use proc_macro_examples::AnswerFn;
@@ -347,37 +335,240 @@ struct Struct;
 fn main() {
     assert_eq!(42, answer());
 }</code></pre>
+</blockquote>
+</div>
+<div class="rule" id="r-macro.proc.derive.syntax"><a class="rule-link" href="#r-macro.proc.derive.syntax" title="macro.proc.derive.syntax"><span>[macro<wbr>.proc<wbr>.derive<wbr>.syntax]</span/></a>
+</div>
+<p>The syntax for the <code>proc_macro_derive</code> attribute is:</p>
+<div class="grammar-container">
+<p><strong><sup>Syntax</sup></strong>
+<br>
+<span class="grammar-text grammar-production" id="grammar-ProcMacroDeriveAttribute" onclick="show_railroad()"><a href="procedural-macros.html#railroad-ProcMacroDeriveAttribute">ProcMacroDeriveAttribute</a></span> → <br />
+    <span class="grammar-literal">proc_macro_derive</span> <span class="grammar-literal">(</span> <span class="grammar-text"><a href="procedural-macros.html#grammar-DeriveMacroName">DeriveMacroName</a></span> ( <span class="grammar-literal">,</span> <span class="grammar-text"><a href="procedural-macros.html#grammar-DeriveMacroAttributes">DeriveMacroAttributes</a></span> )<sup>?</sup> <span class="grammar-literal">,</span><sup>?</sup> <span class="grammar-literal">)</span></p>
+<p><span class="grammar-text grammar-production" id="grammar-DeriveMacroName" onclick="show_railroad()"><a href="procedural-macros.html#railroad-DeriveMacroName">DeriveMacroName</a></span> → <span class="grammar-text"><a href="identifiers.html#grammar-IDENTIFIER">IDENTIFIER</a></span></p>
+<p><span class="grammar-text grammar-production" id="grammar-DeriveMacroAttributes" onclick="show_railroad()"><a href="procedural-macros.html#railroad-DeriveMacroAttributes">DeriveMacroAttributes</a></span> → <br />
+    <span class="grammar-literal">attributes</span> <span class="grammar-literal">(</span> ( <span class="grammar-text"><a href="identifiers.html#grammar-IDENTIFIER">IDENTIFIER</a></span> ( <span class="grammar-literal">,</span> <span class="grammar-text"><a href="identifiers.html#grammar-IDENTIFIER">IDENTIFIER</a></span> )<sup>*</sup> <span class="grammar-literal">,</span><sup>?</sup> )<sup>?</sup> <span class="grammar-literal">)</span></p>
+<p><button class="grammar-toggle-railroad" type="button" title="Toggle railroad display" onclick="toggle_railroad()">Show Railroad</button></p>
+</div>
+<div class="grammar-railroad grammar-hidden">
+<div style="width: 830px; height: auto; max-width: 100%; max-height: 100%" class="railroad-production" id="railroad-ProcMacroDeriveAttribute"><svg class="railroad" viewBox="0 0 830 87" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
+<g class="verticalgrid">
+<a class="link" xlink:href="procedural-macros.html#grammar-ProcMacroDeriveAttribute">
+<text class="comment" x="102" y="25">
+ProcMacroDeriveAttribute</text>
+</a>
+<g class="sequence">
+<path d=" M 10 66 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
+<g class="sequence">
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="156" x="35" y="55"/>
+<text x="113" y="71">
+proc_macro_derive</text>
+</g>
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="201" y="55"/>
+<text x="215" y="71">
+(</text>
+</g>
+<a class="link" xlink:href="procedural-macros.html#railroad-DeriveMacroName">
+<g class="nonterminal">
+<rect height="22" width="140" x="239" y="55"/>
+<text x="309" y="71">
+DeriveMacroName</text>
+</g>
+</a>
+<g class="optional">
+<path d=" M 389 66 h 24 m -24 0 a 12 12 0 0 0 12 -12 v 0 a 12 12 0 0 1 12 -12 h 234 m -114 0 l -5 -5 m 0 10 l 5 -5 m 114 0 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 0 12 12 h -24"/>
+<g class="sequence">
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="413" y="55"/>
+<text x="427" y="71">
+,</text>
+</g>
+<a class="link" xlink:href="procedural-macros.html#railroad-DeriveMacroAttributes">
+<g class="nonterminal">
+<rect height="22" width="196" x="451" y="55"/>
+<text x="549" y="71">
+DeriveMacroAttributes</text>
+</g>
+</a>
+<path d=" M 441 66 h 10"/>
+</g>
+</g>
+<g class="optional">
+<path d=" M 681 66 h 24 m -24 0 a 12 12 0 0 0 12 -12 v 0 a 12 12 0 0 1 12 -12 h 28 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 0 12 12 h -24"/>
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="705" y="55"/>
+<text x="719" y="71">
+,</text>
+</g>
+</g>
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="767" y="55"/>
+<text x="781" y="71">
+)</text>
+</g>
+<path d=" M 191 66 h 10"/>
+<path d=" M 229 66 h 10"/>
+<path d=" M 379 66 h 10"/>
+<path d=" M 671 66 h 10"/>
+<path d=" M 757 66 h 10"/>
+</g>
+<path d=" M 805 66 h 5 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5"/>
+<path d=" M 25 66 h 10"/>
+<path d=" M 795 66 h 10"/>
+</g>
+</g>
+</svg>
+</div>
+<div style="width: 170px; height: auto; max-width: 100%; max-height: 100%" class="railroad-production" id="railroad-DeriveMacroName"><svg class="railroad" viewBox="0 0 170 74" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
+<g class="verticalgrid">
+<a class="link" xlink:href="procedural-macros.html#grammar-DeriveMacroName">
+<text class="comment" x="67" y="25">
+DeriveMacroName</text>
+</a>
+<g class="sequence">
+<path d=" M 10 53 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
+<a class="link" xlink:href="identifiers.html#railroad-IDENTIFIER">
+<g class="nonterminal">
+<rect height="22" width="100" x="35" y="42"/>
+<text x="85" y="58">
+IDENTIFIER</text>
+</g>
+</a>
+<path d=" M 145 53 h 5 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5"/>
+<path d=" M 25 53 h 10"/>
+<path d=" M 135 53 h 10"/>
+</g>
+</g>
+</svg>
+</div>
+<div style="width: 710px; height: auto; max-width: 100%; max-height: 100%" class="railroad-production" id="railroad-DeriveMacroAttributes"><svg class="railroad" viewBox="0 0 710 112" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
+<g class="verticalgrid">
+<a class="link" xlink:href="procedural-macros.html#grammar-DeriveMacroAttributes">
+<text class="comment" x="92" y="25">
+DeriveMacroAttributes</text>
+</a>
+<g class="sequence">
+<path d=" M 10 78 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
+<g class="sequence">
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="100" x="35" y="67"/>
+<text x="85" y="83">
+attributes</text>
+</g>
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="145" y="67"/>
+<text x="159" y="83">
+(</text>
+</g>
+<g class="optional">
+<path d=" M 183 78 h 24 m -24 0 a 12 12 0 0 0 12 -12 v -12 a 12 12 0 0 1 12 -12 h 406 m -200 0 l -5 -5 m 0 10 l 5 -5 m 200 0 a 12 12 0 0 1 12 12 v 12 a 12 12 0 0 0 12 12 h -24"/>
+<g class="sequence">
+<a class="link" xlink:href="identifiers.html#railroad-IDENTIFIER">
+<g class="nonterminal">
+<rect height="22" width="100" x="207" y="67"/>
+<text x="257" y="83">
+IDENTIFIER</text>
+</g>
+</a>
+<g class="optional">
+<path d=" M 317 78 h 24 m -24 0 a 12 12 0 0 0 12 -12 v 0 a 12 12 0 0 1 12 -12 h 162 m -78 0 l -5 -5 m 0 10 l 5 -5 m 78 0 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 0 12 12 h -24"/>
+<g class="repeat">
+<path d=" M 341 78 h 12 m 138 0 h 12 m -12 0 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 1 -12 12 m 0 0 h -138 m 72 0 l 5 -5 m 0 10 l -5 -5 m -72 0 a 12 12 0 0 1 -12 -12 v 0 a 12 12 0 0 1 12 -12"/>
+<g/>
+<g class="sequence">
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="353" y="67"/>
+<text x="367" y="83">
+,</text>
+</g>
+<a class="link" xlink:href="identifiers.html#railroad-IDENTIFIER">
+<g class="nonterminal">
+<rect height="22" width="100" x="391" y="67"/>
+<text x="441" y="83">
+IDENTIFIER</text>
+</g>
+</a>
+<path d=" M 381 78 h 10"/>
+</g>
+</g>
+</g>
+<g class="optional">
+<path d=" M 537 78 h 24 m -24 0 a 12 12 0 0 0 12 -12 v 0 a 12 12 0 0 1 12 -12 h 28 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 0 12 12 h -24"/>
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="561" y="67"/>
+<text x="575" y="83">
+,</text>
+</g>
+</g>
+<path d=" M 307 78 h 10"/>
+<path d=" M 527 78 h 10"/>
+</g>
+</g>
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="647" y="67"/>
+<text x="661" y="83">
+)</text>
+</g>
+<path d=" M 135 78 h 10"/>
+<path d=" M 173 78 h 10"/>
+<path d=" M 637 78 h 10"/>
+</g>
+<path d=" M 685 78 h 5 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5"/>
+<path d=" M 25 78 h 10"/>
+<path d=" M 675 78 h 10"/>
+</g>
+</g>
+</svg>
+</div>
+</div>
+<p>The name of the derive macro is given by <a href="procedural-macros.html#grammar-DeriveMacroName">DeriveMacroName</a>. The optional <code>attributes</code> argument is described in <a href="procedural-macros.html#r-macro.proc.derive.attributes">macro.proc.derive.attributes</a>.</p>
+<div class="rule" id="r-macro.proc.derive.allowed-positions"><a class="rule-link" href="#r-macro.proc.derive.allowed-positions" title="macro.proc.derive.allowed-positions"><span>[macro<wbr>.proc<wbr>.derive<wbr>.allowed-positions]</span/></a>
+</div>
+<p>The <code>proc_macro_derive</code> attribute may only be applied to a <code>pub</code> function with the <a href="items/functions.html#r-items.fn.extern">Rust ABI</a> defined in the root of the crate with a type of <code>fn(TokenStream) -&gt; TokenStream</code>  where <a href="../proc_macro/struct.TokenStream.html"><code>TokenStream</code></a> comes from the <a href="../proc_macro/index.html"><code>proc_macro</code> crate</a>. The function may be <code>const</code> and may use <code>extern</code> to explicitly specify the Rust ABI, but it may not use any other <a href="items/functions.html#grammar-FunctionQualifiers">qualifiers</a> (e.g. it may not be <code>async</code> or <code>unsafe</code>).</p>
+<div class="rule" id="r-macro.proc.derive.duplicates"><a class="rule-link" href="#r-macro.proc.derive.duplicates" title="macro.proc.derive.duplicates"><span>[macro<wbr>.proc<wbr>.derive<wbr>.duplicates]</span/></a>
+</div>
+<p>The <code>proc_macro_derive</code> attribute may be used only once on a function.</p>
+<div class="rule" id="r-macro.proc.derive.namespace"><a class="rule-link" href="#r-macro.proc.derive.namespace" title="macro.proc.derive.namespace"><span>[macro<wbr>.proc<wbr>.derive<wbr>.namespace]</span/></a>
+</div>
+<p>The <code>proc_macro_derive</code> attribute publicly defines the derive macro in the <a href="names/namespaces.html">macro namespace</a> in the root of the crate.</p>
+<div class="rule" id="r-macro.proc.derive.output"><a class="rule-link" href="#r-macro.proc.derive.output" title="macro.proc.derive.output"><span>[macro<wbr>.proc<wbr>.derive<wbr>.output]</span/></a>
+</div>
+<p>The input <a href="../proc_macro/struct.TokenStream.html"><code>TokenStream</code></a> is the token stream of the item to which the <code>derive</code> attribute is applied. The output <a href="../proc_macro/struct.TokenStream.html"><code>TokenStream</code></a> must be a (possibly empty) set of items. These items are appended following the input item within the same <a href="items/modules.html">module</a> or <a href="expressions/block-expr.html">block</a>.</p>
 <div class="rule" id="r-macro.proc.derive.attributes"><a class="rule-link" href="#r-macro.proc.derive.attributes" title="macro.proc.derive.attributes"><span>[macro<wbr>.proc<wbr>.derive<wbr>.attributes]</span/></a>
 </div>
 <h3 id="derive-macro-helper-attributes"><a class="header" href="#derive-macro-helper-attributes">Derive macro helper attributes</a></h3>
 <div class="rule" id="r-macro.proc.derive.attributes.intro"><a class="rule-link" href="#r-macro.proc.derive.attributes.intro" title="macro.proc.derive.attributes.intro"><span>[macro<wbr>.proc<wbr>.derive<wbr>.attributes<wbr>.intro]</span/></a>
 </div>
-<p>Derive macros can add additional <a href="attributes.html">attributes</a> into the scope of the <a href="items.html">item</a>
-they are on. Said attributes are called <em>derive macro helper attributes</em>. These
-attributes are <a href="attributes.html#active-and-inert-attributes">inert</a>, and their only purpose is to be fed into the derive
-macro that defined them. That said, they can be seen by all macros.</p>
-<div class="rule" id="r-macro.proc.derive.attributes.def"><a class="rule-link" href="#r-macro.proc.derive.attributes.def" title="macro.proc.derive.attributes.def"><span>[macro<wbr>.proc<wbr>.derive<wbr>.attributes<wbr>.def]</span/></a>
+<p>Derive macros can declare <em>derive macro helper attributes</em> to be used within the scope of the <a href="items.html">item</a> to which the derive macro is applied. These <a href="attributes.html">attributes</a> are <a href="attributes.html#active-and-inert-attributes">inert</a>. While their purpose is to be used by the macro that declared them, they can be seen by any macro.</p>
+<div class="rule" id="r-macro.proc.derive.attributes.decl"><a class="rule-link" href="#r-macro.proc.derive.attributes.decl" title="macro.proc.derive.attributes.decl"><span>[macro<wbr>.proc<wbr>.derive<wbr>.attributes<wbr>.decl]</span/></a>
 </div>
-<p>The way to define helper attributes is to put an <code>attributes</code> key in the
-<code>proc_macro_derive</code> macro with a comma separated list of identifiers that are
-the names of the helper attributes.</p>
-<p>For example, the following derive macro defines a helper attribute
-<code>helper</code>, but ultimately doesn’t do anything with it.</p>
+<p>A helper attribute for a derive macro is declared by adding its identifier to the <code>attributes</code> list in the <code>proc_macro_derive</code> attribute.</p>
+<div class="alert alert-example">
+<blockquote>
+<p class="alert-title"><svg viewBox="0 0 16 16" width="18" height="18"><path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Zm4.879-2.773 4.264 2.559a.25.25 0 0 1 0 .428l-4.264 2.559A.25.25 0 0 1 6 10.559V5.442a.25.25 0 0 1 .379-.215Z"></path></svg>Example</p>
+<p>This declares a helper attribute and then ignores it.</p>
 <!-- ignore: test doesn't support proc-macro -->
 <pre><code class="language-rust ignore"><span class="boring">#![crate_type="proc-macro"]
 </span><span class="boring">extern crate proc_macro;
 </span><span class="boring">use proc_macro::TokenStream;
-</span>
-#[proc_macro_derive(HelperAttr, attributes(helper))]
-pub fn derive_helper_attr(_item: TokenStream) -&gt; TokenStream {
+</span><span class="boring">
+</span>#[proc_macro_derive(WithHelperAttr, attributes(helper))]
+pub fn derive_with_helper_attr(_item: TokenStream) -&gt; TokenStream {
     TokenStream::new()
 }</code></pre>
-<p>And then usage on the derive macro on a struct:</p>
+<p>To use it, we might write:</p>
 <!-- ignore: requires external crates -->
-<pre><code class="language-rust ignore">#[derive(HelperAttr)]
+<pre><code class="language-rust ignore">#[derive(WithHelperAttr)]
 struct Struct {
-    #[helper] field: ()
+    #[helper] field: (),
 }</code></pre>
+</blockquote>
+</div>
 <div class="rule" id="r-macro.proc.attribute"><a class="rule-link" href="#r-macro.proc.attribute" title="macro.proc.attribute"><span>[macro<wbr>.proc<wbr>.attribute]</span/></a>
 </div>
 <h2 id="attribute-macros"><a class="header" href="#attribute-macros">Attribute macros</a></h2>
@@ -586,9 +777,21 @@ their equivalent <code>#[doc = r"str"]</code> attributes when passed to macros.<
         <script src="book-9576a2db.js"></script>
 
         <!-- Custom JS scripts -->
-        <script src="theme/reference-cfed9ca5.js"></script>
+        <script src="theme/reference-da60281b.js"></script>
 
 
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const fragmentMap =
+                    {"#derive-macros":"procedural-macros.html#the-proc_macro_derive-attribute"}
+                ;
+                const target = fragmentMap[window.location.hash];
+                if (target) {
+                    let url = new URL(target, window.location.href);
+                    window.location.replace(url.href);
+                }
+            });
+        </script>
 
     </div>
     </body>

@@ -41,7 +41,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-ee4246b4.js";
+            window.path_to_searchindex_js = "../searchindex-adf886c2.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-a1ce3eb6.js"></script>
@@ -207,9 +207,8 @@ trait PrintInOption {
     fn print_in_option(self);
 }
 
-// `where`句を用いない場合、以下と等価な機能を実装するには、
-// `T: Debug`という形で表現するか、別の直接的でない方法
-// を使用するかしなくてはなりません。
+// Because we would otherwise have to express this as `T: Debug` or
+// use another method of indirect approach, this requires a `where` clause:
 impl&lt;T&gt; PrintInOption for T where
     Option&lt;T&gt;: Debug {
     // 出力されるのが`Some(self)`であるため、この関数の

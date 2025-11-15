@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-3109fce4.js";
+            window.path_to_searchindex_js = "searchindex-5e2787cc.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-4adb5027.js"></script>
@@ -183,7 +183,7 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="grammar-summary"><a class="header" href="#grammar-summary">Grammar summary</a></h1>
-<p>The following is a summary of the grammar production rules.</p>
+<p>The following is a summary of the grammar production rules. For details on the syntax of this grammar, see <em><a href="notation.html#r-notation.grammar.syntax">notation.grammar.syntax</a></em>.</p>
 <h2 id="lexer-summary"><a class="header" href="#lexer-summary">Lexer summary</a></h2>
 <div class="grammar-container">
 <p><strong><sup>Lexer</sup></strong>
@@ -207,23 +207,23 @@
     | <span class="grammar-literal">//</span></p>
 <p><span class="grammar-text grammar-production" id="grammar-summary-BLOCK_COMMENT" onclick="show_railroad()"><a href="#railroad-summary-BLOCK_COMMENT">BLOCK_COMMENT</a></span> → <br />
       <span class="grammar-literal">/*</span> <br />
-        ( ~[<span class="grammar-literal">*</span> <span class="grammar-literal">!</span>] | <span class="grammar-literal">**</span> | <span class="grammar-text"><a href="#grammar-summary-BlockCommentOrDoc">BlockCommentOrDoc</a></span> ) <br />
-        ( <span class="grammar-text"><a href="#grammar-summary-BlockCommentOrDoc">BlockCommentOrDoc</a></span> | ~<span class="grammar-literal">*/</span> )<sup>*</sup> <br />
+        ( ~[<span class="grammar-literal">*</span> <span class="grammar-literal">!</span>] | <span class="grammar-literal">**</span> | <span class="grammar-text"><a href="#grammar-summary-BLOCK_COMMENT_OR_DOC">BLOCK_COMMENT_OR_DOC</a></span> ) <br />
+        ( <span class="grammar-text"><a href="#grammar-summary-BLOCK_COMMENT_OR_DOC">BLOCK_COMMENT_OR_DOC</a></span> | ~<span class="grammar-literal">*/</span> )<sup>*</sup> <br />
       <span class="grammar-literal">*/</span> <br />
     | <span class="grammar-literal">/**/</span> <br />
     | <span class="grammar-literal">/***/</span></p>
 <p><span class="grammar-text grammar-production" id="grammar-summary-INNER_LINE_DOC" onclick="show_railroad()"><a href="#railroad-summary-INNER_LINE_DOC">INNER_LINE_DOC</a></span> → <br />
     <span class="grammar-literal">//!</span> ~[<a href="#grammar-summary-LF">LF</a> <a href="#grammar-summary-CR">CR</a>]<sup>*</sup></p>
 <p><span class="grammar-text grammar-production" id="grammar-summary-INNER_BLOCK_DOC" onclick="show_railroad()"><a href="#railroad-summary-INNER_BLOCK_DOC">INNER_BLOCK_DOC</a></span> → <br />
-    <span class="grammar-literal">/*!</span> ( <span class="grammar-text"><a href="#grammar-summary-BlockCommentOrDoc">BlockCommentOrDoc</a></span> | ~[<span class="grammar-literal">*/</span> <a href="#grammar-summary-CR">CR</a>] )<sup>*</sup> <span class="grammar-literal">*/</span></p>
+    <span class="grammar-literal">/*!</span> ( <span class="grammar-text"><a href="#grammar-summary-BLOCK_COMMENT_OR_DOC">BLOCK_COMMENT_OR_DOC</a></span> | ~[<span class="grammar-literal">*/</span> <a href="#grammar-summary-CR">CR</a>] )<sup>*</sup> <span class="grammar-literal">*/</span></p>
 <p><span class="grammar-text grammar-production" id="grammar-summary-OUTER_LINE_DOC" onclick="show_railroad()"><a href="#railroad-summary-OUTER_LINE_DOC">OUTER_LINE_DOC</a></span> → <br />
     <span class="grammar-literal">///</span> ( ~<span class="grammar-literal">/</span> ~[<a href="#grammar-summary-LF">LF</a> <a href="#grammar-summary-CR">CR</a>]<sup>*</sup> )<sup>?</sup></p>
 <p><span class="grammar-text grammar-production" id="grammar-summary-OUTER_BLOCK_DOC" onclick="show_railroad()"><a href="#railroad-summary-OUTER_BLOCK_DOC">OUTER_BLOCK_DOC</a></span> → <br />
     <span class="grammar-literal">/**</span> <br />
-      ( ~<span class="grammar-literal">*</span> | <span class="grammar-text"><a href="#grammar-summary-BlockCommentOrDoc">BlockCommentOrDoc</a></span> ) <br />
-      ( <span class="grammar-text"><a href="#grammar-summary-BlockCommentOrDoc">BlockCommentOrDoc</a></span> | ~[<span class="grammar-literal">*/</span> <a href="#grammar-summary-CR">CR</a>] )<sup>*</sup> <br />
+      ( ~<span class="grammar-literal">*</span> | <span class="grammar-text"><a href="#grammar-summary-BLOCK_COMMENT_OR_DOC">BLOCK_COMMENT_OR_DOC</a></span> ) <br />
+      ( <span class="grammar-text"><a href="#grammar-summary-BLOCK_COMMENT_OR_DOC">BLOCK_COMMENT_OR_DOC</a></span> | ~[<span class="grammar-literal">*/</span> <a href="#grammar-summary-CR">CR</a>] )<sup>*</sup> <br />
     <span class="grammar-literal">*/</span></p>
-<p><span class="grammar-text grammar-production" id="grammar-summary-BlockCommentOrDoc" onclick="show_railroad()"><a href="#railroad-summary-BlockCommentOrDoc">BlockCommentOrDoc</a></span> → <br />
+<p><span class="grammar-text grammar-production" id="grammar-summary-BLOCK_COMMENT_OR_DOC" onclick="show_railroad()"><a href="#railroad-summary-BLOCK_COMMENT_OR_DOC">BLOCK_COMMENT_OR_DOC</a></span> → <br />
       <span class="grammar-text"><a href="#grammar-summary-BLOCK_COMMENT">BLOCK_COMMENT</a></span> <br />
     | <span class="grammar-text"><a href="#grammar-summary-OUTER_BLOCK_DOC">OUTER_BLOCK_DOC</a></span> <br />
     | <span class="grammar-text"><a href="#grammar-summary-INNER_BLOCK_DOC">INNER_BLOCK_DOC</a></span></p>
@@ -914,12 +914,12 @@ CHAR</text>
 <text x="147" y="202">
 **</text>
 </g>
-<path d=" M 117 218 v 0 a 12 12 0 0 0 12 12 m 156 0 h 45 a 12 12 0 0 0 12 -12 v 0"/>
-<a class="link" xlink:href="#railroad-summary-BlockCommentOrDoc">
+<path d=" M 117 218 v 0 a 12 12 0 0 0 12 12 m 188 0 h 13 a 12 12 0 0 0 12 -12 v 0"/>
+<a class="link" xlink:href="#railroad-summary-BLOCK_COMMENT_OR_DOC">
 <g class="nonterminal">
-<rect height="22" width="156" x="129" y="219"/>
-<text x="207" y="235">
-BlockCommentOrDoc</text>
+<rect height="22" width="188" x="129" y="219"/>
+<text x="223" y="235">
+BLOCK_COMMENT_OR_DOC</text>
 </g>
 </a>
 </g>
@@ -929,12 +929,12 @@ BlockCommentOrDoc</text>
 <path d=" M 388 156 h 12 m 249 0 h 12 m -12 0 a 12 12 0 0 1 12 12 v 107 m 0 -50 l -5 -5 m 10 0 l -5 5 m 0 50 a 12 12 0 0 1 -12 12 m 0 0 h -249 m 127 0 l 5 -5 m 0 10 l -5 -5 m -127 0 a 12 12 0 0 1 -12 -12 v -107 m 0 56 l -5 5 m 10 0 l -5 -5 m 0 -56 a 12 12 0 0 1 12 -12"/>
 <g/>
 <g class="choice">
-<path d=" M 400 156 h 24 m 156 0 h 69 m -31 0 l -5 -5 m 0 10 l 5 -5 m 31 0"/>
-<a class="link" xlink:href="#railroad-summary-BlockCommentOrDoc">
+<path d=" M 400 156 h 24 m 188 0 h 37"/>
+<a class="link" xlink:href="#railroad-summary-BLOCK_COMMENT_OR_DOC">
 <g class="nonterminal">
-<rect height="22" width="156" x="424" y="145"/>
-<text x="502" y="161">
-BlockCommentOrDoc</text>
+<rect height="22" width="188" x="424" y="145"/>
+<text x="518" y="161">
+BLOCK_COMMENT_OR_DOC</text>
 </g>
 </a>
 <path d=" M 400 156 a 12 12 0 0 1 12 12 v 9 m 225 0 v -9 a 12 12 0 0 1 12 -12"/>
@@ -1081,12 +1081,12 @@ INNER_BLOCK_DOC</text>
 <path d=" M 113 66 h 12 m 249 0 h 12 m -12 0 a 12 12 0 0 1 12 12 v 140 m 0 -67 l -5 -5 m 10 0 l -5 5 m 0 67 a 12 12 0 0 1 -12 12 m 0 0 h -249 m 127 0 l 5 -5 m 0 10 l -5 -5 m -127 0 a 12 12 0 0 1 -12 -12 v -140 m 0 73 l -5 5 m 10 0 l -5 -5 m 0 -73 a 12 12 0 0 1 12 -12"/>
 <g/>
 <g class="choice">
-<path d=" M 125 66 h 24 m 156 0 h 69 m -31 0 l -5 -5 m 0 10 l 5 -5 m 31 0"/>
-<a class="link" xlink:href="#railroad-summary-BlockCommentOrDoc">
+<path d=" M 125 66 h 24 m 188 0 h 37"/>
+<a class="link" xlink:href="#railroad-summary-BLOCK_COMMENT_OR_DOC">
 <g class="nonterminal">
-<rect height="22" width="156" x="149" y="55"/>
-<text x="227" y="71">
-BlockCommentOrDoc</text>
+<rect height="22" width="188" x="149" y="55"/>
+<text x="243" y="71">
+BLOCK_COMMENT_OR_DOC</text>
 </g>
 </a>
 <path d=" M 125 66 a 12 12 0 0 1 12 12 v 9 m 225 0 v -9 a 12 12 0 0 1 12 -12"/>
@@ -1270,12 +1270,12 @@ CHAR</text>
 </a>
 </g>
 <path d=" M 89 123 a 12 12 0 0 1 12 12 v 17 m 225 0 v -17 a 12 12 0 0 1 12 -12"/>
-<path d=" M 101 152 v 0 a 12 12 0 0 0 12 12 m 156 0 h 45 a 12 12 0 0 0 12 -12 v 0"/>
-<a class="link" xlink:href="#railroad-summary-BlockCommentOrDoc">
+<path d=" M 101 152 v 0 a 12 12 0 0 0 12 12 m 188 0 h 13 a 12 12 0 0 0 12 -12 v 0"/>
+<a class="link" xlink:href="#railroad-summary-BLOCK_COMMENT_OR_DOC">
 <g class="nonterminal">
-<rect height="22" width="156" x="113" y="153"/>
-<text x="191" y="169">
-BlockCommentOrDoc</text>
+<rect height="22" width="188" x="113" y="153"/>
+<text x="207" y="169">
+BLOCK_COMMENT_OR_DOC</text>
 </g>
 </a>
 </g>
@@ -1285,12 +1285,12 @@ BlockCommentOrDoc</text>
 <path d=" M 372 123 h 12 m 249 0 h 12 m -12 0 a 12 12 0 0 1 12 12 v 140 m 0 -67 l -5 -5 m 10 0 l -5 5 m 0 67 a 12 12 0 0 1 -12 12 m 0 0 h -249 m 127 0 l 5 -5 m 0 10 l -5 -5 m -127 0 a 12 12 0 0 1 -12 -12 v -140 m 0 73 l -5 5 m 10 0 l -5 -5 m 0 -73 a 12 12 0 0 1 12 -12"/>
 <g/>
 <g class="choice">
-<path d=" M 384 123 h 24 m 156 0 h 69 m -31 0 l -5 -5 m 0 10 l 5 -5 m 31 0"/>
-<a class="link" xlink:href="#railroad-summary-BlockCommentOrDoc">
+<path d=" M 384 123 h 24 m 188 0 h 37"/>
+<a class="link" xlink:href="#railroad-summary-BLOCK_COMMENT_OR_DOC">
 <g class="nonterminal">
-<rect height="22" width="156" x="408" y="112"/>
-<text x="486" y="128">
-BlockCommentOrDoc</text>
+<rect height="22" width="188" x="408" y="112"/>
+<text x="502" y="128">
+BLOCK_COMMENT_OR_DOC</text>
 </g>
 </a>
 <path d=" M 384 123 a 12 12 0 0 1 12 12 v 9 m 225 0 v -9 a 12 12 0 0 1 12 -12"/>
@@ -1346,12 +1346,12 @@ CHAR</text>
 </g>
 </svg>
 </div>
-<div style="width: 258px; height: auto; max-width: 100%; max-height: 100%" class="railroad-production" id="railroad-summary-BlockCommentOrDoc"><svg class="railroad" viewBox="0 0 258 140" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<div style="width: 258px; height: auto; max-width: 100%; max-height: 100%" class="railroad-production" id="railroad-summary-BLOCK_COMMENT_OR_DOC"><svg class="railroad" viewBox="0 0 258 140" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
-<a class="link" xlink:href="#grammar-summary-BlockCommentOrDoc">
-<text class="comment" x="74" y="25">
-BlockCommentOrDoc</text>
+<a class="link" xlink:href="#grammar-summary-BLOCK_COMMENT_OR_DOC">
+<text class="comment" x="88" y="25">
+BLOCK_COMMENT_OR_DOC</text>
 </a>
 <g class="sequence">
 <path d=" M 10 53 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -6102,6 +6102,1111 @@ DelimTokenTree</text>
 </svg>
 </div>
 </div>
+<h2 id="attributes-summary"><a class="header" href="#attributes-summary">Attributes summary</a></h2>
+<div class="grammar-container">
+<p><strong><sup>Syntax</sup></strong>
+<br>
+<span class="grammar-text grammar-production" id="grammar-summary-ProcMacroDeriveAttribute" onclick="show_railroad()"><a href="#railroad-summary-ProcMacroDeriveAttribute">ProcMacroDeriveAttribute</a></span> → <br />
+    <span class="grammar-literal">proc_macro_derive</span> <span class="grammar-literal">(</span> <span class="grammar-text"><a href="#grammar-summary-DeriveMacroName">DeriveMacroName</a></span> ( <span class="grammar-literal">,</span> <span class="grammar-text"><a href="#grammar-summary-DeriveMacroAttributes">DeriveMacroAttributes</a></span> )<sup>?</sup> <span class="grammar-literal">,</span><sup>?</sup> <span class="grammar-literal">)</span></p>
+<p><span class="grammar-text grammar-production" id="grammar-summary-DeriveMacroName" onclick="show_railroad()"><a href="#railroad-summary-DeriveMacroName">DeriveMacroName</a></span> → <span class="grammar-text"><a href="#grammar-summary-IDENTIFIER">IDENTIFIER</a></span></p>
+<p><span class="grammar-text grammar-production" id="grammar-summary-DeriveMacroAttributes" onclick="show_railroad()"><a href="#railroad-summary-DeriveMacroAttributes">DeriveMacroAttributes</a></span> → <br />
+    <span class="grammar-literal">attributes</span> <span class="grammar-literal">(</span> ( <span class="grammar-text"><a href="#grammar-summary-IDENTIFIER">IDENTIFIER</a></span> ( <span class="grammar-literal">,</span> <span class="grammar-text"><a href="#grammar-summary-IDENTIFIER">IDENTIFIER</a></span> )<sup>*</sup> <span class="grammar-literal">,</span><sup>?</sup> )<sup>?</sup> <span class="grammar-literal">)</span></p>
+<p><span class="grammar-text grammar-production" id="grammar-summary-InnerAttribute" onclick="show_railroad()"><a href="#railroad-summary-InnerAttribute">InnerAttribute</a></span> → <span class="grammar-literal">#</span> <span class="grammar-literal">!</span> <span class="grammar-literal">[</span> <span class="grammar-text"><a href="#grammar-summary-Attr">Attr</a></span> <span class="grammar-literal">]</span></p>
+<p><span class="grammar-text grammar-production" id="grammar-summary-OuterAttribute" onclick="show_railroad()"><a href="#railroad-summary-OuterAttribute">OuterAttribute</a></span> → <span class="grammar-literal">#</span> <span class="grammar-literal">[</span> <span class="grammar-text"><a href="#grammar-summary-Attr">Attr</a></span> <span class="grammar-literal">]</span></p>
+<p><span class="grammar-text grammar-production" id="grammar-summary-Attr" onclick="show_railroad()"><a href="#railroad-summary-Attr">Attr</a></span> → <br />
+      <span class="grammar-text"><a href="#grammar-summary-SimplePath">SimplePath</a></span> <span class="grammar-text"><a href="#grammar-summary-AttrInput">AttrInput</a></span><sup>?</sup> <br />
+    | <span class="grammar-literal">unsafe</span> <span class="grammar-literal">(</span> <span class="grammar-text"><a href="#grammar-summary-SimplePath">SimplePath</a></span> <span class="grammar-text"><a href="#grammar-summary-AttrInput">AttrInput</a></span><sup>?</sup> <span class="grammar-literal">)</span></p>
+<p><span class="grammar-text grammar-production" id="grammar-summary-AttrInput" onclick="show_railroad()"><a href="#railroad-summary-AttrInput">AttrInput</a></span> → <br />
+      <span class="grammar-text"><a href="#grammar-summary-DelimTokenTree">DelimTokenTree</a></span> <br />
+    | <span class="grammar-literal">=</span> <span class="grammar-text"><a href="#grammar-summary-Expression">Expression</a></span></p>
+<p><span class="grammar-text grammar-production" id="grammar-summary-MetaItem" onclick="show_railroad()"><a href="#railroad-summary-MetaItem">MetaItem</a></span> → <br />
+      <span class="grammar-text"><a href="#grammar-summary-SimplePath">SimplePath</a></span> <br />
+    | <span class="grammar-text"><a href="#grammar-summary-SimplePath">SimplePath</a></span> <span class="grammar-literal">=</span> <span class="grammar-text"><a href="#grammar-summary-Expression">Expression</a></span> <br />
+    | <span class="grammar-text"><a href="#grammar-summary-SimplePath">SimplePath</a></span> <span class="grammar-literal">(</span> <span class="grammar-text"><a href="#grammar-summary-MetaSeq">MetaSeq</a></span><sup>?</sup> <span class="grammar-literal">)</span></p>
+<p><span class="grammar-text grammar-production" id="grammar-summary-MetaSeq" onclick="show_railroad()"><a href="#railroad-summary-MetaSeq">MetaSeq</a></span> → <br />
+    <span class="grammar-text"><a href="#grammar-summary-MetaItemInner">MetaItemInner</a></span> ( <span class="grammar-literal">,</span> <span class="grammar-text"><a href="#grammar-summary-MetaItemInner">MetaItemInner</a></span> )<sup>*</sup> <span class="grammar-literal">,</span><sup>?</sup></p>
+<p><span class="grammar-text grammar-production" id="grammar-summary-MetaItemInner" onclick="show_railroad()"><a href="#railroad-summary-MetaItemInner">MetaItemInner</a></span> → <br />
+      <span class="grammar-text"><a href="#grammar-summary-MetaItem">MetaItem</a></span> <br />
+    | <span class="grammar-text"><a href="#grammar-summary-Expression">Expression</a></span></p>
+<p><span class="grammar-text grammar-production" id="grammar-summary-MetaWord" onclick="show_railroad()"><a href="#railroad-summary-MetaWord">MetaWord</a></span> → <br />
+    <span class="grammar-text"><a href="#grammar-summary-IDENTIFIER">IDENTIFIER</a></span></p>
+<p><span class="grammar-text grammar-production" id="grammar-summary-MetaNameValueStr" onclick="show_railroad()"><a href="#railroad-summary-MetaNameValueStr">MetaNameValueStr</a></span> → <br />
+    <span class="grammar-text"><a href="#grammar-summary-IDENTIFIER">IDENTIFIER</a></span> <span class="grammar-literal">=</span> ( <span class="grammar-text"><a href="#grammar-summary-STRING_LITERAL">STRING_LITERAL</a></span> | <span class="grammar-text"><a href="#grammar-summary-RAW_STRING_LITERAL">RAW_STRING_LITERAL</a></span> )</p>
+<p><span class="grammar-text grammar-production" id="grammar-summary-MetaListPaths" onclick="show_railroad()"><a href="#railroad-summary-MetaListPaths">MetaListPaths</a></span> → <br />
+    <span class="grammar-text"><a href="#grammar-summary-IDENTIFIER">IDENTIFIER</a></span> <span class="grammar-literal">(</span> ( <span class="grammar-text"><a href="#grammar-summary-SimplePath">SimplePath</a></span> ( <span class="grammar-literal">,</span> <span class="grammar-text"><a href="#grammar-summary-SimplePath">SimplePath</a></span> )<sup>*</sup> <span class="grammar-literal">,</span><sup>?</sup> )<sup>?</sup> <span class="grammar-literal">)</span></p>
+<p><span class="grammar-text grammar-production" id="grammar-summary-MetaListIdents" onclick="show_railroad()"><a href="#railroad-summary-MetaListIdents">MetaListIdents</a></span> → <br />
+    <span class="grammar-text"><a href="#grammar-summary-IDENTIFIER">IDENTIFIER</a></span> <span class="grammar-literal">(</span> ( <span class="grammar-text"><a href="#grammar-summary-IDENTIFIER">IDENTIFIER</a></span> ( <span class="grammar-literal">,</span> <span class="grammar-text"><a href="#grammar-summary-IDENTIFIER">IDENTIFIER</a></span> )<sup>*</sup> <span class="grammar-literal">,</span><sup>?</sup> )<sup>?</sup> <span class="grammar-literal">)</span></p>
+<p><span class="grammar-text grammar-production" id="grammar-summary-MetaListNameValueStr" onclick="show_railroad()"><a href="#railroad-summary-MetaListNameValueStr">MetaListNameValueStr</a></span> → <br />
+    <span class="grammar-text"><a href="#grammar-summary-IDENTIFIER">IDENTIFIER</a></span> <span class="grammar-literal">(</span> ( <span class="grammar-text"><a href="#grammar-summary-MetaNameValueStr">MetaNameValueStr</a></span> ( <span class="grammar-literal">,</span> <span class="grammar-text"><a href="#grammar-summary-MetaNameValueStr">MetaNameValueStr</a></span> )<sup>*</sup> <span class="grammar-literal">,</span><sup>?</sup> )<sup>?</sup> <span class="grammar-literal">)</span></p>
+<p><span class="grammar-text grammar-production" id="grammar-summary-InlineAttribute" onclick="show_railroad()"><a href="#railroad-summary-InlineAttribute">InlineAttribute</a></span> → <br />
+      <span class="grammar-literal">inline</span> <span class="grammar-literal">(</span> <span class="grammar-literal">always</span> <span class="grammar-literal">)</span> <br />
+    | <span class="grammar-literal">inline</span> <span class="grammar-literal">(</span> <span class="grammar-literal">never</span> <span class="grammar-literal">)</span> <br />
+    | <span class="grammar-literal">inline</span></p>
+<p><span class="grammar-text grammar-production" id="grammar-summary-CollapseDebuginfoAttribute" onclick="show_railroad()"><a href="#railroad-summary-CollapseDebuginfoAttribute">CollapseDebuginfoAttribute</a></span> → <span class="grammar-literal">collapse_debuginfo</span> <span class="grammar-literal">(</span> <span class="grammar-text"><a href="#grammar-summary-CollapseDebuginfoOption">CollapseDebuginfoOption</a></span> <span class="grammar-literal">)</span></p>
+<p><span class="grammar-text grammar-production" id="grammar-summary-CollapseDebuginfoOption" onclick="show_railroad()"><a href="#railroad-summary-CollapseDebuginfoOption">CollapseDebuginfoOption</a></span> → <br />
+      <span class="grammar-literal">yes</span> <br />
+    | <span class="grammar-literal">no</span> <br />
+    | <span class="grammar-literal">external</span></p>
+<p><button class="grammar-toggle-railroad" type="button" title="Toggle railroad display" onclick="toggle_railroad()">Show Railroad</button></p>
+</div>
+<div class="grammar-railroad grammar-hidden">
+<div style="width: 830px; height: auto; max-width: 100%; max-height: 100%" class="railroad-production" id="railroad-summary-ProcMacroDeriveAttribute"><svg class="railroad" viewBox="0 0 830 87" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
+<g class="verticalgrid">
+<a class="link" xlink:href="#grammar-summary-ProcMacroDeriveAttribute">
+<text class="comment" x="102" y="25">
+ProcMacroDeriveAttribute</text>
+</a>
+<g class="sequence">
+<path d=" M 10 66 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
+<g class="sequence">
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="156" x="35" y="55"/>
+<text x="113" y="71">
+proc_macro_derive</text>
+</g>
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="201" y="55"/>
+<text x="215" y="71">
+(</text>
+</g>
+<a class="link" xlink:href="#railroad-summary-DeriveMacroName">
+<g class="nonterminal">
+<rect height="22" width="140" x="239" y="55"/>
+<text x="309" y="71">
+DeriveMacroName</text>
+</g>
+</a>
+<g class="optional">
+<path d=" M 389 66 h 24 m -24 0 a 12 12 0 0 0 12 -12 v 0 a 12 12 0 0 1 12 -12 h 234 m -114 0 l -5 -5 m 0 10 l 5 -5 m 114 0 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 0 12 12 h -24"/>
+<g class="sequence">
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="413" y="55"/>
+<text x="427" y="71">
+,</text>
+</g>
+<a class="link" xlink:href="#railroad-summary-DeriveMacroAttributes">
+<g class="nonterminal">
+<rect height="22" width="196" x="451" y="55"/>
+<text x="549" y="71">
+DeriveMacroAttributes</text>
+</g>
+</a>
+<path d=" M 441 66 h 10"/>
+</g>
+</g>
+<g class="optional">
+<path d=" M 681 66 h 24 m -24 0 a 12 12 0 0 0 12 -12 v 0 a 12 12 0 0 1 12 -12 h 28 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 0 12 12 h -24"/>
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="705" y="55"/>
+<text x="719" y="71">
+,</text>
+</g>
+</g>
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="767" y="55"/>
+<text x="781" y="71">
+)</text>
+</g>
+<path d=" M 191 66 h 10"/>
+<path d=" M 229 66 h 10"/>
+<path d=" M 379 66 h 10"/>
+<path d=" M 671 66 h 10"/>
+<path d=" M 757 66 h 10"/>
+</g>
+<path d=" M 805 66 h 5 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5"/>
+<path d=" M 25 66 h 10"/>
+<path d=" M 795 66 h 10"/>
+</g>
+</g>
+</svg>
+</div>
+<div style="width: 170px; height: auto; max-width: 100%; max-height: 100%" class="railroad-production" id="railroad-summary-DeriveMacroName"><svg class="railroad" viewBox="0 0 170 74" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
+<g class="verticalgrid">
+<a class="link" xlink:href="#grammar-summary-DeriveMacroName">
+<text class="comment" x="67" y="25">
+DeriveMacroName</text>
+</a>
+<g class="sequence">
+<path d=" M 10 53 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
+<a class="link" xlink:href="#railroad-summary-IDENTIFIER">
+<g class="nonterminal">
+<rect height="22" width="100" x="35" y="42"/>
+<text x="85" y="58">
+IDENTIFIER</text>
+</g>
+</a>
+<path d=" M 145 53 h 5 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5"/>
+<path d=" M 25 53 h 10"/>
+<path d=" M 135 53 h 10"/>
+</g>
+</g>
+</svg>
+</div>
+<div style="width: 710px; height: auto; max-width: 100%; max-height: 100%" class="railroad-production" id="railroad-summary-DeriveMacroAttributes"><svg class="railroad" viewBox="0 0 710 112" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
+<g class="verticalgrid">
+<a class="link" xlink:href="#grammar-summary-DeriveMacroAttributes">
+<text class="comment" x="92" y="25">
+DeriveMacroAttributes</text>
+</a>
+<g class="sequence">
+<path d=" M 10 78 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
+<g class="sequence">
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="100" x="35" y="67"/>
+<text x="85" y="83">
+attributes</text>
+</g>
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="145" y="67"/>
+<text x="159" y="83">
+(</text>
+</g>
+<g class="optional">
+<path d=" M 183 78 h 24 m -24 0 a 12 12 0 0 0 12 -12 v -12 a 12 12 0 0 1 12 -12 h 406 m -200 0 l -5 -5 m 0 10 l 5 -5 m 200 0 a 12 12 0 0 1 12 12 v 12 a 12 12 0 0 0 12 12 h -24"/>
+<g class="sequence">
+<a class="link" xlink:href="#railroad-summary-IDENTIFIER">
+<g class="nonterminal">
+<rect height="22" width="100" x="207" y="67"/>
+<text x="257" y="83">
+IDENTIFIER</text>
+</g>
+</a>
+<g class="optional">
+<path d=" M 317 78 h 24 m -24 0 a 12 12 0 0 0 12 -12 v 0 a 12 12 0 0 1 12 -12 h 162 m -78 0 l -5 -5 m 0 10 l 5 -5 m 78 0 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 0 12 12 h -24"/>
+<g class="repeat">
+<path d=" M 341 78 h 12 m 138 0 h 12 m -12 0 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 1 -12 12 m 0 0 h -138 m 72 0 l 5 -5 m 0 10 l -5 -5 m -72 0 a 12 12 0 0 1 -12 -12 v 0 a 12 12 0 0 1 12 -12"/>
+<g/>
+<g class="sequence">
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="353" y="67"/>
+<text x="367" y="83">
+,</text>
+</g>
+<a class="link" xlink:href="#railroad-summary-IDENTIFIER">
+<g class="nonterminal">
+<rect height="22" width="100" x="391" y="67"/>
+<text x="441" y="83">
+IDENTIFIER</text>
+</g>
+</a>
+<path d=" M 381 78 h 10"/>
+</g>
+</g>
+</g>
+<g class="optional">
+<path d=" M 537 78 h 24 m -24 0 a 12 12 0 0 0 12 -12 v 0 a 12 12 0 0 1 12 -12 h 28 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 0 12 12 h -24"/>
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="561" y="67"/>
+<text x="575" y="83">
+,</text>
+</g>
+</g>
+<path d=" M 307 78 h 10"/>
+<path d=" M 527 78 h 10"/>
+</g>
+</g>
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="647" y="67"/>
+<text x="661" y="83">
+)</text>
+</g>
+<path d=" M 135 78 h 10"/>
+<path d=" M 173 78 h 10"/>
+<path d=" M 637 78 h 10"/>
+</g>
+<path d=" M 685 78 h 5 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5"/>
+<path d=" M 25 78 h 10"/>
+<path d=" M 675 78 h 10"/>
+</g>
+</g>
+</svg>
+</div>
+<div style="width: 274px; height: auto; max-width: 100%; max-height: 100%" class="railroad-production" id="railroad-summary-InnerAttribute"><svg class="railroad" viewBox="0 0 274 74" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
+<g class="verticalgrid">
+<a class="link" xlink:href="#grammar-summary-InnerAttribute">
+<text class="comment" x="64" y="25">
+InnerAttribute</text>
+</a>
+<g class="sequence">
+<path d=" M 10 53 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
+<g class="sequence">
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="35" y="42"/>
+<text x="49" y="58">
+#</text>
+</g>
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="73" y="42"/>
+<text x="87" y="58">
+!</text>
+</g>
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="111" y="42"/>
+<text x="125" y="58">
+[</text>
+</g>
+<a class="link" xlink:href="#railroad-summary-Attr">
+<g class="nonterminal">
+<rect height="22" width="52" x="149" y="42"/>
+<text x="175" y="58">
+Attr</text>
+</g>
+</a>
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="211" y="42"/>
+<text x="225" y="58">
+]</text>
+</g>
+<path d=" M 63 53 h 10"/>
+<path d=" M 101 53 h 10"/>
+<path d=" M 139 53 h 10"/>
+<path d=" M 201 53 h 10"/>
+</g>
+<path d=" M 249 53 h 5 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5"/>
+<path d=" M 25 53 h 10"/>
+<path d=" M 239 53 h 10"/>
+</g>
+</g>
+</svg>
+</div>
+<div style="width: 236px; height: auto; max-width: 100%; max-height: 100%" class="railroad-production" id="railroad-summary-OuterAttribute"><svg class="railroad" viewBox="0 0 236 74" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
+<g class="verticalgrid">
+<a class="link" xlink:href="#grammar-summary-OuterAttribute">
+<text class="comment" x="64" y="25">
+OuterAttribute</text>
+</a>
+<g class="sequence">
+<path d=" M 10 53 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
+<g class="sequence">
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="35" y="42"/>
+<text x="49" y="58">
+#</text>
+</g>
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="73" y="42"/>
+<text x="87" y="58">
+[</text>
+</g>
+<a class="link" xlink:href="#railroad-summary-Attr">
+<g class="nonterminal">
+<rect height="22" width="52" x="111" y="42"/>
+<text x="137" y="58">
+Attr</text>
+</g>
+</a>
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="173" y="42"/>
+<text x="187" y="58">
+]</text>
+</g>
+<path d=" M 63 53 h 10"/>
+<path d=" M 101 53 h 10"/>
+<path d=" M 163 53 h 10"/>
+</g>
+<path d=" M 211 53 h 5 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5"/>
+<path d=" M 25 53 h 10"/>
+<path d=" M 201 53 h 10"/>
+</g>
+</g>
+</svg>
+</div>
+<div style="width: 522px; height: auto; max-width: 100%; max-height: 100%" class="railroad-production" id="railroad-summary-Attr"><svg class="railroad" viewBox="0 0 522 132" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
+<g class="verticalgrid">
+<a class="link" xlink:href="#grammar-summary-Attr">
+<text class="comment" x="29" y="25">
+Attr</text>
+</a>
+<g class="sequence">
+<path d=" M 10 66 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
+<g class="choice">
+<path d=" M 35 66 h 24 m 250 0 h 178 m -86 0 l -5 -5 m 0 10 l 5 -5 m 86 0"/>
+<g class="sequence">
+<a class="link" xlink:href="#railroad-summary-SimplePath">
+<g class="nonterminal">
+<rect height="22" width="100" x="59" y="55"/>
+<text x="109" y="71">
+SimplePath</text>
+</g>
+</a>
+<g class="optional">
+<path d=" M 169 66 h 24 m -24 0 a 12 12 0 0 0 12 -12 v 0 a 12 12 0 0 1 12 -12 h 92 m -43 0 l -5 -5 m 0 10 l 5 -5 m 43 0 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 0 12 12 h -24"/>
+<a class="link" xlink:href="#railroad-summary-AttrInput">
+<g class="nonterminal">
+<rect height="22" width="92" x="193" y="55"/>
+<text x="239" y="71">
+AttrInput</text>
+</g>
+</a>
+</g>
+<path d=" M 159 66 h 10"/>
+</g>
+<path d=" M 35 66 a 12 12 0 0 1 12 12 v 9 m 428 0 v -9 a 12 12 0 0 1 12 -12"/>
+<path d=" M 47 87 v 12 a 12 12 0 0 0 12 12 m 404 0 h 0 a 12 12 0 0 0 12 -12 v -12"/>
+<g class="sequence">
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="68" x="59" y="100"/>
+<text x="93" y="116">
+unsafe</text>
+</g>
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="137" y="100"/>
+<text x="151" y="116">
+(</text>
+</g>
+<a class="link" xlink:href="#railroad-summary-SimplePath">
+<g class="nonterminal">
+<rect height="22" width="100" x="175" y="100"/>
+<text x="225" y="116">
+SimplePath</text>
+</g>
+</a>
+<g class="optional">
+<path d=" M 285 111 h 24 m -24 0 a 12 12 0 0 0 12 -12 v 0 a 12 12 0 0 1 12 -12 h 92 m -43 0 l -5 -5 m 0 10 l 5 -5 m 43 0 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 0 12 12 h -24"/>
+<a class="link" xlink:href="#railroad-summary-AttrInput">
+<g class="nonterminal">
+<rect height="22" width="92" x="309" y="100"/>
+<text x="355" y="116">
+AttrInput</text>
+</g>
+</a>
+</g>
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="435" y="100"/>
+<text x="449" y="116">
+)</text>
+</g>
+<path d=" M 127 111 h 10"/>
+<path d=" M 165 111 h 10"/>
+<path d=" M 275 111 h 10"/>
+<path d=" M 425 111 h 10"/>
+</g>
+</g>
+<path d=" M 497 66 h 5 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5"/>
+<path d=" M 25 66 h 10"/>
+<path d=" M 487 66 h 10"/>
+</g>
+</g>
+</svg>
+</div>
+<div style="width: 256px; height: auto; max-width: 100%; max-height: 100%" class="railroad-production" id="railroad-summary-AttrInput"><svg class="railroad" viewBox="0 0 256 107" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
+<g class="verticalgrid">
+<a class="link" xlink:href="#grammar-summary-AttrInput">
+<text class="comment" x="46" y="25">
+AttrInput</text>
+</a>
+<g class="sequence">
+<path d=" M 10 53 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
+<g class="choice">
+<path d=" M 35 53 h 24 m 132 0 h 30"/>
+<g class="sequence">
+<a class="link" xlink:href="#railroad-summary-DelimTokenTree">
+<g class="nonterminal">
+<rect height="22" width="132" x="59" y="42"/>
+<text x="125" y="58">
+DelimTokenTree</text>
+</g>
+</a>
+</g>
+<path d=" M 35 53 a 12 12 0 0 1 12 12 v 9 m 162 0 v -9 a 12 12 0 0 1 12 -12"/>
+<path d=" M 47 74 v 0 a 12 12 0 0 0 12 12 m 138 0 h 0 a 12 12 0 0 0 12 -12 v 0"/>
+<g class="sequence">
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="59" y="75"/>
+<text x="73" y="91">
+=</text>
+</g>
+<a class="link" xlink:href="#railroad-summary-Expression">
+<g class="nonterminal">
+<rect height="22" width="100" x="97" y="75"/>
+<text x="147" y="91">
+Expression</text>
+</g>
+</a>
+<path d=" M 87 86 h 10"/>
+</g>
+</g>
+<path d=" M 231 53 h 5 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5"/>
+<path d=" M 25 53 h 10"/>
+<path d=" M 221 53 h 10"/>
+</g>
+</g>
+</svg>
+</div>
+<div style="width: 428px; height: auto; max-width: 100%; max-height: 100%" class="railroad-production" id="railroad-summary-MetaItem"><svg class="railroad" viewBox="0 0 428 152" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
+<g class="verticalgrid">
+<a class="link" xlink:href="#grammar-summary-MetaItem">
+<text class="comment" x="43" y="25">
+MetaItem</text>
+</a>
+<g class="sequence">
+<path d=" M 10 53 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
+<g class="choice">
+<path d=" M 35 53 h 24 m 100 0 h 234 m -114 0 l -5 -5 m 0 10 l 5 -5 m 114 0"/>
+<g class="sequence">
+<a class="link" xlink:href="#railroad-summary-SimplePath">
+<g class="nonterminal">
+<rect height="22" width="100" x="59" y="42"/>
+<text x="109" y="58">
+SimplePath</text>
+</g>
+</a>
+</g>
+<path d=" M 35 53 a 12 12 0 0 1 12 12 v 9 m 334 0 v -9 a 12 12 0 0 1 12 -12"/>
+<path d=" M 47 74 v 33 m 334 0 v -33"/>
+<path d=" M 47 74 v 0 a 12 12 0 0 0 12 12 m 248 0 h 62 m -28 0 l -5 -5 m 0 10 l 5 -5 m 28 0 a 12 12 0 0 0 12 -12 v 0"/>
+<g class="sequence">
+<a class="link" xlink:href="#railroad-summary-SimplePath">
+<g class="nonterminal">
+<rect height="22" width="100" x="59" y="75"/>
+<text x="109" y="91">
+SimplePath</text>
+</g>
+</a>
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="169" y="75"/>
+<text x="183" y="91">
+=</text>
+</g>
+<a class="link" xlink:href="#railroad-summary-Expression">
+<g class="nonterminal">
+<rect height="22" width="100" x="207" y="75"/>
+<text x="257" y="91">
+Expression</text>
+</g>
+</a>
+<path d=" M 159 86 h 10"/>
+<path d=" M 197 86 h 10"/>
+</g>
+<path d=" M 47 107 v 12 a 12 12 0 0 0 12 12 m 310 0 h 0 a 12 12 0 0 0 12 -12 v -12"/>
+<g class="sequence">
+<a class="link" xlink:href="#railroad-summary-SimplePath">
+<g class="nonterminal">
+<rect height="22" width="100" x="59" y="120"/>
+<text x="109" y="136">
+SimplePath</text>
+</g>
+</a>
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="169" y="120"/>
+<text x="183" y="136">
+(</text>
+</g>
+<g class="optional">
+<path d=" M 207 131 h 24 m -24 0 a 12 12 0 0 0 12 -12 v 0 a 12 12 0 0 1 12 -12 h 76 m -35 0 l -5 -5 m 0 10 l 5 -5 m 35 0 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 0 12 12 h -24"/>
+<a class="link" xlink:href="#railroad-summary-MetaSeq">
+<g class="nonterminal">
+<rect height="22" width="76" x="231" y="120"/>
+<text x="269" y="136">
+MetaSeq</text>
+</g>
+</a>
+</g>
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="341" y="120"/>
+<text x="355" y="136">
+)</text>
+</g>
+<path d=" M 159 131 h 10"/>
+<path d=" M 197 131 h 10"/>
+<path d=" M 331 131 h 10"/>
+</g>
+</g>
+<path d=" M 403 53 h 5 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5"/>
+<path d=" M 25 53 h 10"/>
+<path d=" M 393 53 h 10"/>
+</g>
+</g>
+</svg>
+</div>
+<div style="width: 524px; height: auto; max-width: 100%; max-height: 100%" class="railroad-production" id="railroad-summary-MetaSeq"><svg class="railroad" viewBox="0 0 524 100" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
+<g class="verticalgrid">
+<a class="link" xlink:href="#grammar-summary-MetaSeq">
+<text class="comment" x="39" y="25">
+MetaSeq</text>
+</a>
+<g class="sequence">
+<path d=" M 10 66 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
+<g class="sequence">
+<a class="link" xlink:href="#railroad-summary-MetaItemInner">
+<g class="nonterminal">
+<rect height="22" width="124" x="35" y="55"/>
+<text x="97" y="71">
+MetaItemInner</text>
+</g>
+</a>
+<g class="optional">
+<path d=" M 169 66 h 24 m -24 0 a 12 12 0 0 0 12 -12 v 0 a 12 12 0 0 1 12 -12 h 186 m -90 0 l -5 -5 m 0 10 l 5 -5 m 90 0 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 0 12 12 h -24"/>
+<g class="repeat">
+<path d=" M 193 66 h 12 m 162 0 h 12 m -12 0 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 1 -12 12 m 0 0 h -162 m 84 0 l 5 -5 m 0 10 l -5 -5 m -84 0 a 12 12 0 0 1 -12 -12 v 0 a 12 12 0 0 1 12 -12"/>
+<g/>
+<g class="sequence">
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="205" y="55"/>
+<text x="219" y="71">
+,</text>
+</g>
+<a class="link" xlink:href="#railroad-summary-MetaItemInner">
+<g class="nonterminal">
+<rect height="22" width="124" x="243" y="55"/>
+<text x="305" y="71">
+MetaItemInner</text>
+</g>
+</a>
+<path d=" M 233 66 h 10"/>
+</g>
+</g>
+</g>
+<g class="optional">
+<path d=" M 413 66 h 24 m -24 0 a 12 12 0 0 0 12 -12 v 0 a 12 12 0 0 1 12 -12 h 28 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 0 12 12 h -24"/>
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="437" y="55"/>
+<text x="451" y="71">
+,</text>
+</g>
+</g>
+<path d=" M 159 66 h 10"/>
+<path d=" M 403 66 h 10"/>
+</g>
+<path d=" M 499 66 h 5 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5"/>
+<path d=" M 25 66 h 10"/>
+<path d=" M 489 66 h 10"/>
+</g>
+</g>
+</svg>
+</div>
+<div style="width: 218px; height: auto; max-width: 100%; max-height: 100%" class="railroad-production" id="railroad-summary-MetaItemInner"><svg class="railroad" viewBox="0 0 218 107" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
+<g class="verticalgrid">
+<a class="link" xlink:href="#grammar-summary-MetaItemInner">
+<text class="comment" x="60" y="25">
+MetaItemInner</text>
+</a>
+<g class="sequence">
+<path d=" M 10 53 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
+<g class="choice">
+<path d=" M 35 53 h 24 m 84 0 h 40"/>
+<g class="sequence">
+<a class="link" xlink:href="#railroad-summary-MetaItem">
+<g class="nonterminal">
+<rect height="22" width="84" x="59" y="42"/>
+<text x="101" y="58">
+MetaItem</text>
+</g>
+</a>
+</g>
+<path d=" M 35 53 a 12 12 0 0 1 12 12 v 9 m 124 0 v -9 a 12 12 0 0 1 12 -12"/>
+<path d=" M 47 74 v 0 a 12 12 0 0 0 12 12 m 100 0 h 0 a 12 12 0 0 0 12 -12 v 0"/>
+<a class="link" xlink:href="#railroad-summary-Expression">
+<g class="nonterminal">
+<rect height="22" width="100" x="59" y="75"/>
+<text x="109" y="91">
+Expression</text>
+</g>
+</a>
+</g>
+<path d=" M 193 53 h 5 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5"/>
+<path d=" M 25 53 h 10"/>
+<path d=" M 183 53 h 10"/>
+</g>
+</g>
+</svg>
+</div>
+<div style="width: 170px; height: auto; max-width: 100%; max-height: 100%" class="railroad-production" id="railroad-summary-MetaWord"><svg class="railroad" viewBox="0 0 170 74" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
+<g class="verticalgrid">
+<a class="link" xlink:href="#grammar-summary-MetaWord">
+<text class="comment" x="43" y="25">
+MetaWord</text>
+</a>
+<g class="sequence">
+<path d=" M 10 53 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
+<g class="sequence">
+<a class="link" xlink:href="#railroad-summary-IDENTIFIER">
+<g class="nonterminal">
+<rect height="22" width="100" x="35" y="42"/>
+<text x="85" y="58">
+IDENTIFIER</text>
+</g>
+</a>
+</g>
+<path d=" M 145 53 h 5 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5"/>
+<path d=" M 25 53 h 10"/>
+<path d=" M 135 53 h 10"/>
+</g>
+</g>
+</svg>
+</div>
+<div style="width: 430px; height: auto; max-width: 100%; max-height: 100%" class="railroad-production" id="railroad-summary-MetaNameValueStr"><svg class="railroad" viewBox="0 0 430 107" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
+<g class="verticalgrid">
+<a class="link" xlink:href="#grammar-summary-MetaNameValueStr">
+<text class="comment" x="71" y="25">
+MetaNameValueStr</text>
+</a>
+<g class="sequence">
+<path d=" M 10 53 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
+<g class="sequence">
+<a class="link" xlink:href="#railroad-summary-IDENTIFIER">
+<g class="nonterminal">
+<rect height="22" width="100" x="35" y="42"/>
+<text x="85" y="58">
+IDENTIFIER</text>
+</g>
+</a>
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="145" y="42"/>
+<text x="159" y="58">
+=</text>
+</g>
+<g class="choice">
+<path d=" M 183 53 h 24 m 132 0 h 56 m -25 0 l -5 -5 m 0 10 l 5 -5 m 25 0"/>
+<a class="link" xlink:href="#railroad-summary-STRING_LITERAL">
+<g class="nonterminal">
+<rect height="22" width="132" x="207" y="42"/>
+<text x="273" y="58">
+STRING_LITERAL</text>
+</g>
+</a>
+<path d=" M 183 53 a 12 12 0 0 1 12 12 v 9 m 188 0 v -9 a 12 12 0 0 1 12 -12"/>
+<path d=" M 195 74 v 0 a 12 12 0 0 0 12 12 m 164 0 h 0 a 12 12 0 0 0 12 -12 v 0"/>
+<a class="link" xlink:href="#railroad-summary-RAW_STRING_LITERAL">
+<g class="nonterminal">
+<rect height="22" width="164" x="207" y="75"/>
+<text x="289" y="91">
+RAW_STRING_LITERAL</text>
+</g>
+</a>
+</g>
+<path d=" M 135 53 h 10"/>
+<path d=" M 173 53 h 10"/>
+</g>
+<path d=" M 405 53 h 5 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5"/>
+<path d=" M 25 53 h 10"/>
+<path d=" M 395 53 h 10"/>
+</g>
+</g>
+</svg>
+</div>
+<div style="width: 710px; height: auto; max-width: 100%; max-height: 100%" class="railroad-production" id="railroad-summary-MetaListPaths"><svg class="railroad" viewBox="0 0 710 112" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
+<g class="verticalgrid">
+<a class="link" xlink:href="#grammar-summary-MetaListPaths">
+<text class="comment" x="60" y="25">
+MetaListPaths</text>
+</a>
+<g class="sequence">
+<path d=" M 10 78 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
+<g class="sequence">
+<a class="link" xlink:href="#railroad-summary-IDENTIFIER">
+<g class="nonterminal">
+<rect height="22" width="100" x="35" y="67"/>
+<text x="85" y="83">
+IDENTIFIER</text>
+</g>
+</a>
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="145" y="67"/>
+<text x="159" y="83">
+(</text>
+</g>
+<g class="optional">
+<path d=" M 183 78 h 24 m -24 0 a 12 12 0 0 0 12 -12 v -12 a 12 12 0 0 1 12 -12 h 406 m -200 0 l -5 -5 m 0 10 l 5 -5 m 200 0 a 12 12 0 0 1 12 12 v 12 a 12 12 0 0 0 12 12 h -24"/>
+<g class="sequence">
+<a class="link" xlink:href="#railroad-summary-SimplePath">
+<g class="nonterminal">
+<rect height="22" width="100" x="207" y="67"/>
+<text x="257" y="83">
+SimplePath</text>
+</g>
+</a>
+<g class="optional">
+<path d=" M 317 78 h 24 m -24 0 a 12 12 0 0 0 12 -12 v 0 a 12 12 0 0 1 12 -12 h 162 m -78 0 l -5 -5 m 0 10 l 5 -5 m 78 0 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 0 12 12 h -24"/>
+<g class="repeat">
+<path d=" M 341 78 h 12 m 138 0 h 12 m -12 0 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 1 -12 12 m 0 0 h -138 m 72 0 l 5 -5 m 0 10 l -5 -5 m -72 0 a 12 12 0 0 1 -12 -12 v 0 a 12 12 0 0 1 12 -12"/>
+<g/>
+<g class="sequence">
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="353" y="67"/>
+<text x="367" y="83">
+,</text>
+</g>
+<a class="link" xlink:href="#railroad-summary-SimplePath">
+<g class="nonterminal">
+<rect height="22" width="100" x="391" y="67"/>
+<text x="441" y="83">
+SimplePath</text>
+</g>
+</a>
+<path d=" M 381 78 h 10"/>
+</g>
+</g>
+</g>
+<g class="optional">
+<path d=" M 537 78 h 24 m -24 0 a 12 12 0 0 0 12 -12 v 0 a 12 12 0 0 1 12 -12 h 28 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 0 12 12 h -24"/>
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="561" y="67"/>
+<text x="575" y="83">
+,</text>
+</g>
+</g>
+<path d=" M 307 78 h 10"/>
+<path d=" M 527 78 h 10"/>
+</g>
+</g>
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="647" y="67"/>
+<text x="661" y="83">
+)</text>
+</g>
+<path d=" M 135 78 h 10"/>
+<path d=" M 173 78 h 10"/>
+<path d=" M 637 78 h 10"/>
+</g>
+<path d=" M 685 78 h 5 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5"/>
+<path d=" M 25 78 h 10"/>
+<path d=" M 675 78 h 10"/>
+</g>
+</g>
+</svg>
+</div>
+<div style="width: 710px; height: auto; max-width: 100%; max-height: 100%" class="railroad-production" id="railroad-summary-MetaListIdents"><svg class="railroad" viewBox="0 0 710 112" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
+<g class="verticalgrid">
+<a class="link" xlink:href="#grammar-summary-MetaListIdents">
+<text class="comment" x="64" y="25">
+MetaListIdents</text>
+</a>
+<g class="sequence">
+<path d=" M 10 78 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
+<g class="sequence">
+<a class="link" xlink:href="#railroad-summary-IDENTIFIER">
+<g class="nonterminal">
+<rect height="22" width="100" x="35" y="67"/>
+<text x="85" y="83">
+IDENTIFIER</text>
+</g>
+</a>
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="145" y="67"/>
+<text x="159" y="83">
+(</text>
+</g>
+<g class="optional">
+<path d=" M 183 78 h 24 m -24 0 a 12 12 0 0 0 12 -12 v -12 a 12 12 0 0 1 12 -12 h 406 m -200 0 l -5 -5 m 0 10 l 5 -5 m 200 0 a 12 12 0 0 1 12 12 v 12 a 12 12 0 0 0 12 12 h -24"/>
+<g class="sequence">
+<a class="link" xlink:href="#railroad-summary-IDENTIFIER">
+<g class="nonterminal">
+<rect height="22" width="100" x="207" y="67"/>
+<text x="257" y="83">
+IDENTIFIER</text>
+</g>
+</a>
+<g class="optional">
+<path d=" M 317 78 h 24 m -24 0 a 12 12 0 0 0 12 -12 v 0 a 12 12 0 0 1 12 -12 h 162 m -78 0 l -5 -5 m 0 10 l 5 -5 m 78 0 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 0 12 12 h -24"/>
+<g class="repeat">
+<path d=" M 341 78 h 12 m 138 0 h 12 m -12 0 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 1 -12 12 m 0 0 h -138 m 72 0 l 5 -5 m 0 10 l -5 -5 m -72 0 a 12 12 0 0 1 -12 -12 v 0 a 12 12 0 0 1 12 -12"/>
+<g/>
+<g class="sequence">
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="353" y="67"/>
+<text x="367" y="83">
+,</text>
+</g>
+<a class="link" xlink:href="#railroad-summary-IDENTIFIER">
+<g class="nonterminal">
+<rect height="22" width="100" x="391" y="67"/>
+<text x="441" y="83">
+IDENTIFIER</text>
+</g>
+</a>
+<path d=" M 381 78 h 10"/>
+</g>
+</g>
+</g>
+<g class="optional">
+<path d=" M 537 78 h 24 m -24 0 a 12 12 0 0 0 12 -12 v 0 a 12 12 0 0 1 12 -12 h 28 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 0 12 12 h -24"/>
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="561" y="67"/>
+<text x="575" y="83">
+,</text>
+</g>
+</g>
+<path d=" M 307 78 h 10"/>
+<path d=" M 527 78 h 10"/>
+</g>
+</g>
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="647" y="67"/>
+<text x="661" y="83">
+)</text>
+</g>
+<path d=" M 135 78 h 10"/>
+<path d=" M 173 78 h 10"/>
+<path d=" M 637 78 h 10"/>
+</g>
+<path d=" M 685 78 h 5 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5"/>
+<path d=" M 25 78 h 10"/>
+<path d=" M 675 78 h 10"/>
+</g>
+</g>
+</svg>
+</div>
+<div style="width: 806px; height: auto; max-width: 100%; max-height: 100%" class="railroad-production" id="railroad-summary-MetaListNameValueStr"><svg class="railroad" viewBox="0 0 806 112" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
+<g class="verticalgrid">
+<a class="link" xlink:href="#grammar-summary-MetaListNameValueStr">
+<text class="comment" x="88" y="25">
+MetaListNameValueStr</text>
+</a>
+<g class="sequence">
+<path d=" M 10 78 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
+<g class="sequence">
+<a class="link" xlink:href="#railroad-summary-IDENTIFIER">
+<g class="nonterminal">
+<rect height="22" width="100" x="35" y="67"/>
+<text x="85" y="83">
+IDENTIFIER</text>
+</g>
+</a>
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="145" y="67"/>
+<text x="159" y="83">
+(</text>
+</g>
+<g class="optional">
+<path d=" M 183 78 h 24 m -24 0 a 12 12 0 0 0 12 -12 v -12 a 12 12 0 0 1 12 -12 h 502 m -248 0 l -5 -5 m 0 10 l 5 -5 m 248 0 a 12 12 0 0 1 12 12 v 12 a 12 12 0 0 0 12 12 h -24"/>
+<g class="sequence">
+<a class="link" xlink:href="#railroad-summary-MetaNameValueStr">
+<g class="nonterminal">
+<rect height="22" width="148" x="207" y="67"/>
+<text x="281" y="83">
+MetaNameValueStr</text>
+</g>
+</a>
+<g class="optional">
+<path d=" M 365 78 h 24 m -24 0 a 12 12 0 0 0 12 -12 v 0 a 12 12 0 0 1 12 -12 h 210 m -102 0 l -5 -5 m 0 10 l 5 -5 m 102 0 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 0 12 12 h -24"/>
+<g class="repeat">
+<path d=" M 389 78 h 12 m 186 0 h 12 m -12 0 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 1 -12 12 m 0 0 h -186 m 96 0 l 5 -5 m 0 10 l -5 -5 m -96 0 a 12 12 0 0 1 -12 -12 v 0 a 12 12 0 0 1 12 -12"/>
+<g/>
+<g class="sequence">
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="401" y="67"/>
+<text x="415" y="83">
+,</text>
+</g>
+<a class="link" xlink:href="#railroad-summary-MetaNameValueStr">
+<g class="nonterminal">
+<rect height="22" width="148" x="439" y="67"/>
+<text x="513" y="83">
+MetaNameValueStr</text>
+</g>
+</a>
+<path d=" M 429 78 h 10"/>
+</g>
+</g>
+</g>
+<g class="optional">
+<path d=" M 633 78 h 24 m -24 0 a 12 12 0 0 0 12 -12 v 0 a 12 12 0 0 1 12 -12 h 28 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 0 12 12 h -24"/>
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="657" y="67"/>
+<text x="671" y="83">
+,</text>
+</g>
+</g>
+<path d=" M 355 78 h 10"/>
+<path d=" M 623 78 h 10"/>
+</g>
+</g>
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="743" y="67"/>
+<text x="757" y="83">
+)</text>
+</g>
+<path d=" M 135 78 h 10"/>
+<path d=" M 173 78 h 10"/>
+<path d=" M 733 78 h 10"/>
+</g>
+<path d=" M 781 78 h 5 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5"/>
+<path d=" M 25 78 h 10"/>
+<path d=" M 771 78 h 10"/>
+</g>
+</g>
+</svg>
+</div>
+<div style="width: 340px; height: auto; max-width: 100%; max-height: 100%" class="railroad-production" id="railroad-summary-InlineAttribute"><svg class="railroad" viewBox="0 0 340 140" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
+<g class="verticalgrid">
+<a class="link" xlink:href="#grammar-summary-InlineAttribute">
+<text class="comment" x="67" y="25">
+InlineAttribute</text>
+</a>
+<g class="sequence">
+<path d=" M 10 53 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
+<g class="choice">
+<path d=" M 35 53 h 24 m 222 0 h 24"/>
+<g class="sequence">
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="68" x="59" y="42"/>
+<text x="93" y="58">
+inline</text>
+</g>
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="137" y="42"/>
+<text x="151" y="58">
+(</text>
+</g>
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="68" x="175" y="42"/>
+<text x="209" y="58">
+always</text>
+</g>
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="253" y="42"/>
+<text x="267" y="58">
+)</text>
+</g>
+<path d=" M 127 53 h 10"/>
+<path d=" M 165 53 h 10"/>
+<path d=" M 243 53 h 10"/>
+</g>
+<path d=" M 35 53 a 12 12 0 0 1 12 12 v 9 m 246 0 v -9 a 12 12 0 0 1 12 -12"/>
+<path d=" M 47 74 v 33 m 246 0 v -33"/>
+<path d=" M 47 74 v 0 a 12 12 0 0 0 12 12 m 214 0 h 8 a 12 12 0 0 0 12 -12 v 0"/>
+<g class="sequence">
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="68" x="59" y="75"/>
+<text x="93" y="91">
+inline</text>
+</g>
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="137" y="75"/>
+<text x="151" y="91">
+(</text>
+</g>
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="60" x="175" y="75"/>
+<text x="205" y="91">
+never</text>
+</g>
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="245" y="75"/>
+<text x="259" y="91">
+)</text>
+</g>
+<path d=" M 127 86 h 10"/>
+<path d=" M 165 86 h 10"/>
+<path d=" M 235 86 h 10"/>
+</g>
+<path d=" M 47 107 v 0 a 12 12 0 0 0 12 12 m 68 0 h 154 m -74 0 l -5 -5 m 0 10 l 5 -5 m 74 0 a 12 12 0 0 0 12 -12 v 0"/>
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="68" x="59" y="108"/>
+<text x="93" y="124">
+inline</text>
+</g>
+</g>
+<path d=" M 315 53 h 5 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5"/>
+<path d=" M 25 53 h 10"/>
+<path d=" M 305 53 h 10"/>
+</g>
+</g>
+</svg>
+</div>
+<div style="width: 532px; height: auto; max-width: 100%; max-height: 100%" class="railroad-production" id="railroad-summary-CollapseDebuginfoAttribute"><svg class="railroad" viewBox="0 0 532 74" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
+<g class="verticalgrid">
+<a class="link" xlink:href="#grammar-summary-CollapseDebuginfoAttribute">
+<text class="comment" x="109" y="25">
+CollapseDebuginfoAttribute</text>
+</a>
+<g class="sequence">
+<path d=" M 10 53 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
+<g class="sequence">
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="164" x="35" y="42"/>
+<text x="117" y="58">
+collapse_debuginfo</text>
+</g>
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="209" y="42"/>
+<text x="223" y="58">
+(</text>
+</g>
+<a class="link" xlink:href="#railroad-summary-CollapseDebuginfoOption">
+<g class="nonterminal">
+<rect height="22" width="212" x="247" y="42"/>
+<text x="353" y="58">
+CollapseDebuginfoOption</text>
+</g>
+</a>
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="469" y="42"/>
+<text x="483" y="58">
+)</text>
+</g>
+<path d=" M 199 53 h 10"/>
+<path d=" M 237 53 h 10"/>
+<path d=" M 459 53 h 10"/>
+</g>
+<path d=" M 507 53 h 5 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5"/>
+<path d=" M 25 53 h 10"/>
+<path d=" M 497 53 h 10"/>
+</g>
+</g>
+</svg>
+</div>
+<div style="width: 202px; height: auto; max-width: 100%; max-height: 100%" class="railroad-production" id="railroad-summary-CollapseDebuginfoOption"><svg class="railroad" viewBox="0 0 202 140" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
+<g class="verticalgrid">
+<a class="link" xlink:href="#grammar-summary-CollapseDebuginfoOption">
+<text class="comment" x="99" y="25">
+CollapseDebuginfoOption</text>
+</a>
+<g class="sequence">
+<path d=" M 10 53 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
+<g class="choice">
+<path d=" M 35 53 h 24 m 44 0 h 64 m -29 0 l -5 -5 m 0 10 l 5 -5 m 29 0"/>
+<g class="sequence">
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="44" x="59" y="42"/>
+<text x="81" y="58">
+yes</text>
+</g>
+</g>
+<path d=" M 35 53 a 12 12 0 0 1 12 12 v 9 m 108 0 v -9 a 12 12 0 0 1 12 -12"/>
+<path d=" M 47 74 v 33 m 108 0 v -33"/>
+<path d=" M 47 74 v 0 a 12 12 0 0 0 12 12 m 36 0 h 48 a 12 12 0 0 0 12 -12 v 0"/>
+<g class="sequence">
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="36" x="59" y="75"/>
+<text x="77" y="91">
+no</text>
+</g>
+</g>
+<path d=" M 47 107 v 0 a 12 12 0 0 0 12 12 m 84 0 h 0 a 12 12 0 0 0 12 -12 v 0"/>
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="84" x="59" y="108"/>
+<text x="101" y="124">
+external</text>
+</g>
+</g>
+<path d=" M 177 53 h 5 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5"/>
+<path d=" M 25 53 h 10"/>
+<path d=" M 167 53 h 10"/>
+</g>
+</g>
+</svg>
+</div>
+</div>
 <h2 id="items-summary"><a class="header" href="#items-summary">Items summary</a></h2>
 <div class="grammar-container">
 <p><strong><sup>Syntax</sup></strong>
@@ -10664,760 +11769,6 @@ Attr</text>
 </svg>
 </div>
 </div>
-<h2 id="attributes-summary"><a class="header" href="#attributes-summary">Attributes summary</a></h2>
-<div class="grammar-container">
-<p><strong><sup>Syntax</sup></strong>
-<br>
-<span class="grammar-text grammar-production" id="grammar-summary-InnerAttribute" onclick="show_railroad()"><a href="#railroad-summary-InnerAttribute">InnerAttribute</a></span> → <span class="grammar-literal">#</span> <span class="grammar-literal">!</span> <span class="grammar-literal">[</span> <span class="grammar-text"><a href="#grammar-summary-Attr">Attr</a></span> <span class="grammar-literal">]</span></p>
-<p><span class="grammar-text grammar-production" id="grammar-summary-OuterAttribute" onclick="show_railroad()"><a href="#railroad-summary-OuterAttribute">OuterAttribute</a></span> → <span class="grammar-literal">#</span> <span class="grammar-literal">[</span> <span class="grammar-text"><a href="#grammar-summary-Attr">Attr</a></span> <span class="grammar-literal">]</span></p>
-<p><span class="grammar-text grammar-production" id="grammar-summary-Attr" onclick="show_railroad()"><a href="#railroad-summary-Attr">Attr</a></span> → <br />
-      <span class="grammar-text"><a href="#grammar-summary-SimplePath">SimplePath</a></span> <span class="grammar-text"><a href="#grammar-summary-AttrInput">AttrInput</a></span><sup>?</sup> <br />
-    | <span class="grammar-literal">unsafe</span> <span class="grammar-literal">(</span> <span class="grammar-text"><a href="#grammar-summary-SimplePath">SimplePath</a></span> <span class="grammar-text"><a href="#grammar-summary-AttrInput">AttrInput</a></span><sup>?</sup> <span class="grammar-literal">)</span></p>
-<p><span class="grammar-text grammar-production" id="grammar-summary-AttrInput" onclick="show_railroad()"><a href="#railroad-summary-AttrInput">AttrInput</a></span> → <br />
-      <span class="grammar-text"><a href="#grammar-summary-DelimTokenTree">DelimTokenTree</a></span> <br />
-    | <span class="grammar-literal">=</span> <span class="grammar-text"><a href="#grammar-summary-Expression">Expression</a></span></p>
-<p><span class="grammar-text grammar-production" id="grammar-summary-MetaItem" onclick="show_railroad()"><a href="#railroad-summary-MetaItem">MetaItem</a></span> → <br />
-      <span class="grammar-text"><a href="#grammar-summary-SimplePath">SimplePath</a></span> <br />
-    | <span class="grammar-text"><a href="#grammar-summary-SimplePath">SimplePath</a></span> <span class="grammar-literal">=</span> <span class="grammar-text"><a href="#grammar-summary-Expression">Expression</a></span> <br />
-    | <span class="grammar-text"><a href="#grammar-summary-SimplePath">SimplePath</a></span> <span class="grammar-literal">(</span> <span class="grammar-text"><a href="#grammar-summary-MetaSeq">MetaSeq</a></span><sup>?</sup> <span class="grammar-literal">)</span></p>
-<p><span class="grammar-text grammar-production" id="grammar-summary-MetaSeq" onclick="show_railroad()"><a href="#railroad-summary-MetaSeq">MetaSeq</a></span> → <br />
-    <span class="grammar-text"><a href="#grammar-summary-MetaItemInner">MetaItemInner</a></span> ( <span class="grammar-literal">,</span> <span class="grammar-text"><a href="#grammar-summary-MetaItemInner">MetaItemInner</a></span> )<sup>*</sup> <span class="grammar-literal">,</span><sup>?</sup></p>
-<p><span class="grammar-text grammar-production" id="grammar-summary-MetaItemInner" onclick="show_railroad()"><a href="#railroad-summary-MetaItemInner">MetaItemInner</a></span> → <br />
-      <span class="grammar-text"><a href="#grammar-summary-MetaItem">MetaItem</a></span> <br />
-    | <span class="grammar-text"><a href="#grammar-summary-Expression">Expression</a></span></p>
-<p><span class="grammar-text grammar-production" id="grammar-summary-MetaWord" onclick="show_railroad()"><a href="#railroad-summary-MetaWord">MetaWord</a></span> → <br />
-    <span class="grammar-text"><a href="#grammar-summary-IDENTIFIER">IDENTIFIER</a></span></p>
-<p><span class="grammar-text grammar-production" id="grammar-summary-MetaNameValueStr" onclick="show_railroad()"><a href="#railroad-summary-MetaNameValueStr">MetaNameValueStr</a></span> → <br />
-    <span class="grammar-text"><a href="#grammar-summary-IDENTIFIER">IDENTIFIER</a></span> <span class="grammar-literal">=</span> ( <span class="grammar-text"><a href="#grammar-summary-STRING_LITERAL">STRING_LITERAL</a></span> | <span class="grammar-text"><a href="#grammar-summary-RAW_STRING_LITERAL">RAW_STRING_LITERAL</a></span> )</p>
-<p><span class="grammar-text grammar-production" id="grammar-summary-MetaListPaths" onclick="show_railroad()"><a href="#railroad-summary-MetaListPaths">MetaListPaths</a></span> → <br />
-    <span class="grammar-text"><a href="#grammar-summary-IDENTIFIER">IDENTIFIER</a></span> <span class="grammar-literal">(</span> ( <span class="grammar-text"><a href="#grammar-summary-SimplePath">SimplePath</a></span> ( <span class="grammar-literal">,</span> <span class="grammar-text"><a href="#grammar-summary-SimplePath">SimplePath</a></span> )<sup>*</sup> <span class="grammar-literal">,</span><sup>?</sup> )<sup>?</sup> <span class="grammar-literal">)</span></p>
-<p><span class="grammar-text grammar-production" id="grammar-summary-MetaListIdents" onclick="show_railroad()"><a href="#railroad-summary-MetaListIdents">MetaListIdents</a></span> → <br />
-    <span class="grammar-text"><a href="#grammar-summary-IDENTIFIER">IDENTIFIER</a></span> <span class="grammar-literal">(</span> ( <span class="grammar-text"><a href="#grammar-summary-IDENTIFIER">IDENTIFIER</a></span> ( <span class="grammar-literal">,</span> <span class="grammar-text"><a href="#grammar-summary-IDENTIFIER">IDENTIFIER</a></span> )<sup>*</sup> <span class="grammar-literal">,</span><sup>?</sup> )<sup>?</sup> <span class="grammar-literal">)</span></p>
-<p><span class="grammar-text grammar-production" id="grammar-summary-MetaListNameValueStr" onclick="show_railroad()"><a href="#railroad-summary-MetaListNameValueStr">MetaListNameValueStr</a></span> → <br />
-    <span class="grammar-text"><a href="#grammar-summary-IDENTIFIER">IDENTIFIER</a></span> <span class="grammar-literal">(</span> ( <span class="grammar-text"><a href="#grammar-summary-MetaNameValueStr">MetaNameValueStr</a></span> ( <span class="grammar-literal">,</span> <span class="grammar-text"><a href="#grammar-summary-MetaNameValueStr">MetaNameValueStr</a></span> )<sup>*</sup> <span class="grammar-literal">,</span><sup>?</sup> )<sup>?</sup> <span class="grammar-literal">)</span></p>
-<p><button class="grammar-toggle-railroad" type="button" title="Toggle railroad display" onclick="toggle_railroad()">Show Railroad</button></p>
-</div>
-<div class="grammar-railroad grammar-hidden">
-<div style="width: 274px; height: auto; max-width: 100%; max-height: 100%" class="railroad-production" id="railroad-summary-InnerAttribute"><svg class="railroad" viewBox="0 0 274 74" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<rect class="railroad_canvas" height="100%" width="100%"/>
-<g class="verticalgrid">
-<a class="link" xlink:href="#grammar-summary-InnerAttribute">
-<text class="comment" x="64" y="25">
-InnerAttribute</text>
-</a>
-<g class="sequence">
-<path d=" M 10 53 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
-<g class="sequence">
-<g class="terminal">
-<rect height="22" rx="10" ry="10" width="28" x="35" y="42"/>
-<text x="49" y="58">
-#</text>
-</g>
-<g class="terminal">
-<rect height="22" rx="10" ry="10" width="28" x="73" y="42"/>
-<text x="87" y="58">
-!</text>
-</g>
-<g class="terminal">
-<rect height="22" rx="10" ry="10" width="28" x="111" y="42"/>
-<text x="125" y="58">
-[</text>
-</g>
-<a class="link" xlink:href="#railroad-summary-Attr">
-<g class="nonterminal">
-<rect height="22" width="52" x="149" y="42"/>
-<text x="175" y="58">
-Attr</text>
-</g>
-</a>
-<g class="terminal">
-<rect height="22" rx="10" ry="10" width="28" x="211" y="42"/>
-<text x="225" y="58">
-]</text>
-</g>
-<path d=" M 63 53 h 10"/>
-<path d=" M 101 53 h 10"/>
-<path d=" M 139 53 h 10"/>
-<path d=" M 201 53 h 10"/>
-</g>
-<path d=" M 249 53 h 5 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5"/>
-<path d=" M 25 53 h 10"/>
-<path d=" M 239 53 h 10"/>
-</g>
-</g>
-</svg>
-</div>
-<div style="width: 236px; height: auto; max-width: 100%; max-height: 100%" class="railroad-production" id="railroad-summary-OuterAttribute"><svg class="railroad" viewBox="0 0 236 74" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<rect class="railroad_canvas" height="100%" width="100%"/>
-<g class="verticalgrid">
-<a class="link" xlink:href="#grammar-summary-OuterAttribute">
-<text class="comment" x="64" y="25">
-OuterAttribute</text>
-</a>
-<g class="sequence">
-<path d=" M 10 53 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
-<g class="sequence">
-<g class="terminal">
-<rect height="22" rx="10" ry="10" width="28" x="35" y="42"/>
-<text x="49" y="58">
-#</text>
-</g>
-<g class="terminal">
-<rect height="22" rx="10" ry="10" width="28" x="73" y="42"/>
-<text x="87" y="58">
-[</text>
-</g>
-<a class="link" xlink:href="#railroad-summary-Attr">
-<g class="nonterminal">
-<rect height="22" width="52" x="111" y="42"/>
-<text x="137" y="58">
-Attr</text>
-</g>
-</a>
-<g class="terminal">
-<rect height="22" rx="10" ry="10" width="28" x="173" y="42"/>
-<text x="187" y="58">
-]</text>
-</g>
-<path d=" M 63 53 h 10"/>
-<path d=" M 101 53 h 10"/>
-<path d=" M 163 53 h 10"/>
-</g>
-<path d=" M 211 53 h 5 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5"/>
-<path d=" M 25 53 h 10"/>
-<path d=" M 201 53 h 10"/>
-</g>
-</g>
-</svg>
-</div>
-<div style="width: 522px; height: auto; max-width: 100%; max-height: 100%" class="railroad-production" id="railroad-summary-Attr"><svg class="railroad" viewBox="0 0 522 132" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<rect class="railroad_canvas" height="100%" width="100%"/>
-<g class="verticalgrid">
-<a class="link" xlink:href="#grammar-summary-Attr">
-<text class="comment" x="29" y="25">
-Attr</text>
-</a>
-<g class="sequence">
-<path d=" M 10 66 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
-<g class="choice">
-<path d=" M 35 66 h 24 m 250 0 h 178 m -86 0 l -5 -5 m 0 10 l 5 -5 m 86 0"/>
-<g class="sequence">
-<a class="link" xlink:href="#railroad-summary-SimplePath">
-<g class="nonterminal">
-<rect height="22" width="100" x="59" y="55"/>
-<text x="109" y="71">
-SimplePath</text>
-</g>
-</a>
-<g class="optional">
-<path d=" M 169 66 h 24 m -24 0 a 12 12 0 0 0 12 -12 v 0 a 12 12 0 0 1 12 -12 h 92 m -43 0 l -5 -5 m 0 10 l 5 -5 m 43 0 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 0 12 12 h -24"/>
-<a class="link" xlink:href="#railroad-summary-AttrInput">
-<g class="nonterminal">
-<rect height="22" width="92" x="193" y="55"/>
-<text x="239" y="71">
-AttrInput</text>
-</g>
-</a>
-</g>
-<path d=" M 159 66 h 10"/>
-</g>
-<path d=" M 35 66 a 12 12 0 0 1 12 12 v 9 m 428 0 v -9 a 12 12 0 0 1 12 -12"/>
-<path d=" M 47 87 v 12 a 12 12 0 0 0 12 12 m 404 0 h 0 a 12 12 0 0 0 12 -12 v -12"/>
-<g class="sequence">
-<g class="terminal">
-<rect height="22" rx="10" ry="10" width="68" x="59" y="100"/>
-<text x="93" y="116">
-unsafe</text>
-</g>
-<g class="terminal">
-<rect height="22" rx="10" ry="10" width="28" x="137" y="100"/>
-<text x="151" y="116">
-(</text>
-</g>
-<a class="link" xlink:href="#railroad-summary-SimplePath">
-<g class="nonterminal">
-<rect height="22" width="100" x="175" y="100"/>
-<text x="225" y="116">
-SimplePath</text>
-</g>
-</a>
-<g class="optional">
-<path d=" M 285 111 h 24 m -24 0 a 12 12 0 0 0 12 -12 v 0 a 12 12 0 0 1 12 -12 h 92 m -43 0 l -5 -5 m 0 10 l 5 -5 m 43 0 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 0 12 12 h -24"/>
-<a class="link" xlink:href="#railroad-summary-AttrInput">
-<g class="nonterminal">
-<rect height="22" width="92" x="309" y="100"/>
-<text x="355" y="116">
-AttrInput</text>
-</g>
-</a>
-</g>
-<g class="terminal">
-<rect height="22" rx="10" ry="10" width="28" x="435" y="100"/>
-<text x="449" y="116">
-)</text>
-</g>
-<path d=" M 127 111 h 10"/>
-<path d=" M 165 111 h 10"/>
-<path d=" M 275 111 h 10"/>
-<path d=" M 425 111 h 10"/>
-</g>
-</g>
-<path d=" M 497 66 h 5 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5"/>
-<path d=" M 25 66 h 10"/>
-<path d=" M 487 66 h 10"/>
-</g>
-</g>
-</svg>
-</div>
-<div style="width: 256px; height: auto; max-width: 100%; max-height: 100%" class="railroad-production" id="railroad-summary-AttrInput"><svg class="railroad" viewBox="0 0 256 107" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<rect class="railroad_canvas" height="100%" width="100%"/>
-<g class="verticalgrid">
-<a class="link" xlink:href="#grammar-summary-AttrInput">
-<text class="comment" x="46" y="25">
-AttrInput</text>
-</a>
-<g class="sequence">
-<path d=" M 10 53 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
-<g class="choice">
-<path d=" M 35 53 h 24 m 132 0 h 30"/>
-<g class="sequence">
-<a class="link" xlink:href="#railroad-summary-DelimTokenTree">
-<g class="nonterminal">
-<rect height="22" width="132" x="59" y="42"/>
-<text x="125" y="58">
-DelimTokenTree</text>
-</g>
-</a>
-</g>
-<path d=" M 35 53 a 12 12 0 0 1 12 12 v 9 m 162 0 v -9 a 12 12 0 0 1 12 -12"/>
-<path d=" M 47 74 v 0 a 12 12 0 0 0 12 12 m 138 0 h 0 a 12 12 0 0 0 12 -12 v 0"/>
-<g class="sequence">
-<g class="terminal">
-<rect height="22" rx="10" ry="10" width="28" x="59" y="75"/>
-<text x="73" y="91">
-=</text>
-</g>
-<a class="link" xlink:href="#railroad-summary-Expression">
-<g class="nonterminal">
-<rect height="22" width="100" x="97" y="75"/>
-<text x="147" y="91">
-Expression</text>
-</g>
-</a>
-<path d=" M 87 86 h 10"/>
-</g>
-</g>
-<path d=" M 231 53 h 5 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5"/>
-<path d=" M 25 53 h 10"/>
-<path d=" M 221 53 h 10"/>
-</g>
-</g>
-</svg>
-</div>
-<div style="width: 428px; height: auto; max-width: 100%; max-height: 100%" class="railroad-production" id="railroad-summary-MetaItem"><svg class="railroad" viewBox="0 0 428 152" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<rect class="railroad_canvas" height="100%" width="100%"/>
-<g class="verticalgrid">
-<a class="link" xlink:href="#grammar-summary-MetaItem">
-<text class="comment" x="43" y="25">
-MetaItem</text>
-</a>
-<g class="sequence">
-<path d=" M 10 53 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
-<g class="choice">
-<path d=" M 35 53 h 24 m 100 0 h 234 m -114 0 l -5 -5 m 0 10 l 5 -5 m 114 0"/>
-<g class="sequence">
-<a class="link" xlink:href="#railroad-summary-SimplePath">
-<g class="nonterminal">
-<rect height="22" width="100" x="59" y="42"/>
-<text x="109" y="58">
-SimplePath</text>
-</g>
-</a>
-</g>
-<path d=" M 35 53 a 12 12 0 0 1 12 12 v 9 m 334 0 v -9 a 12 12 0 0 1 12 -12"/>
-<path d=" M 47 74 v 33 m 334 0 v -33"/>
-<path d=" M 47 74 v 0 a 12 12 0 0 0 12 12 m 248 0 h 62 m -28 0 l -5 -5 m 0 10 l 5 -5 m 28 0 a 12 12 0 0 0 12 -12 v 0"/>
-<g class="sequence">
-<a class="link" xlink:href="#railroad-summary-SimplePath">
-<g class="nonterminal">
-<rect height="22" width="100" x="59" y="75"/>
-<text x="109" y="91">
-SimplePath</text>
-</g>
-</a>
-<g class="terminal">
-<rect height="22" rx="10" ry="10" width="28" x="169" y="75"/>
-<text x="183" y="91">
-=</text>
-</g>
-<a class="link" xlink:href="#railroad-summary-Expression">
-<g class="nonterminal">
-<rect height="22" width="100" x="207" y="75"/>
-<text x="257" y="91">
-Expression</text>
-</g>
-</a>
-<path d=" M 159 86 h 10"/>
-<path d=" M 197 86 h 10"/>
-</g>
-<path d=" M 47 107 v 12 a 12 12 0 0 0 12 12 m 310 0 h 0 a 12 12 0 0 0 12 -12 v -12"/>
-<g class="sequence">
-<a class="link" xlink:href="#railroad-summary-SimplePath">
-<g class="nonterminal">
-<rect height="22" width="100" x="59" y="120"/>
-<text x="109" y="136">
-SimplePath</text>
-</g>
-</a>
-<g class="terminal">
-<rect height="22" rx="10" ry="10" width="28" x="169" y="120"/>
-<text x="183" y="136">
-(</text>
-</g>
-<g class="optional">
-<path d=" M 207 131 h 24 m -24 0 a 12 12 0 0 0 12 -12 v 0 a 12 12 0 0 1 12 -12 h 76 m -35 0 l -5 -5 m 0 10 l 5 -5 m 35 0 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 0 12 12 h -24"/>
-<a class="link" xlink:href="#railroad-summary-MetaSeq">
-<g class="nonterminal">
-<rect height="22" width="76" x="231" y="120"/>
-<text x="269" y="136">
-MetaSeq</text>
-</g>
-</a>
-</g>
-<g class="terminal">
-<rect height="22" rx="10" ry="10" width="28" x="341" y="120"/>
-<text x="355" y="136">
-)</text>
-</g>
-<path d=" M 159 131 h 10"/>
-<path d=" M 197 131 h 10"/>
-<path d=" M 331 131 h 10"/>
-</g>
-</g>
-<path d=" M 403 53 h 5 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5"/>
-<path d=" M 25 53 h 10"/>
-<path d=" M 393 53 h 10"/>
-</g>
-</g>
-</svg>
-</div>
-<div style="width: 524px; height: auto; max-width: 100%; max-height: 100%" class="railroad-production" id="railroad-summary-MetaSeq"><svg class="railroad" viewBox="0 0 524 100" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<rect class="railroad_canvas" height="100%" width="100%"/>
-<g class="verticalgrid">
-<a class="link" xlink:href="#grammar-summary-MetaSeq">
-<text class="comment" x="39" y="25">
-MetaSeq</text>
-</a>
-<g class="sequence">
-<path d=" M 10 66 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
-<g class="sequence">
-<a class="link" xlink:href="#railroad-summary-MetaItemInner">
-<g class="nonterminal">
-<rect height="22" width="124" x="35" y="55"/>
-<text x="97" y="71">
-MetaItemInner</text>
-</g>
-</a>
-<g class="optional">
-<path d=" M 169 66 h 24 m -24 0 a 12 12 0 0 0 12 -12 v 0 a 12 12 0 0 1 12 -12 h 186 m -90 0 l -5 -5 m 0 10 l 5 -5 m 90 0 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 0 12 12 h -24"/>
-<g class="repeat">
-<path d=" M 193 66 h 12 m 162 0 h 12 m -12 0 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 1 -12 12 m 0 0 h -162 m 84 0 l 5 -5 m 0 10 l -5 -5 m -84 0 a 12 12 0 0 1 -12 -12 v 0 a 12 12 0 0 1 12 -12"/>
-<g/>
-<g class="sequence">
-<g class="terminal">
-<rect height="22" rx="10" ry="10" width="28" x="205" y="55"/>
-<text x="219" y="71">
-,</text>
-</g>
-<a class="link" xlink:href="#railroad-summary-MetaItemInner">
-<g class="nonterminal">
-<rect height="22" width="124" x="243" y="55"/>
-<text x="305" y="71">
-MetaItemInner</text>
-</g>
-</a>
-<path d=" M 233 66 h 10"/>
-</g>
-</g>
-</g>
-<g class="optional">
-<path d=" M 413 66 h 24 m -24 0 a 12 12 0 0 0 12 -12 v 0 a 12 12 0 0 1 12 -12 h 28 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 0 12 12 h -24"/>
-<g class="terminal">
-<rect height="22" rx="10" ry="10" width="28" x="437" y="55"/>
-<text x="451" y="71">
-,</text>
-</g>
-</g>
-<path d=" M 159 66 h 10"/>
-<path d=" M 403 66 h 10"/>
-</g>
-<path d=" M 499 66 h 5 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5"/>
-<path d=" M 25 66 h 10"/>
-<path d=" M 489 66 h 10"/>
-</g>
-</g>
-</svg>
-</div>
-<div style="width: 218px; height: auto; max-width: 100%; max-height: 100%" class="railroad-production" id="railroad-summary-MetaItemInner"><svg class="railroad" viewBox="0 0 218 107" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<rect class="railroad_canvas" height="100%" width="100%"/>
-<g class="verticalgrid">
-<a class="link" xlink:href="#grammar-summary-MetaItemInner">
-<text class="comment" x="60" y="25">
-MetaItemInner</text>
-</a>
-<g class="sequence">
-<path d=" M 10 53 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
-<g class="choice">
-<path d=" M 35 53 h 24 m 84 0 h 40"/>
-<g class="sequence">
-<a class="link" xlink:href="#railroad-summary-MetaItem">
-<g class="nonterminal">
-<rect height="22" width="84" x="59" y="42"/>
-<text x="101" y="58">
-MetaItem</text>
-</g>
-</a>
-</g>
-<path d=" M 35 53 a 12 12 0 0 1 12 12 v 9 m 124 0 v -9 a 12 12 0 0 1 12 -12"/>
-<path d=" M 47 74 v 0 a 12 12 0 0 0 12 12 m 100 0 h 0 a 12 12 0 0 0 12 -12 v 0"/>
-<a class="link" xlink:href="#railroad-summary-Expression">
-<g class="nonterminal">
-<rect height="22" width="100" x="59" y="75"/>
-<text x="109" y="91">
-Expression</text>
-</g>
-</a>
-</g>
-<path d=" M 193 53 h 5 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5"/>
-<path d=" M 25 53 h 10"/>
-<path d=" M 183 53 h 10"/>
-</g>
-</g>
-</svg>
-</div>
-<div style="width: 170px; height: auto; max-width: 100%; max-height: 100%" class="railroad-production" id="railroad-summary-MetaWord"><svg class="railroad" viewBox="0 0 170 74" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<rect class="railroad_canvas" height="100%" width="100%"/>
-<g class="verticalgrid">
-<a class="link" xlink:href="#grammar-summary-MetaWord">
-<text class="comment" x="43" y="25">
-MetaWord</text>
-</a>
-<g class="sequence">
-<path d=" M 10 53 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
-<g class="sequence">
-<a class="link" xlink:href="#railroad-summary-IDENTIFIER">
-<g class="nonterminal">
-<rect height="22" width="100" x="35" y="42"/>
-<text x="85" y="58">
-IDENTIFIER</text>
-</g>
-</a>
-</g>
-<path d=" M 145 53 h 5 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5"/>
-<path d=" M 25 53 h 10"/>
-<path d=" M 135 53 h 10"/>
-</g>
-</g>
-</svg>
-</div>
-<div style="width: 430px; height: auto; max-width: 100%; max-height: 100%" class="railroad-production" id="railroad-summary-MetaNameValueStr"><svg class="railroad" viewBox="0 0 430 107" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<rect class="railroad_canvas" height="100%" width="100%"/>
-<g class="verticalgrid">
-<a class="link" xlink:href="#grammar-summary-MetaNameValueStr">
-<text class="comment" x="71" y="25">
-MetaNameValueStr</text>
-</a>
-<g class="sequence">
-<path d=" M 10 53 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
-<g class="sequence">
-<a class="link" xlink:href="#railroad-summary-IDENTIFIER">
-<g class="nonterminal">
-<rect height="22" width="100" x="35" y="42"/>
-<text x="85" y="58">
-IDENTIFIER</text>
-</g>
-</a>
-<g class="terminal">
-<rect height="22" rx="10" ry="10" width="28" x="145" y="42"/>
-<text x="159" y="58">
-=</text>
-</g>
-<g class="choice">
-<path d=" M 183 53 h 24 m 132 0 h 56 m -25 0 l -5 -5 m 0 10 l 5 -5 m 25 0"/>
-<a class="link" xlink:href="#railroad-summary-STRING_LITERAL">
-<g class="nonterminal">
-<rect height="22" width="132" x="207" y="42"/>
-<text x="273" y="58">
-STRING_LITERAL</text>
-</g>
-</a>
-<path d=" M 183 53 a 12 12 0 0 1 12 12 v 9 m 188 0 v -9 a 12 12 0 0 1 12 -12"/>
-<path d=" M 195 74 v 0 a 12 12 0 0 0 12 12 m 164 0 h 0 a 12 12 0 0 0 12 -12 v 0"/>
-<a class="link" xlink:href="#railroad-summary-RAW_STRING_LITERAL">
-<g class="nonterminal">
-<rect height="22" width="164" x="207" y="75"/>
-<text x="289" y="91">
-RAW_STRING_LITERAL</text>
-</g>
-</a>
-</g>
-<path d=" M 135 53 h 10"/>
-<path d=" M 173 53 h 10"/>
-</g>
-<path d=" M 405 53 h 5 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5"/>
-<path d=" M 25 53 h 10"/>
-<path d=" M 395 53 h 10"/>
-</g>
-</g>
-</svg>
-</div>
-<div style="width: 710px; height: auto; max-width: 100%; max-height: 100%" class="railroad-production" id="railroad-summary-MetaListPaths"><svg class="railroad" viewBox="0 0 710 112" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<rect class="railroad_canvas" height="100%" width="100%"/>
-<g class="verticalgrid">
-<a class="link" xlink:href="#grammar-summary-MetaListPaths">
-<text class="comment" x="60" y="25">
-MetaListPaths</text>
-</a>
-<g class="sequence">
-<path d=" M 10 78 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
-<g class="sequence">
-<a class="link" xlink:href="#railroad-summary-IDENTIFIER">
-<g class="nonterminal">
-<rect height="22" width="100" x="35" y="67"/>
-<text x="85" y="83">
-IDENTIFIER</text>
-</g>
-</a>
-<g class="terminal">
-<rect height="22" rx="10" ry="10" width="28" x="145" y="67"/>
-<text x="159" y="83">
-(</text>
-</g>
-<g class="optional">
-<path d=" M 183 78 h 24 m -24 0 a 12 12 0 0 0 12 -12 v -12 a 12 12 0 0 1 12 -12 h 406 m -200 0 l -5 -5 m 0 10 l 5 -5 m 200 0 a 12 12 0 0 1 12 12 v 12 a 12 12 0 0 0 12 12 h -24"/>
-<g class="sequence">
-<a class="link" xlink:href="#railroad-summary-SimplePath">
-<g class="nonterminal">
-<rect height="22" width="100" x="207" y="67"/>
-<text x="257" y="83">
-SimplePath</text>
-</g>
-</a>
-<g class="optional">
-<path d=" M 317 78 h 24 m -24 0 a 12 12 0 0 0 12 -12 v 0 a 12 12 0 0 1 12 -12 h 162 m -78 0 l -5 -5 m 0 10 l 5 -5 m 78 0 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 0 12 12 h -24"/>
-<g class="repeat">
-<path d=" M 341 78 h 12 m 138 0 h 12 m -12 0 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 1 -12 12 m 0 0 h -138 m 72 0 l 5 -5 m 0 10 l -5 -5 m -72 0 a 12 12 0 0 1 -12 -12 v 0 a 12 12 0 0 1 12 -12"/>
-<g/>
-<g class="sequence">
-<g class="terminal">
-<rect height="22" rx="10" ry="10" width="28" x="353" y="67"/>
-<text x="367" y="83">
-,</text>
-</g>
-<a class="link" xlink:href="#railroad-summary-SimplePath">
-<g class="nonterminal">
-<rect height="22" width="100" x="391" y="67"/>
-<text x="441" y="83">
-SimplePath</text>
-</g>
-</a>
-<path d=" M 381 78 h 10"/>
-</g>
-</g>
-</g>
-<g class="optional">
-<path d=" M 537 78 h 24 m -24 0 a 12 12 0 0 0 12 -12 v 0 a 12 12 0 0 1 12 -12 h 28 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 0 12 12 h -24"/>
-<g class="terminal">
-<rect height="22" rx="10" ry="10" width="28" x="561" y="67"/>
-<text x="575" y="83">
-,</text>
-</g>
-</g>
-<path d=" M 307 78 h 10"/>
-<path d=" M 527 78 h 10"/>
-</g>
-</g>
-<g class="terminal">
-<rect height="22" rx="10" ry="10" width="28" x="647" y="67"/>
-<text x="661" y="83">
-)</text>
-</g>
-<path d=" M 135 78 h 10"/>
-<path d=" M 173 78 h 10"/>
-<path d=" M 637 78 h 10"/>
-</g>
-<path d=" M 685 78 h 5 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5"/>
-<path d=" M 25 78 h 10"/>
-<path d=" M 675 78 h 10"/>
-</g>
-</g>
-</svg>
-</div>
-<div style="width: 710px; height: auto; max-width: 100%; max-height: 100%" class="railroad-production" id="railroad-summary-MetaListIdents"><svg class="railroad" viewBox="0 0 710 112" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<rect class="railroad_canvas" height="100%" width="100%"/>
-<g class="verticalgrid">
-<a class="link" xlink:href="#grammar-summary-MetaListIdents">
-<text class="comment" x="64" y="25">
-MetaListIdents</text>
-</a>
-<g class="sequence">
-<path d=" M 10 78 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
-<g class="sequence">
-<a class="link" xlink:href="#railroad-summary-IDENTIFIER">
-<g class="nonterminal">
-<rect height="22" width="100" x="35" y="67"/>
-<text x="85" y="83">
-IDENTIFIER</text>
-</g>
-</a>
-<g class="terminal">
-<rect height="22" rx="10" ry="10" width="28" x="145" y="67"/>
-<text x="159" y="83">
-(</text>
-</g>
-<g class="optional">
-<path d=" M 183 78 h 24 m -24 0 a 12 12 0 0 0 12 -12 v -12 a 12 12 0 0 1 12 -12 h 406 m -200 0 l -5 -5 m 0 10 l 5 -5 m 200 0 a 12 12 0 0 1 12 12 v 12 a 12 12 0 0 0 12 12 h -24"/>
-<g class="sequence">
-<a class="link" xlink:href="#railroad-summary-IDENTIFIER">
-<g class="nonterminal">
-<rect height="22" width="100" x="207" y="67"/>
-<text x="257" y="83">
-IDENTIFIER</text>
-</g>
-</a>
-<g class="optional">
-<path d=" M 317 78 h 24 m -24 0 a 12 12 0 0 0 12 -12 v 0 a 12 12 0 0 1 12 -12 h 162 m -78 0 l -5 -5 m 0 10 l 5 -5 m 78 0 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 0 12 12 h -24"/>
-<g class="repeat">
-<path d=" M 341 78 h 12 m 138 0 h 12 m -12 0 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 1 -12 12 m 0 0 h -138 m 72 0 l 5 -5 m 0 10 l -5 -5 m -72 0 a 12 12 0 0 1 -12 -12 v 0 a 12 12 0 0 1 12 -12"/>
-<g/>
-<g class="sequence">
-<g class="terminal">
-<rect height="22" rx="10" ry="10" width="28" x="353" y="67"/>
-<text x="367" y="83">
-,</text>
-</g>
-<a class="link" xlink:href="#railroad-summary-IDENTIFIER">
-<g class="nonterminal">
-<rect height="22" width="100" x="391" y="67"/>
-<text x="441" y="83">
-IDENTIFIER</text>
-</g>
-</a>
-<path d=" M 381 78 h 10"/>
-</g>
-</g>
-</g>
-<g class="optional">
-<path d=" M 537 78 h 24 m -24 0 a 12 12 0 0 0 12 -12 v 0 a 12 12 0 0 1 12 -12 h 28 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 0 12 12 h -24"/>
-<g class="terminal">
-<rect height="22" rx="10" ry="10" width="28" x="561" y="67"/>
-<text x="575" y="83">
-,</text>
-</g>
-</g>
-<path d=" M 307 78 h 10"/>
-<path d=" M 527 78 h 10"/>
-</g>
-</g>
-<g class="terminal">
-<rect height="22" rx="10" ry="10" width="28" x="647" y="67"/>
-<text x="661" y="83">
-)</text>
-</g>
-<path d=" M 135 78 h 10"/>
-<path d=" M 173 78 h 10"/>
-<path d=" M 637 78 h 10"/>
-</g>
-<path d=" M 685 78 h 5 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5"/>
-<path d=" M 25 78 h 10"/>
-<path d=" M 675 78 h 10"/>
-</g>
-</g>
-</svg>
-</div>
-<div style="width: 806px; height: auto; max-width: 100%; max-height: 100%" class="railroad-production" id="railroad-summary-MetaListNameValueStr"><svg class="railroad" viewBox="0 0 806 112" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<rect class="railroad_canvas" height="100%" width="100%"/>
-<g class="verticalgrid">
-<a class="link" xlink:href="#grammar-summary-MetaListNameValueStr">
-<text class="comment" x="88" y="25">
-MetaListNameValueStr</text>
-</a>
-<g class="sequence">
-<path d=" M 10 78 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
-<g class="sequence">
-<a class="link" xlink:href="#railroad-summary-IDENTIFIER">
-<g class="nonterminal">
-<rect height="22" width="100" x="35" y="67"/>
-<text x="85" y="83">
-IDENTIFIER</text>
-</g>
-</a>
-<g class="terminal">
-<rect height="22" rx="10" ry="10" width="28" x="145" y="67"/>
-<text x="159" y="83">
-(</text>
-</g>
-<g class="optional">
-<path d=" M 183 78 h 24 m -24 0 a 12 12 0 0 0 12 -12 v -12 a 12 12 0 0 1 12 -12 h 502 m -248 0 l -5 -5 m 0 10 l 5 -5 m 248 0 a 12 12 0 0 1 12 12 v 12 a 12 12 0 0 0 12 12 h -24"/>
-<g class="sequence">
-<a class="link" xlink:href="#railroad-summary-MetaNameValueStr">
-<g class="nonterminal">
-<rect height="22" width="148" x="207" y="67"/>
-<text x="281" y="83">
-MetaNameValueStr</text>
-</g>
-</a>
-<g class="optional">
-<path d=" M 365 78 h 24 m -24 0 a 12 12 0 0 0 12 -12 v 0 a 12 12 0 0 1 12 -12 h 210 m -102 0 l -5 -5 m 0 10 l 5 -5 m 102 0 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 0 12 12 h -24"/>
-<g class="repeat">
-<path d=" M 389 78 h 12 m 186 0 h 12 m -12 0 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 1 -12 12 m 0 0 h -186 m 96 0 l 5 -5 m 0 10 l -5 -5 m -96 0 a 12 12 0 0 1 -12 -12 v 0 a 12 12 0 0 1 12 -12"/>
-<g/>
-<g class="sequence">
-<g class="terminal">
-<rect height="22" rx="10" ry="10" width="28" x="401" y="67"/>
-<text x="415" y="83">
-,</text>
-</g>
-<a class="link" xlink:href="#railroad-summary-MetaNameValueStr">
-<g class="nonterminal">
-<rect height="22" width="148" x="439" y="67"/>
-<text x="513" y="83">
-MetaNameValueStr</text>
-</g>
-</a>
-<path d=" M 429 78 h 10"/>
-</g>
-</g>
-</g>
-<g class="optional">
-<path d=" M 633 78 h 24 m -24 0 a 12 12 0 0 0 12 -12 v 0 a 12 12 0 0 1 12 -12 h 28 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 0 12 12 h -24"/>
-<g class="terminal">
-<rect height="22" rx="10" ry="10" width="28" x="657" y="67"/>
-<text x="671" y="83">
-,</text>
-</g>
-</g>
-<path d=" M 355 78 h 10"/>
-<path d=" M 623 78 h 10"/>
-</g>
-</g>
-<g class="terminal">
-<rect height="22" rx="10" ry="10" width="28" x="743" y="67"/>
-<text x="757" y="83">
-)</text>
-</g>
-<path d=" M 135 78 h 10"/>
-<path d=" M 173 78 h 10"/>
-<path d=" M 733 78 h 10"/>
-</g>
-<path d=" M 781 78 h 5 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5"/>
-<path d=" M 25 78 h 10"/>
-<path d=" M 771 78 h 10"/>
-</g>
-</g>
-</svg>
-</div>
-</div>
 <h2 id="statements-summary"><a class="header" href="#statements-summary">Statements summary</a></h2>
 <div class="grammar-container">
 <p><strong><sup>Syntax</sup></strong>
@@ -11789,7 +12140,7 @@ ExpressionWithBlock</text>
 <p><span class="grammar-text grammar-production" id="grammar-summary-OperatorExpression" onclick="show_railroad()"><a href="#railroad-summary-OperatorExpression">OperatorExpression</a></span> → <br />
       <span class="grammar-text"><a href="#grammar-summary-BorrowExpression">BorrowExpression</a></span> <br />
     | <span class="grammar-text"><a href="#grammar-summary-DereferenceExpression">DereferenceExpression</a></span> <br />
-    | <span class="grammar-text"><a href="#grammar-summary-ErrorPropagationExpression">ErrorPropagationExpression</a></span> <br />
+    | <span class="grammar-text"><a href="#grammar-summary-TryPropagationExpression">TryPropagationExpression</a></span> <br />
     | <span class="grammar-text"><a href="#grammar-summary-NegationExpression">NegationExpression</a></span> <br />
     | <span class="grammar-text"><a href="#grammar-summary-ArithmeticOrLogicalExpression">ArithmeticOrLogicalExpression</a></span> <br />
     | <span class="grammar-text"><a href="#grammar-summary-ComparisonExpression">ComparisonExpression</a></span> <br />
@@ -11803,7 +12154,7 @@ ExpressionWithBlock</text>
     | ( <span class="grammar-literal">&amp;</span> | <span class="grammar-literal">&amp;&amp;</span> ) <span class="grammar-literal">raw</span> <span class="grammar-literal">const</span> <span class="grammar-text"><a href="#grammar-summary-Expression">Expression</a></span> <br />
     | ( <span class="grammar-literal">&amp;</span> | <span class="grammar-literal">&amp;&amp;</span> ) <span class="grammar-literal">raw</span> <span class="grammar-literal">mut</span> <span class="grammar-text"><a href="#grammar-summary-Expression">Expression</a></span></p>
 <p><span class="grammar-text grammar-production" id="grammar-summary-DereferenceExpression" onclick="show_railroad()"><a href="#railroad-summary-DereferenceExpression">DereferenceExpression</a></span> → <span class="grammar-literal">*</span> <span class="grammar-text"><a href="#grammar-summary-Expression">Expression</a></span></p>
-<p><span class="grammar-text grammar-production" id="grammar-summary-ErrorPropagationExpression" onclick="show_railroad()"><a href="#railroad-summary-ErrorPropagationExpression">ErrorPropagationExpression</a></span> → <span class="grammar-text"><a href="#grammar-summary-Expression">Expression</a></span> <span class="grammar-literal">?</span></p>
+<p><span class="grammar-text grammar-production" id="grammar-summary-TryPropagationExpression" onclick="show_railroad()"><a href="#railroad-summary-TryPropagationExpression">TryPropagationExpression</a></span> → <span class="grammar-text"><a href="#grammar-summary-Expression">Expression</a></span> <span class="grammar-literal">?</span></p>
 <p><span class="grammar-text grammar-production" id="grammar-summary-NegationExpression" onclick="show_railroad()"><a href="#railroad-summary-NegationExpression">NegationExpression</a></span> → <br />
       <span class="grammar-literal">-</span> <span class="grammar-text"><a href="#grammar-summary-Expression">Expression</a></span> <br />
     | <span class="grammar-literal">!</span> <span class="grammar-text"><a href="#grammar-summary-Expression">Expression</a></span></p>
@@ -12777,13 +13128,13 @@ DereferenceExpression</text>
 </g>
 </a>
 </g>
-<path d=" M 47 107 v 0 a 12 12 0 0 0 12 12 m 236 0 h 24 a 12 12 0 0 0 12 -12 v 0"/>
+<path d=" M 47 107 v 0 a 12 12 0 0 0 12 12 m 220 0 h 40 a 12 12 0 0 0 12 -12 v 0"/>
 <g class="sequence">
-<a class="link" xlink:href="#railroad-summary-ErrorPropagationExpression">
+<a class="link" xlink:href="#railroad-summary-TryPropagationExpression">
 <g class="nonterminal">
-<rect height="22" width="236" x="59" y="108"/>
-<text x="177" y="124">
-ErrorPropagationExpression</text>
+<rect height="22" width="220" x="59" y="108"/>
+<text x="169" y="124">
+TryPropagationExpression</text>
 </g>
 </a>
 </g>
@@ -13049,12 +13400,12 @@ Expression</text>
 </g>
 </svg>
 </div>
-<div style="width: 219px; height: auto; max-width: 100%; max-height: 100%" class="railroad-production" id="railroad-summary-ErrorPropagationExpression"><svg class="railroad" viewBox="0 0 219 74" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<div style="width: 208px; height: auto; max-width: 100%; max-height: 100%" class="railroad-production" id="railroad-summary-TryPropagationExpression"><svg class="railroad" viewBox="0 0 208 74" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
-<a class="link" xlink:href="#grammar-summary-ErrorPropagationExpression">
-<text class="comment" x="109" y="25">
-ErrorPropagationExpression</text>
+<a class="link" xlink:href="#grammar-summary-TryPropagationExpression">
+<text class="comment" x="102" y="25">
+TryPropagationExpression</text>
 </a>
 <g class="sequence">
 <path d=" M 10 53 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -21455,7 +21806,7 @@ inlateout</text>
         <script src="book-9576a2db.js"></script>
 
         <!-- Custom JS scripts -->
-        <script src="theme/reference-cfed9ca5.js"></script>
+        <script src="theme/reference-da60281b.js"></script>
 
 
 

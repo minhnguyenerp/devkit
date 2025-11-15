@@ -40,7 +40,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-7dbf6f40.js";
+            window.path_to_searchindex_js = "../searchindex-b96ec0af.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-ff85ecd7.js"></script>
@@ -252,7 +252,8 @@ rustc-wrapper = "…"           # run this wrapper instead of `rustc`
 rustc-workspace-wrapper = "…" # run this wrapper instead of `rustc` for workspace members
 rustdoc = "rustdoc"           # the doc generator tool
 target = "triple"             # build for the target triple (ignored by `cargo install`)
-target-dir = "target"         # path of where to place all generated artifacts
+target-dir = "target"         # path of where to place generated artifacts
+build-dir = "target"          # path of where to place intermediate build artifacts
 rustflags = ["…", "…"]        # custom flags to pass to all compiler invocations
 rustdocflags = ["…", "…"]     # custom flags to pass to rustdoc
 incremental = true            # whether or not to enable incremental compilation
@@ -600,10 +601,12 @@ the final invocation is <code>$RUSTC_WRAPPER $RUSTC_WORKSPACE_WRAPPER $RUSTC</co
 <li>Environment: <code>CARGO_BUILD_TARGET</code></li>
 </ul>
 <p>The default <a href="../appendix/glossary.html#target" title="&quot;target&quot; (glossary)">target platform triples</a> to compile to.</p>
-<p>This allows passing either a string or an array of strings. Each string value
-is a target platform triple. The selected build targets will be built for each
-of the selected architectures.</p>
-<p>The string value may also be a relative path to a <code>.json</code> target spec file.</p>
+<p>Possible values:</p>
+<ul>
+<li>Any supported target in <code>rustc --print target-list</code>.</li>
+<li><code>"host-tuple"</code>, which will internally be substituted by the host’s target. This can be particularly useful if you’re cross-compiling some crates, and don’t want to specify your host’s machine as a target (for instance, an <code>xtask</code> in a shared project that may be worked on by many hosts).</li>
+<li>A path to a custom target specification. See <a href="../../rustc/targets/custom.html#custom-target-lookup-path">Custom Target Lookup Path</a> for more information.</li>
+</ul>
 <p>Can be overridden with the <code>--target</code> CLI option.</p>
 <pre><code class="language-toml">[build]
 target = ["x86_64-unknown-linux-gnu", "i686-unknown-linux-gnu"]
@@ -617,6 +620,23 @@ target = ["x86_64-unknown-linux-gnu", "i686-unknown-linux-gnu"]
 <p>The path to where all compiler output is placed. The default if not specified
 is a directory named <code>target</code> located at the root of the workspace.</p>
 <p>Can be overridden with the <code>--target-dir</code> CLI option.</p>
+<p>For more information see the <a href="../reference/build-cache.html">build cache documentation</a>.</p>
+<h4 id="buildbuild-dir"><a class="header" href="#buildbuild-dir"><code>build.build-dir</code></a></h4>
+<ul>
+<li>Type: string (path)</li>
+<li>Default: Defaults to the value of <code>build.target-dir</code></li>
+<li>Environment: <code>CARGO_BUILD_BUILD_DIR</code></li>
+</ul>
+<p>The directory where intermediate build artifacts will be stored.
+Intermediate artifacts are produced by Rustc/Cargo during the build process.</p>
+<p>This option supports path templating.</p>
+<p>Available template variables:</p>
+<ul>
+<li><code>{workspace-root}</code> resolves to root of the current workspace.</li>
+<li><code>{cargo-cache-home}</code> resolves to <code>CARGO_HOME</code></li>
+<li><code>{workspace-path-hash}</code> resolves to a hash of the manifest path</li>
+</ul>
+<p>For more information see the <a href="../reference/build-cache.html">build cache documentation</a>.</p>
 <h4 id="buildrustflags"><a class="header" href="#buildrustflags"><code>build.rustflags</code></a></h4>
 <ul>
 <li>Type: string or array of strings</li>

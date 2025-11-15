@@ -41,7 +41,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-ee4246b4.js";
+            window.path_to_searchindex_js = "../searchindex-adf886c2.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-a1ce3eb6.js"></script>
@@ -201,10 +201,9 @@ struct SGen&lt;T&gt;(T); // ジェネリック型`SGen`
 // `&lt;T&gt;`がないのでジェネリック関数ではありません。
 fn reg_fn(_s: S) {}
 
-// `gen_spec_t`という関数を定義。これは`A`という型を与えられた`SGen&lt;T&gt;`
-// という型の引数`_s`を取ります。関数名の直後に`&lt;A&gt;`という型パラメータでAが
-// ジェネリックであることを明示していないので、この関数はAをジェネリック型
-// としては取りません
+// Define a function `gen_spec_t` that takes an argument `_s` of type `SGen&lt;T&gt;`.
+// It has been explicitly given the type parameter `A`, but because `A` has not
+// been specified as a generic type parameter for `gen_spec_t`, it is not generic.
 fn gen_spec_t(_s: SGen&lt;A&gt;) {}
 
 // `gen_spec_i32`という関数を定義。

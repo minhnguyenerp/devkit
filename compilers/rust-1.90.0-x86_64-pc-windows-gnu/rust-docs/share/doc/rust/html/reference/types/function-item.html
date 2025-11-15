@@ -37,7 +37,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-3109fce4.js";
+            window.path_to_searchindex_js = "../searchindex-5e2787cc.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-4adb5027.js"></script>
@@ -234,8 +234,13 @@ let foo_ptr_2 = if want_i32 {
 <span class="boring">}</span></code></pre></pre>
 <div class="rule" id="r-type.fn-item.traits"><a class="rule-link" href="#r-type.fn-item.traits" title="type.fn-item.traits"><span>[type<wbr>.fn-item<wbr>.traits]</span/></a>
 </div>
-<p>All function items implement <a href="../../core/ops/function/trait.Fn.html"><code>Fn</code></a>, <a href="../../core/ops/function/trait.FnMut.html"><code>FnMut</code></a>, <a href="../../core/ops/function/trait.FnOnce.html"><code>FnOnce</code></a>, <a href="../special-types-and-traits.html#copy"><code>Copy</code></a>,
-<a href="../special-types-and-traits.html#clone"><code>Clone</code></a>, <a href="../special-types-and-traits.html#send"><code>Send</code></a>, and <a href="../special-types-and-traits.html#sync"><code>Sync</code></a>.</p>
+<p>All function items implement <a href="../special-types-and-traits.html#copy"><code>Copy</code></a>, <a href="../special-types-and-traits.html#clone"><code>Clone</code></a>, <a href="../special-types-and-traits.html#send"><code>Send</code></a>, and <a href="../special-types-and-traits.html#sync"><code>Sync</code></a>.</p>
+<p><a href="../../core/ops/function/trait.Fn.html"><code>Fn</code></a>, <a href="../../core/ops/function/trait.FnMut.html"><code>FnMut</code></a>, and <a href="../../core/ops/function/trait.FnOnce.html"><code>FnOnce</code></a> are implemented unless the function has any of the following:</p>
+<ul>
+<li>an <a href="../unsafe-keyword.html#r-unsafe.fn"><code>unsafe</code></a> qualifier</li>
+<li>a <a href="../attributes/codegen.html#r-attributes.codegen.target_feature"><code>target_feature</code> attribute</a></li>
+<li>an <a href="../items/functions.html#r-items.fn.extern">ABI</a> other than <code>"Rust"</code></li>
+</ul>
 
                     </main>
 
@@ -283,7 +288,7 @@ let foo_ptr_2 = if want_i32 {
         <script src="../book-9576a2db.js"></script>
 
         <!-- Custom JS scripts -->
-        <script src="../theme/reference-cfed9ca5.js"></script>
+        <script src="../theme/reference-da60281b.js"></script>
 
 
 

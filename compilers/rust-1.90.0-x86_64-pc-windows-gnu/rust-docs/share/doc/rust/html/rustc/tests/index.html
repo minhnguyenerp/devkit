@@ -37,10 +37,10 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-a3e21844.js";
+            window.path_to_searchindex_js = "../searchindex-cd34eb16.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-2441f1f0.js"></script>
+        <script src="../toc-59e61e94.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -306,7 +306,7 @@ attribute</a>.</p>
 <p>Sets the number of threads to use for running tests in parallel. By default,
 uses the amount of concurrency available on the hardware as indicated by
 <a href="../../std/thread/fn.available_parallelism.html"><code>available_parallelism</code></a>.</p>
-<p>This can also be specified with the <code>RUST_TEST_THREADS</code> environment variable.</p>
+<p>Deprecated: this can also be specified with the <code>RUST_TEST_THREADS</code> environment variable.</p>
 <h4 id="--force-run-in-process"><a class="header" href="#--force-run-in-process"><code>--force-run-in-process</code></a></h4>
 <p>Forces the tests to run in a single process when using the <a href="../../book/ch09-01-unrecoverable-errors-with-panic.html"><code>abort</code> panic
 strategy</a>.</p>
@@ -319,7 +319,7 @@ requires the <code>-Z unstable-options</code> flag. See <a href="https://github.
 docs</a> for more information.</p>
 <h4 id="--shuffle"><a class="header" href="#--shuffle"><code>--shuffle</code></a></h4>
 <p>Runs the tests in random order, as opposed to the default alphabetical order.</p>
-<p>This may also be specified by setting the <code>RUST_TEST_SHUFFLE</code> environment
+<p>Deprecated: this may also be specified by setting the <code>RUST_TEST_SHUFFLE</code> environment
 variable to anything but <code>0</code>.</p>
 <p>The random number generator seed that is output can be passed to
 <a href="#--shuffle-seed-seed"><code>--shuffle-seed</code></a> to run the tests in the same order
@@ -334,7 +334,7 @@ run the tests in random order sequentially, use <code>--shuffle --test-threads 1
 the tests in the same order both times.</p>
 <p><em>SEED</em> is any 64-bit unsigned integer, for example, one produced by
 <a href="#--shuffle"><code>--shuffle</code></a>.</p>
-<p>This can also be specified with the <code>RUST_TEST_SHUFFLE_SEED</code> environment
+<p>Deprecated: this can also be specified with the <code>RUST_TEST_SHUFFLE_SEED</code> environment
 variable.</p>
 <p>⚠️ 🚧 This option is <a href="#unstable-options">unstable</a>, and requires the <code>-Z unstable-options</code> flag. See <a href="https://github.com/rust-lang/rust/issues/89583">tracking issue
 #89583</a> for more information.</p>
@@ -347,7 +347,7 @@ for <a href="#--format-format"><code>--format=terse</code></a>.</p>
 <p>Does not capture the stdout and stderr of the test, and allows tests to print
 to the console. Usually the output is captured, and only displayed if the test
 fails.</p>
-<p>This may also be specified by setting the <code>RUST_TEST_NOCAPTURE</code> environment
+<p>Deprecated: this may also be specified by setting the <code>RUST_TEST_NOCAPTURE</code> environment
 variable to anything but <code>0</code>.</p>
 <p><code>--nocapture</code> is a deprecated alias for <code>--no-capture</code>.</p>
 <h4 id="--show-output"><a class="header" href="#--show-output"><code>--show-output</code></a></h4>

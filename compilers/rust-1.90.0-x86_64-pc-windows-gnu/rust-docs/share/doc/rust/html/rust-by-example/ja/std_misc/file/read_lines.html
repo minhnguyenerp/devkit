@@ -41,7 +41,7 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-ee4246b4.js";
+            window.path_to_searchindex_js = "../../searchindex-adf886c2.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../toc-a1ce3eb6.js"></script>
@@ -209,7 +209,7 @@ fn read_lines(filename: &amp;str) -&gt; Vec&lt;String&gt; {
 </span>use std::fs::read_to_string;
 
 fn read_lines(filename: &amp;str) -&gt; Vec&lt;String&gt; {
-    read_to_string(filename) 
+    read_to_string(filename)
         .unwrap()  // ファイル読み込みエラーの場合はパニックします。
         .lines()  // 文字列のスライスのイテレータに分割します。
         .map(String::from)  // スライスを文字列に変換します。

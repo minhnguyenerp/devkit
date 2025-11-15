@@ -37,10 +37,10 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-a3e21844.js";
+            window.path_to_searchindex_js = "../searchindex-cd34eb16.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-2441f1f0.js"></script>
+        <script src="../toc-59e61e94.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -189,6 +189,34 @@ platform.</p>
 <h2 id="target-maintainers"><a class="header" href="#target-maintainers">Target maintainers</a></h2>
 <p><a href="https://github.com/RDambrosio016">@RDambrosio016</a>
 <a href="https://github.com/kjetilkjeka">@kjetilkjeka</a></p>
+<h2 id="requirements"><a class="header" href="#requirements">Requirements</a></h2>
+<p>This target is <code>no_std</code> and will typically be built with crate-type <code>cdylib</code> and <code>-C linker-flavor=llbc</code>, which generates PTX.
+The necessary components for this workflow are:</p>
+<ul>
+<li><code>rustup toolchain add nightly</code></li>
+<li><code>rustup component add llvm-tools --toolchain nightly</code></li>
+<li><code>rustup component add llvm-bitcode-linker --toolchain nightly</code></li>
+</ul>
+<p>There are two options for using the core library:</p>
+<ul>
+<li><code>rustup component add rust-src --toolchain nightly</code> and build using <code>-Z build-std=core</code>.</li>
+<li><code>rustup target add nvptx64-nvidia-cuda --toolchain nightly</code></li>
+</ul>
+<h3 id="target-and-features"><a class="header" href="#target-and-features">Target and features</a></h3>
+<p>It is generally necessary to specify the target, such as <code>-C target-cpu=sm_89</code>, because the default is very old. This implies two target features: <code>sm_89</code> and <code>ptx78</code> (and all preceding features within <code>sm_*</code> and <code>ptx*</code>). Rust will default to using the oldest PTX version that supports the target processor (see <a href="https://docs.nvidia.com/cuda/parallel-thread-execution/index.html#release-notes-ptx-release-history">this table</a>), which maximizes driver compatibility.
+One can use <code>-C target-feature=+ptx80</code> to choose a later PTX version without changing the target (the default in this case, <code>ptx78</code>, requires CUDA driver version 11.8, while <code>ptx80</code> would require driver version 12.0).
+Later PTX versions may allow more efficient code generation.</p>
+<p>Although Rust follows LLVM in representing <code>ptx*</code> and <code>sm_*</code> as target features, they should be thought of as having crate granularity, set via (either via <code>-Ctarget-cpu</code> and optionally <code>-Ctarget-feature</code>).
+While the compiler accepts <code>#[target_feature(enable = "ptx80", enable = "sm_89")]</code>, it is not supported, may not behave as intended, and may become erroneous in the future.</p>
+<h2 id="building-rust-kernels"><a class="header" href="#building-rust-kernels">Building Rust kernels</a></h2>
+<p>A <code>no_std</code> crate containing one or more functions with <code>extern "ptx-kernel"</code> can be compiled to PTX using a command like the following.</p>
+<pre><code class="language-console">$ RUSTFLAGS='-Ctarget-cpu=sm_89' cargo +nightly rustc --target=nvptx64-nvidia-cuda -Zbuild-std=core --crate-type=cdylib -- -Clinker-flavor=llbc -Zunstable-options
+</code></pre>
+<p>Intrinsics in <code>core::arch::nvptx</code> may use <code>#[cfg(target_feature = "...")]</code>, thus it's necessary to use <code>-Zbuild-std=core</code> with appropriate <code>RUSTFLAGS</code>. The following components are needed for this workflow:</p>
+<pre><code class="language-console">$ rustup component add rust-src --toolchain nightly
+$ rustup component add llvm-tools --toolchain nightly
+$ rustup component add llvm-bitcode-linker --toolchain nightly
+</code></pre>
 <!-- FIXME: fill this out
 
 ## Requirements

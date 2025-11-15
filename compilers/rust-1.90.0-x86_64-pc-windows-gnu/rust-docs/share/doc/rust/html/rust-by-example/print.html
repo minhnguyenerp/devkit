@@ -42,7 +42,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-8b5e0132.js";
+            window.path_to_searchindex_js = "searchindex-25f31b91.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-10049a44.js"></script>
@@ -623,9 +623,18 @@ its own implementation. This is detailed further in <a href="https://doc.rust-la
 <p>After checking the output of the above example, use the <code>Point2D</code> struct as a
 guide to add a <code>Complex</code> struct to the example. When printed in the same
 way, the output should be:</p>
-<pre><code class="language-txt">Display: 3.3 + 7.2i
+<pre><code class="language-txt">Display: 3.3 +7.2i
 Debug: Complex { real: 3.3, imag: 7.2 }
+
+Display: 4.7 -2.3i
+Debug: Complex { real: 4.7, imag: -2.3 }
 </code></pre>
+<p>Bonus: Add a space before the <code>+</code>/<code>-</code> signs.</p>
+<p>Hints in case you get stuck:</p>
+<ul>
+<li>Check the documentation for <a href="https://doc.rust-lang.org/std/fmt/#sign0"><code>Sign/#/0</code></a> in <code>std::fmt</code>.</li>
+<li>Bonus: Check <a href="hello/print/../../flow_control/if_else.html"><code>if</code>-<code>else</code></a> branching and the <a href="https://doc.rust-lang.org/std/primitive.f64.html#method.abs"><code>abs</code></a> function.</li>
+</ul>
 <h3 id="see-also-3"><a class="header" href="#see-also-3">See also:</a></h3>
 <p><a href="hello/print/../../trait/derive.html"><code>derive</code></a>, <a href="https://doc.rust-lang.org/std/fmt/"><code>std::fmt</code></a>, <a href="hello/print/../../macros.html"><code>macros</code></a>, <a href="hello/print/../../custom_types/structs.html"><code>struct</code></a>,
 <a href="https://doc.rust-lang.org/std/fmt/#formatting-traits"><code>trait</code></a>, and <a href="hello/print/../../mod/use.html"><code>use</code></a></p>
@@ -747,13 +756,18 @@ so that the output displays as:</p>
 RGB (0, 3, 254) 0x0003FE
 RGB (0, 0, 0) 0x000000
 </code></pre>
-<p>Three hints if you get stuck:</p>
+<p>Two hints if you get stuck:</p>
 <ul>
-<li>The formula for calculating a color in the RGB color space is:
-<code>RGB = (R*65536)+(G*256)+B , (when R is RED, G is GREEN and B is BLUE)</code>.
-For more see <a href="https://www.rapidtables.com/web/color/RGB_Color.html#rgb-format">RGB color format &amp; calculation</a>.</li>
 <li>You <a href="https://doc.rust-lang.org/std/fmt/#named-parameters">may need to list each color more than once</a>.</li>
-<li>You can <a href="https://doc.rust-lang.org/std/fmt/#width">pad with zeros to a width of 2</a> with <code>:0&gt;2</code>.</li>
+<li>You can <a href="https://doc.rust-lang.org/std/fmt/#width">pad with zeros to a width of 2</a> with <code>:0&gt;2</code>.
+For hexadecimals, you can use <code>:02X</code>.</li>
+</ul>
+<p>Bonus:</p>
+<ul>
+<li>If you would like to experiment with <a href="hello/print/../../types/cast.html">type casting</a> in advance,
+the formula for <a href="https://www.rapidtables.com/web/color/RGB_Color.html#rgb-format">calculating a color in the RGB color space</a> is
+<code>RGB = (R * 65_536) + (G * 256) + B</code>, where <code>R is RED, G is GREEN, and B is BLUE</code>.
+An unsigned 8-bit integer (<code>u8</code>) can only hold numbers up to 255. To cast <code>u8</code> to <code>u32</code>, you can write <code>variable_name as u32</code>.</li>
 </ul>
 <h3 id="see-also-5"><a class="header" href="#see-also-5">See also:</a></h3>
 <p><a href="https://doc.rust-lang.org/std/fmt/"><code>std::fmt</code></a></p>
@@ -809,7 +823,7 @@ Note that Rust can also infer types from context.</p>
     // Array signature consists of Type T and length as [T; length].
     let my_array: [i32; 5] = [1, 2, 3, 4, 5];
 
-    // Tuple is a collection of values of different types 
+    // Tuple is a collection of values of different types
     // and is constructed using parentheses ().
     let my_tuple = (5u32, 1u8, true, -5.04f32);
 }</code></pre></pre>
@@ -1259,8 +1273,8 @@ fn main() {
     println!("zero is {}", Number::Zero as i32);
     println!("one is {}", Number::One as i32);
 
-    println!("roses are #{:06x}", Color::Red as i32);
-    println!("violets are #{:06x}", Color::Blue as i32);
+    println!("roses are #{:06x}", Color::Red as u32);
+    println!("violets are #{:06x}", Color::Blue as u32);
 }</code></pre></pre>
 <h3 id="see-also-10"><a class="header" href="#see-also-10">See also:</a></h3>
 <p><a href="custom_types/enum/../../types/cast.html">casting</a></p>
@@ -1296,7 +1310,7 @@ impl List {
         // `self` has type `&amp;List`, and `*self` has type `List`, matching on a
         // concrete type `T` is preferred over a match on a reference `&amp;T`
         // after Rust 2018 you can use self here and tail (with no ref) below as well,
-        // rust will infer &amp;s and ref tail. 
+        // rust will infer &amp;s and ref tail.
         // See https://doc.rust-lang.org/edition-guide/rust-2018/ownership-and-lifetimes/default-match-bindings.html
         match *self {
             // Can't take ownership of the tail, because `self` is borrowed;
@@ -2097,7 +2111,7 @@ Thus leaving the collection untouched and available for reuse after the loop.</l
             _ =&gt; println!("Hello {}", name),
         }
     }
-    
+
     println!("names: {:?}", names);
 }</code></pre></pre>
 <ul>
@@ -2114,7 +2128,7 @@ available for reuse as it has been 'moved' within the loop.</li>
             _ =&gt; println!("Hello {}", name),
         }
     }
-    
+
     println!("names: {:?}", names);
     // FIXME ^ Comment out this line
 }</code></pre></pre>
@@ -2440,8 +2454,13 @@ fn main() {
     match age() {
         0             =&gt; println!("I haven't celebrated my first birthday yet"),
         // Could `match` 1 ..= 12 directly but then what age
-        // would the child be? Instead, bind to `n` for the
-        // sequence of 1 ..= 12. Now the age can be reported.
+        // would the child be?
+        // Could `match` n and use an `if` guard, but would
+        // not contribute to exhaustiveness checks.
+        // (Although in this case that would not matter since
+        // a "catch-all" pattern is present at the bottom)
+        // Instead, bind to `n` for the sequence of 1 ..= 12.
+        // Now the age can be reported.
         n @ 1  ..= 12 =&gt; println!("I'm a child of age {:?}", n),
         n @ 13 ..= 19 =&gt; println!("I'm a teen of age {:?}", n),
         // Nothing bound. Return the result.
@@ -2457,6 +2476,13 @@ fn main() {
     match some_number() {
         // Got `Some` variant, match if its value, bound to `n`,
         // is equal to 42.
+        // Could also use `Some(42)` and print `"The Awnser: 42!"`
+        // but that would require changing `42` in 2 spots should
+        // you ever wish to change it.
+        // Could also use `Some(n) if n == 42` and print `"The Awnser: {n}!"`
+        // but that would not contribute to exhaustiveness checks.
+        // (Although in this case that would not matter since
+        // the next arm is a "catch-all" pattern)
         Some(n @ 42) =&gt; println!("The Answer: {}!", n),
         // Match any other number.
         Some(n)      =&gt; println!("Not interesting... {}", n),
@@ -2530,18 +2556,18 @@ fn main() {
     let a = Foo::Bar;
     let b = Foo::Baz;
     let c = Foo::Qux(100);
-    
+
     // Variable a matches Foo::Bar
     if let Foo::Bar = a {
         println!("a is foobar");
     }
-    
+
     // Variable b does not match Foo::Bar
     // So this will print nothing
     if let Foo::Bar = b {
         println!("b is foobar");
     }
-    
+
     // Variable c matches Foo::Qux which has a value
     // Similar to Some() in the previous example
     if let Foo::Qux(value) = c {
@@ -2652,7 +2678,7 @@ loop {
 <pre><pre class="playground"><code class="language-rust editable edition2021">fn main() {
     // Make `optional` of type `Option&lt;i32&gt;`
     let mut optional = Some(0);
-    
+
     // This reads: "while `let` destructures `optional` into
     // `Some(i)`, evaluate the block (`{}`). Else `break`.
     while let Some(i) = optional {
@@ -2847,7 +2873,7 @@ variable names <em>must</em> be specified.</p>
 </ul>
 <pre><pre class="playground"><code class="language-rust editable edition2021">fn main() {
     let outer_var = 42;
-    
+
     // A regular function can't refer to variables in the enclosing environment
     //fn function(i: i32) -&gt; i32 { i + outer_var }
     // TODO: uncomment the line above and see the compiler error. The compiler
@@ -2887,12 +2913,12 @@ Closures can capture variables:</p>
 required.</p>
 <pre><pre class="playground"><code class="language-rust editable edition2021">fn main() {
     use std::mem;
-    
+
     let color = String::from("green");
 
     // A closure to print `color` which immediately borrows (`&amp;`) `color` and
     // stores the borrow and closure in the `print` variable. It will remain
-    // borrowed until `print` is used the last time. 
+    // borrowed until `print` is used the last time.
     //
     // `println!` only requires arguments by immutable reference so it doesn't
     // impose anything more restrictive.
@@ -2902,7 +2928,7 @@ required.</p>
     print();
 
     // `color` can be borrowed immutably again, because the closure only holds
-    // an immutable reference to `color`. 
+    // an immutable reference to `color`.
     let _reborrow = &amp;color;
     print();
 
@@ -2927,15 +2953,15 @@ required.</p>
 
     // The closure still mutably borrows `count` because it is called later.
     // An attempt to reborrow will lead to an error.
-    // let _reborrow = &amp;count; 
+    // let _reborrow = &amp;count;
     // ^ TODO: try uncommenting this line.
     inc();
 
     // The closure no longer needs to borrow `&amp;mut count`. Therefore, it is
     // possible to reborrow without an error
-    let _count_reborrowed = &amp;mut count; 
+    let _count_reborrowed = &amp;mut count;
 
-    
+
     // A non-copy type.
     let movable = Box::new(3);
 
@@ -2968,7 +2994,7 @@ to take ownership of captured variables:</p>
     // ^ Uncommenting above line will result in compile-time error
     // because borrow checker doesn't allow re-using variable after it
     // has been moved.
-    
+
     // Removing `move` from closure's signature will cause closure
     // to borrow _haystack_ variable immutably, hence _haystack_ is still
     // available and uncommenting above line will not cause an error.
@@ -3259,9 +3285,9 @@ item, use <code>Iterator::position</code>.</p>
     // we have to destructure `&amp;i32` to `i32`
     let index_of_first_even_number = vec.iter().position(|&amp;x| x % 2 == 0);
     assert_eq!(index_of_first_even_number, Some(5));
-    
+
     // `into_iter()` for vecs yields `i32` and `position()` does not take a reference, so
-    // we do not have to destructure    
+    // we do not have to destructure
     let index_of_first_negative_number = vec.into_iter().position(|x| x &lt; 0);
     assert_eq!(index_of_first_negative_number, None);
 }</code></pre></pre>
@@ -3609,29 +3635,29 @@ mod my {
     fn function() {
         println!("called `my::function()`");
     }
-    
+
     mod cool {
         pub fn function() {
             println!("called `my::cool::function()`");
         }
     }
-    
+
     pub fn indirect_call() {
         // Let's access all the functions named `function` from this scope!
         print!("called `my::indirect_call()`, that\n&gt; ");
-        
+
         // The `self` keyword refers to the current module scope - in this case `my`.
         // Calling `self::function()` and calling `function()` directly both give
         // the same result, because they refer to the same function.
         self::function();
         function();
-        
+
         // We can also use `self` to access another module inside `my`:
         self::cool::function();
-        
+
         // The `super` keyword refers to the parent scope (outside the `my` module).
         super::function();
-        
+
         // This will bind to the `cool::function` in the *crate* scope.
         // In this case the crate scope is the outermost scope.
         {
@@ -3766,7 +3792,7 @@ fn main() {
 }</code></pre>
 <pre><code class="language-txt"># Where library.rlib is the path to the compiled library, assumed that it's
 # in the same directory here:
-$ rustc executable.rs --extern rary=library.rlib &amp;&amp; ./executable 
+$ rustc executable.rs --extern rary=library.rlib &amp;&amp; ./executable
 called rary's `public_function()`
 called rary's `indirect_access()`, that
 &gt; called rary's `private_function()`
@@ -4221,7 +4247,7 @@ struct SingleGen&lt;T&gt;(T);
 fn main() {
     // `Single` is concrete and explicitly takes `A`.
     let _s = Single(A);
-    
+
     // Create a variable `_char` of type `SingleGen&lt;char&gt;`
     // and give it the value `SingleGen('a')`.
     // Here, `SingleGen` has a type parameter explicitly specified.
@@ -4255,7 +4281,7 @@ struct SGen&lt;T&gt;(T); // Generic type `SGen`.
 fn reg_fn(_s: S) {}
 
 // Define a function `gen_spec_t` that takes an argument `_s` of type `SGen&lt;T&gt;`.
-// It has been explicitly given the type parameter `A`, but because `A` has not 
+// It has been explicitly given the type parameter `A`, but because `A` has not
 // been specified as a generic type parameter for `gen_spec_t`, it is not generic.
 fn gen_spec_t(_s: SGen&lt;A&gt;) {}
 
@@ -4415,7 +4441,7 @@ fn main() {
     //print_debug(&amp;_triangle);
     //println!("Area: {}", area(&amp;_triangle));
     // ^ TODO: Try uncommenting these.
-    // | Error: Does not implement either `Debug` or `HasArea`. 
+    // | Error: Does not implement either `Debug` or `HasArea`.
 }</code></pre></pre>
 <p>As an additional note, <a href="generics/../generics/where.html"><code>where</code></a> clauses can also be used to apply bounds in
 some cases to be more expressive.</p>
@@ -4507,7 +4533,7 @@ trait PrintInOption {
     fn print_in_option(self);
 }
 
-// Because we would otherwise have to express this as `T: Debug` or 
+// Because we would otherwise have to express this as `T: Debug` or
 // use another method of indirect approach, this requires a `where` clause:
 impl&lt;T&gt; PrintInOption for T where
     Option&lt;T&gt;: Debug {
@@ -4706,7 +4732,7 @@ fn main() {
         container.contains(&amp;number_1, &amp;number_2));
     println!("First number: {}", container.first());
     println!("Last number: {}", container.last());
-    
+
     println!("The difference is: {}", difference(&amp;container));
 }</code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="phantom-type-parameters"><a class="header" href="#phantom-type-parameters">Phantom type parameters</a></h1>
@@ -4945,7 +4971,7 @@ fn main() {
     // The pointer address of `a` is copied (not the data) into `b`.
     // Both are now pointers to the same heap allocated data, but
     // `b` now owns it.
-    
+
     // Error! `a` can no longer access the data, because it no longer owns the
     // heap memory
     //println!("a contains: {}", a);
@@ -5049,7 +5075,7 @@ fn borrow_i32(borrowed_i32: &amp;i32) {
 }
 
 fn main() {
-    // Create a boxed i32 in the heap, and a i32 on the stack
+    // Create a boxed i32 in the heap, and an i32 on the stack
     // Remember: numbers can have arbitrary underscores added for readability
     // 5_i32 is the same as 5i32
     let boxed_i32 = Box::new(5_i32);
@@ -5113,16 +5139,16 @@ fn main() {
 
     // Create a mutable copy of `immutabook` and call it `mutabook`
     let mut mutabook = immutabook;
-    
+
     // Immutably borrow an immutable object
     borrow_book(&amp;immutabook);
 
     // Immutably borrow a mutable object
     borrow_book(&amp;mutabook);
-    
+
     // Borrow a mutable object as mutable
     new_edition(&amp;mut mutabook);
-    
+
     // Error! Cannot borrow an immutable object as mutable
     new_edition(&amp;mut immutabook);
     // FIXME ^ Comment out this line
@@ -5227,13 +5253,13 @@ fn main() {
 
     // A mutable tuple that includes a pointer
     let mut mutable_tuple = (Box::new(5u32), 3u32);
-    
+
     {
         // Destructure `mutable_tuple` to change the value of `last`.
         let (_, ref mut last) = mutable_tuple;
         *last = 2u32;
     }
-    
+
     println!("tuple is {:?}", mutable_tuple);
 }</code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="lifetimes"><a class="header" href="#lifetimes">Lifetimes</a></h1>
@@ -5249,8 +5275,8 @@ the scope of the borrow is determined by where the reference is used.</p>
 lifetimes relate to scopes, as well as how the two differ.</p>
 <pre><pre class="playground"><code class="language-rust editable edition2021">// Lifetimes are annotated below with lines denoting the creation
 // and destruction of each variable.
-// `i` has the longest lifetime because its scope entirely encloses 
-// both `borrow1` and `borrow2`. The duration of `borrow1` compared 
+// `i` has the longest lifetime because its scope entirely encloses
+// both `borrow1` and `borrow2`. The duration of `borrow1` compared
 // to `borrow2` is irrelevant since they are disjoint.
 fn main() {
     let i = 3; // Lifetime for `i` starts. ────────────────┐
@@ -5301,7 +5327,7 @@ fn failed_borrow&lt;'a&gt;() {
 
     // ERROR: `_x` does not live long enough
     let _y: &amp;'a i32 = &amp;_x;
-    // Attempting to use the lifetime `'a` as an explicit type annotation 
+    // Attempting to use the lifetime `'a` as an explicit type annotation
     // inside the function will fail because the lifetime of `&amp;_x` is shorter
     // than that of `_y`. A short lifetime cannot be coerced into a longer one.
 }
@@ -5309,15 +5335,15 @@ fn failed_borrow&lt;'a&gt;() {
 fn main() {
     // Create variables to be borrowed below.
     let (four, nine) = (4, 9);
-    
+
     // Borrows (`&amp;`) of both variables are passed into the function.
     print_refs(&amp;four, &amp;nine);
-    // Any input which is borrowed must outlive the borrower. 
-    // In other words, the lifetime of `four` and `nine` must 
+    // Any input which is borrowed must outlive the borrower.
+    // In other words, the lifetime of `four` and `nine` must
     // be longer than that of `print_refs`.
-    
+
     failed_borrow();
-    // `failed_borrow` contains no references to force `'a` to be 
+    // `failed_borrow` contains no references to force `'a` to be
     // longer than the lifetime of the function, but `'a` is longer.
     // Because the lifetime is never constrained, it defaults to `'static`.
 }</code></pre></pre>
@@ -5368,10 +5394,10 @@ fn pass_x&lt;'a, 'b&gt;(x: &amp;'a i32, _: &amp;'b i32) -&gt; &amp;'a i32 { x }
 fn main() {
     let x = 7;
     let y = 9;
-    
+
     print_one(&amp;x);
     print_multi(&amp;x, &amp;y);
-    
+
     let z = pass_x(&amp;x, &amp;y);
     print_one(z);
 
@@ -5524,10 +5550,10 @@ fn choose_first&lt;'a: 'b, 'b&gt;(first: &amp;'a i32, _: &amp;'b i32) -&gt; &amp
 
 fn main() {
     let first = 2; // Longer lifetime
-    
+
     {
         let second = 3; // Shorter lifetime
-        
+
         println!("The product is {}", multiply(&amp;first, &amp;second));
         println!("{} is the first", choose_first(&amp;first, &amp;second));
     };
@@ -5733,7 +5759,7 @@ impl Animal for Sheep {
             "baaaaah!"
         }
     }
-    
+
     // Default trait methods can be overridden.
     fn talk(&amp;self) {
         // For example, we can add some quiet contemplation.
@@ -5973,21 +5999,21 @@ impl TempFile {
     fn new(path: PathBuf) -&gt; std::io::Result&lt;Self&gt; {
         // Note: File::create() will overwrite existing files
         let file = File::create(&amp;path)?;
-        
+
         Ok(Self { file, path })
     }
 }
 
 // When TempFile is dropped:
-// 1. First, the File will be automatically closed (Drop for File)
-// 2. Then our drop implementation will remove the file
+// 1. First, our drop implementation will remove the file's name from the filesystem.
+// 2. Then, File's drop will close the file, removing its underlying content from the disk.
 impl Drop for TempFile {
     fn drop(&amp;mut self) {
-        // Note: File is already closed at this point
         if let Err(e) = std::fs::remove_file(&amp;self.path) {
             eprintln!("Failed to remove temporary file: {}", e);
         }
         println!("&gt; Dropped temporary file: {:?}", self.path);
+        // File's drop is implicitly called here because it is a field of this struct.
     }
 }
 
@@ -6004,7 +6030,7 @@ fn main() -&gt; std::io::Result&lt;()&gt; {
     let temp2 = TempFile::new("another_test.txt".into())?;
     drop(temp2); // Explicitly drop the file
     println!("Manually dropped file");
-    
+
     Ok(())
 }</code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="iterators"><a class="header" href="#iterators">Iterators</a></h1>
@@ -6039,7 +6065,7 @@ impl Iterator for Fibonacci {
         self.curr = self.next;
         self.next = current + self.next;
 
-        // Since there's no endpoint to a Fibonacci sequence, the `Iterator` 
+        // Since there's no endpoint to a Fibonacci sequence, the `Iterator`
         // will never return `None`, and `Some` is always returned.
         Some(current)
     }
@@ -6255,7 +6281,7 @@ trait Programmer {
     fn fav_language(&amp;self) -&gt; String;
 }
 
-// CompSciStudent (computer science student) is a subtrait of both Programmer 
+// CompSciStudent (computer science student) is a subtrait of both Programmer
 // and Student. Implementing CompSciStudent requires you to impl both supertraits.
 trait CompSciStudent: Programmer + Student {
     fn git_username(&amp;self) -&gt; String;
@@ -6962,7 +6988,7 @@ fn main() {
 </ul>
 <h2 id="or-is-chainable-evaluates-eagerly-keeps-empty-value-intact"><a class="header" href="#or-is-chainable-evaluates-eagerly-keeps-empty-value-intact"><code>or()</code> is chainable, evaluates eagerly, keeps empty value intact</a></h2>
 <p><code>or()</code>is chainable and eagerly evaluates its argument, as is shown in the following example. Note that because <code>or</code>'s arguments are evaluated eagerly, the variable passed to <code>or</code> is moved.</p>
-<pre><pre class="playground"><code class="language-rust editable edition2021">#[derive(Debug)] 
+<pre><pre class="playground"><code class="language-rust editable edition2021">#[derive(Debug)]
 enum Fruit { Apple, Orange, Banana, Kiwi, Lemon }
 
 fn main() {
@@ -6979,10 +7005,10 @@ fn main() {
     // But the variable named `apple` has been moved regardless, and cannot be used anymore.
     // println!("Variable apple was moved, so this line won't compile: {:?}", apple);
     // TODO: uncomment the line above to see the compiler error
- }</code></pre></pre>
+}</code></pre></pre>
 <h2 id="or_else-is-chainable-evaluates-lazily-keeps-empty-value-intact"><a class="header" href="#or_else-is-chainable-evaluates-lazily-keeps-empty-value-intact"><code>or_else()</code> is chainable, evaluates lazily, keeps empty value intact</a></h2>
 <p>Another alternative is to use <code>or_else</code>, which is also chainable, and evaluates lazily, as is shown in the following example:</p>
-<pre><pre class="playground"><code class="language-rust editable edition2021">#[derive(Debug)] 
+<pre><pre class="playground"><code class="language-rust editable edition2021">#[derive(Debug)]
 enum Fruit { Apple, Orange, Banana, Kiwi, Lemon }
 
 fn main() {
@@ -7021,7 +7047,7 @@ fn main() {
 }</code></pre></pre>
 <h2 id="get_or_insert_with-evaluates-lazily-modifies-empty-value-in-place"><a class="header" href="#get_or_insert_with-evaluates-lazily-modifies-empty-value-in-place"><code>get_or_insert_with()</code> evaluates lazily, modifies empty value in place</a></h2>
 <p>Instead of explicitly providing a value to fall back on, we can pass a closure to <code>get_or_insert_with</code>, as follows:</p>
-<pre><pre class="playground"><code class="language-rust editable edition2021">#[derive(Debug)] 
+<pre><pre class="playground"><code class="language-rust editable edition2021">#[derive(Debug)]
 enum Fruit { Apple, Orange, Banana, Kiwi, Lemon }
 
 fn main() {
@@ -7289,7 +7315,7 @@ fn main() {
 The <code>?</code> operator is now recommended, but you may still find <code>try!</code> when looking
 at older code. The same <code>multiply</code> function from the previous example
 would look like this using <code>try!</code>:</p>
-<pre><pre class="playground"><code class="language-rust editable edition2015">// To compile and run this example without errors, while using Cargo, change the value 
+<pre><pre class="playground"><code class="language-rust editable edition2015">// To compile and run this example without errors, while using Cargo, change the value
 // of the `edition` field, in the `[package]` section of the `Cargo.toml` file, to "2015".
 
 use std::num::ParseIntError;
@@ -7761,7 +7787,7 @@ struct Point {
     y: f64,
 }
 
-// A Rectangle can be specified by where its top left and bottom right 
+// A Rectangle can be specified by where its top left and bottom right
 // corners are in space
 #[allow(dead_code)]
 struct Rectangle {
@@ -8241,15 +8267,15 @@ fn main() {
 ==4401== Copyright (C) 2002-2013, and GNU GPL'd, by Julian Seward et al.
 ==4401== Using Valgrind-3.10.0.SVN and LibVEX; rerun with -h for copyright info
 ==4401== Command: ./panic
-==4401== 
+==4401==
 thread '&lt;main&gt;' panicked at 'division by zero', panic.rs:5
-==4401== 
+==4401==
 ==4401== HEAP SUMMARY:
 ==4401==     in use at exit: 0 bytes in 0 blocks
 ==4401==   total heap usage: 18 allocs, 18 frees, 1,648 bytes allocated
-==4401== 
+==4401==
 ==4401== All heap blocks were freed -- no leaks are possible
-==4401== 
+==4401==
 ==4401== For counts of detected and suppressed errors, rerun with: -v
 ==4401== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
 </code></pre>
@@ -8268,7 +8294,7 @@ with a default initial capacity (recommended).</p>
 
 fn call(number: &amp;str) -&gt; &amp;str {
     match number {
-        "798-1364" =&gt; "We're sorry, the call cannot be completed as dialed. 
+        "798-1364" =&gt; "We're sorry, the call cannot be completed as dialed.
             Please hang up and try again.",
         "645-7689" =&gt; "Hello, this is Mr. Awesome's Pizza. My name is Fred.
             What can I get for you today?",
@@ -8276,7 +8302,7 @@ fn call(number: &amp;str) -&gt; &amp;str {
     }
 }
 
-fn main() { 
+fn main() {
     let mut contacts = HashMap::new();
 
     contacts.insert("Daniel", "798-1364");
@@ -8299,12 +8325,12 @@ fn main() {
         _ =&gt; println!("Don't have Ashley's number."),
     }
 
-    contacts.remove(&amp;"Ashley"); 
+    contacts.remove(&amp;"Ashley");
 
-    // `HashMap::iter()` returns an iterator that yields 
+    // `HashMap::iter()` returns an iterator that yields
     // (&amp;'a key, &amp;'a value) pairs in arbitrary order.
     for (contact, &amp;number) in contacts.iter() {
-        println!("Calling {}: {}", contact, call(number)); 
+        println!("Calling {}: {}", contact, call(number));
     }
 }</code></pre></pre>
 <p>For more information on how hashing and hash maps
@@ -8471,32 +8497,32 @@ fn main() {
     let rc_examples = "Rc examples".to_string();
     {
         println!("--- rc_a is created ---");
-        
+
         let rc_a: Rc&lt;String&gt; = Rc::new(rc_examples);
         println!("Reference Count of rc_a: {}", Rc::strong_count(&amp;rc_a));
-        
+
         {
             println!("--- rc_a is cloned to rc_b ---");
-            
+
             let rc_b: Rc&lt;String&gt; = Rc::clone(&amp;rc_a);
             println!("Reference Count of rc_b: {}", Rc::strong_count(&amp;rc_b));
             println!("Reference Count of rc_a: {}", Rc::strong_count(&amp;rc_a));
-            
+
             // Two `Rc`s are equal if their inner values are equal
             println!("rc_a and rc_b are equal: {}", rc_a.eq(&amp;rc_b));
-            
+
             // We can use methods of a value directly
             println!("Length of the value inside rc_a: {}", rc_a.len());
             println!("Value of rc_b: {}", rc_b);
-            
+
             println!("--- rc_b is dropped out of scope ---");
         }
-        
+
         println!("Reference Count of rc_a: {}", Rc::strong_count(&amp;rc_a));
-        
+
         println!("--- rc_a is dropped out of scope ---");
     }
-    
+
     // Error! `rc_examples` already moved into `rc_a`
     // And when `rc_a` is dropped, `rc_examples` is dropped together
     // println!("rc_examples: {}", rc_examples);
@@ -8678,9 +8704,7 @@ fn main() {
     let final_result = children.into_iter().map(|c| c.join().unwrap()).sum::&lt;u32&gt;();
 
     println!("Final sum result: {}", final_result);
-}
-
-</code></pre></pre>
+}</code></pre></pre>
 <h3 id="assignments"><a class="header" href="#assignments">Assignments</a></h3>
 <p>It is not wise to let our number of threads depend on user inputted data.
 What if the user decides to insert a lot of spaces? Do we <em>really</em> want to spawn 2,000 threads?
@@ -8738,7 +8762,7 @@ fn main() {
         // `recv` will block the current thread if there are no messages available
         ids.push(rx.recv());
     }
-    
+
     // Wait for the threads to complete any remaining work
     for child in children {
         child.join().expect("oops! the child thread panicked");
@@ -8787,8 +8811,7 @@ fn main() {
         None =&gt; panic!("new path is not a valid UTF-8 sequence"),
         Some(s) =&gt; println!("new path is {}", s),
     }
-}
-</code></pre></pre>
+}</code></pre></pre>
 <p>Be sure to check at other <code>Path</code> methods (<code>posix::Path</code> or <code>windows::Path</code>) and
 the <code>Metadata</code> struct.</p>
 <h3 id="see-also-73"><a class="header" href="#see-also-73">See also:</a></h3>
@@ -8912,7 +8935,7 @@ concise and fluent expression.</p>
 </span>use std::fs::read_to_string;
 
 fn read_lines(filename: &amp;str) -&gt; Vec&lt;String&gt; {
-    read_to_string(filename) 
+    read_to_string(filename)
         .unwrap()  // panic on possible file-reading errors
         .lines()  // split the string into an iterator of string slices
         .map(String::from)  // make each slice into a string
@@ -9147,8 +9170,7 @@ fn main() {
     fs::remove_dir("a/c/d").unwrap_or_else(|why| {
         println!("! {:?}", why.kind());
     });
-}
-</code></pre>
+}</code></pre>
 <p>Here's the expected successful output:</p>
 <pre><code class="language-shell">$ rustc fs.rs &amp;&amp; ./fs
 `mkdir a`
@@ -9764,7 +9786,7 @@ inside it.</p>
 or benchmarks) only. Such dependencies are added to <code>Cargo.toml</code> in the
 <code>[dev-dependencies]</code> section. These dependencies are not propagated to other
 packages which depend on this package.</p>
-<p>One such example is <a href="https://docs.rs/pretty_assertions/1.0.0/pretty_assertions/index.html"><code>pretty_assertions</code></a>, which extends standard <code>assert_eq!</code> and <code>assert_ne!</code> macros, to provide colorful diff.<br />
+<p>One such example is <a href="https://docs.rs/pretty_assertions/1.0.0/pretty_assertions/index.html"><code>pretty_assertions</code></a>, which extends standard <code>assert_eq!</code> and <code>assert_ne!</code> macros, to provide colorful diff.
 File <code>Cargo.toml</code>:</p>
 <pre><code class="language-toml"># standard crate data is left out
 [dev-dependencies]

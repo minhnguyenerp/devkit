@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-02f01a62.js";
+            window.path_to_searchindex_js = "searchindex-8c9d6225.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-3a0c9359.js"></script>
@@ -328,7 +328,7 @@ attributes. The <code>#[rustc_doc_primitive = "..."]</code> attribute is used by
 provide a way to generate documentation for primitive types, and requires <code>#![feature(rustc_attrs)]</code>
 to enable.</p>
 <h3 id="document-keywords"><a class="header" href="#document-keywords">Document keywords</a></h3>
-<p>This is for Rust compiler internal use only.</p>
+<p>This is for internal use in the std library.</p>
 <p>Rust keywords are documented in the standard library (look for <code>match</code> for example).</p>
 <p>To do so, the <code>#[doc(keyword = "...")]</code> attribute is used. Example:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
@@ -338,6 +338,19 @@ to enable.</p>
 <span class="boring">fn main() {
 </span>/// Some documentation about the keyword.
 #[doc(keyword = "break")]
+mod empty_mod {}
+<span class="boring">}</span></code></pre></pre>
+<h3 id="document-builtin-attributes"><a class="header" href="#document-builtin-attributes">Document builtin attributes</a></h3>
+<p>This is for internal use in the std library.</p>
+<p>Rust builtin attributes are documented in the standard library (look for <code>repr</code> for example).</p>
+<p>To do so, the <code>#[doc(attribute = "...")]</code> attribute is used. Example:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span>#![feature(rustdoc_internals)]
+#![allow(internal_features)]
+
+<span class="boring">fn main() {
+</span>/// Some documentation about the attribute.
+#[doc(attribute = "repr")]
 mod empty_mod {}
 <span class="boring">}</span></code></pre></pre>
 <h3 id="use-the-rust-logo-as-the-crate-logo"><a class="header" href="#use-the-rust-logo-as-the-crate-logo">Use the Rust logo as the crate logo</a></h3>
@@ -796,6 +809,8 @@ whitespace character will also split arguments. Example:</p>
     "you today?",
 ]
 </code></pre>
+<h2 id="--generate-macro-expansion-generate-macros-expansion-toggles-in-source-code"><a class="header" href="#--generate-macro-expansion-generate-macros-expansion-toggles-in-source-code"><code>--generate-macro-expansion</code>: Generate macros expansion toggles in source code</a></h2>
+<p>This flag enables the generation of toggles to expand macros in the HTML source code pages.</p>
 
                     </main>
 

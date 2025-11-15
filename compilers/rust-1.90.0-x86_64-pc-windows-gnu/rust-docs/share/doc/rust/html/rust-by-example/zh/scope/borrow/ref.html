@@ -41,7 +41,7 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-c56a0a1a.js";
+            window.path_to_searchindex_js = "../../searchindex-ed98a07e.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../toc-32872d2c.js"></script>
@@ -227,13 +227,13 @@ fn main() {
 
     // 包含指针的可变元组
     let mut mutable_tuple = (Box::new(5u32), 3u32);
-    
+
     {
         // 解构 `mutable_tuple` 以修改 `last` 的值。
         let (_, ref mut last) = mutable_tuple;
         *last = 2u32;
     }
-    
+
     println!("元组是 {:?}", mutable_tuple);
 }</code></pre></pre>
 

@@ -41,7 +41,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-ee4246b4.js";
+            window.path_to_searchindex_js = "../searchindex-adf886c2.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-a1ce3eb6.js"></script>
@@ -188,8 +188,7 @@
                     <main>
                         <h1 id="開発中の依存関係"><a class="header" href="#開発中の依存関係">開発中の依存関係</a></h1>
 <p>テスト（あるいは例やベンチマーク）のためだけに、あるクレートに依存しなければならないことがあります。このような依存関係は、<code>Cargo.toml</code>の<code>[dev-dependencies]</code>セクションに追加します。このセクションに追加した依存関係は、このパッケージに依存するパッケージには適用されません。</p>
-<p>そのようなクレートの例として、<a href="https://docs.rs/pretty_assertions/1.0.0/pretty_assertions/index.html"><code>pretty_assertions</code></a>クレートが挙げられます。これは、標準の<code>assert_eq!</code>と<code>assert_ne!</code>マクロを拡張して、差分をカラフルに表示するものです。<br />
-ファイル<code>Cargo.toml</code>：</p>
+<p>One such example is <a href="https://docs.rs/pretty_assertions/1.0.0/pretty_assertions/index.html"><code>pretty_assertions</code></a>, which extends standard <code>assert_eq!</code> and <code>assert_ne!</code> macros, to provide colorful diff. File <code>Cargo.toml</code>:</p>
 <pre><code class="language-toml"># 本節の内容に関係のない行は省略しています。
 [dev-dependencies]
 pretty_assertions = "1"

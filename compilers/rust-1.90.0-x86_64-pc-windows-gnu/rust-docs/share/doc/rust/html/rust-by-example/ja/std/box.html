@@ -41,7 +41,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-ee4246b4.js";
+            window.path_to_searchindex_js = "../searchindex-adf886c2.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-a1ce3eb6.js"></script>
@@ -198,7 +198,8 @@ struct Point {
     y: f64,
 }
 
-// 長方形は左上の角と右下の角がどこにあるかによって特定できます。
+// A Rectangle can be specified by where its top left and bottom right
+// corners are in space
 #[allow(dead_code)]
 struct Rectangle {
     top_left: Point,

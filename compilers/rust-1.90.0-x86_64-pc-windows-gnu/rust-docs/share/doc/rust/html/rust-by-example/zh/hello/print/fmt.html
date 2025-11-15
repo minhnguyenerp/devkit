@@ -41,7 +41,7 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-c56a0a1a.js";
+            window.path_to_searchindex_js = "../../searchindex-ed98a07e.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../toc-32872d2c.js"></script>
@@ -249,11 +249,14 @@ fn main() {
 RGB (0, 3, 254) 0x0003FE
 RGB (0, 0, 0) 0x000000
 </code></pre>
-<p>如果你遇到困难，这里有三个提示：</p>
+<p>Two hints if you get stuck:</p>
 <ul>
-<li>RGB 颜色空间中颜色的计算公式是：<code>RGB = (R*65536)+(G*256)+B，（其中 R 是红色，G 是绿色，B 是蓝色）</code>。更多信息请参见 <a href="https://www.rapidtables.com/web/color/RGB_Color.html#rgb-format">RGB 颜色格式和计算</a>。</li>
 <li>你<a href="https://doc.rust-lang.org/std/fmt/#named-parameters">可能需要多次列出每种颜色</a>。</li>
-<li>你可以使用 <code>:0&gt;2</code> <a href="https://doc.rust-lang.org/std/fmt/#width">用零填充到宽度为 2</a>。</li>
+<li>You can <a href="https://doc.rust-lang.org/std/fmt/#width">pad with zeros to a width of 2</a> with <code>:0&gt;2</code>. For hexadecimals, you can use <code>:02X</code>.</li>
+</ul>
+<p>Bonus:</p>
+<ul>
+<li>If you would like to experiment with <a href="../../types/cast.html">type casting</a> in advance, the formula for <a href="https://www.rapidtables.com/web/color/RGB_Color.html#rgb-format">calculating a color in the RGB color space</a> is <code>RGB = (R * 65_536) + (G * 256) + B</code>, where <code>R is RED, G is GREEN, and B is BLUE</code>. An unsigned 8-bit integer (<code>u8</code>) can only hold numbers up to 255. To cast <code>u8</code> to <code>u32</code>, you can write <code>variable_name as u32</code>.</li>
 </ul>
 <h3 id="另请参阅"><a class="header" href="#另请参阅">另请参阅：</a></h3>
 <p><a href="https://doc.rust-lang.org/std/fmt/"><code>std::fmt</code></a></p>

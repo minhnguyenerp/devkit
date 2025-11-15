@@ -180,13 +180,14 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="error-code-e0578"><a class="header" href="#error-code-e0578">Error code E0578</a></h1>
+<h4 id="note-this-error-code-is-no-longer-emitted-by-the-compiler"><a class="header" href="#note-this-error-code-is-no-longer-emitted-by-the-compiler">Note: this error code is no longer emitted by the compiler.</a></h4>
 <p>A module cannot be found and therefore, the visibility cannot be determined.</p>
 <p>Erroneous code example:</p>
-<pre><pre class="playground"><code class="language-rust compile_fail E0578 edition2018">foo!();
+<pre><code class="language-rust ignore (no longer emitted)">foo!();
 
 pub (in ::Sea) struct Shark; // error!
 
-fn main() {}</code></pre></pre>
+fn main() {}</code></pre>
 <p>Because of the call to the <code>foo</code> macro, the compiler guesses that the missing
 module could be inside it and fails because the macro definition cannot be
 found.</p>

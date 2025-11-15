@@ -41,7 +41,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-ee4246b4.js";
+            window.path_to_searchindex_js = "../searchindex-adf886c2.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-a1ce3eb6.js"></script>
@@ -216,8 +216,7 @@ fn main() {
         None =&gt; panic!("new path is not a valid UTF-8 sequence"),
         Some(s) =&gt; println!("new path is {}", s),
     }
-}
-</code></pre></pre>
+}</code></pre></pre>
 <p>他の<code>Path</code>メソッド（<code>posix::Path</code>と<code>windows::Path</code>）をチェックするのを忘れずに！それと<code>Metadata</code>構造体も見ておくことをオススメします。</p>
 <h3 id="参照"><a class="header" href="#参照">参照</a></h3>
 <p><a href="https://doc.rust-lang.org/std/ffi/struct.OsStr.html">OsStr</a>, <a href="https://doc.rust-lang.org/std/fs/struct.Metadata.html">Metadata</a>.</p>

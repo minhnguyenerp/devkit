@@ -41,7 +41,7 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-8b5e0132.js";
+            window.path_to_searchindex_js = "../../searchindex-25f31b91.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../toc-10049a44.js"></script>
@@ -194,7 +194,7 @@
 </ul>
 <h2 id="or-is-chainable-evaluates-eagerly-keeps-empty-value-intact"><a class="header" href="#or-is-chainable-evaluates-eagerly-keeps-empty-value-intact"><code>or()</code> is chainable, evaluates eagerly, keeps empty value intact</a></h2>
 <p><code>or()</code>is chainable and eagerly evaluates its argument, as is shown in the following example. Note that because <code>or</code>'s arguments are evaluated eagerly, the variable passed to <code>or</code> is moved.</p>
-<pre><pre class="playground"><code class="language-rust editable edition2021">#[derive(Debug)] 
+<pre><pre class="playground"><code class="language-rust editable edition2021">#[derive(Debug)]
 enum Fruit { Apple, Orange, Banana, Kiwi, Lemon }
 
 fn main() {
@@ -211,10 +211,10 @@ fn main() {
     // But the variable named `apple` has been moved regardless, and cannot be used anymore.
     // println!("Variable apple was moved, so this line won't compile: {:?}", apple);
     // TODO: uncomment the line above to see the compiler error
- }</code></pre></pre>
+}</code></pre></pre>
 <h2 id="or_else-is-chainable-evaluates-lazily-keeps-empty-value-intact"><a class="header" href="#or_else-is-chainable-evaluates-lazily-keeps-empty-value-intact"><code>or_else()</code> is chainable, evaluates lazily, keeps empty value intact</a></h2>
 <p>Another alternative is to use <code>or_else</code>, which is also chainable, and evaluates lazily, as is shown in the following example:</p>
-<pre><pre class="playground"><code class="language-rust editable edition2021">#[derive(Debug)] 
+<pre><pre class="playground"><code class="language-rust editable edition2021">#[derive(Debug)]
 enum Fruit { Apple, Orange, Banana, Kiwi, Lemon }
 
 fn main() {
@@ -253,7 +253,7 @@ fn main() {
 }</code></pre></pre>
 <h2 id="get_or_insert_with-evaluates-lazily-modifies-empty-value-in-place"><a class="header" href="#get_or_insert_with-evaluates-lazily-modifies-empty-value-in-place"><code>get_or_insert_with()</code> evaluates lazily, modifies empty value in place</a></h2>
 <p>Instead of explicitly providing a value to fall back on, we can pass a closure to <code>get_or_insert_with</code>, as follows:</p>
-<pre><pre class="playground"><code class="language-rust editable edition2021">#[derive(Debug)] 
+<pre><pre class="playground"><code class="language-rust editable edition2021">#[derive(Debug)]
 enum Fruit { Apple, Orange, Banana, Kiwi, Lemon }
 
 fn main() {

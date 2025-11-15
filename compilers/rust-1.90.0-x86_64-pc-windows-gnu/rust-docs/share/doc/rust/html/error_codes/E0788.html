@@ -180,6 +180,7 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="error-code-e0788"><a class="header" href="#error-code-e0788">Error code E0788</a></h1>
+<h4 id="note-this-error-code-is-no-longer-emitted-by-the-compiler"><a class="header" href="#note-this-error-code-is-no-longer-emitted-by-the-compiler">Note: this error code is no longer emitted by the compiler.</a></h4>
 <p>A <code>#[coverage(off|on)]</code> attribute was found in a position where it is not
 allowed.</p>
 <p>Coverage attributes can be applied to:</p>
@@ -191,13 +192,10 @@ expressions.</li>
 <li><code>impl</code> blocks (inherent or trait), and modules.</li>
 </ul>
 <p>Example of erroneous code:</p>
-<pre><pre class="playground"><code class="language-rust compile_fail E0788"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>unsafe extern "C" {
+<pre><code class="language-rust ignore (no longer emitted)">unsafe extern "C" {
     #[coverage(off)]
     fn foreign_fn();
-}
-<span class="boring">}</span></code></pre></pre>
+}</code></pre>
 <p>When using the <code>-C instrument-coverage</code> flag, coverage attributes act as a
 hint to the compiler that it should instrument or not instrument the
 corresponding function or enclosed functions. The precise effect of applying

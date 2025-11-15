@@ -41,7 +41,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-ee4246b4.js";
+            window.path_to_searchindex_js = "../searchindex-adf886c2.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-a1ce3eb6.js"></script>
@@ -217,7 +217,7 @@ loop {
 <pre><pre class="playground"><code class="language-rust editable edition2021">fn main() {
     // `optional`という変数の型を`Option&lt;i32&gt;`に指定。
     let mut optional = Some(0);
-    
+
     // これは次のように読めます。「`let`が`optional`を`Some(i)`にデストラクト
     // している間はブロック内（`{}`）を評価せよ。さもなくば`break`せよ。」
     while let Some(i) = optional {

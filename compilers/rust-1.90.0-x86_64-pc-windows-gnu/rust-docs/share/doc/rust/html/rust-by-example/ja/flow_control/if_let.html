@@ -41,7 +41,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-ee4246b4.js";
+            window.path_to_searchindex_js = "../searchindex-adf886c2.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-a1ce3eb6.js"></script>
@@ -250,17 +250,17 @@ fn main() {
     let a = Foo::Bar;
     let b = Foo::Baz;
     let c = Foo::Qux(100);
-    
+
     // Foo::Barにマッチする変数
     if let Foo::Bar = a {
         println!("a is foobar");
     }
-    
+
     // 変数bはFoo::Barにマッチしないので出力されません。
     if let Foo::Bar = b {
         println!("b is foobar");
     }
-    
+
     // 変数cはFoo::Quxにマッチしつつ値を取り出せます。
     // これはSome()と同様です。
     if let Foo::Qux(value) = c {

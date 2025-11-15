@@ -41,7 +41,7 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-8b5e0132.js";
+            window.path_to_searchindex_js = "../../searchindex-25f31b91.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../toc-10049a44.js"></script>
@@ -218,7 +218,7 @@ impl List {
         // `self` has type `&amp;List`, and `*self` has type `List`, matching on a
         // concrete type `T` is preferred over a match on a reference `&amp;T`
         // after Rust 2018 you can use self here and tail (with no ref) below as well,
-        // rust will infer &amp;s and ref tail. 
+        // rust will infer &amp;s and ref tail.
         // See https://doc.rust-lang.org/edition-guide/rust-2018/ownership-and-lifetimes/default-match-bindings.html
         match *self {
             // Can't take ownership of the tail, because `self` is borrowed;

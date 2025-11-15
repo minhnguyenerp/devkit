@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-3109fce4.js";
+            window.path_to_searchindex_js = "searchindex-5e2787cc.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-4adb5027.js"></script>
@@ -233,15 +233,16 @@ Recursively defining constants is not allowed.</li>
 <div class="rule" id="r-const-eval.const-expr.path-static"><a class="rule-link" href="#r-const-eval.const-expr.path-static" title="const-eval.const-expr.path-static"><span>[const-eval<wbr>.const-expr<wbr>.path-static]</span/></a>
 </div>
 <ul>
-<li>Paths to <a href="items/static-items.html">statics</a> with these restrictions:
+<li>
+<p>Paths to <a href="items/static-items.html">statics</a> with these restrictions:</p>
 <ul>
 <li>Writes to <code>static</code> items are not allowed in any constant evaluation context.</li>
 <li>Reads from <code>extern</code> statics are not allowed in any constant evaluation context.</li>
 <li>If the evaluation is <em>not</em> carried out in an initializer of a <code>static</code> item, then reads from any mutable <code>static</code> are not allowed. A mutable <code>static</code> is a <code>static mut</code> item, or a <code>static</code> item with an interior-mutable type.</li>
 </ul>
+<p>These requirements are checked only when the constant is evaluated. In other words, having such accesses syntactically occur in const contexts is allowed as long as they never get executed.</p>
 </li>
 </ul>
-<p>These requirements are checked only when the constant is evaluated. In other words, having such accesses syntactically occur in const contexts is allowed as long as they never get executed.</p>
 <div class="rule" id="r-const-eval.const-expr.tuple"><a class="rule-link" href="#r-const-eval.const-expr.tuple" title="const-eval.const-expr.tuple"><span>[const-eval<wbr>.const-expr<wbr>.tuple]</span/></a>
 </div>
 <ul>
@@ -494,6 +495,8 @@ const C: () = { let _: &amp;'static mut [u8] = &amp;mut []; };
 <ul>
 <li>A <a href="expressions/block-expr.html#const-blocks">const block</a></li>
 </ul>
+<div class="rule" id="r-const-eval.const-context.outer-generics"><a class="rule-link" href="#r-const-eval.const-context.outer-generics" title="const-eval.const-context.outer-generics"><span>[const-eval<wbr>.const-context<wbr>.outer-generics]</span/></a>
+</div>
 <p>Const contexts that are used as parts of types (array type and repeat length
 expressions as well as const generic arguments) can only make restricted use of
 surrounding generic parameters: such an expression must either be a single bare
@@ -564,7 +567,7 @@ of whether you are building on a <code>64</code> bit or a <code>32</code> bit sy
         <script src="book-9576a2db.js"></script>
 
         <!-- Custom JS scripts -->
-        <script src="theme/reference-cfed9ca5.js"></script>
+        <script src="theme/reference-da60281b.js"></script>
 
 
 

@@ -4,9 +4,10 @@ file:bin/rust-gdb
 file:bin/rust-gdbgui
 file:bin/rust-lldb
 file:bin/rustc.exe
-file:bin/rustc_driver-27d41d28a14a753d.dll
+file:bin/rustc_driver-ee49369eefca8df5.dll
 file:bin/rustdoc.exe
-file:bin/std-2f47b046973153da.dll
+file:bin/std-eda97603dd98e790.dll
+file:etc/target-spec-json-schema.json
 file:lib/rustlib/etc/gdb_load_rust_pretty_printers.py
 file:lib/rustlib/etc/gdb_lookup.py
 file:lib/rustlib/etc/gdb_providers.py

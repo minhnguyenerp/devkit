@@ -40,7 +40,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-7dbf6f40.js";
+            window.path_to_searchindex_js = "../searchindex-b96ec0af.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-ff85ecd7.js"></script>
@@ -408,6 +408,13 @@ dependencies on code published outside of <a href="https://crates.io/">crates.io
 locations</a> section for a fallback alternative for <code>git</code>
 and <code>path</code> dependencies.</p>
 </blockquote>
+<h3 id="git-submodules"><a class="header" href="#git-submodules">Git submodules</a></h3>
+<p>When cloning a <code>git</code> dependency,
+Cargo automatically fetches its submodules recursively
+so that all required code is available for the build.</p>
+<p>To skip fetching submodules unrelated to the build,
+you can set <a href="https://git-scm.com/docs/gitmodules#Documentation/gitmodules.txt-submodulenameupdate"><code>submodule.&lt;name&gt;.update = none</code></a> in the dependency repo’s <code>.gitmodules</code>.
+This requires write access to the repo and will disable submodule updates more generally.</p>
 <h3 id="accessing-private-git-repositories"><a class="header" href="#accessing-private-git-repositories">Accessing private Git repositories</a></h3>
 <p>See <a href="../appendix/git-authentication.html">Git Authentication</a> for help with Git authentication for private repos.</p>
 <h2 id="specifying-path-dependencies"><a class="header" href="#specifying-path-dependencies">Specifying path dependencies</a></h2>
@@ -669,24 +676,6 @@ cc.workspace = true
 [dev-dependencies]
 rand = { workspace = true, optional = true }
 </code></pre>
-<script>
-(function() {
-    var fragments = {
-        "#overriding-dependencies": "overriding-dependencies.html",
-        "#testing-a-bugfix": "overriding-dependencies.html#testing-a-bugfix",
-        "#working-with-an-unpublished-minor-version": "overriding-dependencies.html#working-with-an-unpublished-minor-version",
-        "#overriding-repository-url": "overriding-dependencies.html#overriding-repository-url",
-        "#prepublishing-a-breaking-change": "overriding-dependencies.html#prepublishing-a-breaking-change",
-        "#overriding-with-local-dependencies": "overriding-dependencies.html#paths-overrides",
-    };
-    var target = fragments[window.location.hash];
-    if (target) {
-        var url = window.location.toString();
-        var base = url.substring(0, url.lastIndexOf('/'));
-        window.location.replace(base + "/" + target);
-    }
-})();
-</script>
 
                     </main>
 
@@ -736,6 +725,18 @@ rand = { workspace = true, optional = true }
         <!-- Custom JS scripts -->
 
 
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const fragmentMap =
+                    {"#overriding-dependencies":"overriding-dependencies.html","#overriding-repository-url":"overriding-dependencies.html#overriding-repository-url","#overriding-with-local-dependencies":"overriding-dependencies.html#paths-overrides","#prepublishing-a-breaking-change":"overriding-dependencies.html#prepublishing-a-breaking-change","#testing-a-bugfix":"overriding-dependencies.html#testing-a-bugfix","#working-with-an-unpublished-minor-version":"overriding-dependencies.html#working-with-an-unpublished-minor-version"}
+                ;
+                const target = fragmentMap[window.location.hash];
+                if (target) {
+                    let url = new URL(target, window.location.href);
+                    window.location.replace(url.href);
+                }
+            });
+        </script>
 
     </div>
     </body>

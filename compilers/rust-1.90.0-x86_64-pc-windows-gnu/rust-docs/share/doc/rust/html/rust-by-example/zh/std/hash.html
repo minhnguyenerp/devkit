@@ -41,7 +41,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-c56a0a1a.js";
+            window.path_to_searchindex_js = "../searchindex-ed98a07e.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-32872d2c.js"></script>
@@ -201,7 +201,7 @@ fn call(number: &amp;str) -&gt; &amp;str {
     }
 }
 
-fn main() { 
+fn main() {
     let mut contacts = HashMap::new();
 
     contacts.insert("Daniel", "798-1364");
@@ -224,12 +224,12 @@ fn main() {
         _ =&gt; println!("没有 Ashley 的电话号码。"),
     }
 
-    contacts.remove(&amp;"Ashley"); 
+    contacts.remove(&amp;"Ashley");
 
     // `HashMap::iter()` 返回一个迭代器，该迭代器以任意顺序生成
     // (&amp;'a key, &amp;'a value) 键值对。
     for (contact, &amp;number) in contacts.iter() {
-        println!("正在呼叫{}：{}", contact, call(number)); 
+        println!("正在呼叫{}：{}", contact, call(number));
     }
 }</code></pre></pre>
 <p>要了解更多关于哈希和哈希映射（有时称为哈希表）的工作原理，请参阅<a href="https://en.wikipedia.org/wiki/Hash_table">哈希表的维基百科页面</a></p>

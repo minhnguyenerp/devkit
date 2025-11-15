@@ -36,7 +36,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-02f01a62.js";
+            window.path_to_searchindex_js = "../searchindex-8c9d6225.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-3a0c9359.js"></script>
@@ -339,6 +339,19 @@ which has a line that starts with a <code>#</code>:</p>
 <pre><code class="language-text">/// let s = "foo
 /// ## bar # baz";
 </code></pre>
+<p>Here is an example with a macro rule which matches on tokens starting with <code>#</code>:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>/// ```
+/// macro_rules! ignore { (##tag) =&gt; {}; }
+/// ignore! {
+///     ###tag
+/// }
+/// ```
+<span class="boring">fn f() {}
+</span><span class="boring">}</span></code></pre></pre>
+<p>As you can see, the rule is expecting two <code>#</code>, so when calling it, we need to add an extra <code>#</code>
+because the first one is used as escape.</p>
 <h2 id="using--in-doc-tests"><a class="header" href="#using--in-doc-tests">Using <code>?</code> in doc tests</a></h2>
 <p>When writing an example, it is rarely useful to include a complete error
 handling, as it would add significant amounts of boilerplate code. Instead, you

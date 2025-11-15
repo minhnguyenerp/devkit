@@ -180,15 +180,13 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="error-code-e0739"><a class="header" href="#error-code-e0739">Error code E0739</a></h1>
+<h4 id="note-this-error-code-is-no-longer-emitted-by-the-compiler"><a class="header" href="#note-this-error-code-is-no-longer-emitted-by-the-compiler">Note: this error code is no longer emitted by the compiler.</a></h4>
 <p><code>#[track_caller]</code> must  be applied to a function</p>
 <p>Erroneous code example:</p>
-<pre><pre class="playground"><code class="language-rust compile_fail E0739"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>#[track_caller]
+<pre><code class="language-rust ignore (no longer emitted)">#[track_caller]
 struct Bar {
     a: u8,
-}
-<span class="boring">}</span></code></pre></pre>
+}</code></pre>
 
                     </main>
 

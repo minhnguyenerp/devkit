@@ -41,7 +41,7 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-c56a0a1a.js";
+            window.path_to_searchindex_js = "../../searchindex-ed98a07e.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../toc-32872d2c.js"></script>
@@ -209,7 +209,7 @@ fn read_lines(filename: &amp;str) -&gt; Vec&lt;String&gt; {
 </span>use std::fs::read_to_string;
 
 fn read_lines(filename: &amp;str) -&gt; Vec&lt;String&gt; {
-    read_to_string(filename) 
+    read_to_string(filename)
         .unwrap()  // 遇到可能的文件读取错误时 panic
         .lines()  // 将字符串分割成字符串切片的迭代器
         .map(String::from)  // 将每个切片转换为字符串

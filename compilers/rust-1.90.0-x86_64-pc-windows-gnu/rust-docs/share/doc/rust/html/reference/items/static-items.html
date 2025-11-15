@@ -37,7 +37,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-3109fce4.js";
+            window.path_to_searchindex_js = "../searchindex-5e2787cc.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-4adb5027.js"></script>
@@ -288,18 +288,18 @@ Expression</text>
 </div>
 <div class="rule" id="r-items.static.intro"><a class="rule-link" href="#r-items.static.intro" title="items.static.intro"><span>[items<wbr>.static<wbr>.intro]</span/></a>
 </div>
-<p>A <em>static item</em> is similar to a <a href="constant-items.html">constant</a>, except that it represents an allocated object in the
+<p>A <em>static item</em> is similar to a <a href="constant-items.html">constant</a>, except that it represents an allocation in the
 program that is initialized with the initializer expression. All references and raw pointers to the
-static refer to the same allocated object.</p>
+static refer to the same allocation.</p>
 <div class="rule" id="r-items.static.lifetime"><a class="rule-link" href="#r-items.static.lifetime" title="items.static.lifetime"><span>[items<wbr>.static<wbr>.lifetime]</span/></a>
 </div>
 <p>Static items have the <code>static</code> lifetime, which outlives all other lifetimes in a Rust program.
 Static items do not call <a href="../destructors.html"><code>drop</code></a> at the end of the program.</p>
 <div class="rule" id="r-items.static.storage-disjointness"><a class="rule-link" href="#r-items.static.storage-disjointness" title="items.static.storage-disjointness"><span>[items<wbr>.static<wbr>.storage-disjointness]</span/></a>
 </div>
-<p>If the <code>static</code> has a size of at least 1 byte, this allocated object is disjoint from all other such
-<code>static</code> objects as well as heap allocations and stack-allocated variables. However, the storage of
-immutable <code>static</code> items can overlap with objects that do not themselves have a unique address, such
+<p>If the <code>static</code> has a size of at least 1 byte, this allocation is disjoint from all other such
+<code>static</code> allocations as well as heap allocations and stack-allocated variables. However, the storage of
+immutable <code>static</code> items can overlap with allocations that do not themselves have a unique address, such
 as <a href="../destructors.html#constant-promotion">promoteds</a> and <a href="constant-items.html"><code>const</code> items</a>.</p>
 <div class="rule" id="r-items.static.namespace"><a class="rule-link" href="#r-items.static.namespace" title="items.static.namespace"><span>[items<wbr>.static<wbr>.namespace]</span/></a>
 </div>
@@ -483,7 +483,7 @@ following are true:</p>
         <script src="../book-9576a2db.js"></script>
 
         <!-- Custom JS scripts -->
-        <script src="../theme/reference-cfed9ca5.js"></script>
+        <script src="../theme/reference-da60281b.js"></script>
 
 
 

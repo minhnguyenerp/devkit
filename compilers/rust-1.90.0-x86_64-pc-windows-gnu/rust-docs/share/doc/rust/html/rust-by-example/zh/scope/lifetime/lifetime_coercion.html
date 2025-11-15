@@ -41,7 +41,7 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-c56a0a1a.js";
+            window.path_to_searchindex_js = "../../searchindex-ed98a07e.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../toc-32872d2c.js"></script>
@@ -202,10 +202,10 @@ fn choose_first&lt;'a: 'b, 'b&gt;(first: &amp;'a i32, _: &amp;'b i32) -&gt; &amp
 
 fn main() {
     let first = 2; // 较长的生命周期
-    
+
     {
         let second = 3; // 较短的生命周期
-        
+
         println!("乘积是 {}", multiply(&amp;first, &amp;second));
         println!("{} 是第一个", choose_first(&amp;first, &amp;second));
     };

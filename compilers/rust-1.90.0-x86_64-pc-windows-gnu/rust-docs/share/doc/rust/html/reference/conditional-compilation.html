@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-3109fce4.js";
+            window.path_to_searchindex_js = "searchindex-5e2787cc.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-4adb5027.js"></script>
@@ -844,6 +844,7 @@ production.  For example, it controls the behavior of the standard library’s
 <li><code>"unwind"</code></li>
 </ul>
 <h2 id="forms-of-conditional-compilation"><a class="header" href="#forms-of-conditional-compilation">Forms of conditional compilation</a></h2>
+<!-- template:attributes -->
 <div class="rule" id="r-cfg.attr"><a class="rule-link" href="#r-cfg.attr" title="cfg.attr"><span>[cfg<wbr>.attr]</span/></a>
 </div>
 <h3 id="the-cfg-attribute"><a class="header" href="#the-cfg-attribute">The <code>cfg</code> attribute</a></h3>
@@ -944,13 +945,13 @@ ConfigurationPredicate</text>
 </div>
 <div class="rule" id="r-cfg.attr.allowed-positions"><a class="rule-link" href="#r-cfg.attr.allowed-positions" title="cfg.attr.allowed-positions"><span>[cfg<wbr>.attr<wbr>.allowed-positions]</span/></a>
 </div>
-<p>The <code>cfg</code> attribute is allowed anywhere attributes are allowed.</p>
+<p>The <code>cfg</code> attribute may be used anywhere attributes are allowed.</p>
 <div class="rule" id="r-cfg.attr.duplicates"><a class="rule-link" href="#r-cfg.attr.duplicates" title="cfg.attr.duplicates"><span>[cfg<wbr>.attr<wbr>.duplicates]</span/></a>
 </div>
-<p>Multiple <code>cfg</code> attributes may be specified. The form to which the attribute is attached will not be included if any of the <code>cfg</code> predicates are false except as described in <a href="conditional-compilation.html#r-cfg.attr.crate-level-attrs">cfg.attr.crate-level-attrs</a>.</p>
+<p>The <code>cfg</code> attribute may be used any number of times on a form. The form to which the attributes are attached will not be included if any of the <code>cfg</code> predicates are false except as described in <a href="conditional-compilation.html#r-cfg.attr.crate-level-attrs">cfg.attr.crate-level-attrs</a>.</p>
 <div class="rule" id="r-cfg.attr.effect"><a class="rule-link" href="#r-cfg.attr.effect" title="cfg.attr.effect"><span>[cfg<wbr>.attr<wbr>.effect]</span/></a>
 </div>
-<p>If the predicate is true, the form is rewritten to not have the <code>cfg</code> attribute on it. If the predicate is false, the form is removed from the source code.</p>
+<p>If the predicates are true, the form is rewritten to not have the <code>cfg</code> attributes on it. If any predicate is false, the form is removed from the source code.</p>
 <div class="rule" id="r-cfg.attr.crate-level-attrs"><a class="rule-link" href="#r-cfg.attr.crate-level-attrs" title="cfg.attr.crate-level-attrs"><span>[cfg<wbr>.attr<wbr>.crate-level-attrs]</span/></a>
 </div>
 <p>When a crate-level <code>cfg</code> has a false predicate, the crate itself still exists. Any crate attributes preceding the <code>cfg</code> are kept, and any crate attributes following the <code>cfg</code> are removed as well as removing all of the following crate contents.</p>
@@ -968,6 +969,7 @@ ConfigurationPredicate</text>
 pub fn example() {}</code></pre>
 </blockquote>
 </div>
+<!-- template:attributes -->
 <div class="rule" id="r-cfg.cfg_attr"><a class="rule-link" href="#r-cfg.cfg_attr" title="cfg.cfg_attr"><span>[cfg<wbr>.cfg_attr]</span/></a>
 </div>
 <h3 id="the-cfg_attr-attribute"><a class="header" href="#the-cfg_attr-attribute">The <code>cfg_attr</code> attribute</a></h3>
@@ -1115,10 +1117,10 @@ Attr</text>
 </div>
 <div class="rule" id="r-cfg.cfg_attr.allowed-positions"><a class="rule-link" href="#r-cfg.cfg_attr.allowed-positions" title="cfg.cfg_attr.allowed-positions"><span>[cfg<wbr>.cfg_attr<wbr>.allowed-positions]</span/></a>
 </div>
-<p>The <code>cfg_attr</code> attribute is allowed anywhere attributes are allowed.</p>
+<p>The <code>cfg_attr</code> attribute may be used anywhere attributes are allowed.</p>
 <div class="rule" id="r-cfg.cfg_attr.duplicates"><a class="rule-link" href="#r-cfg.cfg_attr.duplicates" title="cfg.cfg_attr.duplicates"><span>[cfg<wbr>.cfg_attr<wbr>.duplicates]</span/></a>
 </div>
-<p>Multiple <code>cfg_attr</code> attributes may be specified.</p>
+<p>The <code>cfg_attr</code> attribute may be used any number of times on a form.</p>
 <div class="rule" id="r-cfg.cfg_attr.attr-restriction"><a class="rule-link" href="#r-cfg.cfg_attr.attr-restriction" title="cfg.cfg_attr.attr-restriction"><span>[cfg<wbr>.cfg_attr<wbr>.attr-restriction]</span/></a>
 </div>
 <p>The <a href="linkage.html"><code>crate_type</code></a> and <a href="crates-and-source-files.html#the-crate_name-attribute"><code>crate_name</code></a> attributes cannot be used with <code>cfg_attr</code>.</p>
@@ -1213,7 +1215,7 @@ println!("I'm running on a {} machine!", machine_kind);
         <script src="book-9576a2db.js"></script>
 
         <!-- Custom JS scripts -->
-        <script src="theme/reference-cfed9ca5.js"></script>
+        <script src="theme/reference-da60281b.js"></script>
 
 
 

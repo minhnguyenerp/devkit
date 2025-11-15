@@ -41,7 +41,7 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-ee4246b4.js";
+            window.path_to_searchindex_js = "../../searchindex-adf886c2.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../toc-a1ce3eb6.js"></script>
@@ -282,9 +282,7 @@ fn main() {
     let final_result = children.into_iter().map(|c| c.join().unwrap()).sum::&lt;u32&gt;();
 
     println!("Final sum result: {}", final_result);
-}
-
-</code></pre></pre>
+}</code></pre></pre>
 <h3 id="assignments"><a class="header" href="#assignments">Assignments</a></h3>
 <p>It is not wise to let our number of threads depend on user inputted data. What if the user decides to insert a lot of spaces? Do we <em>really</em> want to spawn 2,000 threads? Modify the program so that the data is always chunked into a limited number of chunks, defined by a static constant at the beginning of the program.</p>
 <h3 id="参照"><a class="header" href="#参照">参照</a></h3>

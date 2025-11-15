@@ -41,7 +41,7 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-8b5e0132.js";
+            window.path_to_searchindex_js = "../../searchindex-25f31b91.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../toc-10049a44.js"></script>
@@ -200,12 +200,12 @@ Closures can capture variables:</p>
 required.</p>
 <pre><pre class="playground"><code class="language-rust editable edition2021">fn main() {
     use std::mem;
-    
+
     let color = String::from("green");
 
     // A closure to print `color` which immediately borrows (`&amp;`) `color` and
     // stores the borrow and closure in the `print` variable. It will remain
-    // borrowed until `print` is used the last time. 
+    // borrowed until `print` is used the last time.
     //
     // `println!` only requires arguments by immutable reference so it doesn't
     // impose anything more restrictive.
@@ -215,7 +215,7 @@ required.</p>
     print();
 
     // `color` can be borrowed immutably again, because the closure only holds
-    // an immutable reference to `color`. 
+    // an immutable reference to `color`.
     let _reborrow = &amp;color;
     print();
 
@@ -240,15 +240,15 @@ required.</p>
 
     // The closure still mutably borrows `count` because it is called later.
     // An attempt to reborrow will lead to an error.
-    // let _reborrow = &amp;count; 
+    // let _reborrow = &amp;count;
     // ^ TODO: try uncommenting this line.
     inc();
 
     // The closure no longer needs to borrow `&amp;mut count`. Therefore, it is
     // possible to reborrow without an error
-    let _count_reborrowed = &amp;mut count; 
+    let _count_reborrowed = &amp;mut count;
 
-    
+
     // A non-copy type.
     let movable = Box::new(3);
 
@@ -281,7 +281,7 @@ to take ownership of captured variables:</p>
     // ^ Uncommenting above line will result in compile-time error
     // because borrow checker doesn't allow re-using variable after it
     // has been moved.
-    
+
     // Removing `move` from closure's signature will cause closure
     // to borrow _haystack_ variable immutably, hence _haystack_ is still
     // available and uncommenting above line will not cause an error.

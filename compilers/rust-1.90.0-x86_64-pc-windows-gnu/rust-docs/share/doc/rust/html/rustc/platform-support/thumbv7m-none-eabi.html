@@ -37,10 +37,10 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-a3e21844.js";
+            window.path_to_searchindex_js = "../searchindex-cd34eb16.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-2441f1f0.js"></script>
+        <script src="../toc-59e61e94.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -183,7 +183,10 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="thumbv7m-none-eabi"><a class="header" href="#thumbv7m-none-eabi"><code>thumbv7m-none-eabi</code></a></h1>
-<p><strong>Tier: 2</strong></p>
+<ul>
+<li><strong>Tier: 2</strong></li>
+<li><strong>Library Support:</strong> core and alloc (bare-metal, <code>#![no_std]</code>)</li>
+</ul>
 <p>Bare-metal target for CPUs in the <a href="https://developer.arm.com/documentation/ddi0403/latest/">Armv7-M</a> architecture family, supporting a
 subset of the <a href="https://developer.arm.com/Architectures/T32%20Instruction%20Set%20Architecture">T32 ISA</a>.</p>
 <p>Processors in this family include the:</p>
@@ -196,9 +199,7 @@ subset of the <a href="https://developer.arm.com/Architectures/T32%20Instruction
 arguments will have those values packed into integer registers. This is the
 only option because there is no FPU support in <a href="https://developer.arm.com/documentation/ddi0403/latest/">Armv7-M</a>.</p>
 <h2 id="target-maintainers"><a class="header" href="#target-maintainers">Target maintainers</a></h2>
-<ul>
-<li><a href="https://github.com/rust-embedded/wg?tab=readme-ov-file#the-arm-team">Rust Embedded Devices Working Group Arm Team</a></li>
-</ul>
+<p><a href="https://github.com/rust-embedded/wg?tab=readme-ov-file#the-arm-team">Rust Embedded Devices Working Group Arm Team</a></p>
 <h2 id="target-cpu-and-target-feature-options"><a class="header" href="#target-cpu-and-target-feature-options">Target CPU and Target Feature options</a></h2>
 <p>See <a href="arm-none-eabi.html#target-cpu-and-target-feature-options">the bare-metal Arm
 docs</a> for details on how

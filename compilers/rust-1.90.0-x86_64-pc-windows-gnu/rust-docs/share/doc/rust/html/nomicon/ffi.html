@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-043cb9a6.js";
+            window.path_to_searchindex_js = "searchindex-9f8385f0.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-52ac7e99.js"></script>
@@ -243,7 +243,7 @@ of keeping the binding correct at runtime.</p>
 <pre><code class="language-rust ignore">use libc::{c_int, size_t};
 
 #[link(name = "snappy")]
-unsafe extern {
+unsafe extern "C" {
     fn snappy_compress(input: *const u8,
                        input_length: size_t,
                        compressed: *mut u8,

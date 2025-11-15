@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `library\core\src\task\wake.rs`."><title>wake.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../../static.files/rustdoc-aa0817cf.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="core" data-themes="" data-resource-suffix="1.90.0" data-rustdoc-version="1.90.0 (1159e78c4 2025-09-14)" data-channel="1.90.0" data-search-js="search-fa3e91e5.js" data-settings-js="settings-5514c975.js" ><script src="../../../static.files/storage-68b7e25d.js"></script><script defer src="../../../static.files/src-script-813739b1.js"></script><script defer src="../../../src-files1.90.0.js"></script><script defer src="../../../static.files/main-eebb9057.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-32bb7600.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-6580c154.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-044be391.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">core\task/</div>wake.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="attr">#![stable(feature = <span class="string">"futures_api"</span>, since = <span class="string">"1.36.0"</span>)]
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `library\core\src\task\wake.rs`."><title>wake.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../../static.files/rustdoc-e56847b5.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="core" data-themes="" data-resource-suffix="1.91.1" data-rustdoc-version="1.91.1 (ed61e7d7e 2025-11-07)" data-channel="1.91.1" data-search-js="search-e256b49e.js" data-stringdex-js="stringdex-c3e638e9.js" data-settings-js="settings-c38705f0.js" ><script src="../../../static.files/storage-e2aeef58.js"></script><script defer src="../../../static.files/src-script-813739b1.js"></script><script defer src="../../../src-files1.91.1.js"></script><script defer src="../../../static.files/main-6dc2a7f3.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-263c88ec.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-eab170b8.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-044be391.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">core\task/</div>wake.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="attr">#![stable(feature = <span class="string">"futures_api"</span>, since = <span class="string">"1.36.0"</span>)]
 <a href=#2 id=2 data-nosnippet>2</a>
 <a href=#3 id=3 data-nosnippet>3</a></span><span class="kw">use </span><span class="kw">crate</span>::any::Any;
 <a href=#4 id=4 data-nosnippet>4</a><span class="kw">use </span><span class="kw">crate</span>::marker::PhantomData;
@@ -901,36 +901,37 @@
 <a href=#901 id=901 data-nosnippet>901</a>}
 <a href=#902 id=902 data-nosnippet>902</a>
 <a href=#903 id=903 data-nosnippet>903</a><span class="attr">#[unstable(feature = <span class="string">"local_waker"</span>, issue = <span class="string">"118959"</span>)]
-<a href=#904 id=904 data-nosnippet>904</a></span><span class="kw">impl </span>AsRef&lt;LocalWaker&gt; <span class="kw">for </span>Waker {
-<a href=#905 id=905 data-nosnippet>905</a>    <span class="kw">fn </span>as_ref(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>LocalWaker {
-<a href=#906 id=906 data-nosnippet>906</a>        <span class="comment">// SAFETY: LocalWaker is just Waker without thread safety
-<a href=#907 id=907 data-nosnippet>907</a>        </span><span class="kw">unsafe </span>{ transmute(<span class="self">self</span>) }
-<a href=#908 id=908 data-nosnippet>908</a>    }
-<a href=#909 id=909 data-nosnippet>909</a>}
-<a href=#910 id=910 data-nosnippet>910</a>
-<a href=#911 id=911 data-nosnippet>911</a><span class="attr">#[unstable(feature = <span class="string">"local_waker"</span>, issue = <span class="string">"118959"</span>)]
-<a href=#912 id=912 data-nosnippet>912</a></span><span class="kw">impl </span>Drop <span class="kw">for </span>LocalWaker {
-<a href=#913 id=913 data-nosnippet>913</a>    <span class="attr">#[inline]
-<a href=#914 id=914 data-nosnippet>914</a>    </span><span class="kw">fn </span>drop(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
-<a href=#915 id=915 data-nosnippet>915</a>        <span class="comment">// SAFETY: This is safe because `LocalWaker::from_raw` is the only way
-<a href=#916 id=916 data-nosnippet>916</a>        // to initialize `drop` and `data` requiring the user to acknowledge
-<a href=#917 id=917 data-nosnippet>917</a>        // that the contract of `RawWaker` is upheld.
-<a href=#918 id=918 data-nosnippet>918</a>        </span><span class="kw">unsafe </span>{ (<span class="self">self</span>.waker.vtable.drop)(<span class="self">self</span>.waker.data) }
-<a href=#919 id=919 data-nosnippet>919</a>    }
-<a href=#920 id=920 data-nosnippet>920</a>}
-<a href=#921 id=921 data-nosnippet>921</a>
-<a href=#922 id=922 data-nosnippet>922</a><span class="attr">#[unstable(feature = <span class="string">"local_waker"</span>, issue = <span class="string">"118959"</span>)]
-<a href=#923 id=923 data-nosnippet>923</a></span><span class="kw">impl </span>fmt::Debug <span class="kw">for </span>LocalWaker {
-<a href=#924 id=924 data-nosnippet>924</a>    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
-<a href=#925 id=925 data-nosnippet>925</a>        <span class="kw">let </span>vtable_ptr = <span class="self">self</span>.waker.vtable <span class="kw">as </span><span class="kw-2">*const </span>RawWakerVTable;
-<a href=#926 id=926 data-nosnippet>926</a>        f.debug_struct(<span class="string">"LocalWaker"</span>)
-<a href=#927 id=927 data-nosnippet>927</a>            .field(<span class="string">"data"</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.waker.data)
-<a href=#928 id=928 data-nosnippet>928</a>            .field(<span class="string">"vtable"</span>, <span class="kw-2">&amp;</span>vtable_ptr)
-<a href=#929 id=929 data-nosnippet>929</a>            .finish()
-<a href=#930 id=930 data-nosnippet>930</a>    }
-<a href=#931 id=931 data-nosnippet>931</a>}
-<a href=#932 id=932 data-nosnippet>932</a>
-<a href=#933 id=933 data-nosnippet>933</a><span class="attr">#[unstable(feature = <span class="string">"local_waker"</span>, issue = <span class="string">"118959"</span>)]
-<a href=#934 id=934 data-nosnippet>934</a></span><span class="kw">impl </span>!Send <span class="kw">for </span>LocalWaker {}
-<a href=#935 id=935 data-nosnippet>935</a><span class="attr">#[unstable(feature = <span class="string">"local_waker"</span>, issue = <span class="string">"118959"</span>)]
-<a href=#936 id=936 data-nosnippet>936</a></span><span class="kw">impl </span>!Sync <span class="kw">for </span>LocalWaker {}</code></pre></div></section></main></body></html>
+<a href=#904 id=904 data-nosnippet>904</a>#[rustc_const_unstable(feature = <span class="string">"const_convert"</span>, issue = <span class="string">"143773"</span>)]
+<a href=#905 id=905 data-nosnippet>905</a></span><span class="kw">impl const </span>AsRef&lt;LocalWaker&gt; <span class="kw">for </span>Waker {
+<a href=#906 id=906 data-nosnippet>906</a>    <span class="kw">fn </span>as_ref(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>LocalWaker {
+<a href=#907 id=907 data-nosnippet>907</a>        <span class="comment">// SAFETY: LocalWaker is just Waker without thread safety
+<a href=#908 id=908 data-nosnippet>908</a>        </span><span class="kw">unsafe </span>{ transmute(<span class="self">self</span>) }
+<a href=#909 id=909 data-nosnippet>909</a>    }
+<a href=#910 id=910 data-nosnippet>910</a>}
+<a href=#911 id=911 data-nosnippet>911</a>
+<a href=#912 id=912 data-nosnippet>912</a><span class="attr">#[unstable(feature = <span class="string">"local_waker"</span>, issue = <span class="string">"118959"</span>)]
+<a href=#913 id=913 data-nosnippet>913</a></span><span class="kw">impl </span>Drop <span class="kw">for </span>LocalWaker {
+<a href=#914 id=914 data-nosnippet>914</a>    <span class="attr">#[inline]
+<a href=#915 id=915 data-nosnippet>915</a>    </span><span class="kw">fn </span>drop(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+<a href=#916 id=916 data-nosnippet>916</a>        <span class="comment">// SAFETY: This is safe because `LocalWaker::from_raw` is the only way
+<a href=#917 id=917 data-nosnippet>917</a>        // to initialize `drop` and `data` requiring the user to acknowledge
+<a href=#918 id=918 data-nosnippet>918</a>        // that the contract of `RawWaker` is upheld.
+<a href=#919 id=919 data-nosnippet>919</a>        </span><span class="kw">unsafe </span>{ (<span class="self">self</span>.waker.vtable.drop)(<span class="self">self</span>.waker.data) }
+<a href=#920 id=920 data-nosnippet>920</a>    }
+<a href=#921 id=921 data-nosnippet>921</a>}
+<a href=#922 id=922 data-nosnippet>922</a>
+<a href=#923 id=923 data-nosnippet>923</a><span class="attr">#[unstable(feature = <span class="string">"local_waker"</span>, issue = <span class="string">"118959"</span>)]
+<a href=#924 id=924 data-nosnippet>924</a></span><span class="kw">impl </span>fmt::Debug <span class="kw">for </span>LocalWaker {
+<a href=#925 id=925 data-nosnippet>925</a>    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
+<a href=#926 id=926 data-nosnippet>926</a>        <span class="kw">let </span>vtable_ptr = <span class="self">self</span>.waker.vtable <span class="kw">as </span><span class="kw-2">*const </span>RawWakerVTable;
+<a href=#927 id=927 data-nosnippet>927</a>        f.debug_struct(<span class="string">"LocalWaker"</span>)
+<a href=#928 id=928 data-nosnippet>928</a>            .field(<span class="string">"data"</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.waker.data)
+<a href=#929 id=929 data-nosnippet>929</a>            .field(<span class="string">"vtable"</span>, <span class="kw-2">&amp;</span>vtable_ptr)
+<a href=#930 id=930 data-nosnippet>930</a>            .finish()
+<a href=#931 id=931 data-nosnippet>931</a>    }
+<a href=#932 id=932 data-nosnippet>932</a>}
+<a href=#933 id=933 data-nosnippet>933</a>
+<a href=#934 id=934 data-nosnippet>934</a><span class="attr">#[unstable(feature = <span class="string">"local_waker"</span>, issue = <span class="string">"118959"</span>)]
+<a href=#935 id=935 data-nosnippet>935</a></span><span class="kw">impl </span>!Send <span class="kw">for </span>LocalWaker {}
+<a href=#936 id=936 data-nosnippet>936</a><span class="attr">#[unstable(feature = <span class="string">"local_waker"</span>, issue = <span class="string">"118959"</span>)]
+<a href=#937 id=937 data-nosnippet>937</a></span><span class="kw">impl </span>!Sync <span class="kw">for </span>LocalWaker {}</code></pre></div></section></main></body></html>

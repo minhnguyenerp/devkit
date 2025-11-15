@@ -41,7 +41,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-8b5e0132.js";
+            window.path_to_searchindex_js = "../searchindex-25f31b91.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-10049a44.js"></script>
@@ -228,7 +228,7 @@ fn main() {
         // `recv` will block the current thread if there are no messages available
         ids.push(rx.recv());
     }
-    
+
     // Wait for the threads to complete any remaining work
     for child in children {
         child.join().expect("oops! the child thread panicked");

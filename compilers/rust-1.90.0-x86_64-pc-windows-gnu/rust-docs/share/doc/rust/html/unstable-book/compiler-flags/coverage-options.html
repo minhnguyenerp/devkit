@@ -36,10 +36,10 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-78c6cc9c.js";
+            window.path_to_searchindex_js = "../searchindex-0b4c70fa.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-dfc73933.js"></script>
+        <script src="../toc-28902c9d.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -186,7 +186,7 @@
 <code>-C instrument-coverage</code>.</p>
 <p>Multiple options can be passed, separated by commas. Valid options are:</p>
 <ul>
-<li><code>block</code>, <code>branch</code>, <code>condition</code>, <code>mcdc</code>:
+<li><code>block</code>, <code>branch</code>, <code>condition</code>:
 Sets the level of coverage instrumentation.
 Setting the level will override any previously-specified level.
 <ul>
@@ -197,9 +197,6 @@ In addition to block coverage, also enables branch coverage instrumentation.</li
 <li><code>condition</code>:
 In addition to branch coverage, also instruments some boolean expressions
 as branches, even if they are not directly used as branch conditions.</li>
-<li><code>mcdc</code>:
-In addition to condition coverage, also enables MC/DC instrumentation.
-(Branch coverage instrumentation may differ in some cases.)</li>
 </ul>
 </li>
 </ul>

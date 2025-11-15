@@ -37,10 +37,10 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-a3e21844.js";
+            window.path_to_searchindex_js = "../searchindex-cd34eb16.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-2441f1f0.js"></script>
+        <script src="../toc-59e61e94.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -229,6 +229,15 @@ target = ["armv7s-apple-ios", "i386-apple-ios"]
 <code>rustc</code> has been built with support for them. For example:</p>
 <pre><code class="language-console">$ rustc --target aarch64-apple-ios your-code.rs
 </code></pre>
+<p>The simulator variants can be differentiated from the variants running
+on-device with the <code>target_env = "sim"</code> cfg (or <code>target_abi = "sim"</code> before
+Rust 1.91.0).</p>
+<pre><code class="language-rust">if cfg!(all(target_vendor = "apple", target_env = "sim")) {
+    // Do something on the iOS/tvOS/visionOS/watchOS Simulator.
+} {
+    // Everything else, like Windows and non-Simulator iOS.
+}</code></pre>
+<p>This is similar to the <code>TARGET_OS_SIMULATOR</code> define in C code.</p>
 <h2 id="testing"><a class="header" href="#testing">Testing</a></h2>
 <p>There is no support for running the Rust or standard library testsuite at the
 moment. Testing has mostly been done manually with builds of static libraries

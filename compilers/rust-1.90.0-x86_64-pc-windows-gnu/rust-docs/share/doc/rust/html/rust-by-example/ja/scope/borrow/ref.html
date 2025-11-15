@@ -41,7 +41,7 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-ee4246b4.js";
+            window.path_to_searchindex_js = "../../searchindex-adf886c2.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../toc-a1ce3eb6.js"></script>
@@ -227,13 +227,13 @@ fn main() {
 
     // ポインタを含むミュータブルなタプル
     let mut mutable_tuple = (Box::new(5u32), 3u32);
-    
+
     {
         // `mutable_tuple`をデストラクトして、`last`の値を変更。
         let (_, ref mut last) = mutable_tuple;
         *last = 2u32;
     }
-    
+
     println!("tuple is {:?}", mutable_tuple);
 }</code></pre></pre>
 

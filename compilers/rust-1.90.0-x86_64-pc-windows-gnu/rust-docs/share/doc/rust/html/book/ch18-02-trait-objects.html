@@ -40,7 +40,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-ac51862c.js";
+            window.path_to_searchindex_js = "searchindex-3a180665.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-18422fb5.js"></script>
@@ -182,7 +182,9 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h2 id="using-trait-objects-that-allow-for-values-of-different-types"><a class="header" href="#using-trait-objects-that-allow-for-values-of-different-types">Using Trait Objects That Allow for Values of Different Types</a></h2>
+                        <h2 id="using-trait-objects-to-abstract-over-shared-behavior"><a class="header" href="#using-trait-objects-to-abstract-over-shared-behavior">Using Trait Objects to Abstract over Shared Behavior</a></h2>
+<!-- Old headings. Do not remove or links may break. -->
+<p><a id="using-trait-objects-that-allow-for-values-of-different-types"></a></p>
 <p>In Chapter 8, we mentioned that one limitation of vectors is that they can
 store elements of only one type. We created a workaround in Listing 8-9 where
 we defined a <code>SpreadsheetCell</code> enum that had variants to hold integers, floats,
@@ -200,13 +202,12 @@ some types for people to use, such as <code>Button</code> or <code>TextField</co
 <code>gui</code> users will want to create their own types that can be drawn: for
 instance, one programmer might add an <code>Image</code> and another might add a
 <code>SelectBox</code>.</p>
-<p>We won’t implement a full-fledged GUI library for this example but will show
-how the pieces would fit together. At the time of writing the library, we can’t
-know and define all the types other programmers might want to create. But we do
-know that <code>gui</code> needs to keep track of many values of different types, and it
-needs to call a <code>draw</code> method on each of these differently typed values. It
-doesn’t need to know exactly what will happen when we call the <code>draw</code> method,
-just that the value will have that method available for us to call.</p>
+<p>At the time of writing the library, we can’t know and define all the types
+other programmers might want to create. But we do know that <code>gui</code> needs to keep
+track of many values of different types, and it needs to call a <code>draw</code> method
+on each of these differently typed values. It doesn’t need to know exactly what
+will happen when we call the <code>draw</code> method, just that the value will have that
+method available for us to call.</p>
 <p>To do this in a language with inheritance, we might define a class named
 <code>Component</code> that has a method named <code>draw</code> on it. The other classes, such as
 <code>Button</code>, <code>Image</code>, and <code>SelectBox</code>, would inherit from <code>Component</code> and thus
@@ -214,7 +215,7 @@ inherit the <code>draw</code> method. They could each override the <code>draw</c
 their custom behavior, but the framework could treat all of the types as if
 they were <code>Component</code> instances and call <code>draw</code> on them. But because Rust
 doesn’t have inheritance, we need another way to structure the <code>gui</code> library to
-allow users to extend it with new types.</p>
+allow users to create new types compatible with the library.</p>
 <h3 id="defining-a-trait-for-common-behavior"><a class="header" href="#defining-a-trait-for-common-behavior">Defining a Trait for Common Behavior</a></h3>
 <p>To implement the behavior we want <code>gui</code> to have, we’ll define a trait named
 <code>Draw</code> that will have one method named <code>draw</code>. Then we can define a vector that
@@ -233,12 +234,10 @@ know all the possible types at compile time.</p>
 “objects” to distinguish them from other languages’ objects. In a struct or
 enum, the data in the struct fields and the behavior in <code>impl</code> blocks are
 separated, whereas in other languages, the data and behavior combined into one
-concept is often labeled an object. However, trait objects <em>are</em> more like
-objects in other languages in the sense that they combine data and behavior.
-But trait objects differ from traditional objects in that we can’t add data to
-a trait object. Trait objects aren’t as generally useful as objects in other
-languages: their specific purpose is to allow abstraction across common
-behavior.</p>
+concept is often labeled an object. Trait objects differ from objects in other
+languages in that we can’t add data to a trait object. Trait objects aren’t as
+generally useful as objects in other languages: their specific purpose is to
+allow abstraction across common behavior.</p>
 <p>Listing 18-3 shows how to define a trait named <code>Draw</code> with one method named
 <code>draw</code>.</p>
 <figure class="listing" id="listing-18-3">
@@ -251,8 +250,8 @@ behavior.</p>
 <p>This syntax should look familiar from our discussions on how to define traits
 in Chapter 10. Next comes some new syntax: Listing 18-4 defines a struct named
 <code>Screen</code> that holds a vector named <code>components</code>. This vector is of type
-<code>Box&lt;dyn Draw&gt;</code>, which is a trait object; it’s a stand-in for any type inside
-a <code>Box</code> that implements the <code>Draw</code> trait.</p>
+<code>Box&lt;dyn Draw&gt;</code>, which is a trait object; it’s a stand-in for any type inside a
+<code>Box</code> that implements the <code>Draw</code> trait.</p>
 <figure class="listing" id="listing-18-4">
 <span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground"><span class="boring">pub trait Draw {
@@ -289,8 +288,8 @@ a <code>Box</code> that implements the <code>Draw</code> trait.</p>
 parameter with trait bounds. A generic type parameter can be substituted with
 only one concrete type at a time, whereas trait objects allow for multiple
 concrete types to fill in for the trait object at runtime. For example, we
-could have defined the <code>Screen</code> struct using a generic type and a trait bound
-as in Listing 18-6:</p>
+could have defined the <code>Screen</code> struct using a generic type and a trait bound,
+as in Listing 18-6.</p>
 <figure class="listing" id="listing-18-6">
 <span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground"><span class="boring">pub trait Draw {
@@ -326,7 +325,7 @@ runtime performance implications.</p>
 <code>Button</code> type. Again, actually implementing a GUI library is beyond the scope
 of this book, so the <code>draw</code> method won’t have any useful implementation in its
 body. To imagine what the implementation might look like, a <code>Button</code> struct
-might have fields for <code>width</code>, <code>height</code>, and <code>label</code>, as shown in Listing 18-7:</p>
+might have fields for <code>width</code>, <code>height</code>, and <code>label</code>, as shown in Listing 18-7.</p>
 <figure class="listing" id="listing-18-7">
 <span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground"><span class="boring">pub trait Draw {
@@ -393,7 +392,7 @@ impl Draw for SelectBox {
 instance. To the <code>Screen</code> instance, they can add a <code>SelectBox</code> and a <code>Button</code>
 by putting each in a <code>Box&lt;T&gt;</code> to become a trait object. They can then call the
 <code>run</code> method on the <code>Screen</code> instance, which will call <code>draw</code> on each of the
-components. Listing 18-9 shows this implementation:</p>
+components. Listing 18-9 shows this implementation.</p>
 <figure class="listing" id="listing-18-9">
 <span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore"><span class="boring">use gui::Draw;
@@ -442,9 +441,9 @@ new type and draw it because <code>SelectBox</code> implements the <code>Draw</c
 means it implements the <code>draw</code> method.</p>
 <p>This concept—of being concerned only with the messages a value responds to
 rather than the value’s concrete type—is similar to the concept of <em>duck
-typing</em> in dynamically typed languages: if it walks like a duck and quacks
-like a duck, then it must be a duck! In the implementation of <code>run</code> on <code>Screen</code>
-in Listing 18-5, <code>run</code> doesn’t need to know what the concrete type of each
+typing</em> in dynamically typed languages: if it walks like a duck and quacks like
+a duck, then it must be a duck! In the implementation of <code>run</code> on <code>Screen</code> in
+Listing 18-5, <code>run</code> doesn’t need to know what the concrete type of each
 component is. It doesn’t check whether a component is an instance of a <code>Button</code>
 or a <code>SelectBox</code>, it just calls the <code>draw</code> method on the component. By
 specifying <code>Box&lt;dyn Draw&gt;</code> as the type of the values in the <code>components</code>
@@ -493,24 +492,24 @@ didn’t mean to pass and so should pass a different type, or we should implemen
 Generics”</a><!-- ignore --> in Chapter 10 our
 discussion on the monomorphization process performed on generics by the
 compiler: the compiler generates nongeneric implementations of functions and
-methods for each concrete type that we use in place of a generic type parameter.
-The code that results from monomorphization is doing <em>static dispatch</em>, which is
-when the compiler knows what method you’re calling at compile time. This is
-opposed to <em>dynamic dispatch</em>, which is when the compiler can’t tell at compile
-time which method you’re calling. In dynamic dispatch cases, the compiler emits
-code that at runtime will figure out which method to call.</p>
+methods for each concrete type that we use in place of a generic type
+parameter. The code that results from monomorphization is doing <em>static
+dispatch</em>, which is when the compiler knows what method you’re calling at
+compile time. This is opposed to <em>dynamic dispatch</em>, which is when the compiler
+can’t tell at compile time which method you’re calling. In dynamic dispatch
+cases, the compiler emits code that at runtime will know which method to call.</p>
 <p>When we use trait objects, Rust must use dynamic dispatch. The compiler doesn’t
 know all the types that might be used with the code that’s using trait objects,
 so it doesn’t know which method implemented on which type to call. Instead, at
 runtime, Rust uses the pointers inside the trait object to know which method to
 call. This lookup incurs a runtime cost that doesn’t occur with static dispatch.
 Dynamic dispatch also prevents the compiler from choosing to inline a method’s
-code, which in turn prevents some optimizations, and Rust has some rules, called
-<em>dyn compatibility</em>, about where you can and cannot use dynamic dispatch. Those
-rules are beyond the scope of this discussion, but  you can read more about them
-<a href="https://doc.rust-lang.org/reference/items/traits.html#dyn-compatibility">in the reference</a>. However, we did get extra flexibility in
-the code that we wrote in Listing 18-5 and were able to support in Listing 18-9,
-so it’s a trade-off to consider.</p>
+code, which in turn prevents some optimizations, and Rust has some rules about
+where you can and cannot use dynamic dispatch, called <em>dyn compatibility</em>. Those
+rules are beyond the scope of this discussion, but you can read more about them
+<a href="https://doc.rust-lang.org/reference/items/traits.html#dyn-compatibility">in the reference</a><!-- ignore -->. However, we did get extra
+flexibility in the code that we wrote in Listing 18-5 and were able to support
+in Listing 18-9, so it’s a trade-off to consider.</p>
 
                     </main>
 

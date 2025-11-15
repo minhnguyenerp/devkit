@@ -37,10 +37,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-78c6cc9c.js";
+            window.path_to_searchindex_js = "searchindex-0b4c70fa.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-dfc73933.js"></script>
+        <script src="toc-28902c9d.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -209,6 +209,17 @@ that what is contained here is accurate or up to date. It's developed on a
 best-effort basis. Each page will have a link to its tracking issue with the
 latest developments; you might want to check those as well.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="compiler-environment-variables"><a class="header" href="#compiler-environment-variables">Compiler environment variables</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="colorterm"><a class="header" href="#colorterm"><code>COLORTERM</code></a></h1>
+<p>This environment variable is used by <a href="compiler-environment-variables/../compiler-flags/terminal-urls.html"><code>-Zterminal-urls</code></a> to detect if URLs are supported by the terminal emulator.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="qnx_target"><a class="header" href="#qnx_target"><code>QNX_TARGET</code></a></h1>
+<hr />
+<p>This environment variable is mandatory when linking on <code>nto-qnx*_iosock</code> platforms. It is used to determine an <code>-L</code> path to pass to the QNX linker.</p>
+<p>You should <a href="https://www.qnx.com/developers/docs/qsc/com.qnx.doc.qsc.inst_larg_org/topic/build_server_developer_steps.html">set this variable</a> by running <code>source qnxsdp-env.sh</code>.
+See <a href="https://www.qnx.com/developers/docs/7.1/#com.qnx.doc.neutrino.io_sock/topic/migrate_app.html.">the QNX docs</a> for more background information.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="rustc_bless"><a class="header" href="#rustc_bless"><code>RUSTC_BLESS</code></a></h1>
+<p>Environment variables have no tracking issue. This environment variable has no documentation, and therefore is likely internal to the compiler and not meant for general use.</p>
+<p>See <a href="https://github.com/search?q=repo%3Arust-lang%2Frust+%22RUSTC_BLESS%22+path%3Acompiler&amp;type=code">the code</a> for more information.</p>
+<hr />
 <div style="break-before: page; page-break-before: always;"></div><h1 id="rustc_bootstrap"><a class="header" href="#rustc_bootstrap"><code>RUSTC_BOOTSTRAP</code></a></h1>
 <p>This feature is perma-unstable and has no tracking issue.</p>
 <hr />
@@ -248,6 +259,30 @@ This leaves the choice of whether to opt-out of Rust's stability guarantees up t
 <li><a href="https://github.com/rust-lang/cargo/pull/9181">Disallowed for build scripts</a> (<a href="https://github.com/rust-lang/compiler-team/issues/350">discussion</a>)</li>
 <li><a href="https://github.com/rust-lang/rust/pull/132993">Extended to emulate stable</a> (<a href="https://github.com/rust-lang/rust/issues/123404">discussion</a>)</li>
 </ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="rustc_break_on_ice"><a class="header" href="#rustc_break_on_ice"><code>RUSTC_BREAK_ON_ICE</code></a></h1>
+<p>Environment variables have no tracking issue. This environment variable has no documentation, and therefore is likely internal to the compiler and not meant for general use.</p>
+<p>See <a href="https://github.com/search?q=repo%3Arust-lang%2Frust+%22RUSTC_BREAK_ON_ICE%22+path%3Acompiler&amp;type=code">the code</a> for more information.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h1 id="rustc_ctfe_backtrace"><a class="header" href="#rustc_ctfe_backtrace"><code>RUSTC_CTFE_BACKTRACE</code></a></h1>
+<p>Environment variables have no tracking issue. This environment variable has no documentation, and therefore is likely internal to the compiler and not meant for general use.</p>
+<p>See <a href="https://github.com/search?q=repo%3Arust-lang%2Frust+%22RUSTC_CTFE_BACKTRACE%22+path%3Acompiler&amp;type=code">the code</a> for more information.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h1 id="rustc_force_rustc_version"><a class="header" href="#rustc_force_rustc_version"><code>RUSTC_FORCE_RUSTC_VERSION</code></a></h1>
+<p>Environment variables have no tracking issue. This environment variable has no documentation, and therefore is likely internal to the compiler and not meant for general use.</p>
+<p>See <a href="https://github.com/search?q=repo%3Arust-lang%2Frust+%22RUSTC_FORCE_RUSTC_VERSION%22+path%3Acompiler&amp;type=code">the code</a> for more information.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h1 id="rustc_graphviz_font"><a class="header" href="#rustc_graphviz_font"><code>RUSTC_GRAPHVIZ_FONT</code></a></h1>
+<p>Environment variables have no tracking issue. This environment variable has no documentation, and therefore is likely internal to the compiler and not meant for general use.</p>
+<p>See <a href="https://github.com/search?q=repo%3Arust-lang%2Frust+%22RUSTC_GRAPHVIZ_FONT%22+path%3Acompiler&amp;type=code">the code</a> for more information.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h1 id="rustc_ice"><a class="header" href="#rustc_ice"><code>RUSTC_ICE</code></a></h1>
+<p>Environment variables have no tracking issue. This environment variable has no documentation, and therefore is likely internal to the compiler and not meant for general use.</p>
+<p>See <a href="https://github.com/search?q=repo%3Arust-lang%2Frust+%22RUSTC_ICE%22+path%3Acompiler&amp;type=code">the code</a> for more information.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h1 id="rustc_log"><a class="header" href="#rustc_log"><code>RUSTC_LOG</code></a></h1>
+<p>Environment variables have no tracking issue. This environment variable has no documentation, and therefore is likely internal to the compiler and not meant for general use.</p>
+<p>See <a href="https://github.com/search?q=repo%3Arust-lang%2Frust+%22RUSTC_LOG%22+path%3Acompiler&amp;type=code">the code</a> for more information.</p>
+<hr />
 <div style="break-before: page; page-break-before: always;"></div><h1 id="rustc_override_version_string"><a class="header" href="#rustc_override_version_string"><code>RUSTC_OVERRIDE_VERSION_STRING</code></a></h1>
 <p>This feature is perma-unstable and has no tracking issue.</p>
 <hr />
@@ -274,6 +309,48 @@ LLVM version: 20.1.1
 This environment variable allows bisecting crates that do incorrect detection with <code>version_check::supports_feature</code>.</p>
 <p>This is not intended to be used for any other case (and, except for bisection, is not particularly useful).</p>
 <p>See <a href="https://github.com/rust-lang/rust/pull/124339">https://github.com/rust-lang/rust/pull/124339</a> for further discussion.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="rustc_translation_no_debug_assert"><a class="header" href="#rustc_translation_no_debug_assert"><code>RUSTC_TRANSLATION_NO_DEBUG_ASSERT</code></a></h1>
+<p>Environment variables have no tracking issue. This environment variable has no documentation, and therefore is likely internal to the compiler and not meant for general use.</p>
+<p>See <a href="https://github.com/search?q=repo%3Arust-lang%2Frust+%22RUSTC_TRANSLATION_NO_DEBUG_ASSERT%22+path%3Acompiler&amp;type=code">the code</a> for more information.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h1 id="rust_backtrace"><a class="header" href="#rust_backtrace"><code>RUST_BACKTRACE</code></a></h1>
+<p>Environment variables have no tracking issue. This environment variable has no documentation, and therefore is likely internal to the compiler and not meant for general use.</p>
+<p>See <a href="https://github.com/search?q=repo%3Arust-lang%2Frust+%22RUST_BACKTRACE%22+path%3Acompiler&amp;type=code">the code</a> for more information.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h1 id="rust_dep_graph"><a class="header" href="#rust_dep_graph"><code>RUST_DEP_GRAPH</code></a></h1>
+<p>Environment variables have no tracking issue. This environment variable has no documentation, and therefore is likely internal to the compiler and not meant for general use.</p>
+<p>See <a href="https://github.com/search?q=repo%3Arust-lang%2Frust+%22RUST_DEP_GRAPH%22+path%3Acompiler&amp;type=code">the code</a> for more information.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h1 id="rust_dep_graph_filter"><a class="header" href="#rust_dep_graph_filter"><code>RUST_DEP_GRAPH_FILTER</code></a></h1>
+<p>Environment variables have no tracking issue. This environment variable has no documentation, and therefore is likely internal to the compiler and not meant for general use.</p>
+<p>See <a href="https://github.com/search?q=repo%3Arust-lang%2Frust+%22RUST_DEP_GRAPH_FILTER%22+path%3Acompiler&amp;type=code">the code</a> for more information.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h1 id="rust_forbid_dep_graph_edge"><a class="header" href="#rust_forbid_dep_graph_edge"><code>RUST_FORBID_DEP_GRAPH_EDGE</code></a></h1>
+<p>Environment variables have no tracking issue. This environment variable has no documentation, and therefore is likely internal to the compiler and not meant for general use.</p>
+<p>See <a href="https://github.com/search?q=repo%3Arust-lang%2Frust+%22RUST_FORBID_DEP_GRAPH_EDGE%22+path%3Acompiler&amp;type=code">the code</a> for more information.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h1 id="rust_min_stack"><a class="header" href="#rust_min_stack"><code>RUST_MIN_STACK</code></a></h1>
+<p>Environment variables have no tracking issue. This environment variable has no documentation, and therefore is likely internal to the compiler and not meant for general use.</p>
+<p>See <a href="https://github.com/search?q=repo%3Arust-lang%2Frust+%22RUST_MIN_STACK%22+path%3Acompiler&amp;type=code">the code</a> for more information.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h1 id="rust_target_path"><a class="header" href="#rust_target_path"><code>RUST_TARGET_PATH</code></a></h1>
+<p>Environment variables have no tracking issue. This environment variable has no documentation, and therefore is likely internal to the compiler and not meant for general use.</p>
+<p>See <a href="https://github.com/search?q=repo%3Arust-lang%2Frust+%22RUST_TARGET_PATH%22+path%3Acompiler&amp;type=code">the code</a> for more information.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h1 id="sdkroot"><a class="header" href="#sdkroot"><code>SDKROOT</code></a></h1>
+<p>This environment variable is used on Apple targets.
+It is passed through to the linker (currently either directly or via the <code>-syslibroot</code> flag).</p>
+<p>Note that this variable is not always respected. When the SDKROOT is clearly wrong (e.g. when the platform of the SDK does not match the <code>--target</code> used by rustc), this is ignored and rustc does its own detection.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="term"><a class="header" href="#term"><code>TERM</code></a></h1>
+<p>This environment variable is used by <a href="compiler-environment-variables/../compiler-flags/terminal-urls.html"><code>-Zterminal-urls</code></a> to detect if URLs are supported by the terminal emulator.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="unstable_rustdoc_test_line"><a class="header" href="#unstable_rustdoc_test_line"><code>UNSTABLE_RUSTDOC_TEST_LINE</code></a></h1>
+<p>Environment variables have no tracking issue. This environment variable has no documentation, and therefore is likely internal to the compiler and not meant for general use.</p>
+<p>See <a href="https://github.com/search?q=repo%3Arust-lang%2Frust+%22UNSTABLE_RUSTDOC_TEST_LINE%22+path%3Acompiler&amp;type=code">the code</a> for more information.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h1 id="unstable_rustdoc_test_path"><a class="header" href="#unstable_rustdoc_test_path"><code>UNSTABLE_RUSTDOC_TEST_PATH</code></a></h1>
+<p>Environment variables have no tracking issue. This environment variable has no documentation, and therefore is likely internal to the compiler and not meant for general use.</p>
+<p>See <a href="https://github.com/search?q=repo%3Arust-lang%2Frust+%22UNSTABLE_RUSTDOC_TEST_PATH%22+path%3Acompiler&amp;type=code">the code</a> for more information.</p>
+<hr />
 <div style="break-before: page; page-break-before: always;"></div><h1 id="compiler-flags"><a class="header" href="#compiler-flags">Compiler flags</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="allow-features"><a class="header" href="#allow-features"><code>allow-features</code></a></h1>
 <p>This feature is perma-unstable and has no tracking issue.</p>
@@ -427,6 +504,15 @@ avoid naming conflicts), that is distributed via <code>rustup</code> with the co
 for the wasm targets). One can also opt into using it by combining this flag with the appropriate
 linker feature: for example, <code>-Clinker-features=+lld -Clink-self-contained=+linker</code> will use the
 toolchain's <code>rust-lld</code> as the linker instead of the system's lld with <code>-Clinker-features=+lld</code> only.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="codegen-source-order"><a class="header" href="#codegen-source-order"><code>codegen-source-order</code></a></h1>
+<hr />
+<p>This feature allows you to have a predictive and
+deterministic order for items after codegen, which
+is the same as in source code.</p>
+<p>For every <code>CodegenUnit</code>, local <code>MonoItem</code>s would
+be sorted by <code>(Span, SymbolName)</code>, which
+makes codegen tests rely on the order of items in
+source files work.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="control-flow-guard"><a class="header" href="#control-flow-guard"><code>control-flow-guard</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/68793">#68793</a>.</p>
 <hr />
@@ -466,7 +552,7 @@ cargo +nightly build -Z build-std --target x86_64-pc-windows-msvc
 <code>-C instrument-coverage</code>.</p>
 <p>Multiple options can be passed, separated by commas. Valid options are:</p>
 <ul>
-<li><code>block</code>, <code>branch</code>, <code>condition</code>, <code>mcdc</code>:
+<li><code>block</code>, <code>branch</code>, <code>condition</code>:
 Sets the level of coverage instrumentation.
 Setting the level will override any previously-specified level.
 <ul>
@@ -477,9 +563,6 @@ In addition to block coverage, also enables branch coverage instrumentation.</li
 <li><code>condition</code>:
 In addition to branch coverage, also instruments some boolean expressions
 as branches, even if they are not directly used as branch conditions.</li>
-<li><code>mcdc</code>:
-In addition to condition coverage, also enables MC/DC instrumentation.
-(Branch coverage instrumentation may differ in some cases.)</li>
 </ul>
 </li>
 </ul>
@@ -928,6 +1011,16 @@ mostly-unused-dependency = "1.2.3"
 [profile.release.package.mostly-unused-dependency]
 rustflags = ["-Zhint-mostly-unused"]
 </code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="indirect-branch-cs-prefix"><a class="header" href="#indirect-branch-cs-prefix"><code>indirect-branch-cs-prefix</code></a></h1>
+<p>The tracking issue for this feature is: https://github.com/rust-lang/rust/issues/116852.</p>
+<hr />
+<p>Option <code>-Zindirect-branch-cs-prefix</code> controls whether a <code>cs</code> prefix is added to
+<code>call</code> and <code>jmp</code> to indirect thunks.</p>
+<p>It is equivalent to <a href="https://clang.llvm.org/docs/ClangCommandLineReference.html#cmdoption-clang-mindirect-branch-cs-prefix">Clang</a>'s and <a href="https://gcc.gnu.org/onlinedocs/gcc/x86-Options.html#index-mindirect-branch-cs-prefix">GCC</a>'s <code>-mindirect-branch-cs-prefix</code>. The
+Linux kernel uses it for RETPOLINE builds. For details, see
+<a href="https://github.com/llvm/llvm-project/commit/6f867f9102838ebe314c1f3661fdf95700386e5a">LLVM commit 6f867f910283</a> ("[X86] Support <code>-mindirect-branch-cs-prefix</code> for
+call and jmp to indirect thunk") which introduces the feature.</p>
+<p>Only x86 and x86_64 are supported.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="instrument-xray"><a class="header" href="#instrument-xray"><code>instrument-xray</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/102921">#102921</a>.</p>
 <hr />
@@ -1228,7 +1321,7 @@ on using AFDO.</p>
 <p>The <code>-Zrandomize-layout</code> flag changes the layout algorithm for <code>repr(Rust)</code> types defined in the current crate from its normal
 optimization goals to pseudorandomly rearranging fields within the degrees of freedom provided by the largely unspecified
 default representation. This also affects type sizes and padding.
-Downstream intantiations of generic types defined in a crate with randomization enabled will also be randomized.</p>
+Downstream instantiations of generic types defined in a crate with randomization enabled will also be randomized.</p>
 <p>It can be used to find unsafe code that accidentally relies on unspecified behavior.</p>
 <p>Randomization is not guaranteed to use a different permutation for each compilation session.
 <code>-Zlayout-seed=&lt;u64&gt;</code> can be used to supply additional entropy.</p>
@@ -1573,17 +1666,15 @@ option for cross-language LLVM CFI support, and proper (i.e., non-rustc) LTO
 Cargo build-std feature (i.e., <code>-Zbuild-std</code>) when enabling CFI.</p>
 <p>See the <a href="https://clang.llvm.org/docs/ControlFlowIntegrity.html">Clang ControlFlowIntegrity documentation</a> for more details.</p>
 <h2 id="example-1-redirecting-control-flow-using-an-indirect-branchcall-to-an-invalid-destination"><a class="header" href="#example-1-redirecting-control-flow-using-an-indirect-branchcall-to-an-invalid-destination">Example 1: Redirecting control flow using an indirect branch/call to an invalid destination</a></h2>
-<pre><code class="language-rust ignore (making doc tests pass cross-platform is hard)">use std::arch::naked_asm;
-use std::mem;
-
-fn add_one(x: i32) -&gt; i32 {
+<pre><pre class="playground"><code class="language-rust">fn add_one(x: i32) -&gt; i32 {
     x + 1
 }
 
 #[unsafe(naked)]
-pub extern "C" fn add_two(x: i32) {
+<span class="boring">#[cfg(all(target_os = "linux", target_arch = "x86_64"))]
+</span>pub extern "sysv64" fn add_two(x: i32) {
     // x + 2 preceded by a landing pad/nop block
-    naked_asm!(
+    std::arch::naked_asm!(
         "
          nop
          nop
@@ -1609,17 +1700,19 @@ fn main() {
 
     println!("The answer is: {}", answer);
 
-    println!("With CFI enabled, you should not see the next answer");
-    let f: fn(i32) -&gt; i32 = unsafe {
-        // Offset 0 is a valid branch/call destination (i.e., the function entry
-        // point), but offsets 1-8 within the landing pad/nop block are invalid
-        // branch/call destinations (i.e., within the body of the function).
-        mem::transmute::&lt;*const u8, fn(i32) -&gt; i32&gt;((add_two as *const u8).offset(5))
-    };
-    let next_answer = do_twice(f, 5);
+<span class="boring">  #[cfg(all(target_os = "linux", target_arch = "x86_64"))] {
+</span>        println!("With CFI enabled, you should not see the next answer");
+        let f: fn(i32) -&gt; i32 = unsafe {
+            // Offset 0 is a valid branch/call destination (i.e., the function entry
+            // point), but offsets 1-8 within the landing pad/nop block are invalid
+            // branch/call destinations (i.e., within the body of the function).
+            std::mem::transmute::&lt;*const u8, fn(i32) -&gt; i32&gt;((add_two as *const u8).offset(5))
+        };
+        let next_answer = do_twice(f, 5);
 
-    println!("The next answer is: {}", next_answer);
-}</code></pre>
+        println!("The next answer is: {}", next_answer);
+<span class="boring">  }
+</span>}</code></pre></pre>
 <p>Fig. 1. Redirecting control flow using an indirect branch/call to an invalid
 destination (i.e., within the body of the function).</p>
 <pre><code class="language-shell">$ cargo run --release
@@ -2296,6 +2389,13 @@ useful if you are running more than one instance of <code>rustc</code> (e.g. wit
 <code>--crate-type</code> settings), and you need to make sure they are not overwriting
 each other's intermediate files. No files are kept unless <code>-C save-temps=yes</code> is
 also set.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="-z-terminal-urls"><a class="header" href="#-z-terminal-urls"><code>-Z terminal-urls</code></a></h1>
+<p>The tracking feature for this issue is <a href="https://github.com/rust-lang/rust/issues/125586">#125586</a></p>
+<hr />
+<p>This flag takes either a boolean or the string "auto".</p>
+<p>When enabled, use the OSC 8 hyperlink terminal specification to print hyperlinks in the compiler output.
+Use "auto" to try and autodetect whether the terminal emulator supports hyperlinks.
+Currently, "auto" only enables hyperlinks if <code>COLORTERM=truecolor</code> and <code>TERM=xterm-256color</code>.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="tiny-const-eval-limit"><a class="header" href="#tiny-const-eval-limit"><code>tiny-const-eval-limit</code></a></h1>
 <hr />
 <p>The <code>-Ztiny-const-eval-limit</code> compiler flag sets a tiny, non-configurable limit for const eval.
@@ -2886,7 +2986,6 @@ fn main() {
 <li>M68k</li>
 <li>CSKY</li>
 <li>SPARC</li>
-<li>LoongArch32</li>
 </ul>
 <h2 id="register-classes"><a class="header" href="#register-classes">Register classes</a></h2>
 <div class="table-wrapper"><table><thead><tr><th>Architecture</th><th>Register class</th><th>Registers</th><th>LLVM constraint code</th></tr></thead><tbody>
@@ -2919,8 +3018,6 @@ fn main() {
 <tr><td>CSKY</td><td><code>freg</code></td><td><code>f[0-31]</code></td><td><code>f</code></td></tr>
 <tr><td>SPARC</td><td><code>reg</code></td><td><code>r[2-29]</code></td><td><code>r</code></td></tr>
 <tr><td>SPARC</td><td><code>yreg</code></td><td><code>y</code></td><td>Only clobbers</td></tr>
-<tr><td>LoongArch32</td><td><code>reg</code></td><td><code>$r1</code>, <code>$r[4-20]</code>, <code>$r[23,30]</code></td><td><code>r</code></td></tr>
-<tr><td>LoongArch32</td><td><code>freg</code></td><td><code>$f[0-31]</code></td><td><code>f</code></td></tr>
 </tbody></table>
 </div>
 <blockquote>
@@ -2964,8 +3061,6 @@ fn main() {
 <tr><td>CSKY</td><td><code>freg</code></td><td>None</td><td><code>f32</code>,</td></tr>
 <tr><td>SPARC</td><td><code>reg</code></td><td>None</td><td><code>i8</code>, <code>i16</code>, <code>i32</code>, <code>i64</code> (SPARC64 only)</td></tr>
 <tr><td>SPARC</td><td><code>yreg</code></td><td>N/A</td><td>Only clobbers</td></tr>
-<tr><td>LoongArch32</td><td><code>reg</code></td><td>None</td><td><code>i8</code>, <code>i16</code>, <code>i32</code>, <code>f32</code></td></tr>
-<tr><td>LoongArch32</td><td><code>freg</code></td><td>None</td><td><code>f32</code>, <code>f64</code></td></tr>
 </tbody></table>
 </div>
 <h2 id="register-aliases"><a class="header" href="#register-aliases">Register aliases</a></h2>
@@ -4006,6 +4101,10 @@ match *(b"test" as &amp;[u8]) {
     _ =&gt; panic!(),
 }
 <span class="boring">}</span></code></pre></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="derive_from"><a class="header" href="#derive_from"><code>derive_from</code></a></h1>
+<p>Allows deriving the From trait on single-field structs.</p>
+<p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/144889">#144889</a></p>
+<hr />
 <div style="break-before: page; page-break-before: always;"></div><h1 id="doc_auto_cfg"><a class="header" href="#doc_auto_cfg"><code>doc_auto_cfg</code></a></h1>
 <p>Tells rustdoc to automatically generate <code>#[doc(cfg(...))]</code>.</p>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/43781">#43781</a></p>
@@ -4104,6 +4203,10 @@ pub fn my_fn() -&gt; MyStruct { MyStruct }
 <p>Allows using the <code>may_dangle</code> attribute (RFC 1327).</p>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/34761">#34761</a></p>
 <hr />
+<div style="break-before: page; page-break-before: always;"></div><h1 id="effective_target_features"><a class="header" href="#effective_target_features"><code>effective_target_features</code></a></h1>
+<p>Allows features to allow target_feature to better interact with traits.</p>
+<p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/143352">#143352</a></p>
+<hr />
 <div style="break-before: page; page-break-before: always;"></div><h1 id="ergonomic_clones"><a class="header" href="#ergonomic_clones"><code>ergonomic_clones</code></a></h1>
 <p>Allows the .use postfix syntax <code>x.use</code> and use closures <code>use |x| { ... }</code></p>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/132290">#132290</a></p>
@@ -4142,11 +4245,6 @@ extern "aapcs" fn function3() {} // compiles
 <p>Allows using <code>#[export_stable]</code> which indicates that an item is exportable.</p>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/139939">#139939</a></p>
 <hr />
-<div style="break-before: page; page-break-before: always;"></div><h1 id="extended_varargs_abi_support"><a class="header" href="#extended_varargs_abi_support"><code>extended_varargs_abi_support</code></a></h1>
-<p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/100189">#100189</a></p>
-<hr />
-<p>This feature adds the possibility of using <code>sysv64</code>, <code>win64</code> or <code>efiapi</code> calling
-conventions on functions with varargs.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="extern_system_varargs"><a class="header" href="#extern_system_varargs"><code>extern_system_varargs</code></a></h1>
 <p>Allows using <code>system</code> as a calling convention with varargs.</p>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/136946">#136946</a></p>
@@ -4529,6 +4627,7 @@ return a valid pointer, and so needs to do the check internally.</p>
 <h2 id="list-of-all-language-items"><a class="header" href="#list-of-all-language-items">List of all language items</a></h2>
 <p>An up-to-date list of all language items can be found <a href="https://github.com/rust-lang/rust/blob/master/compiler/rustc_hir/src/lang_items.rs">here</a> in the compiler code.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="large_assignments"><a class="header" href="#large_assignments"><code>large_assignments</code></a></h1>
+<p>Allows setting the threshold for the <code>large_assignments</code> lint.</p>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/83518">#83518</a></p>
 <hr />
 <div style="break-before: page; page-break-before: always;"></div><h1 id="lazy_type_alias"><a class="header" href="#lazy_type_alias"><code>lazy_type_alias</code></a></h1>
@@ -4607,6 +4706,14 @@ enables other optimizations by clearly splitting out the control flow paths that
 program will actually use.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="m68k_target_feature"><a class="header" href="#m68k_target_feature"><code>m68k_target_feature</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/134328">#134328</a></p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h1 id="macro_attr"><a class="header" href="#macro_attr"><code>macro_attr</code></a></h1>
+<p>Allow <code>macro_rules!</code> attribute rules</p>
+<p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/83527">#83527</a></p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h1 id="macro_derive"><a class="header" href="#macro_derive"><code>macro_derive</code></a></h1>
+<p>Allow <code>macro_rules!</code> derive rules</p>
+<p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/143549">#143549</a></p>
 <hr />
 <div style="break-before: page; page-break-before: always;"></div><h1 id="macro_metavar_expr"><a class="header" href="#macro_metavar_expr"><code>macro_metavar_expr</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/83527">#83527</a></p>
@@ -4898,28 +5005,6 @@ marker type is <code>!AutoTrait</code>.</p>
 <p>Allows <code>#![no_core]</code>.</p>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/29639">#29639</a></p>
 <hr />
-<div style="break-before: page; page-break-before: always;"></div><h1 id="no_sanitize"><a class="header" href="#no_sanitize"><code>no_sanitize</code></a></h1>
-<p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/39699">#39699</a></p>
-<hr />
-<p>The <code>no_sanitize</code> attribute can be used to selectively disable sanitizer
-instrumentation in an annotated function. This might be useful to: avoid
-instrumentation overhead in a performance critical function, or avoid
-instrumenting code that contains constructs unsupported by given sanitizer.</p>
-<p>The precise effect of this annotation depends on particular sanitizer in use.
-For example, with <code>no_sanitize(thread)</code>, the thread sanitizer will no longer
-instrument non-atomic store / load operations, but it will instrument atomic
-operations to avoid reporting false positives and provide meaning full stack
-traces.</p>
-<h2 id="examples-10"><a class="header" href="#examples-10">Examples</a></h2>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
-</span>#![feature(no_sanitize)]
-
-<span class="boring">fn main() {
-</span>#[no_sanitize(address)]
-fn foo() {
-  // ...
-}
-<span class="boring">}</span></code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="non_exhaustive_omitted_patterns_lint"><a class="header" href="#non_exhaustive_omitted_patterns_lint"><code>non_exhaustive_omitted_patterns_lint</code></a></h1>
 <p>Allows using the <code>non_exhaustive_omitted_patterns</code> lint.</p>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/89554">#89554</a></p>
@@ -4927,6 +5012,9 @@ fn foo() {
 <div style="break-before: page; page-break-before: always;"></div><h1 id="non_lifetime_binders"><a class="header" href="#non_lifetime_binders"><code>non_lifetime_binders</code></a></h1>
 <p>Allows <code>for&lt;T&gt;</code> binders in where-clauses</p>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/108185">#108185</a></p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h1 id="nvptx_target_feature"><a class="header" href="#nvptx_target_feature"><code>nvptx_target_feature</code></a></h1>
+<p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/44839">#44839</a></p>
 <hr />
 <div style="break-before: page; page-break-before: always;"></div><h1 id="offset_of_enum"><a class="header" href="#offset_of_enum"><code>offset_of_enum</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/120141">#120141</a></p>
@@ -4969,10 +5057,6 @@ pub struct Struct {
 fn main() {
     assert_eq!(std::mem::offset_of!(Struct, tail), 4);
 }</code></pre></pre>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="omit_gdb_pretty_printer_section"><a class="header" href="#omit_gdb_pretty_printer_section"><code>omit_gdb_pretty_printer_section</code></a></h1>
-<p>Allows using <code>#[omit_gdb_pretty_printer_section]</code>.</p>
-<p>This feature has no tracking issue, and is therefore likely internal to the compiler, not being intended for general use.</p>
-<hr />
 <div style="break-before: page; page-break-before: always;"></div><h1 id="optimize_attribute"><a class="header" href="#optimize_attribute"><code>optimize_attribute</code></a></h1>
 <p>Allows using <code>#[optimize(X)]</code>.</p>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/54882">#54882</a></p>
@@ -5040,6 +5124,9 @@ get_foo().match {
 <div style="break-before: page; page-break-before: always;"></div><h1 id="raw_dylib_elf"><a class="header" href="#raw_dylib_elf"><code>raw_dylib_elf</code></a></h1>
 <p>Allows the use of raw-dylibs on ELF platforms</p>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/135694">#135694</a></p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h1 id="reborrow"><a class="header" href="#reborrow"><code>reborrow</code></a></h1>
+<p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/145612">#145612</a></p>
 <hr />
 <div style="break-before: page; page-break-before: always;"></div><h1 id="ref_pat_eat_one_layer_2024"><a class="header" href="#ref_pat_eat_one_layer_2024"><code>ref_pat_eat_one_layer_2024</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/123076">#123076</a></p>
@@ -5112,7 +5199,7 @@ Attributes using the registered tool are checked for valid syntax, and lint attr
 When compiling with <code>-Z unstable-features</code>, <code>rustc::*</code> lints can also be used. Like <code>rustdoc</code>, the <code>rustc</code> namespace can only be used with lints, not attributes.</p>
 <p>The compiler will emit an error if it encounters a lint/attribute whose namespace isn't a registered tool.</p>
 <p>Tool namespaces cannot be nested; <code>register_tool(main_tool::subtool)</code> is an error.</p>
-<h2 id="examples-11"><a class="header" href="#examples-11">Examples</a></h2>
+<h2 id="examples-10"><a class="header" href="#examples-10">Examples</a></h2>
 <p>Tool attributes:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span>#![feature(register_tool)]
@@ -5171,7 +5258,7 @@ with <code>cargo check</code>) as an alternative to <code>rustc -Z print-type-si
 that is way more verbose.</p>
 <p>Options provided by <code>#[rustc_layout(...)]</code> are <code>debug</code>, <code>size</code>, <code>align</code>,
 <code>abi</code>. Note that it only works on sized types without generics.</p>
-<h2 id="examples-12"><a class="header" href="#examples-12">Examples</a></h2>
+<h2 id="examples-11"><a class="header" href="#examples-11">Examples</a></h2>
 <pre><pre class="playground"><code class="language-rust compile_fail"><span class="boring">#![allow(unused)]
 </span>#![feature(rustc_attrs)]
 
@@ -5243,6 +5330,69 @@ dependent crates which link to it (including integration tests, which are built 
 <div style="break-before: page; page-break-before: always;"></div><h1 id="s390x_target_feature"><a class="header" href="#s390x_target_feature"><code>s390x_target_feature</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/44839">#44839</a></p>
 <hr />
+<div style="break-before: page; page-break-before: always;"></div><h1 id="sanitize"><a class="header" href="#sanitize"><code>sanitize</code></a></h1>
+<p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/39699">#39699</a></p>
+<hr />
+<p>The <code>sanitize</code> attribute can be used to selectively disable or enable sanitizer
+instrumentation in an annotated function. This might be useful to: avoid
+instrumentation overhead in a performance critical function, or avoid
+instrumenting code that contains constructs unsupported by given sanitizer.</p>
+<p>The precise effect of this annotation depends on particular sanitizer in use.
+For example, with <code>sanitize(thread = "off")</code>, the thread sanitizer will no
+longer instrument non-atomic store / load operations, but it will instrument
+atomic operations to avoid reporting false positives and provide meaning full
+stack traces.</p>
+<p>This attribute was previously named <code>no_sanitize</code>.</p>
+<h2 id="examples-12"><a class="header" href="#examples-12">Examples</a></h2>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span>#![feature(sanitize)]
+
+<span class="boring">fn main() {
+</span>#[sanitize(address = "off")]
+fn foo() {
+  // ...
+}
+<span class="boring">}</span></code></pre></pre>
+<p>It is also possible to disable sanitizers for entire modules and enable them
+for single items or functions.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span>#![feature(sanitize)]
+
+<span class="boring">fn main() {
+</span>#[sanitize(address = "off")]
+mod foo {
+  fn unsanitized() {
+    // ...
+  }
+
+  #[sanitize(address = "on")]
+  fn sanitized() {
+    // ...
+  }
+}
+<span class="boring">}</span></code></pre></pre>
+<p>It's also applicable to impl blocks.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span>#![feature(sanitize)]
+
+<span class="boring">fn main() {
+</span>trait MyTrait {
+  fn foo(&amp;self);
+  fn bar(&amp;self);
+}
+
+#[sanitize(address = "off")]
+impl MyTrait for () {
+  fn foo(&amp;self) {
+    // ...
+  }
+
+  #[sanitize(address = "on")]
+  fn bar(&amp;self) {
+    // ...
+  }
+}
+<span class="boring">}</span></code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="simd_ffi"><a class="header" href="#simd_ffi"><code>simd_ffi</code></a></h1>
 <p>Allows the use of SIMD types in functions declared in <code>extern</code> blocks.</p>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/27731">#27731</a></p>
@@ -5258,12 +5408,13 @@ dependent crates which link to it (including integration tests, which are built 
 <p>Allows specialization of implementations (RFC 1210).</p>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/31844">#31844</a></p>
 <hr />
-<div style="break-before: page; page-break-before: always;"></div><h1 id="sse4a_target_feature"><a class="header" href="#sse4a_target_feature"><code>sse4a_target_feature</code></a></h1>
-<p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/44839">#44839</a></p>
-<hr />
 <div style="break-before: page; page-break-before: always;"></div><h1 id="staged_api"><a class="header" href="#staged_api"><code>staged_api</code></a></h1>
 <p>Allows using the <code>#[stable]</code> and <code>#[unstable]</code> attributes.</p>
 <p>This feature has no tracking issue, and is therefore likely internal to the compiler, not being intended for general use.</p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h1 id="static_align"><a class="header" href="#static_align"><code>static_align</code></a></h1>
+<p>Allows using <code>#[rustc_align_static(...)]</code> on static items.</p>
+<p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/146177">#146177</a></p>
 <hr />
 <div style="break-before: page; page-break-before: always;"></div><h1 id="stmt_expr_attributes"><a class="header" href="#stmt_expr_attributes"><code>stmt_expr_attributes</code></a></h1>
 <p>Allows attributes on expressions and non-item statements.</p>
@@ -5334,8 +5485,9 @@ pub fn is_it_the_answer(value: Value) -&gt; bool {
 <p>Allows subtrait items to shadow supertrait items.</p>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/89151">#89151</a></p>
 <hr />
-<div style="break-before: page; page-break-before: always;"></div><h1 id="tbm_target_feature"><a class="header" href="#tbm_target_feature"><code>tbm_target_feature</code></a></h1>
-<p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/44839">#44839</a></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="target_feature_inline_always"><a class="header" href="#target_feature_inline_always"><code>target_feature_inline_always</code></a></h1>
+<p>Allows the use of target_feature when a function is marked inline(always).</p>
+<p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/145574">#145574</a></p>
 <hr />
 <div style="break-before: page; page-break-before: always;"></div><h1 id="test_unstable_lint"><a class="header" href="#test_unstable_lint"><code>test_unstable_lint</code></a></h1>
 <p>Added for testing unstable lints; perma-unstable.</p>
@@ -5757,9 +5909,6 @@ for which you want a custom allocator.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="array_ptr_get"><a class="header" href="#array_ptr_get"><code>array_ptr_get</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/119834">#119834</a></p>
 <hr />
-<div style="break-before: page; page-break-before: always;"></div><h1 id="array_repeat"><a class="header" href="#array_repeat"><code>array_repeat</code></a></h1>
-<p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/126695">#126695</a></p>
-<hr />
 <div style="break-before: page; page-break-before: always;"></div><h1 id="array_try_from_fn"><a class="header" href="#array_try_from_fn"><code>array_try_from_fn</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/89379">#89379</a></p>
 <hr />
@@ -5768,9 +5917,6 @@ for which you want a custom allocator.</p>
 <hr />
 <div style="break-before: page; page-break-before: always;"></div><h1 id="array_windows"><a class="header" href="#array_windows"><code>array_windows</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/75027">#75027</a></p>
-<hr />
-<div style="break-before: page; page-break-before: always;"></div><h1 id="as_array_of_cells"><a class="header" href="#as_array_of_cells"><code>as_array_of_cells</code></a></h1>
-<p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/88248">#88248</a></p>
 <hr />
 <div style="break-before: page; page-break-before: always;"></div><h1 id="ascii_char"><a class="header" href="#ascii_char"><code>ascii_char</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/110998">#110998</a></p>
@@ -5833,6 +5979,9 @@ that borrows from itself (<code>FnOnce::Output</code> has no lifetime parameters
 <div style="break-before: page; page-break-before: always;"></div><h1 id="bound_as_ref"><a class="header" href="#bound_as_ref"><code>bound_as_ref</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/80996">#80996</a></p>
 <hr />
+<div style="break-before: page; page-break-before: always;"></div><h1 id="bound_copied"><a class="header" href="#bound_copied"><code>bound_copied</code></a></h1>
+<p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/145966">#145966</a></p>
+<hr />
 <div style="break-before: page; page-break-before: always;"></div><h1 id="box_as_ptr"><a class="header" href="#box_as_ptr"><code>box_as_ptr</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/129090">#129090</a></p>
 <hr />
@@ -5860,9 +6009,6 @@ that borrows from itself (<code>FnOnce::Output</code> has no lifetime parameters
 <div style="break-before: page; page-break-before: always;"></div><h1 id="btree_entry_insert"><a class="header" href="#btree_entry_insert"><code>btree_entry_insert</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/65225">#65225</a></p>
 <hr />
-<div style="break-before: page; page-break-before: always;"></div><h1 id="btree_extract_if"><a class="header" href="#btree_extract_if"><code>btree_extract_if</code></a></h1>
-<p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/70530">#70530</a></p>
-<hr />
 <div style="break-before: page; page-break-before: always;"></div><h1 id="btree_set_entry"><a class="header" href="#btree_set_entry"><code>btree_set_entry</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/133549">#133549</a></p>
 <hr />
@@ -5883,6 +6029,9 @@ that borrows from itself (<code>FnOnce::Output</code> has no lifetime parameters
 <hr />
 <div style="break-before: page; page-break-before: always;"></div><h1 id="can_vector"><a class="header" href="#can_vector"><code>can_vector</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/69941">#69941</a></p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h1 id="cast_maybe_uninit"><a class="header" href="#cast_maybe_uninit"><code>cast_maybe_uninit</code></a></h1>
+<p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/145036">#145036</a></p>
 <hr />
 <div style="break-before: page; page-break-before: always;"></div><h1 id="cell_leak"><a class="header" href="#cell_leak"><code>cell_leak</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/69099">#69099</a></p>
@@ -5923,9 +6072,6 @@ that borrows from itself (<code>FnOnce::Output</code> has no lifetime parameters
 <div style="break-before: page; page-break-before: always;"></div><h1 id="const_alloc_error"><a class="header" href="#const_alloc_error"><code>const_alloc_error</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/92523">#92523</a></p>
 <hr />
-<div style="break-before: page; page-break-before: always;"></div><h1 id="const_array_each_ref"><a class="header" href="#const_array_each_ref"><code>const_array_each_ref</code></a></h1>
-<p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/133289">#133289</a></p>
-<hr />
 <div style="break-before: page; page-break-before: always;"></div><h1 id="const_btree_len"><a class="header" href="#const_btree_len"><code>const_btree_len</code></a></h1>
 <p>This feature has no tracking issue, and is therefore likely internal to the compiler, not being intended for general use.</p>
 <hr />
@@ -5938,23 +6084,17 @@ that borrows from itself (<code>FnOnce::Output</code> has no lifetime parameters
 <div style="break-before: page; page-break-before: always;"></div><h1 id="const_cmp"><a class="header" href="#const_cmp"><code>const_cmp</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/143800">#143800</a></p>
 <hr />
+<div style="break-before: page; page-break-before: always;"></div><h1 id="const_convert"><a class="header" href="#const_convert"><code>const_convert</code></a></h1>
+<p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/143773">#143773</a></p>
+<hr />
 <div style="break-before: page; page-break-before: always;"></div><h1 id="const_default"><a class="header" href="#const_default"><code>const_default</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/143894">#143894</a></p>
-<hr />
-<div style="break-before: page; page-break-before: always;"></div><h1 id="const_deref"><a class="header" href="#const_deref"><code>const_deref</code></a></h1>
-<p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/88955">#88955</a></p>
 <hr />
 <div style="break-before: page; page-break-before: always;"></div><h1 id="const_eval_select"><a class="header" href="#const_eval_select"><code>const_eval_select</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/124625">#124625</a></p>
 <hr />
-<div style="break-before: page; page-break-before: always;"></div><h1 id="const_exposed_provenance"><a class="header" href="#const_exposed_provenance"><code>const_exposed_provenance</code></a></h1>
-<p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/144538">#144538</a></p>
-<hr />
 <div style="break-before: page; page-break-before: always;"></div><h1 id="const_format_args"><a class="header" href="#const_format_args"><code>const_format_args</code></a></h1>
 <p>This feature has no tracking issue, and is therefore likely internal to the compiler, not being intended for general use.</p>
-<hr />
-<div style="break-before: page; page-break-before: always;"></div><h1 id="const_from"><a class="header" href="#const_from"><code>const_from</code></a></h1>
-<p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/143773">#143773</a></p>
 <hr />
 <div style="break-before: page; page-break-before: always;"></div><h1 id="const_heap"><a class="header" href="#const_heap"><code>const_heap</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/79597">#79597</a></p>
@@ -5968,9 +6108,6 @@ that borrows from itself (<code>FnOnce::Output</code> has no lifetime parameters
 <div style="break-before: page; page-break-before: always;"></div><h1 id="const_option_ops"><a class="header" href="#const_option_ops"><code>const_option_ops</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/143956">#143956</a></p>
 <hr />
-<div style="break-before: page; page-break-before: always;"></div><h1 id="const_pathbuf_osstring_new"><a class="header" href="#const_pathbuf_osstring_new"><code>const_pathbuf_osstring_new</code></a></h1>
-<p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/141520">#141520</a></p>
-<hr />
 <div style="break-before: page; page-break-before: always;"></div><h1 id="const_range_bounds"><a class="header" href="#const_range_bounds"><code>const_range_bounds</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/108082">#108082</a></p>
 <hr />
@@ -5979,6 +6116,9 @@ that borrows from itself (<code>FnOnce::Output</code> has no lifetime parameters
 <hr />
 <div style="break-before: page; page-break-before: always;"></div><h1 id="const_ref_cell"><a class="header" href="#const_ref_cell"><code>const_ref_cell</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/137844">#137844</a></p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h1 id="const_result_trait_fn"><a class="header" href="#const_result_trait_fn"><code>const_result_trait_fn</code></a></h1>
+<p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/144211">#144211</a></p>
 <hr />
 <div style="break-before: page; page-break-before: always;"></div><h1 id="const_slice_from_mut_ptr_range"><a class="header" href="#const_slice_from_mut_ptr_range"><code>const_slice_from_mut_ptr_range</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/89792">#89792</a></p>
@@ -5995,8 +6135,8 @@ that borrows from itself (<code>FnOnce::Output</code> has no lifetime parameters
 <div style="break-before: page; page-break-before: always;"></div><h1 id="const_split_off_first_last"><a class="header" href="#const_split_off_first_last"><code>const_split_off_first_last</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/138539">#138539</a></p>
 <hr />
-<div style="break-before: page; page-break-before: always;"></div><h1 id="const_type_id"><a class="header" href="#const_type_id"><code>const_type_id</code></a></h1>
-<p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/77125">#77125</a></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="const_swap_with_slice"><a class="header" href="#const_swap_with_slice"><code>const_swap_with_slice</code></a></h1>
+<p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/142204">#142204</a></p>
 <hr />
 <div style="break-before: page; page-break-before: always;"></div><h1 id="const_type_name"><a class="header" href="#const_type_name"><code>const_type_name</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/63084">#63084</a></p>
@@ -6009,6 +6149,9 @@ that borrows from itself (<code>FnOnce::Output</code> has no lifetime parameters
 <hr />
 <div style="break-before: page; page-break-before: always;"></div><h1 id="control_flow_into_value"><a class="header" href="#control_flow_into_value"><code>control_flow_into_value</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/137461">#137461</a></p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h1 id="control_flow_ok"><a class="header" href="#control_flow_ok"><code>control_flow_ok</code></a></h1>
+<p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/140266">#140266</a></p>
 <hr />
 <div style="break-before: page; page-break-before: always;"></div><h1 id="convert_float_to_int"><a class="header" href="#convert_float_to_int"><code>convert_float_to_int</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/67057">#67057</a></p>
@@ -6100,13 +6243,10 @@ that borrows from itself (<code>FnOnce::Output</code> has no lifetime parameters
 <div style="break-before: page; page-break-before: always;"></div><h1 id="duration_constructors"><a class="header" href="#duration_constructors"><code>duration_constructors</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/120301">#120301</a></p>
 <hr />
-<p>Add the methods <code>from_days</code> and <code>from_weeks</code> to <code>Duration</code>.
-For <code>from_mins</code> and <code>from_hours</code> see <a href="library-features/./duration-constructors-lite.html">duration-constructors-lite.md</a></p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="duration_constructors_lite"><a class="header" href="#duration_constructors_lite"><code>duration_constructors_lite</code></a></h1>
-<p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/140881">#140881</a></p>
+<p>Add the methods <code>from_days</code> and <code>from_weeks</code> to <code>Duration</code>.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="duration_from_nanos_u128"><a class="header" href="#duration_from_nanos_u128"><code>duration_from_nanos_u128</code></a></h1>
+<p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/139201">#139201</a></p>
 <hr />
-<p>Add the methods <code>from_mins</code>, <code>from_hours</code> to <code>Duration</code>.</p>
-<p>For <code>from_days</code> and <code>from_weeks</code> see <a href="https://github.com/rust-lang/rust/issues/120301"><code>duration_constructors</code></a>.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="duration_millis_float"><a class="header" href="#duration_millis_float"><code>duration_millis_float</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/122451">#122451</a></p>
 <hr />
@@ -6127,6 +6267,9 @@ For <code>from_mins</code> and <code>from_hours</code> see <a href="library-feat
 <hr />
 <div style="break-before: page; page-break-before: always;"></div><h1 id="error_type_id"><a class="header" href="#error_type_id"><code>error_type_id</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/60784">#60784</a></p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h1 id="exact_bitshifts"><a class="header" href="#exact_bitshifts"><code>exact_bitshifts</code></a></h1>
+<p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/144336">#144336</a></p>
 <hr />
 <div style="break-before: page; page-break-before: always;"></div><h1 id="exact_div"><a class="header" href="#exact_div"><code>exact_div</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/139911">#139911</a></p>
@@ -6221,6 +6364,9 @@ fn main() {
 <div style="break-before: page; page-break-before: always;"></div><h1 id="freeze"><a class="header" href="#freeze"><code>freeze</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/121675">#121675</a></p>
 <hr />
+<div style="break-before: page; page-break-before: always;"></div><h1 id="funnel_shifts"><a class="header" href="#funnel_shifts"><code>funnel_shifts</code></a></h1>
+<p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/145686">#145686</a></p>
+<hr />
 <div style="break-before: page; page-break-before: always;"></div><h1 id="future_join"><a class="header" href="#future_join"><code>future_join</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/91642">#91642</a></p>
 <hr />
@@ -6260,6 +6406,9 @@ fn main() {
 <div style="break-before: page; page-break-before: always;"></div><h1 id="int_from_ascii"><a class="header" href="#int_from_ascii"><code>int_from_ascii</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/134821">#134821</a></p>
 <hr />
+<div style="break-before: page; page-break-before: always;"></div><h1 id="int_lowest_highest_one"><a class="header" href="#int_lowest_highest_one"><code>int_lowest_highest_one</code></a></h1>
+<p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/145203">#145203</a></p>
+<hr />
 <div style="break-before: page; page-break-before: always;"></div><h1 id="int_roundings"><a class="header" href="#int_roundings"><code>int_roundings</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/88581">#88581</a></p>
 <hr />
@@ -6296,9 +6445,6 @@ fn main() {
 <div style="break-before: page; page-break-before: always;"></div><h1 id="ip_as_octets"><a class="header" href="#ip_as_octets"><code>ip_as_octets</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/137259">#137259</a></p>
 <hr />
-<div style="break-before: page; page-break-before: always;"></div><h1 id="ip_from"><a class="header" href="#ip_from"><code>ip_from</code></a></h1>
-<p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/131360">#131360</a></p>
-<hr />
 <div style="break-before: page; page-break-before: always;"></div><h1 id="is_ascii_octdigit"><a class="header" href="#is_ascii_octdigit"><code>is_ascii_octdigit</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/101288">#101288</a></p>
 <hr />
@@ -6316,9 +6462,6 @@ fn main() {
 <hr />
 <div style="break-before: page; page-break-before: always;"></div><h1 id="iter_array_chunks"><a class="header" href="#iter_array_chunks"><code>iter_array_chunks</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/100450">#100450</a></p>
-<hr />
-<div style="break-before: page; page-break-before: always;"></div><h1 id="iter_chain"><a class="header" href="#iter_chain"><code>iter_chain</code></a></h1>
-<p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/125964">#125964</a></p>
 <hr />
 <div style="break-before: page; page-break-before: always;"></div><h1 id="iter_collect_into"><a class="header" href="#iter_collect_into"><code>iter_collect_into</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/94780">#94780</a></p>
@@ -6446,7 +6589,13 @@ fn main() {
 <div style="break-before: page; page-break-before: always;"></div><h1 id="next_index"><a class="header" href="#next_index"><code>next_index</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/130711">#130711</a></p>
 <hr />
+<div style="break-before: page; page-break-before: always;"></div><h1 id="nonpoison_condvar"><a class="header" href="#nonpoison_condvar"><code>nonpoison_condvar</code></a></h1>
+<p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/134645">#134645</a></p>
+<hr />
 <div style="break-before: page; page-break-before: always;"></div><h1 id="nonpoison_mutex"><a class="header" href="#nonpoison_mutex"><code>nonpoison_mutex</code></a></h1>
+<p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/134645">#134645</a></p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h1 id="nonpoison_rwlock"><a class="header" href="#nonpoison_rwlock"><code>nonpoison_rwlock</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/134645">#134645</a></p>
 <hr />
 <div style="break-before: page; page-break-before: always;"></div><h1 id="nonzero_bitwise"><a class="header" href="#nonzero_bitwise"><code>nonzero_bitwise</code></a></h1>
@@ -6482,6 +6631,9 @@ fn main() {
 <div style="break-before: page; page-break-before: always;"></div><h1 id="option_array_transpose"><a class="header" href="#option_array_transpose"><code>option_array_transpose</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/130828">#130828</a></p>
 <hr />
+<div style="break-before: page; page-break-before: always;"></div><h1 id="option_reduce"><a class="header" href="#option_reduce"><code>option_reduce</code></a></h1>
+<p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/144273">#144273</a></p>
+<hr />
 <div style="break-before: page; page-break-before: always;"></div><h1 id="option_zip"><a class="header" href="#option_zip"><code>option_zip</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/70086">#70086</a></p>
 <hr />
@@ -6506,9 +6658,6 @@ fn main() {
 <div style="break-before: page; page-break-before: always;"></div><h1 id="panic_internals"><a class="header" href="#panic_internals"><code>panic_internals</code></a></h1>
 <p>This feature has no tracking issue, and is therefore likely internal to the compiler, not being intended for general use.</p>
 <hr />
-<div style="break-before: page; page-break-before: always;"></div><h1 id="panic_payload_as_str"><a class="header" href="#panic_payload_as_str"><code>panic_payload_as_str</code></a></h1>
-<p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/125175">#125175</a></p>
-<hr />
 <div style="break-before: page; page-break-before: always;"></div><h1 id="panic_unwind"><a class="header" href="#panic_unwind"><code>panic_unwind</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/32837">#32837</a></p>
 <hr />
@@ -6518,12 +6667,6 @@ fn main() {
 <div style="break-before: page; page-break-before: always;"></div><h1 id="partial_ord_chaining_methods"><a class="header" href="#partial_ord_chaining_methods"><code>partial_ord_chaining_methods</code></a></h1>
 <p>This feature has no tracking issue, and is therefore likely internal to the compiler, not being intended for general use.</p>
 <hr />
-<div style="break-before: page; page-break-before: always;"></div><h1 id="path_add_extension"><a class="header" href="#path_add_extension"><code>path_add_extension</code></a></h1>
-<p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/127292">#127292</a></p>
-<hr />
-<div style="break-before: page; page-break-before: always;"></div><h1 id="path_file_prefix"><a class="header" href="#path_file_prefix"><code>path_file_prefix</code></a></h1>
-<p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/86319">#86319</a></p>
-<hr />
 <div style="break-before: page; page-break-before: always;"></div><h1 id="pattern"><a class="header" href="#pattern"><code>pattern</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/27721">#27721</a></p>
 <hr />
@@ -6532,6 +6675,9 @@ fn main() {
 <hr />
 <div style="break-before: page; page-break-before: always;"></div><h1 id="pattern_type_range_trait"><a class="header" href="#pattern_type_range_trait"><code>pattern_type_range_trait</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/123646">#123646</a></p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h1 id="peekable_next_if_map"><a class="header" href="#peekable_next_if_map"><code>peekable_next_if_map</code></a></h1>
+<p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/143702">#143702</a></p>
 <hr />
 <div style="break-before: page; page-break-before: always;"></div><h1 id="peer_credentials_unix_socket"><a class="header" href="#peer_credentials_unix_socket"><code>peer_credentials_unix_socket</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/42839">#42839</a></p>
@@ -6611,6 +6757,9 @@ fn main() {
 <div style="break-before: page; page-break-before: always;"></div><h1 id="ptr_as_uninit"><a class="header" href="#ptr_as_uninit"><code>ptr_as_uninit</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/75402">#75402</a></p>
 <hr />
+<div style="break-before: page; page-break-before: always;"></div><h1 id="ptr_cast_array"><a class="header" href="#ptr_cast_array"><code>ptr_cast_array</code></a></h1>
+<p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/144514">#144514</a></p>
+<hr />
 <div style="break-before: page; page-break-before: always;"></div><h1 id="ptr_internals"><a class="header" href="#ptr_internals"><code>ptr_internals</code></a></h1>
 <p>This feature has no tracking issue, and is therefore likely internal to the compiler, not being intended for general use.</p>
 <hr />
@@ -6647,11 +6796,17 @@ fn main() {
 <div style="break-before: page; page-break-before: always;"></div><h1 id="read_buf"><a class="header" href="#read_buf"><code>read_buf</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/78485">#78485</a></p>
 <hr />
+<div style="break-before: page; page-break-before: always;"></div><h1 id="read_buf_at"><a class="header" href="#read_buf_at"><code>read_buf_at</code></a></h1>
+<p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/140771">#140771</a></p>
+<hr />
 <div style="break-before: page; page-break-before: always;"></div><h1 id="reentrant_lock"><a class="header" href="#reentrant_lock"><code>reentrant_lock</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/121440">#121440</a></p>
 <hr />
 <div style="break-before: page; page-break-before: always;"></div><h1 id="reentrant_lock_data_ptr"><a class="header" href="#reentrant_lock_data_ptr"><code>reentrant_lock_data_ptr</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/140368">#140368</a></p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h1 id="refcell_try_map"><a class="header" href="#refcell_try_map"><code>refcell_try_map</code></a></h1>
+<p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/143801">#143801</a></p>
 <hr />
 <div style="break-before: page; page-break-before: always;"></div><h1 id="restricted_std"><a class="header" href="#restricted_std"><code>restricted_std</code></a></h1>
 <p>This feature has no tracking issue, and is therefore likely internal to the compiler, not being intended for general use.</p>
@@ -6661,9 +6816,6 @@ fn main() {
 <hr />
 <div style="break-before: page; page-break-before: always;"></div><h1 id="rev_into_inner"><a class="header" href="#rev_into_inner"><code>rev_into_inner</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/144277">#144277</a></p>
-<hr />
-<div style="break-before: page; page-break-before: always;"></div><h1 id="round_char_boundary"><a class="header" href="#round_char_boundary"><code>round_char_boundary</code></a></h1>
-<p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/93743">#93743</a></p>
 <hr />
 <div style="break-before: page; page-break-before: always;"></div><h1 id="rt"><a class="header" href="#rt"><code>rt</code></a></h1>
 <p>This feature is internal to the Rust compiler and is not intended for general use.</p>
@@ -6682,6 +6834,9 @@ fn main() {
 <hr />
 <div style="break-before: page; page-break-before: always;"></div><h1 id="seek_stream_len"><a class="header" href="#seek_stream_len"><code>seek_stream_len</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/59359">#59359</a></p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h1 id="set_permissions_nofollow"><a class="header" href="#set_permissions_nofollow"><code>set_permissions_nofollow</code></a></h1>
+<p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/141607">#141607</a></p>
 <hr />
 <div style="break-before: page; page-break-before: always;"></div><h1 id="set_ptr_value"><a class="header" href="#set_ptr_value"><code>set_ptr_value</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/75091">#75091</a></p>
@@ -6802,12 +6957,6 @@ fn main() {
 <hr />
 <div style="break-before: page; page-break-before: always;"></div><h1 id="str_split_whitespace_remainder"><a class="header" href="#str_split_whitespace_remainder"><code>str_split_whitespace_remainder</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/77998">#77998</a></p>
-<hr />
-<div style="break-before: page; page-break-before: always;"></div><h1 id="strict_overflow_ops"><a class="header" href="#strict_overflow_ops"><code>strict_overflow_ops</code></a></h1>
-<p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/118260">#118260</a></p>
-<hr />
-<div style="break-before: page; page-break-before: always;"></div><h1 id="strict_provenance_atomic_ptr"><a class="header" href="#strict_provenance_atomic_ptr"><code>strict_provenance_atomic_ptr</code></a></h1>
-<p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/99108">#99108</a></p>
 <hr />
 <div style="break-before: page; page-break-before: always;"></div><h1 id="string_from_utf8_lossy_owned"><a class="header" href="#string_from_utf8_lossy_owned"><code>string_from_utf8_lossy_owned</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/129436">#129436</a></p>
@@ -7119,9 +7268,6 @@ fn main() {
 <div style="break-before: page; page-break-before: always;"></div><h1 id="unsigned_nonzero_div_ceil"><a class="header" href="#unsigned_nonzero_div_ceil"><code>unsigned_nonzero_div_ceil</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/132968">#132968</a></p>
 <hr />
-<div style="break-before: page; page-break-before: always;"></div><h1 id="unsigned_signed_diff"><a class="header" href="#unsigned_signed_diff"><code>unsigned_signed_diff</code></a></h1>
-<p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/126041">#126041</a></p>
-<hr />
 <div style="break-before: page; page-break-before: always;"></div><h1 id="unsize"><a class="header" href="#unsize"><code>unsize</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/18598">#18598</a></p>
 <hr />
@@ -7211,6 +7357,9 @@ fn main() {
 <hr />
 <div style="break-before: page; page-break-before: always;"></div><h1 id="write_all_vectored"><a class="header" href="#write_all_vectored"><code>write_all_vectored</code></a></h1>
 <p>The tracking issue for this feature is: <a href="https://github.com/rust-lang/rust/issues/70436">#70436</a></p>
+<hr />
+<div style="break-before: page; page-break-before: always;"></div><h1 id="wtf8_internals"><a class="header" href="#wtf8_internals"><code>wtf8_internals</code></a></h1>
+<p>This feature has no tracking issue, and is therefore likely internal to the compiler, not being intended for general use.</p>
 <hr />
 <div style="break-before: page; page-break-before: always;"></div><h1 id="yeet_desugar_details"><a class="header" href="#yeet_desugar_details"><code>yeet_desugar_details</code></a></h1>
 <p>This feature has no tracking issue, and is therefore likely internal to the compiler, not being intended for general use.</p>

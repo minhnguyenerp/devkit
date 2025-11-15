@@ -41,7 +41,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-c56a0a1a.js";
+            window.path_to_searchindex_js = "../searchindex-ed98a07e.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-32872d2c.js"></script>
@@ -243,21 +243,21 @@ impl TempFile {
     fn new(path: PathBuf) -&gt; std::io::Result&lt;Self&gt; {
         // 注意：File::create() 会覆盖现有文件
         let file = File::create(&amp;path)?;
-        
+
         Ok(Self { file, path })
     }
 }
 
-// 当 TempFile 被丢弃时：
-// 1. 首先，File 会自动关闭（File 的 Drop 实现）
-// 2. 然后我们的 drop 实现会删除文件
+// When TempFile is dropped:
+// 1. First, our drop implementation will remove the file's name from the filesystem.
+// 2. Then, File's drop will close the file, removing its underlying content from the disk.
 impl Drop for TempFile {
     fn drop(&amp;mut self) {
-        // 注意：文件在此时已经关闭
         if let Err(e) = std::fs::remove_file(&amp;self.path) {
             eprintln!("删除临时文件失败：{}", e);
         }
         println!("&gt; 已丢弃临时文件：{:?}", self.path);
+        // File's drop is implicitly called here because it is a field of this struct.
     }
 }
 
@@ -274,7 +274,7 @@ fn main() -&gt; std::io::Result&lt;()&gt; {
     let temp2 = TempFile::new("another_test.txt".into())?;
     drop(temp2); // 显式丢弃文件
     println!("手动丢弃的文件");
-    
+
     Ok(())
 }</code></pre></pre>
 

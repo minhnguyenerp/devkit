@@ -39,7 +39,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-358b6eba.js";
+            window.path_to_searchindex_js = "searchindex-72365250.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-eeee08c3.js"></script>
@@ -830,6 +830,14 @@ fn main() {
 <ul>
 <li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#cognitive_complexity"><code>cognitive_complexity</code></a></li>
 </ul>
+<h2 id="const-literal-digits-threshold"><a class="header" href="#const-literal-digits-threshold"><code>const-literal-digits-threshold</code></a></h2>
+<p>The minimum digits a const float literal must have to supress the <code>excessive_precicion</code> lint</p>
+<p><strong>Default Value:</strong> <code>30</code></p>
+<hr />
+<p><strong>Affected lints:</strong></p>
+<ul>
+<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#excessive_precision"><code>excessive_precision</code></a></li>
+</ul>
 <h2 id="disallowed-macros"><a class="header" href="#disallowed-macros"><code>disallowed-macros</code></a></h2>
 <p>The list of disallowed macros, written as fully qualified paths.</p>
 <p><strong>Fields:</strong></p>
@@ -896,7 +904,7 @@ default configuration of Clippy. By default, any configuration will replace the 
 <li><code>doc-valid-idents = ["ClipPy"]</code> would replace the default list with <code>["ClipPy"]</code>.</li>
 <li><code>doc-valid-idents = ["ClipPy", ".."]</code> would append <code>ClipPy</code> to the default list.</li>
 </ul>
-<p><strong>Default Value:</strong> <code>["KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "MHz", "GHz", "THz", "AccessKit", "CoAP", "CoreFoundation", "CoreGraphics", "CoreText", "DevOps", "Direct2D", "Direct3D", "DirectWrite", "DirectX", "ECMAScript", "GPLv2", "GPLv3", "GitHub", "GitLab", "IPv4", "IPv6", "ClojureScript", "CoffeeScript", "JavaScript", "PostScript", "PureScript", "TypeScript", "WebAssembly", "NaN", "NaNs", "OAuth", "GraphQL", "OCaml", "OpenAL", "OpenDNS", "OpenGL", "OpenMP", "OpenSSH", "OpenSSL", "OpenStreetMap", "OpenTelemetry", "OpenType", "WebGL", "WebGL2", "WebGPU", "WebRTC", "WebSocket", "WebTransport", "WebP", "OpenExr", "YCbCr", "sRGB", "TensorFlow", "TrueType", "iOS", "macOS", "FreeBSD", "NetBSD", "OpenBSD", "TeX", "LaTeX", "BibTeX", "BibLaTeX", "MinGW", "CamelCase"]</code></p>
+<p><strong>Default Value:</strong> <code>["KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "MHz", "GHz", "THz", "AccessKit", "CoAP", "CoreFoundation", "CoreGraphics", "CoreText", "DevOps", "Direct2D", "Direct3D", "DirectWrite", "DirectX", "ECMAScript", "GPLv2", "GPLv3", "GitHub", "GitLab", "IPv4", "IPv6", "InfiniBand", "RoCE", "ClojureScript", "CoffeeScript", "JavaScript", "PostScript", "PureScript", "TypeScript", "PowerPC", "WebAssembly", "NaN", "NaNs", "OAuth", "GraphQL", "OCaml", "OpenAL", "OpenDNS", "OpenGL", "OpenMP", "OpenSSH", "OpenSSL", "OpenStreetMap", "OpenTelemetry", "OpenType", "WebGL", "WebGL2", "WebGPU", "WebRTC", "WebSocket", "WebTransport", "WebP", "OpenExr", "YCbCr", "sRGB", "TensorFlow", "TrueType", "iOS", "macOS", "FreeBSD", "NetBSD", "OpenBSD", "NixOS", "TeX", "LaTeX", "BibTeX", "BibLaTeX", "MinGW", "CamelCase"]</code></p>
 <hr />
 <p><strong>Affected lints:</strong></p>
 <ul>
@@ -1163,7 +1171,6 @@ crate. For example, <code>pub(crate)</code> items.</p>
 <li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#needless_borrow"><code>needless_borrow</code></a></li>
 <li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#non_std_lazy_statics"><code>non_std_lazy_statics</code></a></li>
 <li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#option_as_ref_deref"><code>option_as_ref_deref</code></a></li>
-<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#option_map_unwrap_or"><code>option_map_unwrap_or</code></a></li>
 <li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#ptr_as_ptr"><code>ptr_as_ptr</code></a></li>
 <li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#question_mark"><code>question_mark</code></a></li>
 <li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#redundant_field_names"><code>redundant_field_names</code></a></li>
@@ -1171,7 +1178,6 @@ crate. For example, <code>pub(crate)</code> items.</p>
 <li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#repeat_vec_with_capacity"><code>repeat_vec_with_capacity</code></a></li>
 <li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#same_item_push"><code>same_item_push</code></a></li>
 <li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#seek_from_current"><code>seek_from_current</code></a></li>
-<li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#seek_rewind"><code>seek_rewind</code></a></li>
 <li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#to_digit_is_some"><code>to_digit_is_some</code></a></li>
 <li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#transmute_ptr_to_ref"><code>transmute_ptr_to_ref</code></a></li>
 <li><a href="https://rust-lang.github.io/rust-clippy/master/index.html#tuple_array_conversions"><code>tuple_array_conversions</code></a></li>
@@ -1540,7 +1546,7 @@ jobs:
   clippy_check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Run Clippy
         run: cargo clippy --all-targets --all-features
 </code></pre>
@@ -1738,12 +1744,12 @@ cargo dev new_lint
 cargo dev deprecate
 # automatically formatting all code before each commit
 cargo dev setup git-hook
-# (experimental) Setup Clippy to work with IntelliJ-Rust
+# (experimental) Setup Clippy to work with RustRover
 cargo dev setup intellij
 # runs the `dogfood` tests
 cargo dev dogfood
 </code></pre>
-<p>More about <a href="https://github.com/rust-lang/rust-clippy/blob/master/CONTRIBUTING.md#intellij-rust">intellij</a> command usage and reasons.</p>
+<p>More about <a href="https://github.com/rust-lang/rust-clippy/blob/master/CONTRIBUTING.md#rustrover">intellij</a> command usage and reasons.</p>
 <h2 id="lintcheck"><a class="header" href="#lintcheck">lintcheck</a></h2>
 <p><code>cargo lintcheck</code> will build and run Clippy on a fixed set of crates and
 generate a log of the results.  You can <code>git diff</code> the updated log against its
@@ -3687,7 +3693,7 @@ impl LateLintPass&lt;'_&gt; for MyStructLint {
             // we are looking for the `DefId` of `Drop` trait in lang items
             .drop_trait()
             // then we use it with our type `ty` by calling `implements_trait` from Clippy's utils
-            .map_or(false, |id| implements_trait(cx, ty, id, &amp;[])) {
+            .is_some_and(|id| implements_trait(cx, ty, id, &amp;[])) {
                 // `expr` implements `Drop` trait
             }
     }

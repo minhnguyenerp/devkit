@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-3109fce4.js";
+            window.path_to_searchindex_js = "searchindex-5e2787cc.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-4adb5027.js"></script>
@@ -187,11 +187,7 @@
 <h1 id="dynamically-sized-types"><a class="header" href="#dynamically-sized-types">Dynamically Sized Types</a></h1>
 <div class="rule" id="r-dynamic-sized.intro"><a class="rule-link" href="#r-dynamic-sized.intro" title="dynamic-sized.intro"><span>[dynamic-sized<wbr>.intro]</span/></a>
 </div>
-<p>Most types have a fixed size that is known at compile time and implement the
-trait <a href="special-types-and-traits.html#sized"><code>Sized</code></a>. A type with a size that is known only at run-time is
-called a <em>dynamically sized type</em> (<em>DST</em>) or, informally, an unsized type.
-<a href="types/slice.html">Slices</a> and <a href="types/trait-object.html">trait objects</a> are two examples of <abbr title="dynamically sized
-types">DSTs</abbr>.</p>
+<p>Most types have a fixed size that is known at compile time and implement the trait <a href="special-types-and-traits.html#sized"><code>Sized</code></a>. A type with a size that is known only at run-time is called a <em>dynamically sized type</em> (<em>DST</em>) or, informally, an unsized type.  <a href="types/slice.html">Slices</a>, <a href="types/trait-object.html">trait objects</a>, and <a href="types/textual.html">str</a> are examples of <abbr title="dynamically sized types">DSTs</abbr>.</p>
 <div class="rule" id="r-dynamic-sized.restriction"><a class="rule-link" href="#r-dynamic-sized.restriction" title="dynamic-sized.restriction"><span>[dynamic-sized<wbr>.restriction]</span/></a>
 </div>
 <p>Such types can only be used in certain cases:</p>
@@ -201,7 +197,7 @@ types">DSTs</abbr>.</p>
 <li><a href="types/pointer.html">Pointer types</a> to <abbr title="dynamically sized types">DSTs</abbr> are
 sized but have twice the size of pointers to sized types
 <ul>
-<li>Pointers to slices also store the number of elements of the slice.</li>
+<li>Pointers to slices and <code>str</code> also store the number of elements.</li>
 <li>Pointers to trait objects also store a pointer to a vtable.</li>
 </ul>
 </li>
@@ -281,7 +277,7 @@ last field; this makes the struct itself a
         <script src="book-9576a2db.js"></script>
 
         <!-- Custom JS scripts -->
-        <script src="theme/reference-cfed9ca5.js"></script>
+        <script src="theme/reference-da60281b.js"></script>
 
 
 

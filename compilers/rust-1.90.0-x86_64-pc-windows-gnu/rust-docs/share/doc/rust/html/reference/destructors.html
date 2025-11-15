@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-3109fce4.js";
+            window.path_to_searchindex_js = "searchindex-5e2787cc.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-4adb5027.js"></script>
@@ -402,10 +402,60 @@ are declared in.</p>
 }
 let declared_last = PrintOnDrop("Dropped first in outer scope");
 <span class="boring">}</span></code></pre></pre>
-<div class="rule" id="r-destructors.scope.bindings.match-pattern-order"><a class="rule-link" href="#r-destructors.scope.bindings.match-pattern-order" title="destructors.scope.bindings.match-pattern-order"><span>[destructors<wbr>.scope<wbr>.bindings<wbr>.match-pattern-order]</span/></a>
+<div class="rule" id="r-destructors.scope.bindings.patterns"><a class="rule-link" href="#r-destructors.scope.bindings.patterns" title="destructors.scope.bindings.patterns"><span>[destructors<wbr>.scope<wbr>.bindings<wbr>.patterns]</span/></a>
 </div>
-<p>If multiple patterns are used in the same arm for a <code>match</code> expression, then an
-unspecified pattern will be used to determine the drop order.</p>
+<p>Variables in patterns are dropped in reverse order of declaration within the pattern.</p>
+<pre><pre class="playground"><code class="language-rust edition2024"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">struct PrintOnDrop(&amp;'static str);
+</span><span class="boring">impl Drop for PrintOnDrop {
+</span><span class="boring">    fn drop(&amp;mut self) {
+</span><span class="boring">        println!("drop({})", self.0);
+</span><span class="boring">    }
+</span><span class="boring">}
+</span>let (declared_first, declared_last) = (
+    PrintOnDrop("Dropped last"),
+    PrintOnDrop("Dropped first"),
+);
+<span class="boring">}</span></code></pre></pre>
+<div class="rule" id="r-destructors.scope.bindings.or-patterns"><a class="rule-link" href="#r-destructors.scope.bindings.or-patterns" title="destructors.scope.bindings.or-patterns"><span>[destructors<wbr>.scope<wbr>.bindings<wbr>.or-patterns]</span/></a>
+</div>
+<p>For the purpose of drop order, <a href="patterns.html#or-patterns">or-patterns</a> declare bindings in the order given by the first subpattern.</p>
+<pre><pre class="playground"><code class="language-rust edition2024"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">struct PrintOnDrop(&amp;'static str);
+</span><span class="boring">impl Drop for PrintOnDrop {
+</span><span class="boring">    fn drop(&amp;mut self) {
+</span><span class="boring">        println!("drop({})", self.0);
+</span><span class="boring">    }
+</span><span class="boring">}
+</span>// Drops `x` before `y`.
+fn or_pattern_drop_order&lt;T&gt;(
+    (Ok([x, y]) | Err([y, x])): Result&lt;[T; 2], [T; 2]&gt;
+//   ^^^^^^^^^^   ^^^^^^^^^^^ This is the second subpattern.
+//   |
+//   This is the first subpattern.
+//
+//   In the first subpattern, `x` is declared before `y`. Since it is
+//   the first subpattern, that is the order used even if the second
+//   subpattern, where the bindings are declared in the opposite
+//   order, is matched.
+) {}
+
+// Here we match the first subpattern, and the drops happen according
+// to the declaration order in the first subpattern.
+or_pattern_drop_order(Ok([
+    PrintOnDrop("Declared first, dropped last"),
+    PrintOnDrop("Declared last, dropped first"),
+]));
+
+// Here we match the second subpattern, and the drops still happen
+// according to the declaration order in the first subpattern.
+or_pattern_drop_order(Err([
+    PrintOnDrop("Declared last, dropped first"),
+    PrintOnDrop("Declared first, dropped last"),
+]));
+<span class="boring">}</span></code></pre></pre>
 <div class="rule" id="r-destructors.scope.temporary"><a class="rule-link" href="#r-destructors.scope.temporary" title="destructors.scope.temporary"><span>[destructors<wbr>.scope<wbr>.temporary]</span/></a>
 </div>
 <h3 id="temporary-scopes"><a class="header" href="#temporary-scopes">Temporary scopes</a></h3>
@@ -584,18 +634,71 @@ temporary scope.</p>
 <h4 id="extending-based-on-patterns"><a class="header" href="#extending-based-on-patterns">Extending based on patterns</a></h4>
 <div class="rule" id="r-destructors.scope.lifetime-extension.patterns.extending"><a class="rule-link" href="#r-destructors.scope.lifetime-extension.patterns.extending" title="destructors.scope.lifetime-extension.patterns.extending"><span>[destructors<wbr>.scope<wbr>.lifetime-extension<wbr>.patterns<wbr>.extending]</span/></a>
 </div>
-<p>An <em>extending pattern</em> is either</p>
+<p>An <em>extending pattern</em> is either:</p>
 <ul>
-<li>An <a href="patterns.html#identifier-patterns">identifier pattern</a> that binds by reference or mutable reference.</li>
-<li>A <a href="patterns.html#struct-patterns">struct</a>, <a href="patterns.html#tuple-patterns">tuple</a>, <a href="patterns.html#tuple-struct-patterns">tuple struct</a>, or <a href="patterns.html#slice-patterns">slice</a> pattern where at least one of the
-direct subpatterns is an extending pattern.</li>
+<li>
+<p>An <a href="patterns.html#identifier-patterns">identifier pattern</a> that binds by reference or mutable reference.</p>
+<pre><pre class="playground"><code class="language-rust edition2024"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">fn temp() {}
+</span>let ref x = temp(); // Binds by reference.
+<span class="boring">x;
+</span>let ref mut x = temp(); // Binds by mutable reference.
+<span class="boring">x;
+</span><span class="boring">}</span></code></pre></pre>
+</li>
+<li>
+<p>A <a href="patterns.html#struct-patterns">struct</a>, <a href="patterns.html#tuple-patterns">tuple</a>, <a href="patterns.html#tuple-struct-patterns">tuple struct</a>, <a href="patterns.html#slice-patterns">slice</a>, or <a href="patterns.html#or-patterns">or-pattern</a> where at least one of the direct subpatterns is an extending pattern.</p>
+<pre><pre class="playground"><code class="language-rust edition2024"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">use core::sync::atomic::{AtomicU64, Ordering::Relaxed};
+</span><span class="boring">static X: AtomicU64 = AtomicU64::new(0);
+</span>struct W&lt;T&gt;(T);
+<span class="boring">impl&lt;T&gt; Drop for W&lt;T&gt; { fn drop(&amp;mut self) { X.fetch_add(1, Relaxed); } }
+</span>let W { 0: ref x } = W(()); // Struct pattern.
+<span class="boring">x;
+</span>let W(ref x) = W(()); // Tuple struct pattern.
+<span class="boring">x;
+</span>let (W(ref x),) = (W(()),); // Tuple pattern.
+<span class="boring">x;
+</span>let [W(ref x), ..] = [W(())]; // Slice pattern.
+<span class="boring">x;
+</span>let (Ok(W(ref x)) | Err(&amp;ref x)) = Ok(W(())); // Or pattern.
+<span class="boring">x;
+</span>//
+// All of the temporaries above are still live here.
+<span class="boring">assert_eq!(0, X.load(Relaxed));
+</span><span class="boring">}</span></code></pre></pre>
+</li>
 </ul>
-<p>So <code>ref x</code>, <code>V(ref x)</code> and <code>[ref x, y]</code> are all extending patterns, but <code>x</code>,
-<code>&amp;ref x</code> and <code>&amp;(ref x,)</code> are not.</p>
+<p>So <code>ref x</code>, <code>V(ref x)</code> and <code>[ref x, y]</code> are all extending patterns, but <code>x</code>, <code>&amp;ref x</code> and <code>&amp;(ref x,)</code> are not.</p>
 <div class="rule" id="r-destructors.scope.lifetime-extension.patterns.let"><a class="rule-link" href="#r-destructors.scope.lifetime-extension.patterns.let" title="destructors.scope.lifetime-extension.patterns.let"><span>[destructors<wbr>.scope<wbr>.lifetime-extension<wbr>.patterns<wbr>.let]</span/></a>
 </div>
 <p>If the pattern in a <code>let</code> statement is an extending pattern then the temporary
 scope of the initializer expression is extended.</p>
+<pre><pre class="playground"><code class="language-rust edition2024"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">fn temp() {}
+</span>// This is an extending pattern, so the temporary scope is extended.
+let ref x = *&amp;temp(); // OK
+<span class="boring">x;
+</span><span class="boring">}</span></code></pre></pre>
+<pre><pre class="playground"><code class="language-rust compile_fail E0716 edition2024"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">fn temp() {}
+</span>// This is neither an extending pattern nor an extending expression,
+// so the temporary is dropped at the semicolon.
+let &amp;ref x = *&amp;&amp;temp(); // ERROR
+<span class="boring">x;
+</span><span class="boring">}</span></code></pre></pre>
+<pre><pre class="playground"><code class="language-rust edition2024"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">fn temp() {}
+</span>// This is not an extending pattern but it is an extending expression,
+// so the temporary lives beyond the `let` statement.
+let &amp;ref x = &amp;*&amp;temp(); // OK
+<span class="boring">x;
+</span><span class="boring">}</span></code></pre></pre>
 <div class="rule" id="r-destructors.scope.lifetime-extension.exprs"><a class="rule-link" href="#r-destructors.scope.lifetime-extension.exprs" title="destructors.scope.lifetime-extension.exprs"><span>[destructors<wbr>.scope<wbr>.lifetime-extension<wbr>.exprs]</span/></a>
 </div>
 <h4 id="extending-based-on-expressions"><a class="header" href="#extending-based-on-expressions">Extending based on expressions</a></h4>
@@ -607,40 +710,105 @@ expression which is one of the following:</p>
 <li>The operand(s) of an extending <a href="expressions/array-expr.html#array-expressions">array</a>, <a href="expressions/operator-expr.html#type-cast-expressions">cast</a>, <a href="expressions/struct-expr.html">braced struct</a>, or <a href="expressions/tuple-expr.html#tuple-expressions">tuple</a>
 expression.</li>
 <li>The arguments to an extending <a href="types/struct.html#r-type.struct.tuple">tuple struct</a> or <a href="types/enum.html#r-type.enum.declaration">tuple variant</a> constructor expression.</li>
-<li>The final expression of any extending <a href="expressions/block-expr.html">block expression</a>.</li>
+<li>The final expression of an extending <a href="expressions/block-expr.html">block expression</a> except for an <a href="expressions/block-expr.html#r-expr.block.async">async block expression</a>.</li>
+<li>The final expression of an extending <a href="expressions/if-expr.html#if-expressions"><code>if</code></a> expression’s consequent, <code>else if</code>, or <code>else</code> block.</li>
+<li>An arm expression of an extending <a href="expressions/match-expr.html"><code>match</code></a> expression.</li>
 </ul>
 <p>So the borrow expressions in <code>&amp;mut 0</code>, <code>(&amp;1, &amp;mut 2)</code>, and <code>Some(&amp;mut 3)</code>
 are all extending expressions. The borrows in <code>&amp;0 + &amp;1</code> and <code>f(&amp;mut 0)</code> are not.</p>
 <p>The operand of any extending borrow expression has its temporary scope
 extended.</p>
+<div class="alert alert-note">
+<blockquote>
+<p class="alert-title"><svg viewBox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
+<p><code>rustc</code> does not treat <a href="expressions/array-expr.html#r-expr.array.repeat-operand">array repeat operands</a> of extending <a href="types/array.html">array</a> expressions as extending expressions. Whether it should is an open question.</p>
+<p>For details, see <a href="https://github.com/rust-lang/rust/issues/146092">Rust issue #146092</a>.</p>
+</blockquote>
+</div>
 <h4 id="examples"><a class="header" href="#examples">Examples</a></h4>
 <p>Here are some examples where expressions have extended temporary scopes:</p>
-<pre><pre class="playground"><code class="language-rust edition2024"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust edition2024 edition2024"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span><span class="boring">fn temp() {}
-</span><span class="boring">trait Use { fn use_temp(&amp;self) -&gt; &amp;Self { self } }
-</span><span class="boring">impl Use for () {}
-</span>// The temporary that stores the result of `temp()` lives in the same scope
-// as x in these cases.
-let x = &amp;temp();
-let x = &amp;temp() as &amp;dyn Send;
-let x = (&amp;*&amp;temp(),);
-let x = { [Some(&amp;temp()) ] };
-let ref x = temp();
-let ref x = *&amp;temp();
+</span><span class="boring">use core::sync::atomic::{AtomicU64, Ordering::Relaxed};
+</span><span class="boring">static X: AtomicU64 = AtomicU64::new(0);
+</span><span class="boring">struct S;
+</span><span class="boring">impl Drop for S { fn drop(&amp;mut self) { X.fetch_add(1, Relaxed); } }
+</span><span class="boring">const fn temp() -&gt; S { S }
+</span>let x = &amp;temp(); // Operand of borrow.
 <span class="boring">x;
+</span>let x = &amp;raw const *&amp;temp(); // Operand of raw borrow.
+<span class="boring">assert_eq!(X.load(Relaxed), 0);
+</span>let x = &amp;temp() as &amp;dyn Send; // Operand of cast.
+<span class="boring">x;
+</span>let x = (&amp;*&amp;temp(),); // Operand of tuple constructor.
+<span class="boring">x;
+</span>let x = { [Some(&amp;temp())] }; // Final expr of block.
+<span class="boring">x;
+</span>let x = const { &amp;temp() }; // Final expr of `const` block.
+<span class="boring">x;
+</span>let x = unsafe { &amp;temp() }; // Final expr of `unsafe` block.
+<span class="boring">x;
+</span>let x = if true { &amp;temp() } else { &amp;temp() };
+//              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+//           Final exprs of `if`/`else` blocks.
+<span class="boring">x;
+</span>let x = match () { _ =&gt; &amp;temp() }; // `match` arm expression.
+<span class="boring">x;
+</span>//
+// All of the temporaries above are still live here.
+<span class="boring">assert_eq!(0, X.load(Relaxed));
 </span><span class="boring">}</span></code></pre></pre>
 <p>Here are some examples where expressions don’t have extended temporary scopes:</p>
-<pre><pre class="playground"><code class="language-rust compile_fail edition2024"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust compile_fail E0716 edition2024"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">fn temp() {}
+</span>// Arguments to function calls are not extending expressions. The
+// temporary is dropped at the semicolon.
+let x = core::convert::identity(&amp;temp()); // ERROR
+<span class="boring">x;
+</span><span class="boring">}</span></code></pre></pre>
+<pre><pre class="playground"><code class="language-rust compile_fail E0716 edition2024"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">fn temp() {}
 </span><span class="boring">trait Use { fn use_temp(&amp;self) -&gt; &amp;Self { self } }
 </span><span class="boring">impl Use for () {}
-</span>// The temporary that stores the result of `temp()` only lives until the
-// end of the let statement in these cases.
-
-let x = std::convert::identity(&amp;temp()); // ERROR
-let x = (&amp;temp()).use_temp();  // ERROR
+</span>// Receivers of method calls are not extending expressions.
+let x = (&amp;temp()).use_temp(); // ERROR
+<span class="boring">x;
+</span><span class="boring">}</span></code></pre></pre>
+<pre><pre class="playground"><code class="language-rust compile_fail E0716 edition2024"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">fn temp() {}
+</span>// Scrutinees of match expressions are not extending expressions.
+let x = match &amp;temp() { x =&gt; x }; // ERROR
+<span class="boring">x;
+</span><span class="boring">}</span></code></pre></pre>
+<pre><pre class="playground"><code class="language-rust compile_fail E0515 edition2024"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">fn temp() {}
+</span>// Final expressions of `async` blocks are not extending expressions.
+let x = async { &amp;temp() }; // ERROR
+<span class="boring">x;
+</span><span class="boring">}</span></code></pre></pre>
+<pre><pre class="playground"><code class="language-rust compile_fail E0515 edition2024"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">fn temp() {}
+</span>// Final expressions of closures are not extending expressions.
+let x = || &amp;temp(); // ERROR
+<span class="boring">x;
+</span><span class="boring">}</span></code></pre></pre>
+<pre><pre class="playground"><code class="language-rust compile_fail E0716 edition2024"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">fn temp() {}
+</span>// Operands of loop breaks are not extending expressions.
+let x = loop { break &amp;temp() }; // ERROR
+<span class="boring">x;
+</span><span class="boring">}</span></code></pre></pre>
+<pre><pre class="playground"><code class="language-rust compile_fail E0716 edition2024"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">fn temp() {}
+</span>// Operands of breaks to labels are not extending expressions.
+let x = 'a: { break 'a &amp;temp() }; // ERROR
 <span class="boring">x;
 </span><span class="boring">}</span></code></pre></pre>
 <div class="rule" id="r-destructors.forget"><a class="rule-link" href="#r-destructors.forget" title="destructors.forget"><span>[destructors<wbr>.forget]</span/></a>
@@ -711,7 +879,7 @@ variable or field from being dropped automatically.</p>
         <script src="book-9576a2db.js"></script>
 
         <!-- Custom JS scripts -->
-        <script src="theme/reference-cfed9ca5.js"></script>
+        <script src="theme/reference-da60281b.js"></script>
 
 
 

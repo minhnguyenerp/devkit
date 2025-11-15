@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-3109fce4.js";
+            window.path_to_searchindex_js = "searchindex-5e2787cc.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-4adb5027.js"></script>
@@ -421,11 +421,6 @@ table production</a> form, and appear in <code>monospace</code> font.</p>
 <tr><td><a href="#c-string-literals">C string</a></td><td><code>c"hello"</code></td><td>0</td><td>All Unicode</td><td><a href="#quote-escapes">Quote</a> &amp; <a href="#byte-escapes">Byte</a> &amp; <a href="#unicode-escapes">Unicode</a></td></tr>
 <tr><td><a href="#raw-c-string-literals">Raw C string</a></td><td><code>cr#"hello"#</code></td><td>&lt;256</td><td>All Unicode</td><td><code>N/A</code></td></tr>
 </tbody></table>
-</div><div class="alert alert-note">
-<blockquote>
-<p class="alert-title"><svg viewBox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
-<p>Character and string literal tokens never include the sequence of <code>U+000D</code> (CR) immediately followed by <code>U+000A</code> (LF): this pair would have been previously transformed into a single <code>U+000A</code> (LF).</p>
-</blockquote>
 </div>
 <h4 id="ascii-escapes"><a class="header" href="#ascii-escapes">ASCII escapes</a></h4>
 <div class="table-wrapper"><table><thead><tr><th></th><th>Name</th></tr></thead><tbody>
@@ -569,7 +564,7 @@ and numeric literal tokens are accepted only with suffixes from the list below.<
 <br>
 <span class="grammar-text grammar-production" id="grammar-CHAR_LITERAL" onclick="show_railroad()"><a href="tokens.html#railroad-CHAR_LITERAL">CHAR_LITERAL</a></span> → <br />
     <span class="grammar-literal">'</span> <br />
-        ( ~[<span class="grammar-literal">'</span> <span class="grammar-literal">\</span> <a href="notation.html#grammar-LF">LF</a> <a href="notation.html#grammar-CR">CR</a> <a href="notation.html#grammar-TAB">TAB</a>] | <span class="grammar-text"><a href="tokens.html#grammar-QUOTE_ESCAPE">QUOTE_ESCAPE</a></span> | <span class="grammar-text"><a href="tokens.html#grammar-ASCII_ESCAPE">ASCII_ESCAPE</a></span> | <span class="grammar-text"><a href="tokens.html#grammar-UNICODE_ESCAPE">UNICODE_ESCAPE</a></span> ) <br />
+        ( ~[<span class="grammar-literal">'</span> <span class="grammar-literal">\</span> <a href="input-format.html#grammar-LF">LF</a> <a href="input-format.html#grammar-CR">CR</a> <a href="input-format.html#grammar-TAB">TAB</a>] | <span class="grammar-text"><a href="tokens.html#grammar-QUOTE_ESCAPE">QUOTE_ESCAPE</a></span> | <span class="grammar-text"><a href="tokens.html#grammar-ASCII_ESCAPE">ASCII_ESCAPE</a></span> | <span class="grammar-text"><a href="tokens.html#grammar-UNICODE_ESCAPE">UNICODE_ESCAPE</a></span> ) <br />
     <span class="grammar-literal">'</span> <span class="grammar-text"><a href="tokens.html#grammar-SUFFIX">SUFFIX</a></span><sup>?</sup></p>
 <p><span class="grammar-text grammar-production" id="grammar-QUOTE_ESCAPE" onclick="show_railroad()"><a href="tokens.html#railroad-QUOTE_ESCAPE">QUOTE_ESCAPE</a></span> → <span class="grammar-literal">\'</span> | <span class="grammar-literal">\"</span></p>
 <p><span class="grammar-text grammar-production" id="grammar-ASCII_ESCAPE" onclick="show_railroad()"><a href="tokens.html#railroad-ASCII_ESCAPE">ASCII_ESCAPE</a></span> → <br />
@@ -621,7 +616,7 @@ CHAR_LITERAL</text>
 \</text>
 </g>
 <path d=" M 117 147 v 0 a 12 12 0 0 0 12 12 m 36 0 h 8 a 12 12 0 0 0 12 -12 v 0"/>
-<a class="link" xlink:href="notation.html#railroad-LF">
+<a class="link" xlink:href="input-format.html#railroad-LF">
 <g class="nonterminal">
 <rect height="22" width="36" x="129" y="148"/>
 <text x="147" y="164">
@@ -629,7 +624,7 @@ LF</text>
 </g>
 </a>
 <path d=" M 117 180 v 0 a 12 12 0 0 0 12 12 m 36 0 h 8 a 12 12 0 0 0 12 -12 v 0"/>
-<a class="link" xlink:href="notation.html#railroad-CR">
+<a class="link" xlink:href="input-format.html#railroad-CR">
 <g class="nonterminal">
 <rect height="22" width="36" x="129" y="181"/>
 <text x="147" y="197">
@@ -637,7 +632,7 @@ CR</text>
 </g>
 </a>
 <path d=" M 117 213 v 0 a 12 12 0 0 0 12 12 m 44 0 h 0 a 12 12 0 0 0 12 -12 v 0"/>
-<a class="link" xlink:href="notation.html#railroad-TAB">
+<a class="link" xlink:href="input-format.html#railroad-TAB">
 <g class="nonterminal">
 <rect height="22" width="44" x="129" y="214"/>
 <text x="151" y="230">
@@ -646,7 +641,7 @@ TAB</text>
 </a>
 </g>
 </g>
-<a class="link" xlink:href="notation.html#railroad-CHAR">
+<a class="link" xlink:href="input-format.html#railroad-CHAR">
 <g class="nonterminal">
 <rect height="22" width="52" x="105" y="244"/>
 <text x="131" y="260">
@@ -889,13 +884,13 @@ which must be <em>escaped</em> by a preceding <code>U+005C</code> character (<co
 <br>
 <span class="grammar-text grammar-production" id="grammar-STRING_LITERAL" onclick="show_railroad()"><a href="tokens.html#railroad-STRING_LITERAL">STRING_LITERAL</a></span> → <br />
     <span class="grammar-literal">"</span> ( <br />
-        ~[<span class="grammar-literal">"</span> <span class="grammar-literal">\</span> <a href="notation.html#grammar-CR">CR</a>] <br />
+        ~[<span class="grammar-literal">"</span> <span class="grammar-literal">\</span> <a href="input-format.html#grammar-CR">CR</a>] <br />
       | <span class="grammar-text"><a href="tokens.html#grammar-QUOTE_ESCAPE">QUOTE_ESCAPE</a></span> <br />
       | <span class="grammar-text"><a href="tokens.html#grammar-ASCII_ESCAPE">ASCII_ESCAPE</a></span> <br />
       | <span class="grammar-text"><a href="tokens.html#grammar-UNICODE_ESCAPE">UNICODE_ESCAPE</a></span> <br />
       | <span class="grammar-text"><a href="tokens.html#grammar-STRING_CONTINUE">STRING_CONTINUE</a></span> <br />
     )<sup>*</sup> <span class="grammar-literal">"</span> <span class="grammar-text"><a href="tokens.html#grammar-SUFFIX">SUFFIX</a></span><sup>?</sup></p>
-<p><span class="grammar-text grammar-production" id="grammar-STRING_CONTINUE" onclick="show_railroad()"><a href="tokens.html#railroad-STRING_CONTINUE">STRING_CONTINUE</a></span> → <span class="grammar-literal">\</span> <span class="grammar-text"><a href="notation.html#grammar-LF">LF</a></span></p>
+<p><span class="grammar-text grammar-production" id="grammar-STRING_CONTINUE" onclick="show_railroad()"><a href="tokens.html#railroad-STRING_CONTINUE">STRING_CONTINUE</a></span> → <span class="grammar-literal">\</span> <span class="grammar-text"><a href="input-format.html#grammar-LF">LF</a></span></p>
 <p><button class="grammar-toggle-railroad" type="button" title="Toggle railroad display" onclick="toggle_railroad()">Show Railroad</button></p>
 </div>
 <div class="grammar-railroad grammar-hidden">
@@ -944,7 +939,7 @@ STRING_LITERAL</text>
 \</text>
 </g>
 <path d=" M 153 159 v 0 a 12 12 0 0 0 12 12 m 36 0 h 0 a 12 12 0 0 0 12 -12 v 0"/>
-<a class="link" xlink:href="notation.html#railroad-CR">
+<a class="link" xlink:href="input-format.html#railroad-CR">
 <g class="nonterminal">
 <rect height="22" width="36" x="165" y="160"/>
 <text x="183" y="176">
@@ -953,7 +948,7 @@ CR</text>
 </a>
 </g>
 </g>
-<a class="link" xlink:href="notation.html#railroad-CHAR">
+<a class="link" xlink:href="input-format.html#railroad-CHAR">
 <g class="nonterminal">
 <rect height="22" width="52" x="141" y="190"/>
 <text x="167" y="206">
@@ -1050,7 +1045,7 @@ STRING_CONTINUE</text>
 <text x="49" y="58">
 \</text>
 </g>
-<a class="link" xlink:href="notation.html#railroad-LF">
+<a class="link" xlink:href="input-format.html#railroad-LF">
 <g class="nonterminal">
 <rect height="22" width="36" x="73" y="42"/>
 <text x="91" y="58">
@@ -1075,9 +1070,9 @@ which must be <em>escaped</em> by a preceding <code>U+005C</code> character (<co
 <div class="rule" id="r-lex.token.literal.str.linefeed"><a class="rule-link" href="#r-lex.token.literal.str.linefeed" title="lex.token.literal.str.linefeed"><span>[lex<wbr>.token<wbr>.literal<wbr>.str<wbr>.linefeed]</span/></a>
 </div>
 <p>Line-breaks, represented by the  character <code>U+000A</code> (LF), are allowed in string literals.
+The character <code>U+000D</code> (CR) may not appear in a string literal.
 When an unescaped <code>U+005C</code> character (<code>\</code>) occurs immediately before a line break, the line break does not appear in the string represented by the token.
-See <a href="expressions/literal-expr.html#string-continuation-escapes">String continuation escapes</a> for details.
-The character <code>U+000D</code> (CR) may not appear in a string literal other than as part of such a string continuation escape.</p>
+See <a href="expressions/literal-expr.html#string-continuation-escapes">String continuation escapes</a> for details.</p>
 <div class="rule" id="r-lex.token.literal.char-escape"><a class="rule-link" href="#r-lex.token.literal.char-escape" title="lex.token.literal.char-escape"><span>[lex<wbr>.token<wbr>.literal<wbr>.char-escape]</span/></a>
 </div>
 <h4 id="character-escapes"><a class="header" href="#character-escapes">Character escapes</a></h4>
@@ -1131,7 +1126,7 @@ escaped in order to denote itself.</li>
 <br>
 <span class="grammar-text grammar-production" id="grammar-RAW_STRING_LITERAL" onclick="show_railroad()"><a href="tokens.html#railroad-RAW_STRING_LITERAL">RAW_STRING_LITERAL</a></span> → <span class="grammar-literal">r</span> <span class="grammar-text"><a href="tokens.html#grammar-RAW_STRING_CONTENT">RAW_STRING_CONTENT</a></span> <span class="grammar-text"><a href="tokens.html#grammar-SUFFIX">SUFFIX</a></span><sup>?</sup></p>
 <p><span class="grammar-text grammar-production" id="grammar-RAW_STRING_CONTENT" onclick="show_railroad()"><a href="tokens.html#railroad-RAW_STRING_CONTENT">RAW_STRING_CONTENT</a></span> → <br />
-      <span class="grammar-literal">"</span> ( ~<span class="grammar-text"><a href="notation.html#grammar-CR">CR</a></span> )<sup>* (non-greedy)</sup> <span class="grammar-literal">"</span> <br />
+      <span class="grammar-literal">"</span> ( ~<span class="grammar-text"><a href="input-format.html#grammar-CR">CR</a></span> )<sup>* (non-greedy)</sup> <span class="grammar-literal">"</span> <br />
     | <span class="grammar-literal">#</span> <span class="grammar-text"><a href="tokens.html#grammar-RAW_STRING_CONTENT">RAW_STRING_CONTENT</a></span> <span class="grammar-literal">#</span></p>
 <p><button class="grammar-toggle-railroad" type="button" title="Toggle railroad display" onclick="toggle_railroad()">Show Railroad</button></p>
 </div>
@@ -1211,7 +1206,7 @@ non-greedy</text>
 <g class="verticalgrid">
 <text class="comment" x="241" y="113">
 ⚠️ with the exception of</text>
-<a class="link" xlink:href="notation.html#railroad-CR">
+<a class="link" xlink:href="input-format.html#railroad-CR">
 <g class="nonterminal">
 <rect height="22" width="36" x="149" y="130"/>
 <text x="167" y="146">
@@ -1219,7 +1214,7 @@ CR</text>
 </g>
 </a>
 </g>
-<a class="link" xlink:href="notation.html#railroad-CHAR">
+<a class="link" xlink:href="input-format.html#railroad-CHAR">
 <g class="nonterminal">
 <rect height="22" width="52" x="149" y="160"/>
 <text x="175" y="176">
@@ -1625,9 +1620,9 @@ below.</p>
 <div class="rule" id="r-lex.token.str-byte.linefeed"><a class="rule-link" href="#r-lex.token.str-byte.linefeed" title="lex.token.str-byte.linefeed"><span>[lex<wbr>.token<wbr>.str-byte<wbr>.linefeed]</span/></a>
 </div>
 <p>Line-breaks, represented by the  character <code>U+000A</code> (LF), are allowed in byte string literals.
+The character <code>U+000D</code> (CR) may not appear in a byte string literal.
 When an unescaped <code>U+005C</code> character (<code>\</code>) occurs immediately before a line break, the line break does not appear in the string represented by the token.
-See <a href="expressions/literal-expr.html#string-continuation-escapes">String continuation escapes</a> for details.
-The character <code>U+000D</code> (CR) may not appear in a byte string literal other than as part of such a string continuation escape.</p>
+See <a href="expressions/literal-expr.html#string-continuation-escapes">String continuation escapes</a> for details.</p>
 <div class="rule" id="r-lex.token.str-byte.escape"><a class="rule-link" href="#r-lex.token.str-byte.escape" title="lex.token.str-byte.escape"><span>[lex<wbr>.token<wbr>.str-byte<wbr>.escape]</span/></a>
 </div>
 <p>Some additional <em>escapes</em> are available in either byte or non-raw byte string
@@ -1858,7 +1853,7 @@ b"\\x52"; br"\x52";                  // \x52
 <br>
 <span class="grammar-text grammar-production" id="grammar-C_STRING_LITERAL" onclick="show_railroad()"><a href="tokens.html#railroad-C_STRING_LITERAL">C_STRING_LITERAL</a></span> → <br />
     <span class="grammar-literal">c"</span> ( <br />
-        ~[<span class="grammar-literal">"</span> <span class="grammar-literal">\</span> <a href="notation.html#grammar-CR">CR</a> <a href="notation.html#grammar-NUL">NUL</a>] <br />
+        ~[<span class="grammar-literal">"</span> <span class="grammar-literal">\</span> <a href="input-format.html#grammar-CR">CR</a> <a href="input-format.html#grammar-NUL">NUL</a>] <br />
       | <span class="grammar-text"><a href="tokens.html#grammar-BYTE_ESCAPE">BYTE_ESCAPE</a></span><sub class="grammar-text">except <code>\0</code> or <code>\x00</code></sub> <br />
       | <span class="grammar-text"><a href="tokens.html#grammar-UNICODE_ESCAPE">UNICODE_ESCAPE</a></span><sub class="grammar-text">except <code>\u{0}</code>, <code>\u{00}</code>, …, <code>\u{000000}</code></sub> <br />
       | <span class="grammar-text"><a href="tokens.html#grammar-STRING_CONTINUE">STRING_CONTINUE</a></span> <br />
@@ -1912,7 +1907,7 @@ c&quot;</text>
 \</text>
 </g>
 <path d=" M 161 159 v 0 a 12 12 0 0 0 12 12 m 36 0 h 8 a 12 12 0 0 0 12 -12 v 0"/>
-<a class="link" xlink:href="notation.html#railroad-CR">
+<a class="link" xlink:href="input-format.html#railroad-CR">
 <g class="nonterminal">
 <rect height="22" width="36" x="173" y="160"/>
 <text x="191" y="176">
@@ -1920,7 +1915,7 @@ CR</text>
 </g>
 </a>
 <path d=" M 161 192 v 0 a 12 12 0 0 0 12 12 m 44 0 h 0 a 12 12 0 0 0 12 -12 v 0"/>
-<a class="link" xlink:href="notation.html#railroad-NUL">
+<a class="link" xlink:href="input-format.html#railroad-NUL">
 <g class="nonterminal">
 <rect height="22" width="44" x="173" y="193"/>
 <text x="195" y="209">
@@ -1929,7 +1924,7 @@ NUL</text>
 </a>
 </g>
 </g>
-<a class="link" xlink:href="notation.html#railroad-CHAR">
+<a class="link" xlink:href="input-format.html#railroad-CHAR">
 <g class="nonterminal">
 <rect height="22" width="52" x="149" y="223"/>
 <text x="175" y="239">
@@ -2029,9 +2024,9 @@ permitted within a C string.</p>
 <div class="rule" id="r-lex.token.str-c.linefeed"><a class="rule-link" href="#r-lex.token.str-c.linefeed" title="lex.token.str-c.linefeed"><span>[lex<wbr>.token<wbr>.str-c<wbr>.linefeed]</span/></a>
 </div>
 <p>Line-breaks, represented by the  character <code>U+000A</code> (LF), are allowed in C string literals.
+The character <code>U+000D</code> (CR) may not appear in a C string literal.
 When an unescaped <code>U+005C</code> character (<code>\</code>) occurs immediately before a line break, the line break does not appear in the string represented by the token.
-See <a href="expressions/literal-expr.html#string-continuation-escapes">String continuation escapes</a> for details.
-The character <code>U+000D</code> (CR) may not appear in a C string literal other than as part of such a string continuation escape.</p>
+See <a href="expressions/literal-expr.html#string-continuation-escapes">String continuation escapes</a> for details.</p>
 <div class="rule" id="r-lex.token.str-c.escape"><a class="rule-link" href="#r-lex.token.str-c.escape" title="lex.token.str-c.escape"><span>[lex<wbr>.token<wbr>.str-c<wbr>.escape]</span/></a>
 </div>
 <p>Some additional <em>escapes</em> are available in non-raw C string literals. An escape
@@ -2094,7 +2089,7 @@ c"\xC3\xA6";
 <span class="grammar-text grammar-production" id="grammar-RAW_C_STRING_LITERAL" onclick="show_railroad()"><a href="tokens.html#railroad-RAW_C_STRING_LITERAL">RAW_C_STRING_LITERAL</a></span> → <br />
     <span class="grammar-literal">cr</span> <span class="grammar-text"><a href="tokens.html#grammar-RAW_C_STRING_CONTENT">RAW_C_STRING_CONTENT</a></span> <span class="grammar-text"><a href="tokens.html#grammar-SUFFIX">SUFFIX</a></span><sup>?</sup></p>
 <p><span class="grammar-text grammar-production" id="grammar-RAW_C_STRING_CONTENT" onclick="show_railroad()"><a href="tokens.html#railroad-RAW_C_STRING_CONTENT">RAW_C_STRING_CONTENT</a></span> → <br />
-      <span class="grammar-literal">"</span> ( ~[<a href="notation.html#grammar-CR">CR</a> <a href="notation.html#grammar-NUL">NUL</a>] )<sup>* (non-greedy)</sup> <span class="grammar-literal">"</span> <br />
+      <span class="grammar-literal">"</span> ( ~[<a href="input-format.html#grammar-CR">CR</a> <a href="input-format.html#grammar-NUL">NUL</a>] )<sup>* (non-greedy)</sup> <span class="grammar-literal">"</span> <br />
     | <span class="grammar-literal">#</span> <span class="grammar-text"><a href="tokens.html#grammar-RAW_C_STRING_CONTENT">RAW_C_STRING_CONTENT</a></span> <span class="grammar-literal">#</span></p>
 <p><button class="grammar-toggle-railroad" type="button" title="Toggle railroad display" onclick="toggle_railroad()">Show Railroad</button></p>
 </div>
@@ -2176,7 +2171,7 @@ non-greedy</text>
 ⚠️ with the exception of</text>
 <g class="choice">
 <path d=" M 149 141 h 24 m 36 0 h 32"/>
-<a class="link" xlink:href="notation.html#railroad-CR">
+<a class="link" xlink:href="input-format.html#railroad-CR">
 <g class="nonterminal">
 <rect height="22" width="36" x="173" y="130"/>
 <text x="191" y="146">
@@ -2185,7 +2180,7 @@ CR</text>
 </a>
 <path d=" M 149 141 a 12 12 0 0 1 12 12 v 9 m 68 0 v -9 a 12 12 0 0 1 12 -12"/>
 <path d=" M 161 162 v 0 a 12 12 0 0 0 12 12 m 44 0 h 0 a 12 12 0 0 0 12 -12 v 0"/>
-<a class="link" xlink:href="notation.html#railroad-NUL">
+<a class="link" xlink:href="input-format.html#railroad-NUL">
 <g class="nonterminal">
 <rect height="22" width="44" x="173" y="163"/>
 <text x="195" y="179">
@@ -2194,7 +2189,7 @@ NUL</text>
 </a>
 </g>
 </g>
-<a class="link" xlink:href="notation.html#railroad-CHAR">
+<a class="link" xlink:href="input-format.html#railroad-CHAR">
 <g class="nonterminal">
 <rect height="22" width="52" x="149" y="193"/>
 <text x="175" y="209">
@@ -4393,7 +4388,7 @@ usages and meanings are defined in the linked pages.</p>
 <tr><td><code>&lt;-</code></td><td>LArrow</td><td>The left arrow symbol has been unused since before Rust 1.0, but it is still treated as a single token</td></tr>
 <tr><td><code>#</code></td><td>Pound</td><td><a href="attributes.html">Attributes</a></td></tr>
 <tr><td><code>$</code></td><td>Dollar</td><td><a href="macros-by-example.html">Macros</a></td></tr>
-<tr><td><code>?</code></td><td>Question</td><td><a href="expressions/operator-expr.html#the-question-mark-operator">Question mark operator</a>, <a href="trait-bounds.html#sized">Questionably sized</a>, <a href="macros-by-example.html">Macro Kleene Matcher</a></td></tr>
+<tr><td><code>?</code></td><td>Question</td><td><a href="expressions/operator-expr.html#the-try-propagation-expression">Try propagation expressions</a>, <a href="trait-bounds.html#sized">Questionably sized</a>, <a href="macros-by-example.html">Macro Kleene Matcher</a></td></tr>
 <tr><td><code>~</code></td><td>Tilde</td><td>The tilde operator has been unused since before Rust 1.0, but its token may still be used</td></tr>
 </tbody></table>
 </div><div class="rule" id="r-lex.token.delim"><a class="rule-link" href="#r-lex.token.delim" title="lex.token.delim"><span>[lex<wbr>.token<wbr>.delim]</span/></a>
@@ -4956,7 +4951,7 @@ RESERVED_POUNDS</text>
         <script src="book-9576a2db.js"></script>
 
         <!-- Custom JS scripts -->
-        <script src="theme/reference-cfed9ca5.js"></script>
+        <script src="theme/reference-da60281b.js"></script>
 
 
 

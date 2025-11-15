@@ -37,7 +37,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-3109fce4.js";
+            window.path_to_searchindex_js = "../searchindex-5e2787cc.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-4adb5027.js"></script>
@@ -743,19 +743,6 @@ fn main() {
     s.method_of_t1();
     s.method_of_s();
 }</code></pre></pre>
-<script>
-(function() {
-    var fragments = {
-        "#object-safety": "traits.html#dyn-compatibility",
-    };
-    var target = fragments[window.location.hash];
-    if (target) {
-        var url = window.location.toString();
-        var base = url.substring(0, url.lastIndexOf('/'));
-        window.location.replace(base + "/" + target);
-    }
-})();
-</script>
 
                     </main>
 
@@ -803,9 +790,21 @@ fn main() {
         <script src="../book-9576a2db.js"></script>
 
         <!-- Custom JS scripts -->
-        <script src="../theme/reference-cfed9ca5.js"></script>
+        <script src="../theme/reference-da60281b.js"></script>
 
 
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const fragmentMap =
+                    {"#object-safety":"traits.html#dyn-compatibility"}
+                ;
+                const target = fragmentMap[window.location.hash];
+                if (target) {
+                    let url = new URL(target, window.location.href);
+                    window.location.replace(url.href);
+                }
+            });
+        </script>
 
     </div>
     </body>

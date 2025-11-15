@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `library\test\src\console.rs`."><title>console.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-aa0817cf.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="test" data-themes="" data-resource-suffix="1.90.0" data-rustdoc-version="1.90.0 (1159e78c4 2025-09-14)" data-channel="1.90.0" data-search-js="search-fa3e91e5.js" data-settings-js="settings-5514c975.js" ><script src="../../static.files/storage-68b7e25d.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files1.90.0.js"></script><script defer src="../../static.files/main-eebb9057.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-32bb7600.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-6580c154.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-044be391.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">test/</div>console.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="doccomment">//! Module providing interface for running tests in the console.
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `library\test\src\console.rs`."><title>console.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-e56847b5.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="test" data-themes="" data-resource-suffix="1.91.1" data-rustdoc-version="1.91.1 (ed61e7d7e 2025-11-07)" data-channel="1.91.1" data-search-js="search-e256b49e.js" data-stringdex-js="stringdex-c3e638e9.js" data-settings-js="settings-c38705f0.js" ><script src="../../static.files/storage-e2aeef58.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files1.91.1.js"></script><script defer src="../../static.files/main-6dc2a7f3.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-263c88ec.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-eab170b8.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-044be391.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">test/</div>console.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="doccomment">//! Module providing interface for running tests in the console.
 <a href=#2 id=2 data-nosnippet>2</a>
 <a href=#3 id=3 data-nosnippet>3</a></span><span class="kw">use </span>std::fs::File;
 <a href=#4 id=4 data-nosnippet>4</a><span class="kw">use </span>std::io;
@@ -281,57 +281,61 @@
 <a href=#281 id=281 data-nosnippet>281</a>    <span class="prelude-val">Ok</span>(())
 <a href=#282 id=282 data-nosnippet>282</a>}
 <a href=#283 id=283 data-nosnippet>283</a>
-<a href=#284 id=284 data-nosnippet>284</a><span class="doccomment">/// A simple console test runner.
-<a href=#285 id=285 data-nosnippet>285</a>/// Runs provided tests reporting process and results to the stdout.
-<a href=#286 id=286 data-nosnippet>286</a></span><span class="kw">pub fn </span>run_tests_console(opts: <span class="kw-2">&amp;</span>TestOpts, tests: Vec&lt;TestDescAndFn&gt;) -&gt; io::Result&lt;bool&gt; {
-<a href=#287 id=287 data-nosnippet>287</a>    <span class="kw">let </span>output = <span class="kw">match </span>term::stdout() {
-<a href=#288 id=288 data-nosnippet>288</a>        <span class="prelude-val">None </span>=&gt; OutputLocation::Raw(io::stdout()),
-<a href=#289 id=289 data-nosnippet>289</a>        <span class="prelude-val">Some</span>(t) =&gt; OutputLocation::Pretty(t),
-<a href=#290 id=290 data-nosnippet>290</a>    };
+<a href=#284 id=284 data-nosnippet>284</a><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>get_formatter(opts: <span class="kw-2">&amp;</span>TestOpts, max_name_len: usize) -&gt; Box&lt;<span class="kw">dyn </span>OutputFormatter&gt; {
+<a href=#285 id=285 data-nosnippet>285</a>    <span class="kw">let </span>output = <span class="kw">match </span>term::stdout() {
+<a href=#286 id=286 data-nosnippet>286</a>        <span class="prelude-val">None </span>=&gt; OutputLocation::Raw(io::stdout()),
+<a href=#287 id=287 data-nosnippet>287</a>        <span class="prelude-val">Some</span>(t) =&gt; OutputLocation::Pretty(t),
+<a href=#288 id=288 data-nosnippet>288</a>    };
+<a href=#289 id=289 data-nosnippet>289</a>
+<a href=#290 id=290 data-nosnippet>290</a>    <span class="kw">let </span>is_multithreaded = opts.test_threads.unwrap_or_else(get_concurrency) &gt; <span class="number">1</span>;
 <a href=#291 id=291 data-nosnippet>291</a>
-<a href=#292 id=292 data-nosnippet>292</a>    <span class="kw">let </span>max_name_len = tests
-<a href=#293 id=293 data-nosnippet>293</a>        .iter()
-<a href=#294 id=294 data-nosnippet>294</a>        .max_by_key(|t| len_if_padded(t))
-<a href=#295 id=295 data-nosnippet>295</a>        .map(|t| t.desc.name.as_slice().len())
-<a href=#296 id=296 data-nosnippet>296</a>        .unwrap_or(<span class="number">0</span>);
-<a href=#297 id=297 data-nosnippet>297</a>
-<a href=#298 id=298 data-nosnippet>298</a>    <span class="kw">let </span>is_multithreaded = opts.test_threads.unwrap_or_else(get_concurrency) &gt; <span class="number">1</span>;
-<a href=#299 id=299 data-nosnippet>299</a>
-<a href=#300 id=300 data-nosnippet>300</a>    <span class="kw">let </span><span class="kw-2">mut </span>out: Box&lt;<span class="kw">dyn </span>OutputFormatter&gt; = <span class="kw">match </span>opts.format {
-<a href=#301 id=301 data-nosnippet>301</a>        OutputFormat::Pretty =&gt; Box::new(PrettyFormatter::new(
-<a href=#302 id=302 data-nosnippet>302</a>            output,
-<a href=#303 id=303 data-nosnippet>303</a>            opts.use_color(),
-<a href=#304 id=304 data-nosnippet>304</a>            max_name_len,
-<a href=#305 id=305 data-nosnippet>305</a>            is_multithreaded,
-<a href=#306 id=306 data-nosnippet>306</a>            opts.time_options,
-<a href=#307 id=307 data-nosnippet>307</a>        )),
-<a href=#308 id=308 data-nosnippet>308</a>        OutputFormat::Terse =&gt; {
-<a href=#309 id=309 data-nosnippet>309</a>            Box::new(TerseFormatter::new(output, opts.use_color(), max_name_len, is_multithreaded))
-<a href=#310 id=310 data-nosnippet>310</a>        }
-<a href=#311 id=311 data-nosnippet>311</a>        OutputFormat::Json =&gt; Box::new(JsonFormatter::new(output)),
-<a href=#312 id=312 data-nosnippet>312</a>        OutputFormat::Junit =&gt; Box::new(JunitFormatter::new(output)),
-<a href=#313 id=313 data-nosnippet>313</a>    };
-<a href=#314 id=314 data-nosnippet>314</a>    <span class="kw">let </span><span class="kw-2">mut </span>st = ConsoleTestState::new(opts)<span class="question-mark">?</span>;
-<a href=#315 id=315 data-nosnippet>315</a>
-<a href=#316 id=316 data-nosnippet>316</a>    <span class="comment">// Prevent the usage of `Instant` in some cases:
-<a href=#317 id=317 data-nosnippet>317</a>    // - It's currently not supported for wasm targets without Emscripten nor WASI.
-<a href=#318 id=318 data-nosnippet>318</a>    // - It's currently not supported for zkvm targets.
-<a href=#319 id=319 data-nosnippet>319</a>    </span><span class="kw">let </span>is_instant_unsupported =
-<a href=#320 id=320 data-nosnippet>320</a>        (<span class="macro">cfg!</span>(target_family = <span class="string">"wasm"</span>) &amp;&amp; <span class="macro">cfg!</span>(target_os = <span class="string">"unknown"</span>)) || <span class="macro">cfg!</span>(target_os = <span class="string">"zkvm"</span>);
-<a href=#321 id=321 data-nosnippet>321</a>
-<a href=#322 id=322 data-nosnippet>322</a>    <span class="kw">let </span>start_time = (!is_instant_unsupported).then(Instant::now);
-<a href=#323 id=323 data-nosnippet>323</a>    run_tests(opts, tests, |x| on_test_event(<span class="kw-2">&amp;</span>x, <span class="kw-2">&amp;mut </span>st, <span class="kw-2">&amp;mut *</span>out))<span class="question-mark">?</span>;
-<a href=#324 id=324 data-nosnippet>324</a>    st.exec_time = start_time.map(|t| TestSuiteExecTime(t.elapsed()));
+<a href=#292 id=292 data-nosnippet>292</a>    <span class="kw">match </span>opts.format {
+<a href=#293 id=293 data-nosnippet>293</a>        OutputFormat::Pretty =&gt; Box::new(PrettyFormatter::new(
+<a href=#294 id=294 data-nosnippet>294</a>            output,
+<a href=#295 id=295 data-nosnippet>295</a>            opts.use_color(),
+<a href=#296 id=296 data-nosnippet>296</a>            max_name_len,
+<a href=#297 id=297 data-nosnippet>297</a>            is_multithreaded,
+<a href=#298 id=298 data-nosnippet>298</a>            opts.time_options,
+<a href=#299 id=299 data-nosnippet>299</a>        )),
+<a href=#300 id=300 data-nosnippet>300</a>        OutputFormat::Terse =&gt; {
+<a href=#301 id=301 data-nosnippet>301</a>            Box::new(TerseFormatter::new(output, opts.use_color(), max_name_len, is_multithreaded))
+<a href=#302 id=302 data-nosnippet>302</a>        }
+<a href=#303 id=303 data-nosnippet>303</a>        OutputFormat::Json =&gt; Box::new(JsonFormatter::new(output)),
+<a href=#304 id=304 data-nosnippet>304</a>        OutputFormat::Junit =&gt; Box::new(JunitFormatter::new(output)),
+<a href=#305 id=305 data-nosnippet>305</a>    }
+<a href=#306 id=306 data-nosnippet>306</a>}
+<a href=#307 id=307 data-nosnippet>307</a>
+<a href=#308 id=308 data-nosnippet>308</a><span class="doccomment">/// A simple console test runner.
+<a href=#309 id=309 data-nosnippet>309</a>/// Runs provided tests reporting process and results to the stdout.
+<a href=#310 id=310 data-nosnippet>310</a></span><span class="kw">pub fn </span>run_tests_console(opts: <span class="kw-2">&amp;</span>TestOpts, tests: Vec&lt;TestDescAndFn&gt;) -&gt; io::Result&lt;bool&gt; {
+<a href=#311 id=311 data-nosnippet>311</a>    <span class="kw">let </span>max_name_len = tests
+<a href=#312 id=312 data-nosnippet>312</a>        .iter()
+<a href=#313 id=313 data-nosnippet>313</a>        .max_by_key(|t| len_if_padded(t))
+<a href=#314 id=314 data-nosnippet>314</a>        .map(|t| t.desc.name.as_slice().len())
+<a href=#315 id=315 data-nosnippet>315</a>        .unwrap_or(<span class="number">0</span>);
+<a href=#316 id=316 data-nosnippet>316</a>
+<a href=#317 id=317 data-nosnippet>317</a>    <span class="kw">let </span><span class="kw-2">mut </span>out = get_formatter(opts, max_name_len);
+<a href=#318 id=318 data-nosnippet>318</a>    <span class="kw">let </span><span class="kw-2">mut </span>st = ConsoleTestState::new(opts)<span class="question-mark">?</span>;
+<a href=#319 id=319 data-nosnippet>319</a>
+<a href=#320 id=320 data-nosnippet>320</a>    <span class="comment">// Prevent the usage of `Instant` in some cases:
+<a href=#321 id=321 data-nosnippet>321</a>    // - It's currently not supported for wasm targets without Emscripten nor WASI.
+<a href=#322 id=322 data-nosnippet>322</a>    // - It's currently not supported for zkvm targets.
+<a href=#323 id=323 data-nosnippet>323</a>    </span><span class="kw">let </span>is_instant_unsupported =
+<a href=#324 id=324 data-nosnippet>324</a>        (<span class="macro">cfg!</span>(target_family = <span class="string">"wasm"</span>) &amp;&amp; <span class="macro">cfg!</span>(target_os = <span class="string">"unknown"</span>)) || <span class="macro">cfg!</span>(target_os = <span class="string">"zkvm"</span>);
 <a href=#325 id=325 data-nosnippet>325</a>
-<a href=#326 id=326 data-nosnippet>326</a>    <span class="macro">assert!</span>(opts.fail_fast || st.current_test_count() == st.total);
-<a href=#327 id=327 data-nosnippet>327</a>
-<a href=#328 id=328 data-nosnippet>328</a>    out.write_run_finish(<span class="kw-2">&amp;</span>st)
-<a href=#329 id=329 data-nosnippet>329</a>}
-<a href=#330 id=330 data-nosnippet>330</a>
-<a href=#331 id=331 data-nosnippet>331</a><span class="comment">// Calculates padding for given test description.
-<a href=#332 id=332 data-nosnippet>332</a></span><span class="kw">fn </span>len_if_padded(t: <span class="kw-2">&amp;</span>TestDescAndFn) -&gt; usize {
-<a href=#333 id=333 data-nosnippet>333</a>    <span class="kw">match </span>t.testfn.padding() {
-<a href=#334 id=334 data-nosnippet>334</a>        NamePadding::PadNone =&gt; <span class="number">0</span>,
-<a href=#335 id=335 data-nosnippet>335</a>        NamePadding::PadOnRight =&gt; t.desc.name.as_slice().len(),
-<a href=#336 id=336 data-nosnippet>336</a>    }
-<a href=#337 id=337 data-nosnippet>337</a>}</code></pre></div></section></main></body></html>
+<a href=#326 id=326 data-nosnippet>326</a>    <span class="kw">let </span>start_time = (!is_instant_unsupported).then(Instant::now);
+<a href=#327 id=327 data-nosnippet>327</a>    run_tests(opts, tests, |x| on_test_event(<span class="kw-2">&amp;</span>x, <span class="kw-2">&amp;mut </span>st, <span class="kw-2">&amp;mut *</span>out))<span class="question-mark">?</span>;
+<a href=#328 id=328 data-nosnippet>328</a>    st.exec_time = start_time.map(|t| TestSuiteExecTime(t.elapsed()));
+<a href=#329 id=329 data-nosnippet>329</a>
+<a href=#330 id=330 data-nosnippet>330</a>    <span class="macro">assert!</span>(opts.fail_fast || st.current_test_count() == st.total);
+<a href=#331 id=331 data-nosnippet>331</a>
+<a href=#332 id=332 data-nosnippet>332</a>    out.write_run_finish(<span class="kw-2">&amp;</span>st)
+<a href=#333 id=333 data-nosnippet>333</a>}
+<a href=#334 id=334 data-nosnippet>334</a>
+<a href=#335 id=335 data-nosnippet>335</a><span class="comment">// Calculates padding for given test description.
+<a href=#336 id=336 data-nosnippet>336</a></span><span class="kw">fn </span>len_if_padded(t: <span class="kw-2">&amp;</span>TestDescAndFn) -&gt; usize {
+<a href=#337 id=337 data-nosnippet>337</a>    <span class="kw">match </span>t.testfn.padding() {
+<a href=#338 id=338 data-nosnippet>338</a>        NamePadding::PadNone =&gt; <span class="number">0</span>,
+<a href=#339 id=339 data-nosnippet>339</a>        NamePadding::PadOnRight =&gt; t.desc.name.as_slice().len(),
+<a href=#340 id=340 data-nosnippet>340</a>    }
+<a href=#341 id=341 data-nosnippet>341</a>}</code></pre></div></section></main></body></html>

@@ -41,7 +41,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-ee4246b4.js";
+            window.path_to_searchindex_js = "../searchindex-adf886c2.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-a1ce3eb6.js"></script>
@@ -190,10 +190,11 @@
 <p><em>ライフタイム</em> はコンパイラ（借用チェッカーと呼ばれる場合もあります）が、全ての借用に問題がないことを確認するために使用する仕組みです。正確にいうと、変数のライフタイムは作成時に開始し、破棄された時に終了します。ライフタイムとスコープは同時に語られることが多いですが、同じものではありません。</p>
 <p>例として<code>&amp;</code>を用いて変数を借用する場合をあげましょう。借用のライフタイムは宣言時に決定し、そこから貸し手が破棄されるまで続きます。しかしながら、借用のスコープは参照が使われる際に決定します。</p>
 <p>以下の例からこのセクションの残りでは、ライフタイムとスコープの関係、そしてそれらがいかに異なるものであるかを見ていきます。</p>
-<pre><pre class="playground"><code class="language-rust editable edition2021">// 以下では、変数の作成から破棄までのライフタイムを線で示しています。
-// `i`は最長のライフタイムを持ち、そのスコープは`borrow1`および`borrow2`
-// のスコープを完全に包含します。
-// `borrow1`と`borrow2`の存続期間は一切重なりません。
+<pre><pre class="playground"><code class="language-rust editable edition2021">// Lifetimes are annotated below with lines denoting the creation
+// and destruction of each variable.
+// `i` has the longest lifetime because its scope entirely encloses
+// both `borrow1` and `borrow2`. The duration of `borrow1` compared
+// to `borrow2` is irrelevant since they are disjoint.
 fn main() {
     let i = 3; // `i`のライフタイム開始 ───────────────────┐
     //                                                     │

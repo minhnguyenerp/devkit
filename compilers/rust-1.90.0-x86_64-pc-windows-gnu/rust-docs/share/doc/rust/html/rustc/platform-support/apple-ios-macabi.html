@@ -37,10 +37,10 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-a3e21844.js";
+            window.path_to_searchindex_js = "../searchindex-cd34eb16.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-2441f1f0.js"></script>
+        <script src="../toc-59e61e94.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -219,6 +219,12 @@ currently available, see <a href="https://github.com/rust-lang/rust/issues/12906
 <code>rustc</code> has been built with support for them. For example:</p>
 <pre><code class="language-console">$ rustc --target aarch64-apple-ios-macabi your-code.rs
 </code></pre>
+<p>The target can be differentiated from the iOS targets with the
+<code>target_env = "macabi"</code> cfg (or <code>target_abi = "macabi"</code> before Rust 1.91.0).</p>
+<pre><code class="language-rust">if cfg!(target_env = "macabi") {
+    // Do something only on Mac Catalyst.
+}</code></pre>
+<p>This is similar to the <code>TARGET_OS_MACCATALYST</code> define in C code.</p>
 <h2 id="testing"><a class="header" href="#testing">Testing</a></h2>
 <p>Mac Catalyst binaries can be run directly on macOS 10.15 Catalina or newer.</p>
 <p>x86 binaries can be run on Apple Silicon by using Rosetta.</p>

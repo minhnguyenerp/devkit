@@ -36,10 +36,10 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-78c6cc9c.js";
+            window.path_to_searchindex_js = "../searchindex-0b4c70fa.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-dfc73933.js"></script>
+        <script src="../toc-28902c9d.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -404,17 +404,15 @@ option for cross-language LLVM CFI support, and proper (i.e., non-rustc) LTO
 Cargo build-std feature (i.e., <code>-Zbuild-std</code>) when enabling CFI.</p>
 <p>See the <a href="https://clang.llvm.org/docs/ControlFlowIntegrity.html">Clang ControlFlowIntegrity documentation</a> for more details.</p>
 <h2 id="example-1-redirecting-control-flow-using-an-indirect-branchcall-to-an-invalid-destination"><a class="header" href="#example-1-redirecting-control-flow-using-an-indirect-branchcall-to-an-invalid-destination">Example 1: Redirecting control flow using an indirect branch/call to an invalid destination</a></h2>
-<pre><code class="language-rust ignore (making doc tests pass cross-platform is hard)">use std::arch::naked_asm;
-use std::mem;
-
-fn add_one(x: i32) -&gt; i32 {
+<pre><pre class="playground"><code class="language-rust">fn add_one(x: i32) -&gt; i32 {
     x + 1
 }
 
 #[unsafe(naked)]
-pub extern "C" fn add_two(x: i32) {
+<span class="boring">#[cfg(all(target_os = "linux", target_arch = "x86_64"))]
+</span>pub extern "sysv64" fn add_two(x: i32) {
     // x + 2 preceded by a landing pad/nop block
-    naked_asm!(
+    std::arch::naked_asm!(
         "
          nop
          nop
@@ -440,17 +438,19 @@ fn main() {
 
     println!("The answer is: {}", answer);
 
-    println!("With CFI enabled, you should not see the next answer");
-    let f: fn(i32) -&gt; i32 = unsafe {
-        // Offset 0 is a valid branch/call destination (i.e., the function entry
-        // point), but offsets 1-8 within the landing pad/nop block are invalid
-        // branch/call destinations (i.e., within the body of the function).
-        mem::transmute::&lt;*const u8, fn(i32) -&gt; i32&gt;((add_two as *const u8).offset(5))
-    };
-    let next_answer = do_twice(f, 5);
+<span class="boring">  #[cfg(all(target_os = "linux", target_arch = "x86_64"))] {
+</span>        println!("With CFI enabled, you should not see the next answer");
+        let f: fn(i32) -&gt; i32 = unsafe {
+            // Offset 0 is a valid branch/call destination (i.e., the function entry
+            // point), but offsets 1-8 within the landing pad/nop block are invalid
+            // branch/call destinations (i.e., within the body of the function).
+            std::mem::transmute::&lt;*const u8, fn(i32) -&gt; i32&gt;((add_two as *const u8).offset(5))
+        };
+        let next_answer = do_twice(f, 5);
 
-    println!("The next answer is: {}", next_answer);
-}</code></pre>
+        println!("The next answer is: {}", next_answer);
+<span class="boring">  }
+</span>}</code></pre></pre>
 <p>Fig. 1. Redirecting control flow using an indirect branch/call to an invalid
 destination (i.e., within the body of the function).</p>
 <pre><code class="language-shell">$ cargo run --release

@@ -38,7 +38,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-358b6eba.js";
+            window.path_to_searchindex_js = "../searchindex-72365250.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-eeee08c3.js"></script>
@@ -321,7 +321,7 @@ impl LateLintPass&lt;'_&gt; for MyStructLint {
             // we are looking for the `DefId` of `Drop` trait in lang items
             .drop_trait()
             // then we use it with our type `ty` by calling `implements_trait` from Clippy's utils
-            .map_or(false, |id| implements_trait(cx, ty, id, &amp;[])) {
+            .is_some_and(|id| implements_trait(cx, ty, id, &amp;[])) {
                 // `expr` implements `Drop` trait
             }
     }

@@ -41,7 +41,7 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-ee4246b4.js";
+            window.path_to_searchindex_js = "../../searchindex-adf886c2.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../toc-a1ce3eb6.js"></script>
@@ -202,10 +202,10 @@ fn choose_first&lt;'a: 'b, 'b&gt;(first: &amp;'a i32, _: &amp;'b i32) -&gt; &amp
 
 fn main() {
     let first = 2; // 長いライフタイム
-    
+
     {
         let second = 3; // 短いライフタイム
-        
+
         println!("The product is {}", multiply(&amp;first, &amp;second));
         println!("{} is the first", choose_first(&amp;first, &amp;second));
     };

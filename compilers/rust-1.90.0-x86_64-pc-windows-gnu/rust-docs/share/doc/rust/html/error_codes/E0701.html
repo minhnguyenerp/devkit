@@ -180,14 +180,12 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="error-code-e0701"><a class="header" href="#error-code-e0701">Error code E0701</a></h1>
+<h4 id="note-this-error-code-is-no-longer-emitted-by-the-compiler"><a class="header" href="#note-this-error-code-is-no-longer-emitted-by-the-compiler">Note: this error code is no longer emitted by the compiler.</a></h4>
 <p>This error indicates that a <code>#[non_exhaustive]</code> attribute was incorrectly placed
 on something other than a struct or enum.</p>
 <p>Erroneous code example:</p>
-<pre><pre class="playground"><code class="language-rust compile_fail E0701"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>#[non_exhaustive]
-trait Foo { }
-<span class="boring">}</span></code></pre></pre>
+<pre><code class="language-rust ignore (no longer emitted)">#[non_exhaustive]
+trait Foo { }</code></pre>
 
                     </main>
 

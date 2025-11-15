@@ -41,7 +41,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-8b5e0132.js";
+            window.path_to_searchindex_js = "../searchindex-25f31b91.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-10049a44.js"></script>
@@ -211,7 +211,7 @@ trait PrintInOption {
     fn print_in_option(self);
 }
 
-// Because we would otherwise have to express this as `T: Debug` or 
+// Because we would otherwise have to express this as `T: Debug` or
 // use another method of indirect approach, this requires a `where` clause:
 impl&lt;T&gt; PrintInOption for T where
     Option&lt;T&gt;: Debug {

@@ -40,7 +40,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-7dbf6f40.js";
+            window.path_to_searchindex_js = "../searchindex-b96ec0af.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-ff85ecd7.js"></script>
@@ -262,7 +262,7 @@ build-std = ["core", "alloc"]
 <li>Output behavior
 <ul>
 <li><a href="#artifact-dir">artifact-dir</a> — Adds a directory where artifacts are copied to.</li>
-<li><a href="#build-dir">build-dir</a> — Adds a directory where intermediate build artifacts are stored.</li>
+<li><a href="#build-dir-new-layout">build-dir-new-layout</a> — Enables the new build-dir filesystem layout</li>
 <li><a href="#different-binary-name">Different binary name</a> — Assign a name to the built binary that is separate from the crate name.</li>
 <li><a href="#root-dir">root-dir</a> — Controls the root directory relative to which paths are printed</li>
 </ul>
@@ -308,6 +308,7 @@ build-std = ["core", "alloc"]
 <li><a href="#build-plan">Build-plan</a> — Emits JSON information on which commands will be run.</li>
 <li><a href="#unit-graph">unit-graph</a> — Emits JSON for Cargo’s internal graph structure.</li>
 <li><a href="#rustc---print"><code>cargo rustc --print</code></a> — Calls rustc with <code>--print</code> to display information from rustc.</li>
+<li><a href="#build-analysis">Build analysis</a> — Record and persist detailed build metrics across runs, with new commands to query past builds.</li>
 </ul>
 </li>
 <li>Configuration
@@ -332,6 +333,7 @@ build-std = ["core", "alloc"]
 <li><a href="#warnings">warnings</a> — controls warning behavior; options for allowing or denying warnings.</li>
 <li><a href="#package-message-format">Package message format</a> — Message format for <code>cargo package</code>.</li>
 <li><a href="#fix-edition"><code>fix-edition</code></a> — A permanently unstable edition migration helper.</li>
+<li><a href="https://github.com/crate-ci/cargo-plumbing">Plumbing subcommands</a> — Low, level commands that act as APIs for Cargo, like <code>cargo metadata</code></li>
 </ul>
 </li>
 </ul>
@@ -437,30 +439,6 @@ Example:</p>
 <pre><code class="language-toml">[build]
 artifact-dir = "out"
 </code></pre>
-<h2 id="build-dir"><a class="header" href="#build-dir">build-dir</a></h2>
-<ul>
-<li>Original Issue: <a href="https://github.com/rust-lang/cargo/issues/14125">#14125</a></li>
-<li>Tracking Issue: <a href="https://github.com/rust-lang/cargo/issues/14125">#14125</a></li>
-</ul>
-<p>The directory where intermediate build artifacts will be stored.
-Intermediate artifacts are produced by Rustc/Cargo during the build process.</p>
-<pre><code class="language-toml">[build]
-build-dir = "out"
-</code></pre>
-<h3 id="buildbuild-dir"><a class="header" href="#buildbuild-dir"><code>build.build-dir</code></a></h3>
-<ul>
-<li>Type: string (path)</li>
-<li>Default: Defaults to the value of <code>build.target-dir</code></li>
-<li>Environment: <code>CARGO_BUILD_BUILD_DIR</code></li>
-</ul>
-<p>The path to where internal files used as part of the build are placed.</p>
-<p>This option supports path templating.</p>
-<p>Available template variables:</p>
-<ul>
-<li><code>{workspace-root}</code> resolves to root of the current workspace.</li>
-<li><code>{cargo-cache-home}</code> resolves to <code>CARGO_HOME</code></li>
-<li><code>{workspace-path-hash}</code> resolves to a hash of the manifest path</li>
-</ul>
 <h2 id="root-dir"><a class="header" href="#root-dir">root-dir</a></h2>
 <ul>
 <li>Original Issue: <a href="https://github.com/rust-lang/cargo/issues/9887">#9887</a></li>
@@ -1726,36 +1704,6 @@ this feature in multiple projects, lockfiles should be stored in different direc
 Example:</p>
 <pre><code class="language-sh">cargo +nightly metadata --lockfile-path=$LOCKFILES_ROOT/my-project/Cargo.lock -Z unstable-options
 </code></pre>
-<h2 id="package-workspace"><a class="header" href="#package-workspace">package-workspace</a></h2>
-<ul>
-<li>Tracking Issue: <a href="https://github.com/rust-lang/cargo/issues/10948">#10948</a></li>
-</ul>
-<p>This allows cargo to package (or publish) multiple crates in a workspace, even
-if they have inter-dependencies. For example, consider a workspace containing
-packages <code>foo</code> and <code>dep</code>, where <code>foo</code> depends on <code>dep</code>. Then</p>
-<pre><code class="language-sh">cargo +nightly -Zpackage-workspace package -p foo -p dep
-</code></pre>
-<p>will package both <code>foo</code> and <code>dep</code>, while</p>
-<pre><code class="language-sh">cargo +nightly -Zpackage-workspace publish -p foo -p dep
-</code></pre>
-<p>will publish both <code>foo</code> and <code>dep</code>.
-If <code>foo</code> and <code>dep</code> are the only crates in the workspace, you can use the <code>--workspace</code>
-flag instead of specifying the crates individually:</p>
-<pre><code class="language-sh">cargo +nightly -Zpackage-workspace package --workspace
-cargo +nightly -Zpackage-workspace publish --workspace
-</code></pre>
-<h4 id="lock-file-behavior"><a class="header" href="#lock-file-behavior">Lock-file behavior</a></h4>
-<p>When packaging a binary at the same time as one of its dependencies, the binary
-will be packaged with a lock-file pointing at the dependency’s registry entry
-<em>as though the dependency were already published</em>, even though it has not yet
-been. In this case, <code>cargo</code> needs to know the registry that the dependency
-will eventually be published on. <code>cargo</code> will attempt to infer this registry
-by examining the <a href="manifest.html#the-publish-field">the <code>publish</code> field</a>, falling back
-to <code>crates.io</code> if no <code>publish</code> field is set. To explicitly set the registry,
-pass a <code>--registry</code> or <code>--index</code> flag.</p>
-<pre><code class="language-sh">cargo +nightly -Zpackage-workspace --registry=my-registry package -p foo -p dep
-cargo +nightly -Zpackage-workspace --index=https://example.com package -p foo -p dep
-</code></pre>
 <h2 id="native-completions"><a class="header" href="#native-completions">native-completions</a></h2>
 <ul>
 <li>Original Issue: <a href="https://github.com/rust-lang/cargo/issues/6645">#6645</a></li>
@@ -1907,6 +1855,35 @@ edition = "future"
 <p>For example:</p>
 <pre><code class="language-console">cargo +nightly fix -Zfix-edition=end=2024,future
 </code></pre>
+<h2 id="section-timings"><a class="header" href="#section-timings">section-timings</a></h2>
+<ul>
+<li>Original Pull Request: <a href="https://github.com/rust-lang/cargo/pull/15780">#15780</a></li>
+<li>Tracking Issue: <a href="https://github.com/rust-lang/cargo/issues/15817">#15817</a></li>
+</ul>
+<p>This feature can be used to extend the output of <code>cargo build --timings</code>. It will tell rustc
+to produce timings of individual compilation sections, which will be then displayed in the timings
+HTML/JSON output.</p>
+<pre><code class="language-console">cargo +nightly -Zsection-timings build --timings
+</code></pre>
+<h2 id="build-analysis"><a class="header" href="#build-analysis">Build analysis</a></h2>
+<ul>
+<li>Original Issue: <a href="https://github.com/rust-lang/rust-project-goals/pull/332">rust-lang/rust-project-goals#332</a></li>
+<li>Tracking Issue: <a href="https://github.com/rust-lang/cargo/issues/15844">#15844</a></li>
+</ul>
+<p>The <code>-Zbuild-analysis</code> feature records and persists detailed build metrics
+(timings, rebuild reasons, etc.) across runs, with new commands to query past builds.</p>
+<pre><code class="language-toml"># Example config.toml file.
+
+# Enable the build metric collection
+[build.analysis]
+enabled = true
+</code></pre>
+<h2 id="build-dir-new-layout"><a class="header" href="#build-dir-new-layout">build-dir-new-layout</a></h2>
+<ul>
+<li>Tracking Issue: <a href="https://github.com/rust-lang/cargo/issues/15010">#15010</a></li>
+</ul>
+<p>Enables the new build-dir filesystem layout.
+This layout change unblocks work towards caching and locking improvements.</p>
 <h1 id="stabilized-and-removed-features"><a class="header" href="#stabilized-and-removed-features">Stabilized and removed features</a></h1>
 <h2 id="compile-progress"><a class="header" href="#compile-progress">Compile progress</a></h2>
 <p>The compile-progress feature has been stabilized in the 1.30 release.
@@ -2074,6 +2051,8 @@ See <a href="../commands/cargo-fix.html"><code>cargo fix --edition</code></a> an
 More information can be found in the <a href="config.html#cache">config chapter</a>.</p>
 <h2 id="doctest-xcompile"><a class="header" href="#doctest-xcompile">doctest-xcompile</a></h2>
 <p>Doctest cross-compiling is now unconditionally enabled starting in Rust 1.89. Running doctests with <code>cargo test</code> will now honor the <code>--target</code> flag.</p>
+<h2 id="package-workspace"><a class="header" href="#package-workspace">package-workspace</a></h2>
+<p>Multi-package publishing has been stabilized in Rust 1.90.0.</p>
 <h2 id="compile-time-deps"><a class="header" href="#compile-time-deps">compile-time-deps</a></h2>
 <p>This permanently-unstable flag to only build proc-macros and build scripts (and their required dependencies),
 as well as run the build scripts.</p>
@@ -2082,6 +2061,9 @@ as well as run the build scripts.</p>
 <pre><code class="language-console">cargo +nightly build --compile-time-deps -Z unstable-options
 cargo +nightly check --compile-time-deps --all-targets -Z unstable-options
 </code></pre>
+<h2 id="build-dir"><a class="header" href="#build-dir">build-dir</a></h2>
+<p>Support for <code>build.build-dir</code> was stabilized in the 1.91 release.
+See the <a href="config.html#buildbuild-dir">config documentation</a> for information about changing the build-dir</p>
 
                     </main>
 

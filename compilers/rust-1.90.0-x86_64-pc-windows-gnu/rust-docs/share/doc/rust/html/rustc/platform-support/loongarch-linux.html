@@ -37,10 +37,10 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-a3e21844.js";
+            window.path_to_searchindex_js = "../searchindex-cd34eb16.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-2441f1f0.js"></script>
+        <script src="../toc-59e61e94.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -187,8 +187,8 @@
 <p><a href="https://loongson.github.io/LoongArch-Documentation/README-EN.html">LoongArch</a> Linux targets.
 LoongArch is a RISC ISA developed by Loongson Technology Corporation Limited.</p>
 <div class="table-wrapper"><table><thead><tr><th>Target</th><th>Description</th></tr></thead><tbody>
-<tr><td><code>loongarch64-unknown-linux-gnu</code></td><td>LoongArch64 Linux, LP64D ABI (kernel 5.19, glibc 2.36)</td></tr>
-<tr><td><code>loongarch64-unknown-linux-musl</code></td><td>LoongArch64 Linux, LP64D ABI (kernel 5.19, musl 1.2.5)</td></tr>
+<tr><td><code>loongarch64-unknown-linux-gnu</code></td><td>LoongArch64 Linux, LP64D ABI (kernel 5.19, glibc 2.36), LSX required</td></tr>
+<tr><td><code>loongarch64-unknown-linux-musl</code></td><td>LoongArch64 Linux, LP64D ABI (kernel 5.19, musl 1.2.5), LSX required</td></tr>
 </tbody></table>
 </div>
 <p>These support both native and cross builds, and have full support for <code>std</code>.</p>
@@ -199,8 +199,6 @@ LoongArch is a RISC ISA developed by Loongson Technology Corporation Limited.</p
 </ul>
 <h2 id="target-maintainers"><a class="header" href="#target-maintainers">Target maintainers</a></h2>
 <p><a href="https://github.com/heiher">@heiher</a>
-<a href="https://github.com/xiangzhai">@xiangzhai</a>
-<a href="https://github.com/zhaixiaojuan">@zhaixiaojuan</a>
 <a href="https://github.com/xen0n">@xen0n</a></p>
 <h2 id="requirements"><a class="header" href="#requirements">Requirements</a></h2>
 <h3 id="os-version"><a class="header" href="#os-version">OS Version</a></h3>
@@ -216,8 +214,8 @@ and will abort if incompatibility is detected.</p>
 Currently the following components are used by the Rust CI to build the target,
 and the versions can be seen as the minimum requirement:</p>
 <ul>
-<li>GNU Binutils 2.40</li>
-<li>GCC 13.x</li>
+<li>GNU Binutils 2.42</li>
+<li>GCC 14.x</li>
 <li>glibc 2.36</li>
 <li>linux-headers 5.19</li>
 </ul>
@@ -227,6 +225,9 @@ Older versions of Binutils and GCC will not work either, due to lack of support
 for newer LoongArch ELF relocation types, among other features.</p>
 <p>Recent LLVM/Clang toolchains may be able to build the targets, but are not
 currently being actively tested.</p>
+<h3 id="cpu-features"><a class="header" href="#cpu-features">CPU features</a></h3>
+<p>These targets require the double-precision floating-point and LSX (LoongArch
+SIMD Extension) features.</p>
 <h2 id="building"><a class="header" href="#building">Building</a></h2>
 <p>These targets are distributed through <code>rustup</code>, and otherwise require no
 special configuration.</p>

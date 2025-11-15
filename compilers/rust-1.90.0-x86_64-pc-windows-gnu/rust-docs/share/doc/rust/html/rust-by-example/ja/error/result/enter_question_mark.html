@@ -41,7 +41,7 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-ee4246b4.js";
+            window.path_to_searchindex_js = "../../searchindex-adf886c2.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../toc-a1ce3eb6.js"></script>
@@ -216,8 +216,8 @@ fn main() {
 }</code></pre></pre>
 <h2 id="tryマクロ"><a class="header" href="#tryマクロ"><code>try!</code>マクロ</a></h2>
 <p><code>?</code>ができる前、同様の動作を<code>try!</code>マクロによって行うことができました。現在は<code>?</code>演算子が推奨されていますが、古いコードでは<code>try!</code>に出会うこともあります。<code>try!</code>を使って前の例と同じ<code>multiply</code>関数を実装すると、以下のようになるでしょう。</p>
-<pre><pre class="playground"><code class="language-rust editable edition2015">// Cargoを使いながらこの例をエラーなくコンパイル、及び実行する場合、
-// `Cargo.toml`ファイル内、`[package]`セクションの`edition`の値を"2015"に変更してください。
+<pre><pre class="playground"><code class="language-rust editable edition2015">// To compile and run this example without errors, while using Cargo, change the value
+// of the `edition` field, in the `[package]` section of the `Cargo.toml` file, to "2015".
 
 use std::num::ParseIntError;
 

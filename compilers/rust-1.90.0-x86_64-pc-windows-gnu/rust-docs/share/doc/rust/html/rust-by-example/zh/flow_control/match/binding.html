@@ -41,7 +41,7 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-c56a0a1a.js";
+            window.path_to_searchindex_js = "../../searchindex-ed98a07e.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../toc-32872d2c.js"></script>
@@ -198,13 +198,18 @@ fn main() {
 
     match age() {
         0             =&gt; println!("我还没有过第一个生日"),
-        // 可以直接匹配 1 ..= 12，但那样无法知道具体年龄
-        // 相反，我们将 1 ..= 12 的序列绑定到 `n`
-        // 现在就可以报告具体年龄了
+        // 我们可以直接 `match` 1 ..= 12，但那样的话如何确定
+        // 孩子的确切年龄呢？
+        // 可以 `match` n 并使用 `if` 守卫，但这并不是
+        // 穷尽性检查。
+        // （虽然在这种情况下无关紧要，因为底部有一个
+        // "兜底" 模式）
+        // 因此，将 1 ..= 12 序列绑定到 `n`。
+        // 现在可以报告年龄了。
         n @ 1  ..= 12 =&gt; println!("我是 {:?} 岁的儿童", n),
         n @ 13 ..= 19 =&gt; println!("我是 {:?} 岁的青少年", n),
         // 没有绑定。直接返回结果。
-        n             =&gt; println!("我是 {:?} 岁的老年人", n),
+        n             =&gt; println!("我是 {:?} 岁的成年人", n),
     }
 }</code></pre></pre>
 <p>你也可以使用绑定来"解构" <code>enum</code> 变体，例如 <code>Option</code>：</p>
@@ -214,7 +219,14 @@ fn main() {
 
 fn main() {
     match some_number() {
-        // 获得 `Some` 变体，检查其值（绑定到 `n`）是否等于 42
+        // 匹配到 `Some` 变体，检查其绑定到 `n` 的值
+        // 是否等于 42。
+        // 也可以使用 `Some(42)` 并打印 `"答案是: 42!"`
+        // 但如果想要改变这个值，就需要在两个地方修改 `42`。
+        // 也可以使用 `Some(n) if n == 42` 并打印 `"答案是: {n}!"`
+        // 但这不是穷尽性检查。
+        // （虽然在这种情况下无关紧要，因为
+        // 下一个分支是"兜底"模式）
         Some(n @ 42) =&gt; println!("答案是：{}！", n),
         // 匹配任何其他数字
         Some(n)      =&gt; println!("不感兴趣... {}", n),

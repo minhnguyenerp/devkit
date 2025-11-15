@@ -41,7 +41,7 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-ee4246b4.js";
+            window.path_to_searchindex_js = "../../searchindex-adf886c2.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../toc-a1ce3eb6.js"></script>
@@ -273,9 +273,18 @@ fn main() {
 <p><code>fmt::Display</code>は実装されていますが、<code>fmt::Binary</code>はされていないので使用できません。<code>std::fmt</code>にはそのような<a href="https://doc.rust-lang.org/std/fmt/#formatting-traits">トレイト</a>が数多くあり、それぞれに独自の実装が必要です。詳しくは<a href="https://doc.rust-lang.org/std/fmt/"><code>std::fmt</code></a>を参照してください。</p>
 <h3 id="演習"><a class="header" href="#演習">演習</a></h3>
 <p>上記の例のアウトプットを確認し、<code>Point2D</code>構造体を参考として、複素数を格納するための<code>Complex</code>構造体を定義しましょう。うまく行けば以下のように出力されるはずです。</p>
-<pre><code class="language-txt">Display: 3.3 + 7.2i
+<pre><code class="language-txt">Display: 3.3 +7.2i
 Debug: Complex { real: 3.3, imag: 7.2 }
+
+Display: 4.7 -2.3i
+Debug: Complex { real: 4.7, imag: -2.3 }
 </code></pre>
+<p>Bonus: Add a space before the <code>+</code>/<code>-</code> signs.</p>
+<p>Hints in case you get stuck:</p>
+<ul>
+<li>Check the documentation for <a href="https://doc.rust-lang.org/std/fmt/#sign0"><code>Sign/#/0</code></a> in <code>std::fmt</code>.</li>
+<li>Bonus: Check <a href="../../flow_control/if_else.html"><code>if</code>-<code>else</code></a> branching and the <a href="https://doc.rust-lang.org/std/primitive.f64.html#method.abs"><code>abs</code></a> function.</li>
+</ul>
 <h3 id="参照"><a class="header" href="#参照">参照</a></h3>
 <p><a href="../../trait/derive.html">導出</a>, <a href="https://doc.rust-lang.org/std/fmt/"><code>std::fmt</code></a>, <a href="../../macros.html">マクロ</a>, <a href="../../custom_types/structs.html">構造体</a>, <a href="https://doc.rust-lang.org/std/fmt/#formatting-traits">トレイト</a>, <a href="../../mod/use.html"><code>use</code></a></p>
 

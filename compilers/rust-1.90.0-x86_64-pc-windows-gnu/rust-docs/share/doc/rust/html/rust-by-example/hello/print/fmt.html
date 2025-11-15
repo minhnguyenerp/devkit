@@ -41,7 +41,7 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-8b5e0132.js";
+            window.path_to_searchindex_js = "../../searchindex-25f31b91.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../toc-10049a44.js"></script>
@@ -255,13 +255,18 @@ so that the output displays as:</p>
 RGB (0, 3, 254) 0x0003FE
 RGB (0, 0, 0) 0x000000
 </code></pre>
-<p>Three hints if you get stuck:</p>
+<p>Two hints if you get stuck:</p>
 <ul>
-<li>The formula for calculating a color in the RGB color space is:
-<code>RGB = (R*65536)+(G*256)+B , (when R is RED, G is GREEN and B is BLUE)</code>.
-For more see <a href="https://www.rapidtables.com/web/color/RGB_Color.html#rgb-format">RGB color format &amp; calculation</a>.</li>
 <li>You <a href="https://doc.rust-lang.org/std/fmt/#named-parameters">may need to list each color more than once</a>.</li>
-<li>You can <a href="https://doc.rust-lang.org/std/fmt/#width">pad with zeros to a width of 2</a> with <code>:0&gt;2</code>.</li>
+<li>You can <a href="https://doc.rust-lang.org/std/fmt/#width">pad with zeros to a width of 2</a> with <code>:0&gt;2</code>.
+For hexadecimals, you can use <code>:02X</code>.</li>
+</ul>
+<p>Bonus:</p>
+<ul>
+<li>If you would like to experiment with <a href="../../types/cast.html">type casting</a> in advance,
+the formula for <a href="https://www.rapidtables.com/web/color/RGB_Color.html#rgb-format">calculating a color in the RGB color space</a> is
+<code>RGB = (R * 65_536) + (G * 256) + B</code>, where <code>R is RED, G is GREEN, and B is BLUE</code>.
+An unsigned 8-bit integer (<code>u8</code>) can only hold numbers up to 255. To cast <code>u8</code> to <code>u32</code>, you can write <code>variable_name as u32</code>.</li>
 </ul>
 <h3 id="see-also"><a class="header" href="#see-also">See also:</a></h3>
 <p><a href="https://doc.rust-lang.org/std/fmt/"><code>std::fmt</code></a></p>

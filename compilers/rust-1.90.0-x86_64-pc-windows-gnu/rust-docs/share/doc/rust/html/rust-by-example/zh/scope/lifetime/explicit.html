@@ -41,7 +41,7 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-c56a0a1a.js";
+            window.path_to_searchindex_js = "../../searchindex-ed98a07e.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../toc-32872d2c.js"></script>
@@ -217,13 +217,13 @@ fn failed_borrow&lt;'a&gt;() {
 fn main() {
     // 创建将要被借用的变量。
     let (four, nine) = (4, 9);
-    
+
     // 将两个变量的借用（`&amp;`）传递给函数。
     print_refs(&amp;four, &amp;nine);
     // 任何被借用的输入必须比借用者存活更久。
     // 换句话说，`four` 和 `nine` 的生命周期必须
     // 比 `print_refs` 的生命周期更长。
-    
+
     failed_borrow();
     // `failed_borrow` 不包含任何引用来强制 `'a` 比函数的生命周期更长，
     // 但 `'a` 实际上更长。

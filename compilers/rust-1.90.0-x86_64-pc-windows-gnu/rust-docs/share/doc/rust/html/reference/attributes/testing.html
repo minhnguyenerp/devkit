@@ -37,7 +37,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-3109fce4.js";
+            window.path_to_searchindex_js = "../searchindex-5e2787cc.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-4adb5027.js"></script>
@@ -189,6 +189,7 @@
 tests. Compiling a crate in “test” mode enables building the test functions
 along with a test harness for executing the tests. Enabling the test mode also
 enables the <a href="../conditional-compilation.html#test"><code>test</code> conditional compilation option</a>.</p>
+<!-- template:attributes -->
 <div class="rule" id="r-attributes.testing.test"><a class="rule-link" href="#r-attributes.testing.test" title="attributes.testing.test"><span>[attributes<wbr>.testing<wbr>.test]</span/></a>
 </div>
 <h2 id="the-test-attribute"><a class="header" href="#the-test-attribute">The <code>test</code> attribute</a></h2>
@@ -211,7 +212,7 @@ fn it_works() {
 </div>
 <div class="rule" id="r-attributes.testing.test.syntax"><a class="rule-link" href="#r-attributes.testing.test.syntax" title="attributes.testing.test.syntax"><span>[attributes<wbr>.testing<wbr>.test<wbr>.syntax]</span/></a>
 </div>
-<p>The <code>test</code> attribute uses the <a href="../attributes.html#grammar-MetaWord">MetaWord</a> syntax and thus does not take any inputs.</p>
+<p>The <code>test</code> attribute uses the <a href="../attributes.html#grammar-MetaWord">MetaWord</a> syntax.</p>
 <div class="rule" id="r-attributes.testing.test.allowed-positions"><a class="rule-link" href="#r-attributes.testing.test.allowed-positions" title="attributes.testing.test.allowed-positions"><span>[attributes<wbr>.testing<wbr>.test<wbr>.allowed-positions]</span/></a>
 </div>
 <p>The <code>test</code> attribute may only be applied to <a href="../glossary.html#free-item">free functions</a> that are monomorphic, that take no arguments, and where the return type implements the <a href="../../std/process/trait.Termination.html"><code>Termination</code></a> trait.</p>
@@ -227,11 +228,11 @@ fn it_works() {
 </div>
 <div class="rule" id="r-attributes.testing.test.duplicates"><a class="rule-link" href="#r-attributes.testing.test.duplicates" title="attributes.testing.test.duplicates"><span>[attributes<wbr>.testing<wbr>.test<wbr>.duplicates]</span/></a>
 </div>
-<p>Only the first instance of <code>test</code> on a function is honored.</p>
+<p>Only the first use of <code>test</code> on a function has effect.</p>
 <div class="alert alert-note">
 <blockquote>
 <p class="alert-title"><svg viewBox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
-<p>Subsequent <code>test</code> attributes are currently ignored and <code>rustc</code> warns about these.</p>
+<p><code>rustc</code> lints against any use following the first. This may become an error in the future.</p>
 </blockquote>
 </div>
 <!-- TODO: This is a minor lie. Currently rustc warns that duplicates are ignored, but it then generates multiple test entries with the same name. I would vote for rejecting this in the future. -->
@@ -274,6 +275,7 @@ fn test_the_thing() -&gt; io::Result&lt;()&gt; {
 <span class="boring">}</span></code></pre></pre>
 </blockquote>
 </div>
+<!-- template:attributes -->
 <div class="rule" id="r-attributes.testing.ignore"><a class="rule-link" href="#r-attributes.testing.ignore" title="attributes.testing.ignore"><span>[attributes<wbr>.testing<wbr>.ignore]</span/></a>
 </div>
 <h2 id="the-ignore-attribute"><a class="header" href="#the-ignore-attribute">The <code>ignore</code> attribute</a></h2>
@@ -301,7 +303,7 @@ fn check_thing() {
 </div>
 <div class="rule" id="r-attributes.testing.ignore.syntax"><a class="rule-link" href="#r-attributes.testing.ignore.syntax" title="attributes.testing.ignore.syntax"><span>[attributes<wbr>.testing<wbr>.ignore<wbr>.syntax]</span/></a>
 </div>
-<p>The <code>ignore</code> attribute uses either the <a href="../attributes.html#grammar-MetaWord">MetaWord</a> or <a href="../attributes.html#grammar-MetaNameValueStr">MetaNameValueStr</a> syntax.</p>
+<p>The <code>ignore</code> attribute uses the <a href="../attributes.html#grammar-MetaWord">MetaWord</a> and <a href="../attributes.html#grammar-MetaNameValueStr">MetaNameValueStr</a> syntaxes.</p>
 <div class="rule" id="r-attributes.testing.ignore.reason"><a class="rule-link" href="#r-attributes.testing.ignore.reason" title="attributes.testing.ignore.reason"><span>[attributes<wbr>.testing<wbr>.ignore<wbr>.reason]</span/></a>
 </div>
 <p>The <a href="../attributes.html#grammar-MetaNameValueStr">MetaNameValueStr</a> form of the <code>ignore</code> attribute provides a way to specify a reason why the test is ignored.</p>
@@ -320,25 +322,26 @@ fn mytest() {
 </div>
 <div class="rule" id="r-attributes.testing.ignore.allowed-positions"><a class="rule-link" href="#r-attributes.testing.ignore.allowed-positions" title="attributes.testing.ignore.allowed-positions"><span>[attributes<wbr>.testing<wbr>.ignore<wbr>.allowed-positions]</span/></a>
 </div>
-<p>The <code>ignore</code> attribute may be applied to functions annotated with the <code>test</code> attribute.</p>
+<p>The <code>ignore</code> attribute may only be applied to functions annotated with the <code>test</code> attribute.</p>
 <div class="alert alert-note">
 <blockquote>
 <p class="alert-title"><svg viewBox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
-<p><code>rustc</code> currently warns when <code>ignore</code> is used in some other situations. This may become an error in the future.</p>
+<p><code>rustc</code> ignores use in other positions but lints against it. This may become an error in the future.</p>
 </blockquote>
 </div>
 <div class="rule" id="r-attributes.testing.ignore.duplicates"><a class="rule-link" href="#r-attributes.testing.ignore.duplicates" title="attributes.testing.ignore.duplicates"><span>[attributes<wbr>.testing<wbr>.ignore<wbr>.duplicates]</span/></a>
 </div>
-<p>Only the first instance of <code>ignore</code> on a function is honored.</p>
+<p>Only the first use of <code>ignore</code> on a function has effect.</p>
 <div class="alert alert-note">
 <blockquote>
 <p class="alert-title"><svg viewBox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
-<p><code>rustc</code> currently ignores duplicate <code>ignore</code> attributes. This may become an error in the future.</p>
+<p><code>rustc</code> lints against any use following the first. This may become an error in the future.</p>
 </blockquote>
 </div>
 <div class="rule" id="r-attributes.testing.ignore.behavior"><a class="rule-link" href="#r-attributes.testing.ignore.behavior" title="attributes.testing.ignore.behavior"><span>[attributes<wbr>.testing<wbr>.ignore<wbr>.behavior]</span/></a>
 </div>
 <p>Ignored tests are still compiled when in test mode, but they are not executed.</p>
+<!-- template:attributes -->
 <div class="rule" id="r-attributes.testing.should_panic"><a class="rule-link" href="#r-attributes.testing.should_panic" title="attributes.testing.should_panic"><span>[attributes<wbr>.testing<wbr>.should_panic]</span/></a>
 </div>
 <h2 id="the-should_panic-attribute"><a class="header" href="#the-should_panic-attribute">The <code>should_panic</code> attribute</a></h2>
@@ -360,7 +363,7 @@ fn mytest() {
 </div>
 <div class="rule" id="r-attributes.testing.should_panic.syntax"><a class="rule-link" href="#r-attributes.testing.should_panic.syntax" title="attributes.testing.should_panic.syntax"><span>[attributes<wbr>.testing<wbr>.should_panic<wbr>.syntax]</span/></a>
 </div>
-<p>The <code>should_panic</code> attribute has one of the following forms:</p>
+<p>The <code>should_panic</code> attribute has these forms:</p>
 <ul>
 <li>
 <p><a href="../attributes.html#grammar-MetaWord">MetaWord</a></p>
@@ -403,12 +406,6 @@ fn mytest() { panic!("error: some message, and more"); }
 <span class="boring">}</span></code></pre></pre>
 </blockquote>
 </div>
-<div class="alert alert-note">
-<blockquote>
-<p class="alert-title"><svg viewBox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
-<p><code>rustc</code> currently accepts the <a href="../attributes.html#grammar-MetaListNameValueStr">MetaListNameValueStr</a> form with invalid syntax between the parentheses and emits a future-compatibility warning. This may become a hard error in the future.</p>
-</blockquote>
-</div>
 </li>
 </ul>
 <div class="rule" id="r-attributes.testing.should_panic.allowed-positions"><a class="rule-link" href="#r-attributes.testing.should_panic.allowed-positions" title="attributes.testing.should_panic.allowed-positions"><span>[attributes<wbr>.testing<wbr>.should_panic<wbr>.allowed-positions]</span/></a>
@@ -417,16 +414,16 @@ fn mytest() { panic!("error: some message, and more"); }
 <div class="alert alert-note">
 <blockquote>
 <p class="alert-title"><svg viewBox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
-<p><code>rustc</code> currently accepts this attribute in other positions with a warning. This may become a hard error in the future.</p>
+<p><code>rustc</code> ignores use in other positions but lints against it. This may become an error in the future.</p>
 </blockquote>
 </div>
 <div class="rule" id="r-attributes.testing.should_panic.duplicates"><a class="rule-link" href="#r-attributes.testing.should_panic.duplicates" title="attributes.testing.should_panic.duplicates"><span>[attributes<wbr>.testing<wbr>.should_panic<wbr>.duplicates]</span/></a>
 </div>
-<p>Only the first instance of <code>should_panic</code> on a function is honored.</p>
+<p>Only the first use of <code>should_panic</code> on a function has effect.</p>
 <div class="alert alert-note">
 <blockquote>
 <p class="alert-title"><svg viewBox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
-<p><code>rustc</code> currently ignores subsequent <code>should_panic</code> attributes and emits a future-compatibility warning. This may become a hard error in the future.</p>
+<p><code>rustc</code> lints against any use following the first with a future-compatibility warning. This may become an error in the future.</p>
 </blockquote>
 </div>
 <div class="rule" id="r-attributes.testing.should_panic.expected"><a class="rule-link" href="#r-attributes.testing.should_panic.expected" title="attributes.testing.should_panic.expected"><span>[attributes<wbr>.testing<wbr>.should_panic<wbr>.expected]</span/></a>
@@ -482,7 +479,7 @@ fn mytest() { panic!("error: some message, and more"); }
         <script src="../book-9576a2db.js"></script>
 
         <!-- Custom JS scripts -->
-        <script src="../theme/reference-cfed9ca5.js"></script>
+        <script src="../theme/reference-da60281b.js"></script>
 
 
 

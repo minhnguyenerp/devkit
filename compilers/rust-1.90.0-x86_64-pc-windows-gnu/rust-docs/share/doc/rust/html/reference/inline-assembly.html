@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-3109fce4.js";
+            window.path_to_searchindex_js = "searchindex-5e2787cc.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-4adb5027.js"></script>
@@ -1422,6 +1422,8 @@ assert_eq!(x, 5);
 unsafe { core::arch::asm!("call {}", sym foo, clobber_abi("C")); }
 <span class="boring">}
 </span><span class="boring">}</span></code></pre></pre>
+<div class="rule" id="r-asm.operand-type.supported-operands.const"><a class="rule-link" href="#r-asm.operand-type.supported-operands.const" title="asm.operand-type.supported-operands.const"><span>[asm<wbr>.operand-type<wbr>.supported-operands<wbr>.const]</span/></a>
+</div>
 <ul>
 <li><code>const &lt;expr&gt;</code>
 <ul>
@@ -1689,9 +1691,10 @@ The availability of supported types for a particular register class may depend o
 <tr><td>RISC-V</td><td><code>freg</code></td><td><code>f</code></td><td><code>f32</code></td></tr>
 <tr><td>RISC-V</td><td><code>freg</code></td><td><code>d</code></td><td><code>f64</code></td></tr>
 <tr><td>RISC-V</td><td><code>vreg</code></td><td>N/A</td><td>Only clobbers</td></tr>
+<tr><td>LoongArch32</td><td><code>reg</code></td><td>None</td><td><code>i8</code>, <code>i16</code>, <code>i32</code>, <code>f32</code></td></tr>
 <tr><td>LoongArch64</td><td><code>reg</code></td><td>None</td><td><code>i8</code>, <code>i16</code>, <code>i32</code>, <code>i64</code>, <code>f32</code>, <code>f64</code></td></tr>
-<tr><td>LoongArch64</td><td><code>freg</code></td><td><code>f</code></td><td><code>f32</code></td></tr>
-<tr><td>LoongArch64</td><td><code>freg</code></td><td><code>d</code></td><td><code>f64</code></td></tr>
+<tr><td>LoongArch</td><td><code>freg</code></td><td><code>f</code></td><td><code>f32</code></td></tr>
+<tr><td>LoongArch</td><td><code>freg</code></td><td><code>d</code></td><td><code>f64</code></td></tr>
 <tr><td>s390x</td><td><code>reg</code>, <code>reg_addr</code></td><td>None</td><td><code>i8</code>, <code>i16</code>, <code>i32</code>, <code>i64</code></td></tr>
 <tr><td>s390x</td><td><code>freg</code></td><td>None</td><td><code>f32</code>, <code>f64</code></td></tr>
 <tr><td>s390x</td><td><code>vreg</code></td><td>N/A</td><td>Only clobbers</td></tr>
@@ -2939,7 +2942,7 @@ assert_eq!(s, "Hello World!");
         <script src="book-9576a2db.js"></script>
 
         <!-- Custom JS scripts -->
-        <script src="theme/reference-cfed9ca5.js"></script>
+        <script src="theme/reference-da60281b.js"></script>
 
 
 

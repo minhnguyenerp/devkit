@@ -41,7 +41,7 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-ee4246b4.js";
+            window.path_to_searchindex_js = "../../searchindex-adf886c2.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../toc-a1ce3eb6.js"></script>
@@ -213,13 +213,13 @@ impl List {
 
     // リストの長さを返すメソッド
     fn len(&amp;self) -&gt; u32 {
-        // このメソッドは、`self`の状態によって振る舞いが
-        // 変化するため、matchをする必要があります。
-        // `self`の型は`&amp;List`なので、`*self`は`List`になります。マッチングは
-        // 参照（`&amp;T`）ではなく実体（`T`）に対して行うのが好ましいです。
-        // Rust 2018以降ではここでselfと（refのない）tailを使うことができ、
-        // &amp;selfとref tailが推論されます。
-        // 参照 https://doc.rust-lang.org/edition-guide/rust-2018/ownership-and-lifetimes/default-match-bindings.html
+        // `self` has to be matched, because the behavior of this method
+        // depends on the variant of `self`
+        // `self` has type `&amp;List`, and `*self` has type `List`, matching on a
+        // concrete type `T` is preferred over a match on a reference `&amp;T`
+        // after Rust 2018 you can use self here and tail (with no ref) below as well,
+        // rust will infer &amp;s and ref tail.
+        // See https://doc.rust-lang.org/edition-guide/rust-2018/ownership-and-lifetimes/default-match-bindings.html
         match *self {
             // Can't take ownership of the tail, because `self` is borrowed;
             // instead take a reference to the tail

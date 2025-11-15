@@ -55,8 +55,11 @@ locked-deps = true
 extended = true
 
 # Use the optimized LLVM C intrinsics for `compiler_builtins`, rather than Rust intrinsics.
-# Requires the LLVM submodule to be managed by bootstrap (i.e. not external) so that `compiler-rt`
-# sources are available.
+# Choosing true requires the LLVM submodule to be managed by bootstrap (i.e. not external)
+# so that `compiler-rt` sources are available.
+#
+# Setting this to a path removes the requirement for a C toolchain, but requires setting the
+# path to an existing library containing the builtins library from LLVM's compiler-rt.
 #
 # Setting this to `false` generates slower code, but removes the requirement for a C toolchain in
 # order to run `x check`.
@@ -115,11 +118,19 @@ verbose-tests = true
 # You can still build a source tarball when this is disabled by explicitly passing `x dist rustc-src`.
 dist-src = false
 
-# This is an array of the codegen backends that will be compiled for the rustc
-# that's being compiled. The default is to only build the LLVM codegen backend,
-# and currently the only standard options supported are `"llvm"`, `"cranelift"`
-# and `"gcc"`. The first backend in this list will be used as default by rustc
-# when no explicit backend is specified.
+# This array serves three distinct purposes:
+# - Backends in this list will be automatically compiled and included in the sysroot of each
+# rustc compiled by bootstrap.
+# - The first backend in this list will be configured as the **default codegen backend** by each
+# rustc compiled by bootstrap. In other words, if the first backend is e.g. cranelift, then when
+# we build a stage 1 rustc, it will by default compile Rust programs using the Cranelift backend.
+# This also means that stage 2 rustc would get built by the Cranelift backend.
+# - Running `x dist` (without additional arguments, or with `--include-default-paths`) will produce
+# a dist component/tarball for the Cranelift backend if it is included in this array.
+#
+# Note that the LLVM codegen backend is special and will always be built and distributed.
+#
+# Currently, the only standard options supported here are `"llvm"`, `"cranelift"` and `"gcc"`.
 codegen-backends = ['llvm', 'cranelift']
 
 # Indicates whether LLD will be compiled and made available in the sysroot for rustc to execute, and

@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `library\core\src\ptr\unique.rs`."><title>unique.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../../static.files/rustdoc-aa0817cf.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="core" data-themes="" data-resource-suffix="1.90.0" data-rustdoc-version="1.90.0 (1159e78c4 2025-09-14)" data-channel="1.90.0" data-search-js="search-fa3e91e5.js" data-settings-js="settings-5514c975.js" ><script src="../../../static.files/storage-68b7e25d.js"></script><script defer src="../../../static.files/src-script-813739b1.js"></script><script defer src="../../../src-files1.90.0.js"></script><script defer src="../../../static.files/main-eebb9057.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-32bb7600.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-6580c154.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-044be391.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">core\ptr/</div>unique.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use </span><span class="kw">crate</span>::fmt;
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `library\core\src\ptr\unique.rs`."><title>unique.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../../static.files/rustdoc-e56847b5.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="core" data-themes="" data-resource-suffix="1.91.1" data-rustdoc-version="1.91.1 (ed61e7d7e 2025-11-07)" data-channel="1.91.1" data-search-js="search-e256b49e.js" data-stringdex-js="stringdex-c3e638e9.js" data-settings-js="settings-c38705f0.js" ><script src="../../../static.files/storage-e2aeef58.js"></script><script defer src="../../../static.files/src-script-813739b1.js"></script><script defer src="../../../src-files1.91.1.js"></script><script defer src="../../../static.files/main-6dc2a7f3.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-263c88ec.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-eab170b8.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-044be391.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">core\ptr/</div>unique.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use </span><span class="kw">crate</span>::fmt;
 <a href=#2 id=2 data-nosnippet>2</a><span class="kw">use </span><span class="kw">crate</span>::marker::{PhantomData, PointeeSized, Unsize};
 <a href=#3 id=3 data-nosnippet>3</a><span class="kw">use </span><span class="kw">crate</span>::ops::{CoerceUnsized, DispatchFromDyn};
 <a href=#4 id=4 data-nosnippet>4</a><span class="kw">use </span><span class="kw">crate</span>::pin::PinCoerceUnsized;
@@ -63,10 +63,10 @@
 <a href=#63 id=63 data-nosnippet>63</a>    /// This is useful for initializing types which lazily allocate, like
 <a href=#64 id=64 data-nosnippet>64</a>    /// `Vec::new` does.
 <a href=#65 id=65 data-nosnippet>65</a>    ///
-<a href=#66 id=66 data-nosnippet>66</a>    /// Note that the pointer value may potentially represent a valid pointer to
-<a href=#67 id=67 data-nosnippet>67</a>    /// a `T`, which means this must not be used as a "not yet initialized"
-<a href=#68 id=68 data-nosnippet>68</a>    /// sentinel value. Types that lazily allocate must track initialization by
-<a href=#69 id=69 data-nosnippet>69</a>    /// some other means.
+<a href=#66 id=66 data-nosnippet>66</a>    /// Note that the address of the returned pointer may potentially
+<a href=#67 id=67 data-nosnippet>67</a>    /// be that of a valid pointer, which means this must not be used
+<a href=#68 id=68 data-nosnippet>68</a>    /// as a "not yet initialized" sentinel value.
+<a href=#69 id=69 data-nosnippet>69</a>    /// Types that lazily allocate must track initialization by some other means.
 <a href=#70 id=70 data-nosnippet>70</a>    </span><span class="attr">#[must_use]
 <a href=#71 id=71 data-nosnippet>71</a>    #[inline]
 <a href=#72 id=72 data-nosnippet>72</a>    </span><span class="kw">pub const fn </span>dangling() -&gt; <span class="self">Self </span>{
@@ -189,23 +189,25 @@
 <a href=#189 id=189 data-nosnippet>189</a>}
 <a href=#190 id=190 data-nosnippet>190</a>
 <a href=#191 id=191 data-nosnippet>191</a><span class="attr">#[unstable(feature = <span class="string">"ptr_internals"</span>, issue = <span class="string">"none"</span>)]
-<a href=#192 id=192 data-nosnippet>192</a></span><span class="kw">impl</span>&lt;T: PointeeSized&gt; From&lt;<span class="kw-2">&amp;mut </span>T&gt; <span class="kw">for </span>Unique&lt;T&gt; {
-<a href=#193 id=193 data-nosnippet>193</a>    <span class="doccomment">/// Converts a `&amp;mut T` to a `Unique&lt;T&gt;`.
-<a href=#194 id=194 data-nosnippet>194</a>    ///
-<a href=#195 id=195 data-nosnippet>195</a>    /// This conversion is infallible since references cannot be null.
-<a href=#196 id=196 data-nosnippet>196</a>    </span><span class="attr">#[inline]
-<a href=#197 id=197 data-nosnippet>197</a>    </span><span class="kw">fn </span>from(reference: <span class="kw-2">&amp;mut </span>T) -&gt; <span class="self">Self </span>{
-<a href=#198 id=198 data-nosnippet>198</a>        <span class="self">Self</span>::from(NonNull::from(reference))
-<a href=#199 id=199 data-nosnippet>199</a>    }
-<a href=#200 id=200 data-nosnippet>200</a>}
-<a href=#201 id=201 data-nosnippet>201</a>
-<a href=#202 id=202 data-nosnippet>202</a><span class="attr">#[unstable(feature = <span class="string">"ptr_internals"</span>, issue = <span class="string">"none"</span>)]
-<a href=#203 id=203 data-nosnippet>203</a></span><span class="kw">impl</span>&lt;T: PointeeSized&gt; From&lt;NonNull&lt;T&gt;&gt; <span class="kw">for </span>Unique&lt;T&gt; {
-<a href=#204 id=204 data-nosnippet>204</a>    <span class="doccomment">/// Converts a `NonNull&lt;T&gt;` to a `Unique&lt;T&gt;`.
-<a href=#205 id=205 data-nosnippet>205</a>    ///
-<a href=#206 id=206 data-nosnippet>206</a>    /// This conversion is infallible since `NonNull` cannot be null.
-<a href=#207 id=207 data-nosnippet>207</a>    </span><span class="attr">#[inline]
-<a href=#208 id=208 data-nosnippet>208</a>    </span><span class="kw">fn </span>from(pointer: NonNull&lt;T&gt;) -&gt; <span class="self">Self </span>{
-<a href=#209 id=209 data-nosnippet>209</a>        Unique::from_non_null(pointer)
-<a href=#210 id=210 data-nosnippet>210</a>    }
-<a href=#211 id=211 data-nosnippet>211</a>}</code></pre></div></section></main></body></html>
+<a href=#192 id=192 data-nosnippet>192</a>#[rustc_const_unstable(feature = <span class="string">"const_convert"</span>, issue = <span class="string">"143773"</span>)]
+<a href=#193 id=193 data-nosnippet>193</a></span><span class="kw">impl</span>&lt;T: PointeeSized&gt; <span class="kw">const </span>From&lt;<span class="kw-2">&amp;mut </span>T&gt; <span class="kw">for </span>Unique&lt;T&gt; {
+<a href=#194 id=194 data-nosnippet>194</a>    <span class="doccomment">/// Converts a `&amp;mut T` to a `Unique&lt;T&gt;`.
+<a href=#195 id=195 data-nosnippet>195</a>    ///
+<a href=#196 id=196 data-nosnippet>196</a>    /// This conversion is infallible since references cannot be null.
+<a href=#197 id=197 data-nosnippet>197</a>    </span><span class="attr">#[inline]
+<a href=#198 id=198 data-nosnippet>198</a>    </span><span class="kw">fn </span>from(reference: <span class="kw-2">&amp;mut </span>T) -&gt; <span class="self">Self </span>{
+<a href=#199 id=199 data-nosnippet>199</a>        <span class="self">Self</span>::from(NonNull::from(reference))
+<a href=#200 id=200 data-nosnippet>200</a>    }
+<a href=#201 id=201 data-nosnippet>201</a>}
+<a href=#202 id=202 data-nosnippet>202</a>
+<a href=#203 id=203 data-nosnippet>203</a><span class="attr">#[unstable(feature = <span class="string">"ptr_internals"</span>, issue = <span class="string">"none"</span>)]
+<a href=#204 id=204 data-nosnippet>204</a>#[rustc_const_unstable(feature = <span class="string">"const_convert"</span>, issue = <span class="string">"143773"</span>)]
+<a href=#205 id=205 data-nosnippet>205</a></span><span class="kw">impl</span>&lt;T: PointeeSized&gt; <span class="kw">const </span>From&lt;NonNull&lt;T&gt;&gt; <span class="kw">for </span>Unique&lt;T&gt; {
+<a href=#206 id=206 data-nosnippet>206</a>    <span class="doccomment">/// Converts a `NonNull&lt;T&gt;` to a `Unique&lt;T&gt;`.
+<a href=#207 id=207 data-nosnippet>207</a>    ///
+<a href=#208 id=208 data-nosnippet>208</a>    /// This conversion is infallible since `NonNull` cannot be null.
+<a href=#209 id=209 data-nosnippet>209</a>    </span><span class="attr">#[inline]
+<a href=#210 id=210 data-nosnippet>210</a>    </span><span class="kw">fn </span>from(pointer: NonNull&lt;T&gt;) -&gt; <span class="self">Self </span>{
+<a href=#211 id=211 data-nosnippet>211</a>        Unique::from_non_null(pointer)
+<a href=#212 id=212 data-nosnippet>212</a>    }
+<a href=#213 id=213 data-nosnippet>213</a>}</code></pre></div></section></main></body></html>

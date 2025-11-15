@@ -180,13 +180,14 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="error-code-e0755"><a class="header" href="#error-code-e0755">Error code E0755</a></h1>
+<h4 id="note-this-error-code-is-no-longer-emitted-by-the-compiler"><a class="header" href="#note-this-error-code-is-no-longer-emitted-by-the-compiler">Note: this error code is no longer emitted by the compiler.</a></h4>
 <p>The <code>ffi_pure</code> attribute was used on a non-foreign function.</p>
 <p>Erroneous code example:</p>
-<pre><pre class="playground"><code class="language-rust compile_fail E0755">#![feature(ffi_pure)]
+<pre><code class="language-rust ignore (no longer emitted)">#![feature(ffi_pure)]
 
 #[unsafe(ffi_pure)] // error!
 pub fn foo() {}
-<span class="boring">fn main() {}</span></code></pre></pre>
+<span class="boring">fn main() {}</span></code></pre>
 <p>The <code>ffi_pure</code> attribute can only be used on foreign functions which do not have
 side effects or infinite loops:</p>
 <pre><pre class="playground"><code class="language-rust">#![feature(ffi_pure)]

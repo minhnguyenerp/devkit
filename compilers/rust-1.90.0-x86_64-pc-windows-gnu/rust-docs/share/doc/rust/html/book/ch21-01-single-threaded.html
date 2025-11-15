@@ -40,7 +40,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-ac51862c.js";
+            window.path_to_searchindex_js = "searchindex-3a180665.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-18422fb5.js"></script>
@@ -228,7 +228,7 @@ fn main() {
 <code>127.0.0.1:7878</code>. In the address, the section before the colon is an IP address
 representing your computer (this is the same on every computer and doesn’t
 represent the authors’ computer specifically), and <code>7878</code> is the port. We’ve
-chosen this port for two reasons: HTTP isn’t normally accepted on this port so
+chosen this port for two reasons: HTTP isn’t normally accepted on this port, so
 our server is unlikely to conflict with any other web server you might have
 running on your machine, and 7878 is <em>rust</em> typed on a telephone.</p>
 <p>The <code>bind</code> function in this scenario works like the <code>new</code> function in that it
@@ -236,14 +236,11 @@ will return a new <code>TcpListener</code> instance. The function is called <cod
 because, in networking, connecting to a port to listen to is known as “binding
 to a port.”</p>
 <p>The <code>bind</code> function returns a <code>Result&lt;T, E&gt;</code>, which indicates that it’s
-possible for binding to fail. For example, connecting to port 80 requires
-administrator privileges (non-administrators can listen only on ports higher
-than 1023), so if we tried to connect to port 80 without being an
-administrator, binding wouldn’t work. Binding also wouldn’t work, for example,
-if we ran two instances of our program and so had two programs listening to the
-same port. Because we’re writing a basic server just for learning purposes, we
-won’t worry about handling these kinds of errors; instead, we use <code>unwrap</code> to
-stop the program if errors happen.</p>
+possible for binding to fail. For example, if we ran two instances of our
+program and so had two programs listening to the same port. Because we’re
+writing a basic server just for learning purposes, we won’t worry about
+handling these kinds of errors; instead, we use <code>unwrap</code> to stop the program if
+errors happen.</p>
 <p>The <code>incoming</code> method on <code>TcpListener</code> returns an iterator that gives us a
 sequence of streams (more specifically, streams of type <code>TcpStream</code>). A single
 <em>stream</em> represents an open connection between the client and the server. A
@@ -284,14 +281,14 @@ of scope and is dropped at the end of the loop, the connection is closed as
 part of the <code>drop</code> implementation. Browsers sometimes deal with closed
 connections by retrying, because the problem might be temporary.</p>
 <p>Browsers also sometimes open multiple connections to the server without sending
-any requests, so that if they <em>do</em> later send requests, they can happen faster.
-When this happens, our server will see each connection, regardless of whether
-there are any requests over that connection. Many versions of Chrome-based
-browsers do this, for example; you can disable that optimization by using =
-private browsing mode or use a different browser.</p>
+any requests, so that if they <em>do</em> later send requests, those requests can
+happen faster. When this happens, our server will see each connection,
+regardless of whether there are any requests over that connection. Many
+versions of Chrome-based browsers do this, for example; you can disable that
+optimization by using private browsing mode or using a different browser.</p>
 <p>The important factor is that we’ve successfully gotten a handle to a TCP
 connection!</p>
-<p>Remember to stop the program by pressing <kbd>ctrl</kbd>-<kbd>c</kbd> when
+<p>Remember to stop the program by pressing <kbd>ctrl</kbd>-<kbd>C</kbd> when
 you’re done running a particular version of the code. Then restart the program
 by invoking the <code>cargo run</code> command after you’ve made each set of code changes
 to make sure you’re running the newest code.</p>
@@ -337,8 +334,8 @@ loop in the <code>main</code> function, instead of printing a message that says 
 connection, we now call the new <code>handle_connection</code> function and pass the
 <code>stream</code> to it.</p>
 <p>In the <code>handle_connection</code> function, we create a new <code>BufReader</code> instance that
-wraps a reference to the <code>stream</code>. The <code>BufReader</code> adds buffering by managing calls
-to the <code>std::io::Read</code> trait methods for us.</p>
+wraps a reference to the <code>stream</code>. The <code>BufReader</code> adds buffering by managing
+calls to the <code>std::io::Read</code> trait methods for us.</p>
 <p>We create a variable named <code>http_request</code> to collect the lines of the request
 the browser sends to our server. We indicate that we want to collect these
 lines in a vector by adding the <code>Vec&lt;_&gt;</code> type annotation.</p>
@@ -401,7 +398,7 @@ information.</p>
 identifier</em> <em>(URI)</em> the client is requesting: a URI is almost, but not quite,
 the same as a <em>uniform resource locator</em> <em>(URL)</em>. The difference between URIs
 and URLs isn’t important for our purposes in this chapter, but the HTTP spec
-uses the term URI, so we can just mentally substitute <em>URL</em> for <em>URI</em> here.</p>
+uses the term <em>URI</em>, so we can just mentally substitute <em>URL</em> for <em>URI</em> here.</p>
 <p>The last part is the HTTP version the client uses, and then the request line
 ends in a CRLF sequence. (CRLF stands for <em>carriage return</em> and <em>line feed</em>,
 which are terms from the typewriter days!) The CRLF sequence can also be
@@ -562,7 +559,7 @@ request to <em>/</em>.</p>
 <h3 id="validating-the-request-and-selectively-responding"><a class="header" href="#validating-the-request-and-selectively-responding">Validating the Request and Selectively Responding</a></h3>
 <p>Right now, our web server will return the HTML in the file no matter what the
 client requested. Let’s add functionality to check that the browser is
-requesting <em>/</em> before returning the HTML file and return an error if the
+requesting <em>/</em> before returning the HTML file, and return an error if the
 browser requests anything else. For this we need to modify <code>handle_connection</code>,
 as shown in Listing 21-6. This new code checks the content of the request
 received against what we know a request for <em>/</em> looks like and adds <code>if</code> and
@@ -676,7 +673,7 @@ indicating the response to the end user.</p>
 <p>Here, our response has a status line with status code 404 and the reason phrase
 <code>NOT FOUND</code>. The body of the response will be the HTML in the file <em>404.html</em>.
 You’ll need to create a <em>404.html</em> file next to <em>hello.html</em> for the error
-page; again feel free to use any HTML you want or use the example HTML in
+page; again feel free to use any HTML you want, or use the example HTML in
 Listing 21-8.</p>
 <figure class="listing" id="listing-21-8">
 <span class="file-name">Filename: 404.html</span>

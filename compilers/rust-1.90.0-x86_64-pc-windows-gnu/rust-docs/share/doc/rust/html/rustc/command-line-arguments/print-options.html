@@ -37,10 +37,10 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-a3e21844.js";
+            window.path_to_searchindex_js = "../searchindex-cd34eb16.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-2441f1f0.js"></script>
+        <script src="../toc-59e61e94.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -202,7 +202,7 @@ my_crate
 <h2 id="file-names"><a class="header" href="#file-names"><code>file-names</code></a></h2>
 <p>The names of the files created by the <code>link</code> emit kind.</p>
 <h2 id="sysroot"><a class="header" href="#sysroot"><code>sysroot</code></a></h2>
-<p>Abosulte path to the sysroot.</p>
+<p>Absolute path to the sysroot.</p>
 <p>Example (with rustup and the stable toolchain):</p>
 <pre><code class="language-bash">$ rustc --print sysroot a.rs
 /home/[REDACTED]/.rustup/toolchains/stable-x86_64-unknown-linux-gnu
@@ -303,7 +303,7 @@ that indicates the linker flags to use when linking the resulting static library
 <p>The note starts with the text <code>native-static-libs:</code> to make it easier to fetch the output.</p>
 <p>Example:</p>
 <pre><code class="language-bash">$ rustc --print native-static-libs --crate-type staticlib a.rs
-note: Link against the following native artifacts when linking against this static library. The order and any duplication can be significant on some platforms.
+note: link against the following native artifacts when linking against this static library. The order and any duplication can be significant on some platforms.
 
 note: native-static-libs: -lgcc_s -lutil [REDACTED] -lpthread -lm -ldl -lc
 </code></pre>

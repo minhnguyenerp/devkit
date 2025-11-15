@@ -41,7 +41,7 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-8b5e0132.js";
+            window.path_to_searchindex_js = "../../searchindex-25f31b91.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../toc-10049a44.js"></script>
@@ -212,7 +212,7 @@ concise and fluent expression.</p>
 </span>use std::fs::read_to_string;
 
 fn read_lines(filename: &amp;str) -&gt; Vec&lt;String&gt; {
-    read_to_string(filename) 
+    read_to_string(filename)
         .unwrap()  // panic on possible file-reading errors
         .lines()  // split the string into an iterator of string slices
         .map(String::from)  // make each slice into a string

@@ -40,7 +40,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-7dbf6f40.js";
+            window.path_to_searchindex_js = "../searchindex-b96ec0af.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-ff85ecd7.js"></script>
@@ -422,19 +422,6 @@ format for the content of either of these tables, it is suggested that
 external tools may wish to use them in a consistent fashion, such as referring
 to the data in <code>workspace.metadata</code> if data is missing from <code>package.metadata</code>,
 if that makes sense for the tool in question.</p>
-<script>
-(function() {
-    var fragments = {
-        "#virtual-manifest": "workspaces.html#virtual-workspace",
-    };
-    var target = fragments[window.location.hash];
-    if (target) {
-        var url = window.location.toString();
-        var base = url.substring(0, url.lastIndexOf('/'));
-        window.location.replace(base + "/" + target);
-    }
-})();
-</script>
 
                     </main>
 
@@ -484,6 +471,18 @@ if that makes sense for the tool in question.</p>
         <!-- Custom JS scripts -->
 
 
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const fragmentMap =
+                    {"#virtual-manifest":"workspaces.html#virtual-workspace"}
+                ;
+                const target = fragmentMap[window.location.hash];
+                if (target) {
+                    let url = new URL(target, window.location.href);
+                    window.location.replace(url.href);
+                }
+            });
+        </script>
 
     </div>
     </body>

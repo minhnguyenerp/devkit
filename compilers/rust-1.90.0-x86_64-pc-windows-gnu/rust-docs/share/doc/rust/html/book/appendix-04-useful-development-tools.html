@@ -40,7 +40,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-ac51862c.js";
+            window.path_to_searchindex_js = "searchindex-3a180665.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-18422fb5.js"></script>
@@ -190,17 +190,11 @@ warning fixes, a linter, and integrating with IDEs.</p>
 <p>The <code>rustfmt</code> tool reformats your code according to the community code style.
 Many collaborative projects use <code>rustfmt</code> to prevent arguments about which
 style to use when writing Rust: everyone formats their code using the tool.</p>
-<p>Rust installations include rustfmt by default, so you should already have the
+<p>Rust installations include <code>rustfmt</code> by default, so you should already have the
 programs <code>rustfmt</code> and <code>cargo-fmt</code> on your system. These two commands are
 analogous to <code>rustc</code> and <code>cargo</code> in that <code>rustfmt</code> allows finer-grained control
 and <code>cargo-fmt</code> understands conventions of a project that uses Cargo. To format
 any Cargo project, enter the following:</p>
-<pre><code class="language-sh">$ cargo fmt
-</code></pre>
-<p>Running this command reformats all the Rust code in the current crate. This
-should only change the code style, not the code semantics.</p>
-<p>This command gives you <code>rustfmt</code> and <code>cargo-fmt</code>, similar to how Rust gives you
-both <code>rustc</code> and <code>cargo</code>. To format any Cargo project, enter the following:</p>
 <pre><code class="language-console">$ cargo fmt
 </code></pre>
 <p>Running this command reformats all the Rust code in the current crate. This
@@ -209,7 +203,7 @@ on <code>rustfmt</code>, see <a href="https://github.com/rust-lang/rustfmt">its 
 <h3 id="fix-your-code-with-rustfix"><a class="header" href="#fix-your-code-with-rustfix">Fix Your Code with <code>rustfix</code></a></h3>
 <p>The <code>rustfix</code> tool is included with Rust installations and can automatically fix
 compiler warnings that have a clear way to correct the problem that’s likely
-what you want. It’s likely you’ve seen compiler warnings before. For example,
+what you want. You’ve probably seen compiler warnings before. For example,
 consider this code:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><pre class="playground"><code class="language-rust edition2024">fn main() {
@@ -244,7 +238,7 @@ code:</p>
     let x = 42;
     println!("{x}");
 }</code></pre></pre>
-<p>The <code>x</code> variable is now immutable, and the warning no longer appears.</p>
+<p>The variable <code>x</code> is now immutable, and the warning no longer appears.</p>
 <p>You can also use the <code>cargo fix</code> command to transition your code between
 different Rust editions. Editions are covered in <a href="appendix-05-editions.html">Appendix E</a>.</p>
 <h3 id="more-lints-with-clippy"><a class="header" href="#more-lints-with-clippy">More Lints with Clippy</a></h3>
@@ -277,8 +271,8 @@ mathematical constant, such as pi, as this program does:</p>
 </code></pre>
 <p>This error lets you know that Rust already has a more precise <code>PI</code> constant
 defined, and that your program would be more correct if you used the constant
-instead. You would then change your code to use the <code>PI</code> constant. The
-following code doesn’t result in any errors or warnings from Clippy:</p>
+instead. You would then change your code to use the <code>PI</code> constant.</p>
+<p>The following code doesn’t result in any errors or warnings from Clippy:</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2024">fn main() {
@@ -289,15 +283,15 @@ following code doesn’t result in any errors or warnings from Clippy:</p>
 </figure>
 <p>For more information on Clippy, see <a href="https://github.com/rust-lang/rust-clippy">its documentation</a>.</p>
 <h3 id="ide-integration-using-rust-analyzer"><a class="header" href="#ide-integration-using-rust-analyzer">IDE Integration Using <code>rust-analyzer</code></a></h3>
-<p>To help IDE integration, the Rust community recommends using
+<p>To help with IDE integration, the Rust community recommends using
 <a href="https://rust-analyzer.github.io"><code>rust-analyzer</code></a><!-- ignore -->. This tool is a set of
-compiler-centric utilities that speaks the <a href="http://langserver.org/">Language Server Protocol</a><!--
+compiler-centric utilities that speak <a href="http://langserver.org/">Language Server Protocol</a><!--
 ignore -->, which is a specification for IDEs and programming languages to
 communicate with each other. Different clients can use <code>rust-analyzer</code>, such as
 <a href="https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer">the Rust analyzer plug-in for Visual Studio Code</a>.</p>
 <p>Visit the <code>rust-analyzer</code> project’s <a href="https://rust-analyzer.github.io">home page</a><!-- ignore -->
 for installation instructions, then install the language server support in your
-particular IDE. Your IDE will gain abilities such as autocompletion, jump to
+particular IDE. Your IDE will gain capabilities such as autocompletion, jump to
 definition, and inline errors.</p>
 
                     </main>

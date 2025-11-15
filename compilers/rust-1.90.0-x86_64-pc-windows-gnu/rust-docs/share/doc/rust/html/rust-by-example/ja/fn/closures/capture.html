@@ -41,7 +41,7 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-ee4246b4.js";
+            window.path_to_searchindex_js = "../../searchindex-adf886c2.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../toc-a1ce3eb6.js"></script>
@@ -196,24 +196,22 @@
 <p>クロージャは出来る限り参照を取得しようとし、その他2つは必要なときのみ取得します。</p>
 <pre><pre class="playground"><code class="language-rust editable edition2021">fn main() {
     use std::mem;
-    
+
     let color = String::from("green");
 
-    // `color`を出力するためのクロージャ。
-    // これは`color`を借用（`&amp;`）し、その借用とクロージャを`print`
-    // という名の変数に保持します。
-    // 借用は`print`がスコープから出るまで続きます。
+    // A closure to print `color` which immediately borrows (`&amp;`) `color` and
+    // stores the borrow and closure in the `print` variable. It will remain
+    // borrowed until `print` is used the last time.
     //
-    // `println!`は参照を与えれば機能するので、
-    // これ以上なにかする必要はありません。
+    // `println!` only requires arguments by immutable reference so it doesn't
+    // impose anything more restrictive.
     let print = || println!("`color`: {}", color);
 
     // 借用を行ったクロージャを呼び出します。
     print();
 
-    // `color`を再びイミュータブルで借用することができます。
-    // これはクロージャが`color`に対するイミュータブルな
-    // 参照しか保持しないためです。
+    // `color` can be borrowed immutably again, because the closure only holds
+    // an immutable reference to `color`.
     let _reborrow = &amp;color;
     print();
 
@@ -238,17 +236,17 @@
     // ミュータブルな借用を使ってクロージャを実行。
     inc();
 
-    // クロージャは後で呼ばれるため、まだ `count` をミュータブルで借用しています。
-    // 再借用しようとするとエラーになります。
-    // let _reborrow = &amp;count; 
-    // ^ TODO: この行のコメントアウトを解除しましょう。
+    // The closure still mutably borrows `count` because it is called later.
+    // An attempt to reborrow will lead to an error.
+    // let _reborrow = &amp;count;
+    // ^ TODO: try uncommenting this line.
     inc();
 
     // クロージャはもう`&amp;mut count`を借用する必要がありません。
     // なので、エラーを起こさず再借用することができます。
-    let _count_reborrowed = &amp;mut count; 
+    let _count_reborrowed = &amp;mut count;
 
-    
+
     // コピー不可能な型
     let movable = Box::new(3);
 
@@ -279,7 +277,7 @@
     // println!("There're {} elements in vec", haystack.len());
     // ^ 上の行のコメントアウトを解除すると、コンパイル時エラーになります。
     // これは変数の所有権が移った後の再利用を借用チェッカーが許可しないからです。
-    
+
     // クロージャのシグネチャから`move`を削除すると、クロージャは
     // _haystack_ 変数をイミュータブルで借用するようになります。
     // そのため _haystack_ はまだ利用可能となり、上の行のコメントアウトを

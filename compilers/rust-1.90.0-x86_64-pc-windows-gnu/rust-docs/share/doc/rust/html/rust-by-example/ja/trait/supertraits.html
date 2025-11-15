@@ -41,7 +41,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-ee4246b4.js";
+            window.path_to_searchindex_js = "../searchindex-adf886c2.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-a1ce3eb6.js"></script>
@@ -202,8 +202,8 @@ trait Programmer {
     fn fav_language(&amp;self) -&gt; String;
 }
 
-// CompSciStudent（コンピュータサイエンスの学生）はProgrammerとStudent両方のサブトレイトです。
-// CompSciStudentを実装するには、両方のスーパートレイトを実装する必要があります。
+// CompSciStudent (computer science student) is a subtrait of both Programmer
+// and Student. Implementing CompSciStudent requires you to impl both supertraits.
 trait CompSciStudent: Programmer + Student {
     fn git_username(&amp;self) -&gt; String;
 }
