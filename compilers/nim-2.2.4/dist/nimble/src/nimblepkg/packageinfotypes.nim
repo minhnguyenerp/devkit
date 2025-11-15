@@ -79,7 +79,8 @@ type
     entryPoints*: seq[string] #useful for tools like the lsp.
     features*: Table[string, seq[PkgTuple]] #features requires defined in the nimble file. Declarative parser + SAT solver only.
     activeFeatures*: Table[PkgTuple, seq[string]] #features that dependencies of this package have activated. #i.e. requires package[feature1, feature2]
-  
+    testEntryPoint*: string ## The entry point for the test task.
+
   Package* = object ## Definition of package from packages.json.
     # Required fields in a package.
     name*: string
@@ -96,6 +97,43 @@ type
 
   PackageDependenciesInfo* = tuple[deps: HashSet[PackageInfo], pkg: PackageInfo]
 
+  SolvedPackage* = object
+    pkgName*: string
+    version*: Version
+    requirements*: seq[PkgTuple] 
+    reverseDependencies*: seq[(string, Version)] 
+    deps*: seq[SolvedPackage]
+    reverseDeps*: seq[SolvedPackage]
+
+  SATPass* = enum
+    satNone
+    satLockFile #From a lock file. SAT is not ran.
+    satNimSelection #Declarative parser only. Ideally this is the only pass that is used.
+    satFallbackToVmParser #A package that has a control flow require was found.
+    satDone
+
+  NimResolved* = object
+    pkg*: Option[PackageInfo] #when none, we need to install it
+    version*: Version
+
+  SATResult* = ref object
+    rootPackage*: PackageInfo 
+    pkgsToInstall*: seq[(string, Version)] #Packages to install
+    solvedPkgs*: seq[SolvedPackage] #SAT solution
+    pkgList*: HashSet[PackageInfo] #Original package list the user has installed
+    output*: string
+    pkgs*: HashSet[PackageInfo] #Packages from solution + new installs
+    pass*: SATPass
+    installedPkgs*: seq[PackageInfo] #Packages installed in the current pass
+    buildPkgs*: seq[PackageInfo] #Packages that were built in the current pass
+    declarativeParseFailed*: bool
+    declarativeParserErrorLines*: seq[string]
+    nimResolved*: NimResolved
+
+proc `==`*(a, b: SolvedPackage): bool =
+  a.pkgName == b.pkgName and
+  a.version == b.version 
+  
 proc isMinimal*(pkg: PackageInfo): bool =
   pkg.infoKind == pikMinimal
 
@@ -118,3 +156,5 @@ proc getGloballyActiveFeatures*(): seq[string] =
     for feature in features:
       result.add(&"features.{pkgName}.{feature}")
   
+proc initSATResult*(pass: SATPass): SATResult =
+  SATResult(pkgsToInstall: @[], solvedPkgs: @[], output: "", pkgs: initHashSet[PackageInfo](), pass: pass, installedPkgs: @[], declarativeParseFailed: false, declarativeParserErrorLines: @[])

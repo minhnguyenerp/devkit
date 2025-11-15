@@ -16,10 +16,10 @@
 <link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA3XAAAN1wFCKJt4AAAAB3RJTUUH4QQQEwksSS9ZWwAAAk1JREFUWMPtll2ITVEUx39nn/O7Y5qR8f05wtCUUr6ZIS++8pEnkZInPImneaCQ5METNdOkeFBKUhMPRIkHKfEuUZSUlGlKPN2TrgfncpvmnntnmlEyq1Z7t89/rf9a6+y99oZxGZf/XeIq61EdtgKXgdXA0xrYAvBjOIF1AI9zvjcC74BSpndrJPkBWDScTF8Aa4E3wDlgHbASaANmVqlcCnwHvgDvgVfAJ+AikAAvgfVZwLnSVZHZaOuKoQi3ZOMi4NkYkpe1p4J7A8BpYAD49hfIy/oqG0+hLomiKP2L5L+1ubn5115S+3OAn4EnwBlgMzCjyt6ZAnQCJ4A7wOs88iRJHvw50HoujuPBoCKwHWiosy8MdfZnAdcHk8dxXFJ3VQbQlCTJvRBCGdRbD4M6uc5glpY3eAihpN5S5w12diSEcCCEcKUO4ljdr15T76ur1FDDLIQQ3qv71EdDOe3Kxj3leRXyk+pxdWnFWod6Wt2bY3de3aSuUHcPBVimHs7mK9WrmeOF6lR1o9qnzskh2ar2qm1qizpfXaPeVGdlmGN5pb09qMxz1Xb1kLqgzn1RyH7JUXW52lr5e/Kqi9qpto7V1atuUzfnARrV7jEib1T76gG2qxdGmXyiekkt1GswPTtek0aBfJp6YySGBfWg2tPQ0FAYgf1stUfdmdcjarbYJEniKIq6gY/Aw+zWHAC+p2labGpqiorFYgGYCEzN7oQdQClN07O1/EfDyGgC0ALMBdYAi4FyK+4H3gLPsxfR1zRNi+NP7nH5J+QntnXe5B5mpfQAAAAASUVORK5CYII=">
 
 <!-- CSS -->
-<link rel="stylesheet" type="text/css" href="nimdoc.out.css?v=2.2.4">
+<link rel="stylesheet" type="text/css" href="nimdoc.out.css?v=2.2.6">
 
 <!-- JS -->
-<script type="text/javascript" src="dochack.js?v=2.2.4"></script>
+<script type="text/javascript" src="dochack.js?v=2.2.6"></script>
 </head>
 <body>
   <div class="document" id="documentId">
@@ -85,7 +85,11 @@
   <details open>
     <summary><a class="reference reference-toplevel" href="#12" id="62">Procs</a></summary>
     <ul class="simple simple-toc-section">
-      <ul class="simple nested-toc-section">debug
+      <ul class="simple nested-toc-section">[]=
+  <li><a class="reference" href="#%5B%5D%3D%2CTIdTable%5BT%5D%2CItemId%2CT" title="`[]=`[T](t: var TIdTable[T]; key: ItemId; val: T)">`[]=`[T](t: var TIdTable[T]; key: ItemId; val: T)</a></li>
+
+</ul>
+<ul class="simple nested-toc-section">debug
   <li><a class="reference" href="#debug%2CPNode%2CConfigRef" title="debug(n: PNode; conf: ConfigRef = nil)">debug(n: PNode; conf: ConfigRef = nil)</a></li>
 <li><a class="reference" href="#debug%2CPSym%2CConfigRef" title="debug(n: PSym; conf: ConfigRef = nil)">debug(n: PSym; conf: ConfigRef = nil)</a></li>
 <li><a class="reference" href="#debug%2CPType%2CConfigRef" title="debug(n: PType; conf: ConfigRef = nil)">debug(n: PType; conf: ConfigRef = nil)</a></li>
@@ -107,6 +111,10 @@
 </ul>
 <ul class="simple nested-toc-section">getNamedParamFromList
   <li><a class="reference" href="#getNamedParamFromList%2CPNode%2CPIdent" title="getNamedParamFromList(list: PNode; ident: PIdent): PSym">getNamedParamFromList(list: PNode; ident: PIdent): PSym</a></li>
+
+</ul>
+<ul class="simple nested-toc-section">getOrDefault
+  <li><a class="reference" href="#getOrDefault%2CTIdTable%5BT%5D%2CItemId" title="getOrDefault[T](t: TIdTable[T]; key: ItemId): T">getOrDefault[T](t: TIdTable[T]; key: ItemId): T</a></li>
 
 </ul>
 <ul class="simple nested-toc-section">getSymFromList
@@ -229,7 +237,11 @@
   <details open>
     <summary><a class="reference reference-toplevel" href="#15" id="65">Iterators</a></summary>
     <ul class="simple simple-toc-section">
-      <ul class="simple nested-toc-section">items
+      <ul class="simple nested-toc-section">idTablePairs
+  <li><a class="reference" href="#idTablePairs.i%2CTIdTable%5BT%5D" title="idTablePairs[T](t: TIdTable[T]): tuple[key: ItemId, val: T]">idTablePairs[T](t: TIdTable[T]): tuple[key: ItemId, val: T]</a></li>
+
+</ul>
+<ul class="simple nested-toc-section">items
   <li><a class="reference" href="#items.i%2CTStrTable" title="items(tab: TStrTable): PSym">items(tab: TStrTable): PSym</a></li>
 
 </ul>
@@ -244,6 +256,14 @@
       <ul class="simple nested-toc-section">debug
   <li><a class="reference" href="#debug.t%2Cauto" title="debug(x: auto)">debug(x: auto)</a></li>
 <li><a class="reference" href="#debug.t" title="debug(x: PSym | PType | PNode)">debug(x: PSym | PType | PNode)</a></li>
+
+</ul>
+<ul class="simple nested-toc-section">idTableGet
+  <li><a class="reference" href="#idTableGet.t%2CTIdTable%5BT%5D%2C" title="idTableGet[T](t: TIdTable[T]; key: PType | PSym): T">idTableGet[T](t: TIdTable[T]; key: PType | PSym): T</a></li>
+
+</ul>
+<ul class="simple nested-toc-section">idTablePut
+  <li><a class="reference" href="#idTablePut.t%2CTIdTable%5BT%5D%2C%2CT" title="idTablePut[T](t: var TIdTable[T]; key: PType | PSym; val: T)">idTablePut[T](t: var TIdTable[T]; key: PType | PSym; val: T)</a></li>
 
 </ul>
 <ul class="simple nested-toc-section">mdbg
@@ -354,7 +374,20 @@
 <div class="section" id="12">
   <h1><a class="toc-backref" href="#12">Procs</a></h1>
   <dl class="item">
-    <div id="debug-procs-all">
+    <div id="[]=-procs-all">
+  <div id="[]=,TIdTable[T],ItemId,T">
+  <dt><pre><span class="Keyword">proc</span> <a href="#%5B%5D%3D%2CTIdTable%5BT%5D%2CItemId%2CT"><span class="Identifier">`[]=`</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">t</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="ast.html#TIdTable"><span class="Identifier">TIdTable</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">key</span><span class="Other">:</span> <a href="ast.html#ItemId"><span class="Identifier">ItemId</span></a><span class="Other">;</span> <span class="Identifier">val</span><span class="Other">:</span> <span class="Identifier">T</span><span class="Other">)</span></pre></dt>
+  <dd>
+    
+    
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/compiler/astalgo.nim#L753" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/compiler/astalgo.nim#L753" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+
+  </dd>
+</div>
+
+</div>
+<div id="debug-procs-all">
   <div id="debug,PNode,ConfigRef">
   <dt><pre><span class="Keyword">proc</span> <a href="#debug%2CPNode%2CConfigRef"><span class="Identifier">debug</span></a><span class="Other">(</span><span class="Identifier">n</span><span class="Other">:</span> <a href="ast.html#PNode"><span class="Identifier">PNode</span></a><span class="Other">;</span> <span class="Identifier">conf</span><span class="Other">:</span> <a href="options.html#ConfigRef"><span class="Identifier">ConfigRef</span></a> <span class="Other">=</span> <span class="Keyword">nil</span><span class="Other">)</span> {.<span class="Identifier">exportc</span><span class="Other">:</span> <span class="StringLit">&quot;debugNode&quot;</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">deprecated</span><span class="Other">,</span>
     <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">KeyError</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">RootEffect</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
@@ -452,6 +485,19 @@
 
     <a href="https://github.com/nim-lang/Nim/tree/version-2-2/compiler/astalgo.nim#L202" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
 <a href="https://github.com/nim-lang/Nim/edit/devel/compiler/astalgo.nim#L202" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+
+  </dd>
+</div>
+
+</div>
+<div id="getOrDefault-procs-all">
+  <div id="getOrDefault,TIdTable[T],ItemId">
+  <dt><pre><span class="Keyword">proc</span> <a href="#getOrDefault%2CTIdTable%5BT%5D%2CItemId"><span class="Identifier">getOrDefault</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">t</span><span class="Other">:</span> <a href="ast.html#TIdTable"><span class="Identifier">TIdTable</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">key</span><span class="Other">:</span> <a href="ast.html#ItemId"><span class="Identifier">ItemId</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">T</span></pre></dt>
+  <dd>
+    
+    
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/compiler/astalgo.nim#L734" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/compiler/astalgo.nim#L734" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -558,8 +604,8 @@
   <dd>
     
     
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/compiler/astalgo.nim#L768" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/compiler/astalgo.nim#L768" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/compiler/astalgo.nim#L832" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/compiler/astalgo.nim#L832" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -586,8 +632,8 @@
   <dd>
     
     
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/compiler/astalgo.nim#L761" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/compiler/astalgo.nim#L761" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/compiler/astalgo.nim#L825" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/compiler/astalgo.nim#L825" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -848,7 +894,20 @@
 <div class="section" id="15">
   <h1><a class="toc-backref" href="#15">Iterators</a></h1>
   <dl class="item">
-    <div id="items-iterators-all">
+    <div id="idTablePairs-iterators-all">
+  <div id="idTablePairs.i,TIdTable[T]">
+  <dt><pre><span class="Keyword">iterator</span> <a href="#idTablePairs.i%2CTIdTable%5BT%5D"><span class="Identifier">idTablePairs</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">t</span><span class="Other">:</span> <a href="ast.html#TIdTable"><span class="Identifier">TIdTable</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Keyword">tuple</span><span class="Other">[</span><span class="Identifier">key</span><span class="Other">:</span> <a href="ast.html#ItemId"><span class="Identifier">ItemId</span></a><span class="Other">,</span> <span class="Identifier">val</span><span class="Other">:</span> <span class="Identifier">T</span><span class="Other">]</span></pre></dt>
+  <dd>
+    
+    
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/compiler/astalgo.nim#L775" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/compiler/astalgo.nim#L775" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+
+  </dd>
+</div>
+
+</div>
+<div id="items-iterators-all">
   <div id="items.i,TStrTable">
   <dt><pre><span class="Keyword">iterator</span> <a href="#items.i%2CTStrTable"><span class="Identifier">items</span></a><span class="Other">(</span><span class="Identifier">tab</span><span class="Other">:</span> <a href="ast.html#TStrTable"><span class="Identifier">TStrTable</span></a><span class="Other">)</span><span class="Other">:</span> <a href="ast.html#PSym"><span class="Identifier">PSym</span></a> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
@@ -896,6 +955,32 @@
 </div>
 
 </div>
+<div id="idTableGet-templates-all">
+  <div id="idTableGet.t,TIdTable[T],">
+  <dt><pre><span class="Keyword">template</span> <a href="#idTableGet.t%2CTIdTable%5BT%5D%2C"><span class="Identifier">idTableGet</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">t</span><span class="Other">:</span> <a href="ast.html#TIdTable"><span class="Identifier">TIdTable</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">key</span><span class="Other">:</span> <a href="ast.html#PType"><span class="Identifier">PType</span></a> <span class="Operator">|</span> <a href="ast.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">T</span></pre></dt>
+  <dd>
+    
+    
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/compiler/astalgo.nim#L739" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/compiler/astalgo.nim#L739" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+
+  </dd>
+</div>
+
+</div>
+<div id="idTablePut-templates-all">
+  <div id="idTablePut.t,TIdTable[T],,T">
+  <dt><pre><span class="Keyword">template</span> <a href="#idTablePut.t%2CTIdTable%5BT%5D%2C%2CT"><span class="Identifier">idTablePut</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">t</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="ast.html#TIdTable"><span class="Identifier">TIdTable</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">key</span><span class="Other">:</span> <a href="ast.html#PType"><span class="Identifier">PType</span></a> <span class="Operator">|</span> <a href="ast.html#PSym"><span class="Identifier">PSym</span></a><span class="Other">;</span> <span class="Identifier">val</span><span class="Other">:</span> <span class="Identifier">T</span><span class="Other">)</span></pre></dt>
+  <dd>
+    
+    
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/compiler/astalgo.nim#L772" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/compiler/astalgo.nim#L772" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+
+  </dd>
+</div>
+
+</div>
 <div id="mdbg-templates-all">
   <div id="mdbg.t">
   <dt><pre><span class="Keyword">template</span> <a href="#mdbg.t"><span class="Identifier">mdbg</span></a><span class="Other">(</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span> {.<span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">deprecated</span></span>.}</pre></dt>
@@ -928,7 +1013,7 @@
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2025-04-22 02:28:13 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2025-10-31 02:27:31 UTC</small>
       </div>
     </div>
   </div>

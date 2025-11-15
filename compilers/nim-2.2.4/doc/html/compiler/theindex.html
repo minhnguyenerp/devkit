@@ -16,10 +16,10 @@
 <link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA3XAAAN1wFCKJt4AAAAB3RJTUUH4QQQEwksSS9ZWwAAAk1JREFUWMPtll2ITVEUx39nn/O7Y5qR8f05wtCUUr6ZIS++8pEnkZInPImneaCQ5METNdOkeFBKUhMPRIkHKfEuUZSUlGlKPN2TrgfncpvmnntnmlEyq1Z7t89/rf9a6+y99oZxGZf/XeIq61EdtgKXgdXA0xrYAvBjOIF1AI9zvjcC74BSpndrJPkBWDScTF8Aa4E3wDlgHbASaANmVqlcCnwHvgDvgVfAJ+AikAAvgfVZwLnSVZHZaOuKoQi3ZOMi4NkYkpe1p4J7A8BpYAD49hfIy/oqG0+hLomiKP2L5L+1ubn5115S+3OAn4EnwBlgMzCjyt6ZAnQCJ4A7wOs88iRJHvw50HoujuPBoCKwHWiosy8MdfZnAdcHk8dxXFJ3VQbQlCTJvRBCGdRbD4M6uc5glpY3eAihpN5S5w12diSEcCCEcKUO4ljdr15T76ur1FDDLIQQ3qv71EdDOe3Kxj3leRXyk+pxdWnFWod6Wt2bY3de3aSuUHcPBVimHs7mK9WrmeOF6lR1o9qnzskh2ar2qm1qizpfXaPeVGdlmGN5pb09qMxz1Xb1kLqgzn1RyH7JUXW52lr5e/Kqi9qpto7V1atuUzfnARrV7jEib1T76gG2qxdGmXyiekkt1GswPTtek0aBfJp6YySGBfWg2tPQ0FAYgf1stUfdmdcjarbYJEniKIq6gY/Aw+zWHAC+p2labGpqiorFYgGYCEzN7oQdQClN07O1/EfDyGgC0ALMBdYAi4FyK+4H3gLPsxfR1zRNi+NP7nH5J+QntnXe5B5mpfQAAAAASUVORK5CYII=">
 
 <!-- CSS -->
-<link rel="stylesheet" type="text/css" href="nimdoc.out.css?v=2.2.4">
+<link rel="stylesheet" type="text/css" href="nimdoc.out.css?v=2.2.6">
 
 <!-- JS -->
-<script type="text/javascript" src="dochack.js?v=2.2.4"></script>
+<script type="text/javascript" src="dochack.js?v=2.2.6"></script>
 </head>
 <body>
   <div class="document" id="documentId">
@@ -199,6 +199,8 @@
           data-doc-search-tag="ast: template `[]=`(n: PType; i: BackwardsIndex; x: PType)" href="ast.html#%5B%5D%3D.t%2CPType%2CBackwardsIndex%2CPType">ast: template `[]=`(n: PType; i: BackwardsIndex; x: PType)</a></li>
           <li><a class="reference external"
           data-doc-search-tag="ast: template `[]=`(n: PType; i: int; x: PType)" href="ast.html#%5B%5D%3D.t%2CPType%2Cint%2CPType">ast: template `[]=`(n: PType; i: int; x: PType)</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="astalgo: proc `[]=`[T](t: var TIdTable[T]; key: ItemId; val: T)" href="astalgo.html#%5B%5D%3D%2CTIdTable%5BT%5D%2CItemId%2CT">astalgo: proc `[]=`[T](t: var TIdTable[T]; key: ItemId; val: T)</a></li>
           <li><a class="reference external"
           data-doc-search-tag="suggestsymdb: proc `[]=`(s: var PackedBoolArray; idx: int; v: bool)" href="suggestsymdb.html#%5B%5D%3D%2CPackedBoolArray%2Cint%2Cbool">suggestsymdb: proc `[]=`(s: var PackedBoolArray; idx: int; v: bool)</a></li>
           </ul></dd>
@@ -718,7 +720,7 @@
           </ul></dd>
 <dt><a name="annotateType" href="#annotateType"><span>annotateType:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="semmacrosanity: proc annotateType(n: PNode; t: PType; conf: ConfigRef)" href="semmacrosanity.html#annotateType%2CPNode%2CPType%2CConfigRef">semmacrosanity: proc annotateType(n: PNode; t: PType; conf: ConfigRef)</a></li>
+          data-doc-search-tag="semmacrosanity: proc annotateType(n: PNode; t: PType; conf: ConfigRef; producedClosure: var bool)" href="semmacrosanity.html#annotateType%2CPNode%2CPType%2CConfigRef%2Cbool">semmacrosanity: proc annotateType(n: PNode; t: PType; conf: ConfigRef; producedClosure: var bool)</a></li>
           </ul></dd>
 <dt><a name="AnyPath" href="#AnyPath"><span>AnyPath:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -2016,6 +2018,10 @@
 <li><a class="reference external"
           data-doc-search-tag="pathutils: proc copyFile(source, dest: AbsoluteFile)" href="pathutils.html#copyFile%2CAbsoluteFile%2CAbsoluteFile">pathutils: proc copyFile(source, dest: AbsoluteFile)</a></li>
           </ul></dd>
+<dt><a name="copyIdTable" href="#copyIdTable"><span>copyIdTable:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="ast: proc copyIdTable[T](dest: var TIdTable[T]; src: TIdTable[T])" href="ast.html#copyIdTable%2CTIdTable%5BT%5D%2CTIdTable%5BT%5D">ast: proc copyIdTable[T](dest: var TIdTable[T]; src: TIdTable[T])</a></li>
+          </ul></dd>
 <dt><a name="copyInto" href="#copyInto"><span>copyInto:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="packed_ast: template copyInto(dest, n, body)" href="ic/packed_ast.html#copyInto.t%2C%2C%2C">packed_ast: template copyInto(dest, n, body)</a></li>
@@ -2203,6 +2209,10 @@
 <dt><a name="cpuRiscV64" href="#cpuRiscV64"><span>cpuRiscV64:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="platform: TSystemCPU.cpuRiscV64" href="platform.html#cpuRiscV64">platform: TSystemCPU.cpuRiscV64</a></li>
+          </ul></dd>
+<dt><a name="cpuS390x" href="#cpuS390x"><span>cpuS390x:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="platform: TSystemCPU.cpuS390x" href="platform.html#cpuS390x">platform: TSystemCPU.cpuS390x</a></li>
           </ul></dd>
 <dt><a name="cpuSparc" href="#cpuSparc"><span>cpuSparc:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -3464,7 +3474,9 @@
           </ul></dd>
 <dt><a name="findSymInfoIndex" href="#findSymInfoIndex"><span>findSymInfoIndex:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="suggestsymdb: proc findSymInfoIndex(s: var SuggestFileSymbolDatabase; li: TLineInfo): int" href="suggestsymdb.html#findSymInfoIndex%2CSuggestFileSymbolDatabase%2CTLineInfo">suggestsymdb: proc findSymInfoIndex(s: var SuggestFileSymbolDatabase; li: TLineInfo): int</a></li>
+          data-doc-search-tag="suggestsymdb: proc findSymInfoIndex(s: var SuggestFileSymbolDatabase; li: TLineInfo;
+                 isGenericInstance: bool): int" href="suggestsymdb.html#findSymInfoIndex%2CSuggestFileSymbolDatabase%2CTLineInfo%2Cbool">suggestsymdb: proc findSymInfoIndex(s: var SuggestFileSymbolDatabase; li: TLineInfo;
+                 isGenericInstance: bool): int</a></li>
           </ul></dd>
 <dt><a name="findType" href="#findType"><span>findType:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -4126,6 +4138,8 @@
           </ul></dd>
 <dt><a name="getOrDefault" href="#getOrDefault"><span>getOrDefault:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
+          data-doc-search-tag="astalgo: proc getOrDefault[T](t: TIdTable[T]; key: ItemId): T" href="astalgo.html#getOrDefault%2CTIdTable%5BT%5D%2CItemId">astalgo: proc getOrDefault[T](t: TIdTable[T]; key: ItemId): T</a></li>
+          <li><a class="reference external"
           data-doc-search-tag="btrees: proc getOrDefault[Key, Val](b: BTree[Key, Val]; key: Key): Val" href="btrees.html#getOrDefault%2CBTree%5BKey%2CVal%5D%2CKey">btrees: proc getOrDefault[Key, Val](b: BTree[Key, Val]; key: Key): Val</a></li>
           </ul></dd>
 <dt><a name="getOrdValue" href="#getOrdValue"><span>getOrdValue:</span></a></dt><dd><ul class="simple">
@@ -4818,11 +4832,15 @@
           </ul></dd>
 <dt><a name="idTableGet" href="#idTableGet"><span>idTableGet:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="ast: template idTableGet(tab: typed; key: PSym | PType): untyped" href="ast.html#idTableGet.t%2Ctyped%2C">ast: template idTableGet(tab: typed; key: PSym | PType): untyped</a></li>
+          data-doc-search-tag="astalgo: template idTableGet[T](t: TIdTable[T]; key: PType | PSym): T" href="astalgo.html#idTableGet.t%2CTIdTable%5BT%5D%2C">astalgo: template idTableGet[T](t: TIdTable[T]; key: PType | PSym): T</a></li>
+          </ul></dd>
+<dt><a name="idTablePairs" href="#idTablePairs"><span>idTablePairs:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="astalgo: iterator idTablePairs[T](t: TIdTable[T]): tuple[key: ItemId, val: T]" href="astalgo.html#idTablePairs.i%2CTIdTable%5BT%5D">astalgo: iterator idTablePairs[T](t: TIdTable[T]): tuple[key: ItemId, val: T]</a></li>
           </ul></dd>
 <dt><a name="idTablePut" href="#idTablePut"><span>idTablePut:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="ast: template idTablePut(tab: typed; key, val: PSym | PType)" href="ast.html#idTablePut.t%2Ctyped%2C%2C">ast: template idTablePut(tab: typed; key, val: PSym | PType)</a></li>
+          data-doc-search-tag="astalgo: template idTablePut[T](t: var TIdTable[T]; key: PType | PSym; val: T)" href="astalgo.html#idTablePut.t%2CTIdTable%5BT%5D%2C%2CT">astalgo: template idTablePut[T](t: var TIdTable[T]; key: PType | PSym; val: T)</a></li>
           </ul></dd>
 <dt><a name="Iface" href="#Iface"><span>Iface:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -5050,6 +5068,10 @@
 <li><a class="reference external"
           data-doc-search-tag="astalgo: proc initIdentIter(ti: var TIdentIter; tab: TStrTable; s: PIdent): PSym" href="astalgo.html#initIdentIter%2CTIdentIter%2CTStrTable%2CPIdent">astalgo: proc initIdentIter(ti: var TIdentIter; tab: TStrTable; s: PIdent): PSym</a></li>
           </ul></dd>
+<dt><a name="initIdTable" href="#initIdTable"><span>initIdTable:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="ast: proc initIdTable[T](): TIdTable[T]" href="ast.html#initIdTable">ast: proc initIdTable[T](): TIdTable[T]</a></li>
+          </ul></dd>
 <dt><a name="initIITable" href="#initIITable"><span>initIITable:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="astalgo: proc initIITable(x: var TIITable)" href="astalgo.html#initIITable%2CTIITable">astalgo: proc initIITable(x: var TIITable)</a></li>
@@ -5068,7 +5090,7 @@
           </ul></dd>
 <dt><a name="initNodeTable" href="#initNodeTable"><span>initNodeTable:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="ast: proc initNodeTable(): TNodeTable" href="ast.html#initNodeTable">ast: proc initNodeTable(): TNodeTable</a></li>
+          data-doc-search-tag="ast: proc initNodeTable(ignoreTypes = false): TNodeTable" href="ast.html#initNodeTable">ast: proc initNodeTable(ignoreTypes = false): TNodeTable</a></li>
           </ul></dd>
 <dt><a name="initObjectSet" href="#initObjectSet"><span>initObjectSet:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -5116,7 +5138,7 @@
           </ul></dd>
 <dt><a name="initSymMapping" href="#initSymMapping"><span>initSymMapping:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="ast: template initSymMapping(): Table[ItemId, PSym]" href="ast.html#initSymMapping.t">ast: template initSymMapping(): Table[ItemId, PSym]</a></li>
+          data-doc-search-tag="ast: template initSymMapping(): SymMapping" href="ast.html#initSymMapping.t">ast: template initSymMapping(): SymMapping</a></li>
           </ul></dd>
 <dt><a name="initTabIter" href="#initTabIter"><span>initTabIter:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -5128,7 +5150,7 @@
           </ul></dd>
 <dt><a name="initTypeMapping" href="#initTypeMapping"><span>initTypeMapping:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="ast: template initTypeMapping(): Table[ItemId, PType]" href="ast.html#initTypeMapping.t">ast: template initTypeMapping(): Table[ItemId, PType]</a></li>
+          data-doc-search-tag="ast: template initTypeMapping(): TypeMapping" href="ast.html#initTypeMapping.t">ast: template initTypeMapping(): TypeMapping</a></li>
           </ul></dd>
 <dt><a name="initTypeVars" href="#initTypeVars"><span>initTypeVars:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -5610,9 +5632,9 @@
           <li><a class="reference external"
           data-doc-search-tag="sigmatch: proc isTracked(current, trackPos: TLineInfo; tokenLen: int): bool" href="sigmatch.html#isTracked%2CTLineInfo%2CTLineInfo%2Cint">sigmatch: proc isTracked(current, trackPos: TLineInfo; tokenLen: int): bool</a></li>
           </ul></dd>
-<dt><a name="isTrival" href="#isTrival"><span>isTrival:</span></a></dt><dd><ul class="simple">
+<dt><a name="isTrivial" href="#isTrivial"><span>isTrivial:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="liftdestructors: proc isTrival(s: PSym): bool" href="liftdestructors.html#isTrival%2CPSym">liftdestructors: proc isTrival(s: PSym): bool</a></li>
+          data-doc-search-tag="liftdestructors: proc isTrivial(s: PSym): bool" href="liftdestructors.html#isTrivial%2CPSym">liftdestructors: proc isTrivial(s: PSym): bool</a></li>
           </ul></dd>
 <dt><a name="isTrue" href="#isTrue"><span>isTrue:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -6480,7 +6502,9 @@
           </ul></dd>
 <dt><a name="markUsed" href="#markUsed"><span>markUsed:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="sigmatch: proc markUsed(c: PContext; info: TLineInfo; s: PSym; checkStyle = true)" href="sigmatch.html#markUsed%2CPContext%2CTLineInfo%2CPSym">sigmatch: proc markUsed(c: PContext; info: TLineInfo; s: PSym; checkStyle = true)</a></li>
+          data-doc-search-tag="sigmatch: proc markUsed(c: PContext; info: TLineInfo; s: PSym; checkStyle = true;
+         isGenericInstance = false)" href="sigmatch.html#markUsed%2CPContext%2CTLineInfo%2CPSym">sigmatch: proc markUsed(c: PContext; info: TLineInfo; s: PSym; checkStyle = true;
+         isGenericInstance = false)</a></li>
           </ul></dd>
 <dt><a name="mArray" href="#mArray"><span>mArray:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -9216,7 +9240,7 @@
           </ul></dd>
 <dt><a name="onUse" href="#onUse"><span>onUse:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="modulegraphs: template onUse(info: TLineInfo; s: PSym)" href="modulegraphs.html#onUse.t%2CTLineInfo%2CPSym">modulegraphs: template onUse(info: TLineInfo; s: PSym)</a></li>
+          data-doc-search-tag="modulegraphs: template onUse(info: TLineInfo; s: PSym; isGenericInstance = false)" href="modulegraphs.html#onUse.t%2CTLineInfo%2CPSym">modulegraphs: template onUse(info: TLineInfo; s: PSym; isGenericInstance = false)</a></li>
           </ul></dd>
 <dt><a name="opcAddFloat" href="#opcAddFloat"><span>opcAddFloat:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -10065,8 +10089,8 @@
 <dt><a name="opMapTypeInstToAst" href="#opMapTypeInstToAst"><span>opMapTypeInstToAst:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="vmdeps: proc opMapTypeInstToAst(cache: IdentCache; t: PType; info: TLineInfo;
-                   idgen: IdGenerator): PNode" href="vmdeps.html#opMapTypeInstToAst%2CIdentCache%2CPType%2CTLineInfo%2CIdGenerator">vmdeps: proc opMapTypeInstToAst(cache: IdentCache; t: PType; info: TLineInfo;
-                   idgen: IdGenerator): PNode</a></li>
+                   idgen: IdGenerator; skipAlias = false): PNode" href="vmdeps.html#opMapTypeInstToAst%2CIdentCache%2CPType%2CTLineInfo%2CIdGenerator">vmdeps: proc opMapTypeInstToAst(cache: IdentCache; t: PType; info: TLineInfo;
+                   idgen: IdGenerator; skipAlias = false): PNode</a></li>
           </ul></dd>
 <dt><a name="opMapTypeToAst" href="#opMapTypeToAst"><span>opMapTypeToAst:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -11712,9 +11736,7 @@
           </ul></dd>
 <dt><a name="resetIdTable" href="#resetIdTable"><span>resetIdTable:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="ast: template resetIdTable(tab: Table[ItemId, PSym])" href="ast.html#resetIdTable.t%2CTable%5BItemId%2CPSym%5D">ast: template resetIdTable(tab: Table[ItemId, PSym])</a></li>
-          <li><a class="reference external"
-          data-doc-search-tag="ast: template resetIdTable(tab: Table[ItemId, PType])" href="ast.html#resetIdTable.t%2CTable%5BItemId%2CPType%5D">ast: template resetIdTable(tab: Table[ItemId, PType])</a></li>
+          data-doc-search-tag="ast: proc resetIdTable[T](x: var TIdTable[T])" href="ast.html#resetIdTable%2CTIdTable%5BT%5D">ast: proc resetIdTable[T](x: var TIdTable[T])</a></li>
           </ul></dd>
 <dt><a name="resetNimScriptSymbols" href="#resetNimScriptSymbols"><span>resetNimScriptSymbols:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -13171,8 +13193,8 @@
 <dt><a name="suggestSym" href="#suggestSym"><span>suggestSym:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="sigmatch: proc suggestSym(g: ModuleGraph; info: TLineInfo; s: PSym; usageSym: var PSym;
-           isDecl = true)" href="sigmatch.html#suggestSym%2CModuleGraph%2CTLineInfo%2CPSym%2CPSym">sigmatch: proc suggestSym(g: ModuleGraph; info: TLineInfo; s: PSym; usageSym: var PSym;
-           isDecl = true)</a></li>
+           isDecl = true; isGenericInstance = false)" href="sigmatch.html#suggestSym%2CModuleGraph%2CTLineInfo%2CPSym%2CPSym">sigmatch: proc suggestSym(g: ModuleGraph; info: TLineInfo; s: PSym; usageSym: var PSym;
+           isDecl = true; isGenericInstance = false)</a></li>
           </ul></dd>
 <dt><a name="SuggestSymbolDatabase" href="#SuggestSymbolDatabase"><span>SuggestSymbolDatabase:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -13308,10 +13330,6 @@
 <li><a class="reference external"
           data-doc-search-tag="typeallowed: TTypeAllowedFlag.taConcept" href="typeallowed.html#taConcept">typeallowed: TTypeAllowedFlag.taConcept</a></li>
           </ul></dd>
-<dt><a name="taField" href="#taField"><span>taField:</span></a></dt><dd><ul class="simple">
-<li><a class="reference external"
-          data-doc-search-tag="typeallowed: TTypeAllowedFlag.taField" href="typeallowed.html#taField">typeallowed: TTypeAllowedFlag.taField</a></li>
-          </ul></dd>
 <dt><a name="tagEffects" href="#tagEffects"><span>tagEffects:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="ast: const tagEffects" href="ast.html#tagEffects">ast: const tagEffects</a></li>
@@ -13356,6 +13374,10 @@
 <li><a class="reference external"
           data-doc-search-tag="typeallowed: TTypeAllowedFlag.taNoUntyped" href="typeallowed.html#taNoUntyped">typeallowed: TTypeAllowedFlag.taNoUntyped</a></li>
           </ul></dd>
+<dt><a name="taObjField" href="#taObjField"><span>taObjField:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="typeallowed: TTypeAllowedFlag.taObjField" href="typeallowed.html#taObjField">typeallowed: TTypeAllowedFlag.taObjField</a></li>
+          </ul></dd>
 <dt><a name="taProcContextIsNotMacro" href="#taProcContextIsNotMacro"><span>taProcContextIsNotMacro:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="typeallowed: TTypeAllowedFlag.taProcContextIsNotMacro" href="typeallowed.html#taProcContextIsNotMacro">typeallowed: TTypeAllowedFlag.taProcContextIsNotMacro</a></li>
@@ -13375,6 +13397,10 @@
 <dt><a name="TAssignableResult" href="#TAssignableResult"><span>TAssignableResult:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="parampatterns: enum TAssignableResult" href="parampatterns.html#TAssignableResult">parampatterns: enum TAssignableResult</a></li>
+          </ul></dd>
+<dt><a name="taTupField" href="#taTupField"><span>taTupField:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="typeallowed: TTypeAllowedFlag.taTupField" href="typeallowed.html#taTupField">typeallowed: TTypeAllowedFlag.taTupField</a></li>
           </ul></dd>
 <dt><a name="taVoid" href="#taVoid"><span>taVoid:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -13757,6 +13783,18 @@
 <dt><a name="TIdentIter" href="#TIdentIter"><span>TIdentIter:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="astalgo: object TIdentIter" href="astalgo.html#TIdentIter">astalgo: object TIdentIter</a></li>
+          </ul></dd>
+<dt><a name="TIdPair" href="#TIdPair"><span>TIdPair:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="ast: object TIdPair" href="ast.html#TIdPair">ast: object TIdPair</a></li>
+          </ul></dd>
+<dt><a name="TIdPairSeq" href="#TIdPairSeq"><span>TIdPairSeq:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="ast: type TIdPairSeq" href="ast.html#TIdPairSeq">ast: type TIdPairSeq</a></li>
+          </ul></dd>
+<dt><a name="TIdTable" href="#TIdTable"><span>TIdTable:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="ast: object TIdTable" href="ast.html#TIdTable">ast: object TIdTable</a></li>
           </ul></dd>
 <dt><a name="TIIPair" href="#TIIPair"><span>TIIPair:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -14488,6 +14526,10 @@
           <li><a class="reference external"
           data-doc-search-tag="ast: proc toHumanStr(kind: TTypeKind): string" href="ast.html#toHumanStr%2CTTypeKind">ast: proc toHumanStr(kind: TTypeKind): string</a></li>
           </ul></dd>
+<dt><a name="toId" href="#toId"><span>toId:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="ast: template toId(a: ItemId): int" href="ast.html#toId.t%2CItemId">ast: template toId(a: ItemId): int</a></li>
+          </ul></dd>
 <dt><a name="toInt" href="#toInt"><span>toInt:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="int128: proc toInt(arg: Int128): int" href="int128.html#toInt%2CInt128">int128: proc toInt(arg: Int128): int</a></li>
@@ -14877,6 +14919,10 @@
 <dt><a name="truncateInferredTypeCandidates" href="#truncateInferredTypeCandidates"><span>truncateInferredTypeCandidates:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="ast: proc truncateInferredTypeCandidates(t: PType)" href="ast.html#truncateInferredTypeCandidates%2CPType">ast: proc truncateInferredTypeCandidates(t: PType)</a></li>
+          </ul></dd>
+<dt><a name="trySuggestModuleNames" href="#trySuggestModuleNames"><span>trySuggestModuleNames:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="sigmatch: template trySuggestModuleNames(c: PContext; n: PNode)" href="sigmatch.html#trySuggestModuleNames.t%2CPContext%2CPNode">sigmatch: template trySuggestModuleNames(c: PContext; n: PNode)</a></li>
           </ul></dd>
 <dt><a name="trySuggestPragmas" href="#trySuggestPragmas"><span>trySuggestPragmas:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -17188,7 +17234,7 @@
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2025-04-22 02:28:20 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2025-10-31 02:27:38 UTC</small>
       </div>
     </div>
   </div>

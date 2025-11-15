@@ -2,12 +2,12 @@
 # BSD License. Look at license.txt for more info.
 
 import parseutils, os, osproc, strutils, tables, uri, strformat,
-       httpclient, json, sequtils, forge_aliases, urls
+       httpclient, json, sequtils, urls
 
 from algorithm import SortOrder, sorted
 
 import packageinfotypes, packageparser, version, tools, common, options, cli,
-       sha1hashes, vcstools, displaymessages, packageinfo, config
+       sha1hashes, vcstools, displaymessages, packageinfo, config, declarativeparser
 
 type
   DownloadPkgResult* = tuple
@@ -17,7 +17,7 @@ type
 
 proc updateSubmodules(dir: string) =
   discard tryDoCmdEx(
-    &"git -C {dir} submodule update --init --recursive --depth 1")
+    &"git -C {dir.quoteShell} submodule update --init --recursive --depth 1")
 
 proc doCheckout*(meth: DownloadMethod, downloadDir, branch: string, options: Options) =
   case meth
@@ -25,11 +25,11 @@ proc doCheckout*(meth: DownloadMethod, downloadDir, branch: string, options: Opt
     # Force is used here because local changes may appear straight after a clone
     # has happened. Like in the case of git on Windows where it messes up the
     # damn line endings.
-    discard tryDoCmdEx(&"git -C {downloadDir} checkout --force {branch}")
+    discard tryDoCmdEx(&"git -C {downloadDir.quoteShell} checkout --force {branch}")
     if not options.ignoreSubmodules:
       downloadDir.updateSubmodules
   of DownloadMethod.hg:
-    discard tryDoCmdEx(&"hg --cwd {downloadDir} checkout {branch}")
+    discard tryDoCmdEx(&"hg --cwd {downloadDir.quoteShell} checkout {branch}")
 
 proc doClone(meth: DownloadMethod, url, downloadDir: string, branch = "",
              onlyTip = true, options: Options) =
@@ -41,12 +41,14 @@ proc doClone(meth: DownloadMethod, url, downloadDir: string, branch = "",
       branchArg = if branch == "": "" else: &"-b {branch}"
     discard tryDoCmdEx(
        "git clone --config core.autocrlf=false --config core.eol=lf " &
-      &"{submoduleFlag} {depthArg} {branchArg} {url} {downloadDir}")
+      &"{submoduleFlag} {depthArg} {branchArg} {url} {downloadDir.quoteShell}")
+    if not options.ignoreSubmodules:
+      downloadDir.updateSubmodules
   of DownloadMethod.hg:
     let
       tipArg = if onlyTip: "-r tip " else: ""
       branchArg = if branch == "": "" else: &"-b {branch}"
-    discard tryDoCmdEx(&"hg clone {tipArg} {branchArg} {url} {downloadDir}")
+    discard tryDoCmdEx(&"hg clone {tipArg} {branchArg} {url} {downloadDir.quoteShell}")
 
 proc gitFetchTags*(repoDir: string, downloadMethod: DownloadMethod, options: Options) =
   case downloadMethod:
@@ -54,8 +56,8 @@ proc gitFetchTags*(repoDir: string, downloadMethod: DownloadMethod, options: Opt
       let submoduleFlag = if not options.ignoreSubmodules: " --recurse-submodules" else: ""
       tryDoCmdEx(&"git -C {repoDir} fetch --tags" & submoduleFlag)
     of DownloadMethod.hg:
-      assert false, "hg not supported"
-
+      # In Mercurial, pulling updates also fetches all remote tags
+      tryDoCmdEx(&"hg --cwd {repoDir} pull")
 
 proc getTagsList*(dir: string, meth: DownloadMethod): seq[string] =
   var output: string
@@ -90,7 +92,7 @@ proc getTagsListRemote*(url: string, meth: DownloadMethod): seq[string] =
     var (output, exitCode) = doCmdEx(&"git ls-remote --tags {url}")
     if exitCode != QuitSuccess:
       raise nimbleError("Unable to query remote tags for " & url &
-                        ". Git returned: " & output)
+                        " . Git returned: " & output)
     for i in output.splitLines():
       let refStart = i.find("refs/tags/")
       # git outputs warnings, empty lines, etc
@@ -155,12 +157,12 @@ proc cloneSpecificRevision(downloadMethod: DownloadMethod,
   of DownloadMethod.git:
     let downloadDir = downloadDir.quoteShell
     createDir(downloadDir)
-    discard tryDoCmdEx(&"git -C {downloadDir} init")
-    discard tryDoCmdEx(&"git -C {downloadDir} config core.autocrlf false")
-    discard tryDoCmdEx(&"git -C {downloadDir} remote add origin {url}")
+    discard tryDoCmdEx(&"git -C {downloadDir.quoteShell} init")
+    discard tryDoCmdEx(&"git -C {downloadDir.quoteShell} config core.autocrlf false")
+    discard tryDoCmdEx(&"git -C {downloadDir.quoteShell} remote add origin {url}")
     discard tryDoCmdEx(
-      &"git -C {downloadDir} fetch --depth 1 origin {vcsRevision}")
-    discard tryDoCmdEx(&"git -C {downloadDir} reset --hard FETCH_HEAD")
+      &"git -C {downloadDir.quoteShell} fetch --depth 1 origin {vcsRevision}")
+    discard tryDoCmdEx(&"git -C {downloadDir.quoteShell} reset --hard FETCH_HEAD")
     if not options.ignoreSubmodules:
       downloadDir.updateSubmodules
   of DownloadMethod.hg:
@@ -196,10 +198,12 @@ proc isGitHubRepo(url: string): bool =
 
 proc downloadTarball(url: string, options: Options): bool =
   ## Determines whether to download the repository as a tarball.
+  ## Tarballs don't include git submodules, so we must use git clone when submodules are needed.
   options.enableTarballs and
   not options.forceFullClone and
   url.isGitHubRepo and
-  hasTar()
+  hasTar() and
+  options.ignoreSubmodules  # Only use tarballs when ignoring submodules
 
 proc removeTrailingGitString*(url: string): string =
   ## Removes ".git" from an URL.
@@ -292,10 +296,10 @@ proc getTarCmdLine(downloadDir, filePath: string): string =
   when defined(Windows):
     let downloadDir = downloadDir.replace('\\', '/')
     let filePath = filePath.replace('\\', '/')
-    &"{getTarExePath()} -C {downloadDir} -xf {filePath} --strip-components 1 " &
+    &"{getTarExePath()} -C {downloadDir.quoteShell} -xf {filePath} --strip-components 1 " &
      "--force-local"
   else:
-    &"tar -C {downloadDir} -xf {filePath} --strip-components 1"
+    &"tar -C {downloadDir.quoteShell} -xf {filePath} --strip-components 1"
 
 proc doDownloadTarball(url, downloadDir, version: string, queryRevision: bool):
     Sha1Hash =
@@ -518,16 +522,35 @@ proc downloadPkg*(url: string, verRange: VersionRange,
 
   (result.version, result.vcsRevision) = doDownload(
     modUrl, downloadDir, verRange, downMethod, options, vcsRevision)
-
-  if validateRange and verRange.kind notin {verSpecial, verAny}:
+  
+  var pkgInfo: PackageInfo
+  if validateRange and verRange.kind notin {verSpecial, verAny} or not options.isLegacy:
     ## Makes sure that the downloaded package's version satisfies the requested
     ## version range.
-    let pkginfo = getPkgInfo(result.dir, options)
+    pkginfo = if options.satResult.pass in {satNimSelection, satFallbackToVmParser}: #TODO later when in vnext we should just use this code path and fallback inside the toRequires if we can
+      getPkgInfoFromDirWithDeclarativeParser(result.dir, options)
+    else:
+      getPkgInfo(result.dir, options)
     if pkginfo.basicInfo.version notin verRange:
       raise nimbleError(
         "Downloaded package's version does not satisfy requested version " &
         "range: wanted $1 got $2." %
         [$verRange, $pkginfo.basicInfo.version])
+
+    #TODO rework the pkgcache to handle this better
+    #ideally we should be able to know the version we are downloading upfront 
+    #as for the constraints we need a way to invalidate the cache entry so it doesnt get outdated
+    # if options.isVNext:
+    #   # Rename the download directory to use actual version if it's different from the version range
+    #   # as constraints shouldnt be stored in the download cache but the actual package version
+    #   # theorically this means that subsequent downloads of unconstraines packages will be re-download
+    #   # but this shouldnt be an issue since when a package is installed we dont reach this point anymore
+    #   let newDownloadDir = options.pkgCachePath / getDownloadDirName(url, pkginfo.basicInfo.version.toVersionRange(), notSetSha1Hash)
+    #   if downloadDir != newDownloadDir:
+    #     if dirExists(newDownloadDir):
+    #       removeDir(newDownloadDir)  
+    #     moveDir(downloadDir, newDownloadDir)
+    #     result.dir = newDownloadDir / subdir
 
 proc echoPackageVersions*(pkg: Package) =
   let downMethod = pkg.downloadMethod
@@ -620,9 +643,6 @@ proc getDownloadInfo*(
     result = (checkUrlType(url), url, metadata)
     # echo "getDownloadInfo:isURL: ", $result
     return
-  elif pv.name.isForgeAlias:
-    let url = newForge(pv.name).expand()
-    return (checkUrlType(url), url, default(Table[string, string]))
   else:
     # If package is not found give the user a chance to refresh
     # package.json

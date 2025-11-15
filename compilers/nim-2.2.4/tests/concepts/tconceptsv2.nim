@@ -485,6 +485,40 @@ block:
   assert Container[AsyncImpl] isnot SyncType
   assert Container[AsyncImpl] is AsyncType
 
+block:
+  type
+    C1 = concept
+      proc p(x: typedesc[Self]): int
+    E1 = enum
+      One, Two
+  proc p[E: enum](x: typedesc[set[E]]): int = sizeof(set[E])
+
+  proc spring(x: C1) = discard
+
+  spring({One,Two})
+
+block: # bare `range`
+  type
+    MyRange = 0..64
+    MyConcept = concept
+      proc a(x: typedesc[Self])
+
+  proc a(x: typedesc[range]) = discard
+  proc spring(x: typedesc[MyConcept]) = discard
+  spring(MyRange)
+
+block:
+  type
+    A = object
+    TestConcept =
+      concept
+          proc x(x: Self)
+
+  proc x(x: not object) =
+    discard
+
+  assert A isnot TestConcept
+
 # this code fails inside a block for some reason
 type Indexable[T] = concept
   proc `[]`(t: Self, i: int): T

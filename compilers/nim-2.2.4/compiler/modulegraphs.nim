@@ -136,6 +136,8 @@ type
 
     cachedFiles*: StringTableRef
 
+    procGlobals*: seq[PNode]
+
   TPassContext* = object of RootObj # the pass's context
     idgen*: IdGenerator
   PPassContext* = ref TPassContext
@@ -454,10 +456,10 @@ template getPContext(): untyped =
   else: c.c
 
 when defined(nimsuggest):
-  template onUse*(info: TLineInfo; s: PSym) = discard
+  template onUse*(info: TLineInfo; s: PSym; isGenericInstance = false) = discard
   template onDefResolveForward*(info: TLineInfo; s: PSym) = discard
 else:
-  template onUse*(info: TLineInfo; s: PSym) = discard
+  template onUse*(info: TLineInfo; s: PSym; isGenericInstance = false) = discard
   template onDef*(info: TLineInfo; s: PSym) = discard
   template onDefResolveForward*(info: TLineInfo; s: PSym) = discard
 

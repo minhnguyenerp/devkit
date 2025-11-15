@@ -271,7 +271,10 @@ proc matchType(c: PContext; fo, ao: PType; m: var MatchCon): bool =
   var
     a = ao
     f = fo
-  
+  if a.isSelf:
+    if m.magic in {mArrPut, mArrGet}:
+      return false
+    a = m.potentialImplementation
   if a.kind in bindableTypes:
     a = existingBinding(m, ao)
     if a == ao and a.kind == tyGenericParam and a.hasElementType and a.elementType.kind != tyNone:
@@ -337,8 +340,11 @@ proc matchType(c: PContext; fo, ao: PType; m: var MatchCon): bool =
       result = true
     else:
       let ak = a.skipTypes(ignorableForArgType - {f.kind})
-      if ak.kind == f.kind and f.kidsLen == ak.kidsLen:
-        result = matchKids(c, f, ak, m)
+      if ak.kind == f.kind:
+        if f.base.kind == tyNone:
+          result = true
+        elif f.kidsLen == ak.kidsLen:
+          result = matchKids(c, f, ak, m)
   of tyGenericInvocation, tyGenericInst:
     result = false
     let ea = a.skipTypes(ignorableForArgType)
@@ -419,6 +425,10 @@ proc matchType(c: PContext; fo, ao: PType; m: var MatchCon): bool =
         result = matchType(c, ff, a, m)
         if result: break # and remember the binding!
         m.bindings.setToPreviousLayer()
+  of tySet:
+    result = false
+    if a.kind == tySet:
+      result = matchType(c, f.elementType, a.elementType, m)
   else:
     result = false
   if result and ao.kind == tyGenericParam:

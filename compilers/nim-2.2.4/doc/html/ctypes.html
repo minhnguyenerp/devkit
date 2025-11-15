@@ -16,10 +16,10 @@
 <link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA3XAAAN1wFCKJt4AAAAB3RJTUUH4QQQEwksSS9ZWwAAAk1JREFUWMPtll2ITVEUx39nn/O7Y5qR8f05wtCUUr6ZIS++8pEnkZInPImneaCQ5METNdOkeFBKUhMPRIkHKfEuUZSUlGlKPN2TrgfncpvmnntnmlEyq1Z7t89/rf9a6+y99oZxGZf/XeIq61EdtgKXgdXA0xrYAvBjOIF1AI9zvjcC74BSpndrJPkBWDScTF8Aa4E3wDlgHbASaANmVqlcCnwHvgDvgVfAJ+AikAAvgfVZwLnSVZHZaOuKoQi3ZOMi4NkYkpe1p4J7A8BpYAD49hfIy/oqG0+hLomiKP2L5L+1ubn5115S+3OAn4EnwBlgMzCjyt6ZAnQCJ4A7wOs88iRJHvw50HoujuPBoCKwHWiosy8MdfZnAdcHk8dxXFJ3VQbQlCTJvRBCGdRbD4M6uc5glpY3eAihpN5S5w12diSEcCCEcKUO4ljdr15T76ur1FDDLIQQ3qv71EdDOe3Kxj3leRXyk+pxdWnFWod6Wt2bY3de3aSuUHcPBVimHs7mK9WrmeOF6lR1o9qnzskh2ar2qm1qizpfXaPeVGdlmGN5pb09qMxz1Xb1kLqgzn1RyH7JUXW52lr5e/Kqi9qpto7V1atuUzfnARrV7jEib1T76gG2qxdGmXyiekkt1GswPTtek0aBfJp6YySGBfWg2tPQ0FAYgf1stUfdmdcjarbYJEniKIq6gY/Aw+zWHAC+p2labGpqiorFYgGYCEzN7oQdQClN07O1/EfDyGgC0ALMBdYAi4FyK+4H3gLPsxfR1zRNi+NP7nH5J+QntnXe5B5mpfQAAAAASUVORK5CYII=">
 
 <!-- CSS -->
-<link rel="stylesheet" type="text/css" href="nimdoc.out.css?v=2.2.4">
+<link rel="stylesheet" type="text/css" href="nimdoc.out.css?v=2.2.6">
 
 <!-- JS -->
-<script type="text/javascript" src="dochack.js?v=2.2.4"></script>
+<script type="text/javascript" src="dochack.js?v=2.2.6"></script>
 </head>
 <body>
   <div class="document" id="documentId">
@@ -63,7 +63,7 @@
 <li><a class="reference" href="#cdouble" title="cdouble {.importc: &quot;double&quot;, nodecl.} = float64">cdouble</a></li>
 <li><a class="reference" href="#cfloat" title="cfloat {.importc: &quot;float&quot;, nodecl.} = float32">cfloat</a></li>
 <li><a class="reference" href="#cint" title="cint {.importc: &quot;int&quot;, nodecl.} = int32">cint</a></li>
-<li><a class="reference" href="#clong" title="clong {.importc: &quot;long&quot;, nodecl.} = int32">clong</a></li>
+<li><a class="reference" href="#clong" title="clong = ClongImpl">clong</a></li>
 <li><a class="reference" href="#clongdouble" title="clongdouble {.importc: &quot;long double&quot;, nodecl.} = BiggestFloat">clongdouble</a></li>
 <li><a class="reference" href="#clonglong" title="clonglong {.importc: &quot;long long&quot;, nodecl.} = int64">clonglong</a></li>
 <li><a class="reference" href="#cschar" title="cschar {.importc: &quot;signed char&quot;, nodecl.} = int8">cschar</a></li>
@@ -71,9 +71,9 @@
 <li><a class="reference" href="#csize_t" title="csize_t {.importc: &quot;size_t&quot;, nodecl.} = uint">csize_t</a></li>
 <li><a class="reference" href="#cstringArray" title="cstringArray {.importc: &quot;char**&quot;, nodecl.} = ptr UncheckedArray[cstring]">cstringArray</a></li>
 <li><a class="reference" href="#cuchar" title="cuchar {.importc: &quot;unsigned char&quot;, nodecl,
-         deprecated: &quot;use `char` or `uint8` instead&quot;.} = char">cuchar</a></li>
+         deprecated: &quot;Use `char` or `uint8` instead&quot;.} = char">cuchar</a></li>
 <li><a class="reference" href="#cuint" title="cuint {.importc: &quot;unsigned int&quot;, nodecl.} = uint32">cuint</a></li>
-<li><a class="reference" href="#culong" title="culong {.importc: &quot;unsigned long&quot;, nodecl.} = uint32">culong</a></li>
+<li><a class="reference" href="#culong" title="culong = CulongImpl">culong</a></li>
 <li><a class="reference" href="#culonglong" title="culonglong {.importc: &quot;unsigned long long&quot;, nodecl.} = uint64">culonglong</a></li>
 <li><a class="reference" href="#cushort" title="cushort {.importc: &quot;unsigned short&quot;, nodecl.} = uint16">cushort</a></li>
 <li><a class="reference" href="#PFloat32" title="PFloat32 {.deprecated: &quot;use `ptr float32`&quot;.} = ptr float32">PFloat32</a></li>
@@ -136,8 +136,8 @@
 </div>
 
     is the signed integer type that should be used for converting pointers to integer addresses for readability.
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/system/ctypes.nim#L64" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/system/ctypes.nim#L64" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/system/ctypes.nim#L95" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/system/ctypes.nim#L95" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -146,8 +146,8 @@
   <dd>
     
     This is the same as the type <tt class="docutils literal"><span class="pre"><span class="Identifier">char</span></span></tt> in <em>C</em>.
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/system/ctypes.nim#L34" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/system/ctypes.nim#L34" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/system/ctypes.nim#L66" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/system/ctypes.nim#L66" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -156,8 +156,8 @@
   <dd>
     
     This is the same as the type <tt class="docutils literal"><span class="pre"><span class="Identifier">double</span></span></tt> in <em>C</em>.
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/system/ctypes.nim#L48" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/system/ctypes.nim#L48" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/system/ctypes.nim#L80" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/system/ctypes.nim#L80" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -166,8 +166,8 @@
   <dd>
     
     This is the same as the type <tt class="docutils literal"><span class="pre"><span class="Identifier">float</span></span></tt> in <em>C</em>.
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/system/ctypes.nim#L46" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/system/ctypes.nim#L46" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/system/ctypes.nim#L78" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/system/ctypes.nim#L78" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -176,18 +176,26 @@
   <dd>
     
     This is the same as the type <tt class="docutils literal"><span class="pre"><span class="Identifier">int</span></span></tt> in <em>C</em>.
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/system/ctypes.nim#L40" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/system/ctypes.nim#L40" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/system/ctypes.nim#L72" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/system/ctypes.nim#L72" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
 <div id="clong">
-  <dt><pre><a href="ctypes.html#clong"><span class="Identifier">clong</span></a> {.<span class="Identifier">importc</span><span class="Other">:</span> <span class="StringLit">&quot;long&quot;</span><span class="Other">,</span> <span class="Identifier">nodecl</span>.} <span class="Other">=</span> <a href="system.html#int32"><span class="Identifier">int32</span></a></pre></dt>
+  <dt><pre><a href="ctypes.html#clong"><span class="Identifier">clong</span></a> <span class="Other">=</span> <span class="Identifier">ClongImpl</span></pre></dt>
   <dd>
     
-    This is the same as the type <tt class="docutils literal"><span class="pre"><span class="Identifier">long</span></span></tt> in <em>C</em>.
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/system/ctypes.nim#L22" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/system/ctypes.nim#L22" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <p>Represents the <em>C</em> <tt class="docutils literal"><span class="pre"><span class="Identifier">long</span></span></tt> type, used for interoperability.</p>
+<p>Its purpose is to match the <em>C</em> <tt class="docutils literal"><span class="pre"><span class="Identifier">long</span></span></tt> for the target platform's Application Binary Interface (ABI).</p>
+<p>Typically, the compiler resolves it to one of the following Nim types based on the target:</p>
+<ul class="simple"><li><a class="reference external" href="system.html#int32">int32</a> on Windows using MSVC or MinGW compilers.</li>
+<li><a class="reference external" href="system.html#int">int</a> on Linux, macOS and other platforms that use the LP64 or ILP32 <a class="reference external" href="https://en.wikipedia.org/wiki/64-bit_computing#64-bit_data_models">data models</a>.</li>
+</ul>
+<div class="admonition admonition-warning"><span class="admonition-warning-text"><b>Warning:</b></span>
+The underlying Nim type is an implementation detail and should not be relied upon.</div>
+
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/system/ctypes.nim#L26" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/system/ctypes.nim#L26" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -196,8 +204,8 @@
   <dd>
     
     This is the same as the type <tt class="docutils literal"><span class="pre"><span class="Identifier">long</span> <span class="Identifier">double</span></span></tt> in <em>C</em>. This C type is not supported by Nim's code generator.
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/system/ctypes.nim#L50" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/system/ctypes.nim#L50" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/system/ctypes.nim#L82" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/system/ctypes.nim#L82" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -206,8 +214,8 @@
   <dd>
     
     This is the same as the type <tt class="docutils literal"><span class="pre"><span class="Identifier">long</span> <span class="Identifier">long</span></span></tt> in <em>C</em>.
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/system/ctypes.nim#L44" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/system/ctypes.nim#L44" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/system/ctypes.nim#L76" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/system/ctypes.nim#L76" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -216,8 +224,8 @@
   <dd>
     
     This is the same as the type <tt class="docutils literal"><span class="pre"><span class="Identifier">signed</span> <span class="Identifier">char</span></span></tt> in <em>C</em>.
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/system/ctypes.nim#L36" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/system/ctypes.nim#L36" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/system/ctypes.nim#L68" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/system/ctypes.nim#L68" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -226,8 +234,8 @@
   <dd>
     
     This is the same as the type <tt class="docutils literal"><span class="pre"><span class="Identifier">short</span></span></tt> in <em>C</em>.
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/system/ctypes.nim#L38" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/system/ctypes.nim#L38" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/system/ctypes.nim#L70" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/system/ctypes.nim#L70" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -236,8 +244,8 @@
   <dd>
     
     This is the same as the type <tt class="docutils literal"><span class="pre"><span class="Identifier">size_t</span></span></tt> in <em>C</em>.
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/system/ctypes.nim#L42" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/system/ctypes.nim#L42" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/system/ctypes.nim#L74" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/system/ctypes.nim#L74" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -246,22 +254,22 @@
   <dd>
     
     This is binary compatible to the type <tt class="docutils literal"><span class="pre"><span class="Identifier">char</span><span class="Operator">**</span></span></tt> in <em>C</em>. The array's high value is large enough to disable bounds checking in practice. Use <a class="reference external" href="#cstringArrayToSeq,cstringArray,Natural">cstringArrayToSeq proc</a> to convert it into a <tt class="docutils literal"><span class="pre"><span class="Identifier">seq</span><span class="Punctuation">[</span><span class="Identifier">string</span><span class="Punctuation">]</span></span></tt>.
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/system/ctypes.nim#L68" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/system/ctypes.nim#L68" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/system/ctypes.nim#L99" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/system/ctypes.nim#L99" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
 <div id="cuchar">
   <dt><pre><a href="ctypes.html#cuchar"><span class="Identifier">cuchar</span></a> {.<span class="Identifier">importc</span><span class="Other">:</span> <span class="StringLit">&quot;unsigned char&quot;</span><span class="Other">,</span> <span class="Identifier">nodecl</span><span class="Other">,</span>
-         <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">deprecated</span><span class="Other">:</span> <span class="StringLit">&quot;use `char` or `uint8` instead&quot;</span></span>.} <span class="Other">=</span> <a href="system.html#char"><span class="Identifier">char</span></a></pre></dt>
+         <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">deprecated</span><span class="Other">:</span> <span class="StringLit">&quot;Use `char` or `uint8` instead&quot;</span></span>.} <span class="Other">=</span> <a href="system.html#char"><span class="Identifier">char</span></a></pre></dt>
   <dd>
     <div class="deprecation-message">
-  <b>Deprecated:</b> use `char` or `uint8` instead
+  <b>Deprecated:</b> Use `char` or `uint8` instead
 </div>
 
-    Deprecated: Use <tt class="docutils literal"><span class="pre"><span class="Identifier">uint8</span></span></tt> instead.
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/system/ctypes.nim#L54" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/system/ctypes.nim#L54" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/system/ctypes.nim#L86" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/system/ctypes.nim#L86" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -270,18 +278,26 @@
   <dd>
     
     This is the same as the type <tt class="docutils literal"><span class="pre"><span class="Identifier">unsigned</span> <span class="Identifier">int</span></span></tt> in <em>C</em>.
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/system/ctypes.nim#L58" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/system/ctypes.nim#L58" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/system/ctypes.nim#L89" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/system/ctypes.nim#L89" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
 <div id="culong">
-  <dt><pre><a href="ctypes.html#culong"><span class="Identifier">culong</span></a> {.<span class="Identifier">importc</span><span class="Other">:</span> <span class="StringLit">&quot;unsigned long&quot;</span><span class="Other">,</span> <span class="Identifier">nodecl</span>.} <span class="Other">=</span> <a href="system.html#uint32"><span class="Identifier">uint32</span></a></pre></dt>
+  <dt><pre><a href="ctypes.html#culong"><span class="Identifier">culong</span></a> <span class="Other">=</span> <span class="Identifier">CulongImpl</span></pre></dt>
   <dd>
     
-    This is the same as the type <tt class="docutils literal"><span class="pre"><span class="Identifier">unsigned</span> <span class="Identifier">long</span></span></tt> in <em>C</em>.
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/system/ctypes.nim#L24" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/system/ctypes.nim#L24" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <p>Represents the <em>C</em> <tt class="docutils literal"><span class="pre"><span class="Identifier">unsigned</span> <span class="Identifier">long</span></span></tt> type, used for interoperability.</p>
+<p>Its purpose is to match the <em>C</em> <tt class="docutils literal"><span class="pre"><span class="Identifier">unsigned</span> <span class="Identifier">long</span></span></tt> for the target platform's Application Binary Interface (ABI).</p>
+<p>Typically, the compiler resolves it to one of the following Nim types based on the target:</p>
+<ul class="simple"><li><a class="reference external" href="system.html#uint32">uint32</a> on Windows using MSVC or MinGW compilers.</li>
+<li><a class="reference external" href="system.html#uint">uint</a> on Linux, macOS and other platforms that use the LP64 or ILP32 <a class="reference external" href="https://en.wikipedia.org/wiki/64-bit_computing#64-bit_data_models">data models</a>.</li>
+</ul>
+<div class="admonition admonition-warning"><span class="admonition-warning-text"><b>Warning:</b></span>
+The underlying Nim type is an implementation detail and should not be relied upon.</div>
+
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/system/ctypes.nim#L41" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/system/ctypes.nim#L41" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -290,8 +306,8 @@
   <dd>
     
     This is the same as the type <tt class="docutils literal"><span class="pre"><span class="Identifier">unsigned</span> <span class="Identifier">long</span> <span class="Identifier">long</span></span></tt> in <em>C</em>.
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/system/ctypes.nim#L60" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/system/ctypes.nim#L60" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/system/ctypes.nim#L91" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/system/ctypes.nim#L91" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -300,8 +316,8 @@
   <dd>
     
     This is the same as the type <tt class="docutils literal"><span class="pre"><span class="Identifier">unsigned</span> <span class="Identifier">short</span></span></tt> in <em>C</em>.
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/system/ctypes.nim#L56" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/system/ctypes.nim#L56" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/system/ctypes.nim#L87" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/system/ctypes.nim#L87" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -313,8 +329,8 @@
 </div>
 
     An alias for <tt class="docutils literal"><span class="pre"><span class="Keyword">ptr</span> <span class="Identifier">float32</span></span></tt>.
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/system/ctypes.nim#L77" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/system/ctypes.nim#L77" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/system/ctypes.nim#L108" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/system/ctypes.nim#L108" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -326,8 +342,8 @@
 </div>
 
     An alias for <tt class="docutils literal"><span class="pre"><span class="Keyword">ptr</span> <span class="Identifier">float64</span></span></tt>.
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/system/ctypes.nim#L79" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/system/ctypes.nim#L79" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/system/ctypes.nim#L110" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/system/ctypes.nim#L110" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -339,8 +355,8 @@
 </div>
 
     An alias for <tt class="docutils literal"><span class="pre"><span class="Keyword">ptr</span> <span class="Identifier">int32</span></span></tt>.
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/system/ctypes.nim#L83" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/system/ctypes.nim#L83" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/system/ctypes.nim#L114" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/system/ctypes.nim#L114" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -352,8 +368,8 @@
 </div>
 
     An alias for <tt class="docutils literal"><span class="pre"><span class="Keyword">ptr</span> <span class="Identifier">int64</span></span></tt>.
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/system/ctypes.nim#L81" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/system/ctypes.nim#L81" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/system/ctypes.nim#L112" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/system/ctypes.nim#L112" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -367,7 +383,7 @@
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2025-04-22 02:25:30 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2025-10-31 02:24:58 UTC</small>
       </div>
     </div>
   </div>

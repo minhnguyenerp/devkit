@@ -16,10 +16,10 @@
 <link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA3XAAAN1wFCKJt4AAAAB3RJTUUH4QQQEwksSS9ZWwAAAk1JREFUWMPtll2ITVEUx39nn/O7Y5qR8f05wtCUUr6ZIS++8pEnkZInPImneaCQ5METNdOkeFBKUhMPRIkHKfEuUZSUlGlKPN2TrgfncpvmnntnmlEyq1Z7t89/rf9a6+y99oZxGZf/XeIq61EdtgKXgdXA0xrYAvBjOIF1AI9zvjcC74BSpndrJPkBWDScTF8Aa4E3wDlgHbASaANmVqlcCnwHvgDvgVfAJ+AikAAvgfVZwLnSVZHZaOuKoQi3ZOMi4NkYkpe1p4J7A8BpYAD49hfIy/oqG0+hLomiKP2L5L+1ubn5115S+3OAn4EnwBlgMzCjyt6ZAnQCJ4A7wOs88iRJHvw50HoujuPBoCKwHWiosy8MdfZnAdcHk8dxXFJ3VQbQlCTJvRBCGdRbD4M6uc5glpY3eAihpN5S5w12diSEcCCEcKUO4ljdr15T76ur1FDDLIQQ3qv71EdDOe3Kxj3leRXyk+pxdWnFWod6Wt2bY3de3aSuUHcPBVimHs7mK9WrmeOF6lR1o9qnzskh2ar2qm1qizpfXaPeVGdlmGN5pb09qMxz1Xb1kLqgzn1RyH7JUXW52lr5e/Kqi9qpto7V1atuUzfnARrV7jEib1T76gG2qxdGmXyiekkt1GswPTtek0aBfJp6YySGBfWg2tPQ0FAYgf1stUfdmdcjarbYJEniKIq6gY/Aw+zWHAC+p2labGpqiorFYgGYCEzN7oQdQClN07O1/EfDyGgC0ALMBdYAi4FyK+4H3gLPsxfR1zRNi+NP7nH5J+QntnXe5B5mpfQAAAAASUVORK5CYII=">
 
 <!-- CSS -->
-<link rel="stylesheet" type="text/css" href="nimdoc.out.css?v=2.2.4">
+<link rel="stylesheet" type="text/css" href="nimdoc.out.css?v=2.2.6">
 
 <!-- JS -->
-<script type="text/javascript" src="dochack.js?v=2.2.4"></script>
+<script type="text/javascript" src="dochack.js?v=2.2.6"></script>
 </head>
 <body>
   <div class="document" id="documentId">
@@ -213,6 +213,8 @@
           data-doc-search-tag="sexp: proc `$`(node: SexpNode): string" href="sexp.html#%24%2CSexpNode">sexp: proc `$`(node: SexpNode): string</a></li>
           <li><a class="reference external"
           data-doc-search-tag="sha1: proc `$`(self: SecureHash): string" href="sha1.html#%24%2CSecureHash">sha1: proc `$`(self: SecureHash): string</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="smtp: proc `$`(email: Email): string" href="smtp.html#%24%2CEmail">smtp: proc `$`(email: Email): string</a></li>
           <li><a class="reference external"
           data-doc-search-tag="smtp: proc `$`(msg: Message): string" href="smtp.html#%24%2CMessage">smtp: proc `$`(msg: Message): string</a></li>
           <li><a class="reference external"
@@ -3212,6 +3214,8 @@ else:
           </ul></dd>
 <dt><a name="auth" href="#auth"><span>auth:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
+          data-doc-search-tag="httpclient: proc auth(p: Proxy): string" href="httpclient.html#auth%2CProxy">httpclient: proc auth(p: Proxy): string</a></li>
+          <li><a class="reference external"
           data-doc-search-tag="smtp: proc auth(smtp: AsyncSmtp; username, password: string): owned(Future[void])" href="smtp.html#auth%2CAsyncSmtp%2Cstring%2Cstring">smtp: proc auth(smtp: AsyncSmtp; username, password: string): owned(Future[void])</a></li>
           <li><a class="reference external"
           data-doc-search-tag="smtp: proc auth(smtp: Smtp; username, password: string)" href="smtp.html#auth%2CSmtp%2Cstring%2Cstring">smtp: proc auth(smtp: Smtp; username, password: string)</a></li>
@@ -5572,20 +5576,30 @@ else:
           </ul></dd>
 <dt><a name="copyDir" href="#copyDir"><span>copyDir:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
+          data-doc-search-tag="dirs: proc copyDir(source, dest: Path; skipSpecial = false)" href="dirs.html#copyDir%2CPath%2CPath">dirs: proc copyDir(source, dest: Path; skipSpecial = false)</a></li>
+          <li><a class="reference external"
           data-doc-search-tag="osdirs: proc copyDir(source, dest: string; skipSpecial = false)" href="osdirs.html#copyDir%2Cstring%2Cstring">osdirs: proc copyDir(source, dest: string; skipSpecial = false)</a></li>
           </ul></dd>
 <dt><a name="copyDirWithPermissions" href="#copyDirWithPermissions"><span>copyDirWithPermissions:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
+          data-doc-search-tag="dirs: proc copyDirWithPermissions(source, dest: Path; ignorePermissionErrors = true;
+                       skipSpecial = false)" href="dirs.html#copyDirWithPermissions%2CPath%2CPath">dirs: proc copyDirWithPermissions(source, dest: Path; ignorePermissionErrors = true;
+                       skipSpecial = false)</a></li>
+          <li><a class="reference external"
           data-doc-search-tag="osdirs: proc copyDirWithPermissions(source, dest: string; ignorePermissionErrors = true;
                        skipSpecial = false)" href="osdirs.html#copyDirWithPermissions%2Cstring%2Cstring">osdirs: proc copyDirWithPermissions(source, dest: string; ignorePermissionErrors = true;
                        skipSpecial = false)</a></li>
           </ul></dd>
 <dt><a name="copyFile" href="#copyFile"><span>copyFile:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
+          data-doc-search-tag="files: proc copyFile(source, dest: Path; options = cfSymlinkFollow; bufferSize = 16384)" href="files.html#copyFile%2CPath%2CPath%2Cint">files: proc copyFile(source, dest: Path; options = cfSymlinkFollow; bufferSize = 16384)</a></li>
+          <li><a class="reference external"
           data-doc-search-tag="osfiles: proc copyFile(source, dest: string; options = {cfSymlinkFollow}; bufferSize = 16384)" href="osfiles.html#copyFile%2Cstring%2Cstring%2Cint">osfiles: proc copyFile(source, dest: string; options = {cfSymlinkFollow}; bufferSize = 16384)</a></li>
           </ul></dd>
 <dt><a name="copyFileToDir" href="#copyFileToDir"><span>copyFileToDir:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
+          data-doc-search-tag="files: proc copyFileToDir(source, dir: Path; options = cfSymlinkFollow; bufferSize = 16384)" href="files.html#copyFileToDir%2CPath%2CPath%2Cint">files: proc copyFileToDir(source, dir: Path; options = cfSymlinkFollow; bufferSize = 16384)</a></li>
+          <li><a class="reference external"
           data-doc-search-tag="osfiles: proc copyFileToDir(source, dir: string; options = {cfSymlinkFollow};
               bufferSize = 16384)" href="osfiles.html#copyFileToDir%2Cstring%2Cstring%2Cint">osfiles: proc copyFileToDir(source, dir: string; options = {cfSymlinkFollow};
               bufferSize = 16384)</a></li>
@@ -5596,6 +5610,10 @@ else:
           </ul></dd>
 <dt><a name="copyFileWithPermissions" href="#copyFileWithPermissions"><span>copyFileWithPermissions:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
+          data-doc-search-tag="files: proc copyFileWithPermissions(source, dest: Path; ignorePermissionErrors = true;
+                        options = cfSymlinkFollow)" href="files.html#copyFileWithPermissions%2CPath%2CPath">files: proc copyFileWithPermissions(source, dest: Path; ignorePermissionErrors = true;
+                        options = cfSymlinkFollow)</a></li>
+          <li><a class="reference external"
           data-doc-search-tag="osfiles: proc copyFileWithPermissions(source, dest: string; ignorePermissionErrors = true;
                         options = {cfSymlinkFollow})" href="osfiles.html#copyFileWithPermissions%2Cstring%2Cstring">osfiles: proc copyFileWithPermissions(source, dest: string; ignorePermissionErrors = true;
                         options = {cfSymlinkFollow})</a></li>
@@ -5832,6 +5850,10 @@ else:
 <li><a class="reference external"
           data-doc-search-tag="dom: proc createElementNS(d: Document; namespaceURI, qualifiedIdentifier: cstring): Element" href="dom.html#createElementNS%2CDocument%2Ccstring%2Ccstring">dom: proc createElementNS(d: Document; namespaceURI, qualifiedIdentifier: cstring): Element</a></li>
           </ul></dd>
+<dt><a name="createEmail" href="#createEmail"><span>createEmail:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="smtp: proc createEmail(address: string; name: string = &quot;&quot;): Email" href="smtp.html#createEmail%2Cstring%2Cstring">smtp: proc createEmail(address: string; name: string = &quot;&quot;): Email</a></li>
+          </ul></dd>
 <dt><a name="createEvent" href="#createEvent"><span>createEvent:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="winlean: proc createEvent(lpEventAttributes: ptr SECURITY_ATTRIBUTES; bManualReset: DWORD;
@@ -5901,6 +5923,14 @@ else:
           data-doc-search-tag="smtp: proc createMessage(mSubject, mBody: string; mTo, mCc: seq[string];
               otherHeaders: openArray[tuple[name, value: string]]): Message" href="smtp.html#createMessage%2Cstring%2Cstring%2Cseq%5Bstring%5D%2Cseq%5Bstring%5D%2CopenArray%5Btuple%5Bstring%2Cstring%5D%5D">smtp: proc createMessage(mSubject, mBody: string; mTo, mCc: seq[string];
               otherHeaders: openArray[tuple[name, value: string]]): Message</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="smtp: proc createMessage[T: Email | string](mSubject, mBody: string; sender: T;
+                                 mTo: seq[T] = @[]; mCc: seq[T] = @[];
+                                 mBcc: seq[T] = @[]; mReplyTo: seq[T] = @[];
+    otherHeaders: openArray[tuple[name, value: string]] = @[]): Message" href="smtp.html#createMessage%2Cstring%2Cstring%2CT%2Cseq%5BT%5D%2Cseq%5BT%5D%2Cseq%5BT%5D%2Cseq%5BT%5D%2CopenArray%5Btuple%5Bstring%2Cstring%5D%5D">smtp: proc createMessage[T: Email | string](mSubject, mBody: string; sender: T;
+                                 mTo: seq[T] = @[]; mCc: seq[T] = @[];
+                                 mBcc: seq[T] = @[]; mReplyTo: seq[T] = @[];
+    otherHeaders: openArray[tuple[name, value: string]] = @[]): Message</a></li>
           </ul></dd>
 <dt><a name="createNamedPipe" href="#createNamedPipe"><span>createNamedPipe:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -6874,7 +6904,7 @@ else:
           </ul></dd>
 <dt><a name="destructor" href="#destructor"><span>destructor:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="system: Passing Channels Safely" href="system.html#destructor_1">system: Passing Channels Safely</a></li>
+          data-doc-search-tag="system: Example:" href="system.html#destructor_1">system: Example:</a></li>
           </ul></dd>
 <dt><a name="DETACHED_PROCESS" href="#DETACHED_PROCESS"><span>DETACHED_PROCESS:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -7336,7 +7366,7 @@ else:
 <li><a class="reference external"
           data-doc-search-tag="sugar: macro dup[T](arg: T; calls: varargs[untyped]): T" href="sugar.html#dup.m%2CT%2Cvarargs%5Buntyped%5D">sugar: macro dup[T](arg: T; calls: varargs[untyped]): T</a></li>
           <li><a class="reference external"
-          data-doc-search-tag="system: Passing Channels Safely" href="system.html#dup_1">system: Passing Channels Safely</a></li>
+          data-doc-search-tag="system: Example:" href="system.html#dup_1">system: Example:</a></li>
           </ul></dd>
 <dt><a name="duplicateHandle" href="#duplicateHandle"><span>duplicateHandle:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -7453,6 +7483,10 @@ else:
 <dt><a name="em" href="#em"><span>em:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="htmlgen: macro em(e: varargs[untyped]): untyped" href="htmlgen.html#em.m%2Cvarargs%5Buntyped%5D">htmlgen: macro em(e: varargs[untyped]): untyped</a></li>
+          </ul></dd>
+<dt><a name="Email" href="#Email"><span>Email:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="smtp: object Email" href="smtp.html#Email">smtp: object Email</a></li>
           </ul></dd>
 <dt><a name="embed" href="#embed"><span>embed:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -9228,6 +9262,10 @@ else:
 <li><a class="reference external"
           data-doc-search-tag="winlean: proc findFirstFileW(lpFileName: WideCString; lpFindFileData: var WIN32_FIND_DATA): Handle" href="winlean.html#findFirstFileW%2CWideCString%2CWIN32_FIND_DATA">winlean: proc findFirstFileW(lpFileName: WideCString; lpFindFileData: var WIN32_FIND_DATA): Handle</a></li>
           </ul></dd>
+<dt><a name="findIt" href="#findIt"><span>findIt:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="sequtils: template findIt(s, predicate: untyped): int" href="sequtils.html#findIt.t%2Cuntyped%2Cuntyped">sequtils: template findIt(s, predicate: untyped): int</a></li>
+          </ul></dd>
 <dt><a name="findIter" href="#findIter"><span>findIter:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="nre: iterator findIter(str: string; pattern: Regex; start = 0; endpos = int.high): RegexMatch" href="nre.html#findIter.i%2Cstring%2CRegex%2Cint">nre: iterator findIter(str: string; pattern: Regex; start = 0; endpos = int.high): RegexMatch</a></li>
@@ -10526,6 +10564,8 @@ else:
           </ul></dd>
 <dt><a name="getFilePermissions" href="#getFilePermissions"><span>getFilePermissions:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
+          data-doc-search-tag="files: proc getFilePermissions(filename: Path): set[FilePermission]" href="files.html#getFilePermissions%2CPath">files: proc getFilePermissions(filename: Path): set[FilePermission]</a></li>
+          <li><a class="reference external"
           data-doc-search-tag="osfiles: proc getFilePermissions(filename: string): set[FilePermission]" href="osfiles.html#getFilePermissions%2Cstring">osfiles: proc getFilePermissions(filename: string): set[FilePermission]</a></li>
           </ul></dd>
 <dt><a name="getFilePos" href="#getFilePos"><span>getFilePos:</span></a></dt><dd><ul class="simple">
@@ -10868,7 +10908,7 @@ else:
           </ul></dd>
 <dt><a name="get_osfhandle" href="#get_osfhandle"><span>get_osfhandle:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="winlean: proc get_osfhandle(fd: FileHandle): Handle" href="winlean.html#get_osfhandle%2CFileHandle">winlean: proc get_osfhandle(fd: FileHandle): Handle</a></li>
+          data-doc-search-tag="winlean: proc get_osfhandle(fd: cint): Handle" href="winlean.html#get_osfhandle%2Ccint">winlean: proc get_osfhandle(fd: cint): Handle</a></li>
           </ul></dd>
 <dt><a name="getOsFileHandle" href="#getOsFileHandle"><span>getOsFileHandle:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -13446,11 +13486,11 @@ else:
           </ul></dd>
 <dt><a name="INT_MAX" href="#INT_MAX"><span>INT_MAX:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="system: Passing Channels Safely" href="system.html#int-max_1">system: Passing Channels Safely</a></li>
+          data-doc-search-tag="system: Example:" href="system.html#int-max_1">system: Example:</a></li>
           </ul></dd>
 <dt><a name="INT_MIN" href="#INT_MIN"><span>INT_MIN:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="system: Passing Channels Safely" href="system.html#int-min_1">system: Passing Channels Safely</a></li>
+          data-doc-search-tag="system: Example:" href="system.html#int-min_1">system: Example:</a></li>
           </ul></dd>
 <dt><a name="IntSet" href="#IntSet"><span>IntSet:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -15248,6 +15288,8 @@ else:
 <li><a class="reference external"
           data-doc-search-tag="jscore: proc max(m: MathLib; a, b: SomeNumber): SomeNumber" href="jscore.html#max%2CMathLib%2CSomeNumber%2CSomeNumber">jscore: proc max(m: MathLib; a, b: SomeNumber): SomeNumber</a></li>
           <li><a class="reference external"
+          data-doc-search-tag="sequtils: proc max[T](x: openArray[T]; cmp: proc (a, b: T): int): T" href="sequtils.html#max%2CopenArray%5BT%5D%2Cproc%28T%2CT%29">sequtils: proc max[T](x: openArray[T]; cmp: proc (a, b: T): int): T</a></li>
+          <li><a class="reference external"
           data-doc-search-tag="system: proc max(x, y: float32): float32" href="system.html#max%2Cfloat32%2Cfloat32">system: proc max(x, y: float32): float32</a></li>
           <li><a class="reference external"
           data-doc-search-tag="system: proc max(x, y: float64): float64" href="system.html#max%2Cfloat64%2Cfloat64">system: proc max(x, y: float64): float64</a></li>
@@ -15315,10 +15357,12 @@ else:
 <dt><a name="maxIndex" href="#maxIndex"><span>maxIndex:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="sequtils: proc maxIndex[T](s: openArray[T]): int" href="sequtils.html#maxIndex%2CopenArray%5BT%5D">sequtils: proc maxIndex[T](s: openArray[T]): int</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="sequtils: proc maxIndex[T](s: openArray[T]; cmp: proc (a, b: T): int): int" href="sequtils.html#maxIndex%2CopenArray%5BT%5D%2Cproc%28T%2CT%29">sequtils: proc maxIndex[T](s: openArray[T]; cmp: proc (a, b: T): int): int</a></li>
           </ul></dd>
 <dt><a name="MAX_INT" href="#MAX_INT"><span>MAX_INT:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="system: Passing Channels Safely" href="system.html#max-int_1">system: Passing Channels Safely</a></li>
+          data-doc-search-tag="system: Example:" href="system.html#max-int_1">system: Example:</a></li>
           </ul></dd>
 <dt><a name="maxLen" href="#maxLen"><span>maxLen:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -15596,7 +15640,7 @@ else:
           </ul></dd>
 <dt><a name="method" href="#method"><span>method:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="system: Passing Channels Safely" href="system.html#method_1">system: Passing Channels Safely</a></li>
+          data-doc-search-tag="system: Example:" href="system.html#method_1">system: Example:</a></li>
           </ul></dd>
 <dt><a name="methodGet" href="#methodGet"><span>methodGet:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -15692,6 +15736,8 @@ else:
 <li><a class="reference external"
           data-doc-search-tag="jscore: proc min[T: SomeNumber | JsRoot](m: MathLib; a, b: T): T" href="jscore.html#min%2CMathLib%2CT%2CT">jscore: proc min[T: SomeNumber | JsRoot](m: MathLib; a, b: T): T</a></li>
           <li><a class="reference external"
+          data-doc-search-tag="sequtils: proc min[T](x: openArray[T]; cmp: proc (a, b: T): int): T" href="sequtils.html#min%2CopenArray%5BT%5D%2Cproc%28T%2CT%29">sequtils: proc min[T](x: openArray[T]; cmp: proc (a, b: T): int): T</a></li>
+          <li><a class="reference external"
           data-doc-search-tag="system: proc min(x, y: float32): float32" href="system.html#min%2Cfloat32%2Cfloat32">system: proc min(x, y: float32): float32</a></li>
           <li><a class="reference external"
           data-doc-search-tag="system: proc min(x, y: float64): float64" href="system.html#min%2Cfloat64%2Cfloat64">system: proc min(x, y: float64): float64</a></li>
@@ -15735,14 +15781,18 @@ else:
 <dt><a name="minIndex" href="#minIndex"><span>minIndex:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="sequtils: proc minIndex[T](s: openArray[T]): int" href="sequtils.html#minIndex%2CopenArray%5BT%5D">sequtils: proc minIndex[T](s: openArray[T]): int</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="sequtils: proc minIndex[T](s: openArray[T]; cmp: proc (a, b: T): int): int" href="sequtils.html#minIndex%2CopenArray%5BT%5D%2Cproc%28T%2CT%29">sequtils: proc minIndex[T](s: openArray[T]; cmp: proc (a, b: T): int): int</a></li>
           </ul></dd>
 <dt><a name="MIN_INT" href="#MIN_INT"><span>MIN_INT:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="system: Passing Channels Safely" href="system.html#min-int_1">system: Passing Channels Safely</a></li>
+          data-doc-search-tag="system: Example:" href="system.html#min-int_1">system: Example:</a></li>
           </ul></dd>
 <dt><a name="minmax" href="#minmax"><span>minmax:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="sequtils: proc minmax[T](x: openArray[T]): (T, T)" href="sequtils.html#minmax%2CopenArray%5BT%5D">sequtils: proc minmax[T](x: openArray[T]): (T, T)</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="sequtils: proc minmax[T](x: openArray[T]; cmp: proc (a, b: T): int): (T, T)" href="sequtils.html#minmax%2CopenArray%5BT%5D%2Cproc%28T%2CT%29">sequtils: proc minmax[T](x: openArray[T]; cmp: proc (a, b: T): int): (T, T)</a></li>
           </ul></dd>
 <dt><a name="minute" href="#minute"><span>minute:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -16790,9 +16840,13 @@ else:
           </ul></dd>
 <dt><a name="newProxy" href="#newProxy"><span>newProxy:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="httpclient: proc newProxy(url: string; auth = &quot;&quot;): Proxy" href="httpclient.html#newProxy%2Cstring%2Cstring">httpclient: proc newProxy(url: string; auth = &quot;&quot;): Proxy</a></li>
+          data-doc-search-tag="httpclient: proc newProxy(url: string): Proxy" href="httpclient.html#newProxy%2Cstring">httpclient: proc newProxy(url: string): Proxy</a></li>
           <li><a class="reference external"
-          data-doc-search-tag="httpclient: proc newProxy(url: Uri; auth = &quot;&quot;): Proxy" href="httpclient.html#newProxy%2CUri%2Cstring">httpclient: proc newProxy(url: Uri; auth = &quot;&quot;): Proxy</a></li>
+          data-doc-search-tag="httpclient: proc newProxy(url: string; auth: string): Proxy" href="httpclient.html#newProxy%2Cstring%2Cstring">httpclient: proc newProxy(url: string; auth: string): Proxy</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="httpclient: proc newProxy(url: Uri): Proxy" href="httpclient.html#newProxy%2CUri">httpclient: proc newProxy(url: Uri): Proxy</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="httpclient: proc newProxy(url: Uri; auth: string): Proxy" href="httpclient.html#newProxy%2CUri%2Cstring">httpclient: proc newProxy(url: Uri; auth: string): Proxy</a></li>
           </ul></dd>
 <dt><a name="newReadSocketStream" href="#newReadSocketStream"><span>newReadSocketStream:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -18838,9 +18892,9 @@ else:
           </ul></dd>
 <dt><a name="OpenMP" href="#OpenMP"><span>OpenMP:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="system: Passing Channels Safely" href="system.html#openmp_1">system: Passing Channels Safely</a></li>
+          data-doc-search-tag="system: Example:" href="system.html#openmp_1">system: Example:</a></li>
           <li><a class="reference external"
-          data-doc-search-tag="system: Passing Channels Safely" href="system.html#openmp_2">system: Passing Channels Safely</a></li>
+          data-doc-search-tag="system: Example:" href="system.html#openmp_2">system: Example:</a></li>
           </ul></dd>
 <dt><a name="openProcess" href="#openProcess"><span>openProcess:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -20992,6 +21046,10 @@ else:
 <li><a class="reference external"
           data-doc-search-tag="winlean: const REALTIME_PRIORITY_CLASS" href="winlean.html#REALTIME_PRIORITY_CLASS">winlean: const REALTIME_PRIORITY_CLASS</a></li>
           </ul></dd>
+<dt><a name="recipients" href="#recipients"><span>recipients:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="smtp: proc recipients(msg: Message): seq[Email]" href="smtp.html#recipients%2CMessage">smtp: proc recipients(msg: Message): seq[Email]</a></li>
+          </ul></dd>
 <dt><a name="reciprocal" href="#reciprocal"><span>reciprocal:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="rationals: proc reciprocal[T](x: Rational[T]): Rational[T]" href="rationals.html#reciprocal%2CRational%5BT%5D">rationals: proc reciprocal[T](x: Rational[T]): Rational[T]</a></li>
@@ -21630,7 +21688,7 @@ else:
           </ul></dd>
 <dt><a name="resource" href="#resource"><span>resource:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="system: Passing Channels Safely" href="system.html#resource_1">system: Passing Channels Safely</a></li>
+          data-doc-search-tag="system: Example:" href="system.html#resource_1">system: Example:</a></li>
           </ul></dd>
 <dt><a name="ResourceExhaustedError" href="#ResourceExhaustedError"><span>ResourceExhaustedError:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -22068,7 +22126,7 @@ else:
           </ul></dd>
 <dt><a name="roof" href="#roof"><span>roof:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="system: Passing Channels Safely" href="system.html#roof_1">system: Passing Channels Safely</a></li>
+          data-doc-search-tag="system: Example:" href="system.html#roof_1">system: Example:</a></li>
           </ul></dd>
 <dt><a name="RootEffect" href="#RootEffect"><span>RootEffect:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -22714,15 +22772,23 @@ else:
 <li><a class="reference external"
           data-doc-search-tag="dom: proc sendBeacon(self: Navigator; url, data: cstring): bool" href="dom.html#sendBeacon%2CNavigator%2Ccstring%2Ccstring">dom: proc sendBeacon(self: Navigator; url, data: cstring): bool</a></li>
           </ul></dd>
+<dt><a name="sender" href="#sender"><span>sender:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="smtp: proc sender(msg: Message): Email" href="smtp.html#sender%2CMessage">smtp: proc sender(msg: Message): Email</a></li>
+          </ul></dd>
 <dt><a name="sendHeaders" href="#sendHeaders"><span>sendHeaders:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="asynchttpserver: proc sendHeaders(req: Request; headers: HttpHeaders): Future[void]" href="asynchttpserver.html#sendHeaders%2CRequest%2CHttpHeaders">asynchttpserver: proc sendHeaders(req: Request; headers: HttpHeaders): Future[void]</a></li>
           </ul></dd>
 <dt><a name="sendMail" href="#sendMail"><span>sendMail:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
+          data-doc-search-tag="smtp: proc sendMail(smtp: AsyncSmtp; msg: Message): owned(Future[void])" href="smtp.html#sendMail%2CAsyncSmtp%2CMessage">smtp: proc sendMail(smtp: AsyncSmtp; msg: Message): owned(Future[void])</a></li>
+          <li><a class="reference external"
           data-doc-search-tag="smtp: proc sendMail(smtp: AsyncSmtp; fromAddr: string; toAddrs: seq[string]; msg: string): owned(
     Future[void])" href="smtp.html#sendMail%2CAsyncSmtp%2Cstring%2Cseq%5Bstring%5D%2Cstring">smtp: proc sendMail(smtp: AsyncSmtp; fromAddr: string; toAddrs: seq[string]; msg: string): owned(
     Future[void])</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="smtp: proc sendMail(smtp: Smtp; msg: Message)" href="smtp.html#sendMail%2CSmtp%2CMessage">smtp: proc sendMail(smtp: Smtp; msg: Message)</a></li>
           <li><a class="reference external"
           data-doc-search-tag="smtp: proc sendMail(smtp: Smtp; fromAddr: string; toAddrs: seq[string]; msg: string)" href="smtp.html#sendMail%2CSmtp%2Cstring%2Cseq%5Bstring%5D%2Cstring">smtp: proc sendMail(smtp: Smtp; fromAddr: string; toAddrs: seq[string]; msg: string)</a></li>
           </ul></dd>
@@ -22974,6 +23040,10 @@ else:
           </ul></dd>
 <dt><a name="setFilePermissions" href="#setFilePermissions"><span>setFilePermissions:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
+          data-doc-search-tag="files: proc setFilePermissions(filename: Path; permissions: set[FilePermission];
+                   followSymlinks = true)" href="files.html#setFilePermissions%2CPath%2Cset%5BFilePermission%5D">files: proc setFilePermissions(filename: Path; permissions: set[FilePermission];
+                   followSymlinks = true)</a></li>
+          <li><a class="reference external"
           data-doc-search-tag="osfiles: proc setFilePermissions(filename: string; permissions: set[FilePermission];
                    followSymlinks = true)" href="osfiles.html#setFilePermissions%2Cstring%2Cset%5BFilePermission%5D">osfiles: proc setFilePermissions(filename: string; permissions: set[FilePermission];
                    followSymlinks = true)</a></li>
@@ -23652,7 +23722,7 @@ else:
 <li><a class="reference external"
           data-doc-search-tag="system: type sink" href="system.html#sink">system: type sink</a></li>
           <li><a class="reference external"
-          data-doc-search-tag="system: Passing Channels Safely" href="system.html#sink_1">system: Passing Channels Safely</a></li>
+          data-doc-search-tag="system: Example:" href="system.html#sink_1">system: Example:</a></li>
           </ul></dd>
 <dt><a name="SInt" href="#SInt"><span>SInt:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -24712,7 +24782,7 @@ else:
 <li><a class="reference external"
           data-doc-search-tag="manual: Inhibit dynamic method resolution via procCall" href="manual.html#super_1">manual: Inhibit dynamic method resolution via procCall</a></li>
           <li><a class="reference external"
-          data-doc-search-tag="system: Passing Channels Safely" href="system.html#super_1">system: Passing Channels Safely</a></li>
+          data-doc-search-tag="system: Example:" href="system.html#super_1">system: Example:</a></li>
           </ul></dd>
 <dt><a name="supportedSystem" href="#supportedSystem"><span>supportedSystem:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -26256,7 +26326,7 @@ else:
 <li><a class="reference external"
           data-doc-search-tag="jsconsole: proc trace(console: Console)" href="jsconsole.html#trace%2CConsole">jsconsole: proc trace(console: Console)</a></li>
           <li><a class="reference external"
-          data-doc-search-tag="system: Passing Channels Safely" href="system.html#trace_1">system: Passing Channels Safely</a></li>
+          data-doc-search-tag="system: Example:" href="system.html#trace_1">system: Example:</a></li>
           </ul></dd>
 <dt><a name="traced" href="#traced"><span>traced:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -26382,6 +26452,8 @@ else:
           </ul></dd>
 <dt><a name="tryRemoveFile" href="#tryRemoveFile"><span>tryRemoveFile:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
+          data-doc-search-tag="files: proc tryRemoveFile(file: Path): bool" href="files.html#tryRemoveFile%2CPath">files: proc tryRemoveFile(file: Path): bool</a></li>
+          <li><a class="reference external"
           data-doc-search-tag="osfiles: proc tryRemoveFile(file: string): bool" href="osfiles.html#tryRemoveFile%2Cstring">osfiles: proc tryRemoveFile(file: string): bool</a></li>
           </ul></dd>
 <dt><a name="trySend" href="#trySend"><span>trySend:</span></a></dt><dd><ul class="simple">
@@ -26972,7 +27044,7 @@ else:
           </ul></dd>
 <dt><a name="view" href="#view"><span>view:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="system: Passing Channels Safely" href="system.html#view_1">system: Passing Channels Safely</a></li>
+          data-doc-search-tag="system: Example:" href="system.html#view_1">system: Example:</a></li>
           </ul></dd>
 <dt><a name="VisualViewport" href="#VisualViewport"><span>VisualViewport:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -27828,7 +27900,7 @@ else:
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2025-04-22 02:22:39 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2025-10-31 02:22:04 UTC</small>
       </div>
     </div>
   </div>

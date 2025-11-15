@@ -16,10 +16,10 @@
 <link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA3XAAAN1wFCKJt4AAAAB3RJTUUH4QQQEwksSS9ZWwAAAk1JREFUWMPtll2ITVEUx39nn/O7Y5qR8f05wtCUUr6ZIS++8pEnkZInPImneaCQ5METNdOkeFBKUhMPRIkHKfEuUZSUlGlKPN2TrgfncpvmnntnmlEyq1Z7t89/rf9a6+y99oZxGZf/XeIq61EdtgKXgdXA0xrYAvBjOIF1AI9zvjcC74BSpndrJPkBWDScTF8Aa4E3wDlgHbASaANmVqlcCnwHvgDvgVfAJ+AikAAvgfVZwLnSVZHZaOuKoQi3ZOMi4NkYkpe1p4J7A8BpYAD49hfIy/oqG0+hLomiKP2L5L+1ubn5115S+3OAn4EnwBlgMzCjyt6ZAnQCJ4A7wOs88iRJHvw50HoujuPBoCKwHWiosy8MdfZnAdcHk8dxXFJ3VQbQlCTJvRBCGdRbD4M6uc5glpY3eAihpN5S5w12diSEcCCEcKUO4ljdr15T76ur1FDDLIQQ3qv71EdDOe3Kxj3leRXyk+pxdWnFWod6Wt2bY3de3aSuUHcPBVimHs7mK9WrmeOF6lR1o9qnzskh2ar2qm1qizpfXaPeVGdlmGN5pb09qMxz1Xb1kLqgzn1RyH7JUXW52lr5e/Kqi9qpto7V1atuUzfnARrV7jEib1T76gG2qxdGmXyiekkt1GswPTtek0aBfJp6YySGBfWg2tPQ0FAYgf1stUfdmdcjarbYJEniKIq6gY/Aw+zWHAC+p2labGpqiorFYgGYCEzN7oQdQClN07O1/EfDyGgC0ALMBdYAi4FyK+4H3gLPsxfR1zRNi+NP7nH5J+QntnXe5B5mpfQAAAAASUVORK5CYII=">
 
 <!-- CSS -->
-<link rel="stylesheet" type="text/css" href="nimdoc.out.css?v=2.2.4">
+<link rel="stylesheet" type="text/css" href="nimdoc.out.css?v=2.2.6">
 
 <!-- JS -->
-<script type="text/javascript" src="dochack.js?v=2.2.4"></script>
+<script type="text/javascript" src="dochack.js?v=2.2.6"></script>
 </head>
 <body>
   <div class="document" id="documentId">
@@ -105,7 +105,7 @@
     <div id="tocRoot"></div>
     
     <p class="module-desc"><table class="docinfo" frame="void" rules="none"><col class="docinfo-name" /><col class="docinfo-content" /><tbody valign="top"><tr><th class="docinfo-name">Author:</th><td>Andreas Rumpf</td></tr>
-<tr><th class="docinfo-name">Version:</th><td>2.2.4</td></tr>
+<tr><th class="docinfo-name">Version:</th><td>2.2.6</td></tr>
 </tbody></table><blockquote class="markdown-quote"><p>&quot;Look at you, hacker. A pathetic creature of meat and bone, panting and sweating as you run through my corridors. How can you challenge a perfect, immortal machine?&quot;</p></blockquote>
 
 <h1><a class="toc-backref" id="introduction" href="#introduction">Introduction</a></h1><p>This document describes the usage of the <em>Nim compiler</em> on the different supported platforms. It is not a definition of the Nim programming language (which is covered in the <a class="reference external" href="manual.html">manual</a>).</p>
@@ -332,6 +332,7 @@ Advanced commands:<div class="option-list"><div class="option-list-item odd"><di
 <li><tt class="docutils literal"><span class="pre">$projectDir/nim.cfg</span></tt> where <tt class="docutils literal"><span class="pre">$projectDir</span></tt> stands for the project file's path. This file can be skipped with the <tt class="docutils literal"><span class="pre option">--skipProjCfg</span></tt> command-line option.</li>
 <li>A project can also have a project-specific configuration file named <tt class="docutils literal"><span class="pre">$project.nim.cfg</span></tt> that resides in the same directory as <tt class="docutils literal"><span class="pre">$project.nim</span></tt>. This file can be skipped with the <tt class="docutils literal"><span class="pre option">--skipProjCfg</span></tt> command-line option.</li>
 </ol>
+<p><a class="reference external" href="nims.html">NimScript files</a> can also be used for configuration.</p>
 <p>Command-line settings have priority over configuration file settings.</p>
 <p>The default build of a project is a <span id="debug-build_1">debug build</span>. To compile a <span id="release-build_1">release build</span> define the <tt class="docutils literal"><span class="pre"><span class="Identifier">release</span></span></tt> symbol:</p>
 <p><pre class="listing"><span class="program">nim</span> <span class="option">c</span> <span class="option">-d:release</span> <span class="Identifier">myproject.nim</span></pre></p>
@@ -563,7 +564,7 @@ __global__ void add(int a, int b) {
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2025-04-22 02:24:50 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2025-10-31 02:24:17 UTC</small>
       </div>
     </div>
   </div>

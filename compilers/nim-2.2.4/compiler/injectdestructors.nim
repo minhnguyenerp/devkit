@@ -100,6 +100,7 @@ when false:
 proc isLastReadImpl(n: PNode; c: var Con; scope: var Scope): bool =
   let root = parampatterns.exprRoot(n, allowCalls=false)
   if root == nil: return false
+  elif sfSingleUsedTemp in root.flags: return true
 
   var s = addr(scope)
   while s != nil:
@@ -162,13 +163,16 @@ proc isLastReadImpl(n: PNode; c: var Con; scope: var Scope): bool =
   else:
     result = false
 
+template hasDestructorOrAsgn(c: var Con, typ: PType): bool =
+  # bug #23354; an object type could have a non-trivial assignements when it is passed to a sink parameter
+  hasDestructor(c, typ) or (c.graph.config.selectedGC in {gcArc, gcOrc, gcAtomicArc} and
+        typ.kind == tyObject and not isTrivial(getAttachedOp(c.graph, typ, attachedAsgn)))
+
 proc isLastRead(n: PNode; c: var Con; s: var Scope): bool =
-  # bug #23354; an object type could have a non-trival assignements when it is passed to a sink parameter
-  if not hasDestructor(c, n.typ) and (n.typ.kind != tyObject or isTrival(getAttachedOp(c.graph, n.typ, attachedAsgn))): return true
+  if not hasDestructorOrAsgn(c, n.typ): return true
 
   let m = skipConvDfa(n)
-  result = (m.kind == nkSym and sfSingleUsedTemp in m.sym.flags) or
-      isLastReadImpl(n, c, s)
+  result = isLastReadImpl(n, c, s)
 
 proc isFirstWrite(n: PNode; c: var Con): bool =
   let m = skipConvDfa(n)
@@ -185,10 +189,11 @@ proc isCursor(n: PNode): bool =
   else:
     false
 
-template isUnpackedTuple(n: PNode): bool =
+template isFullyUnpackedTuple(n: PNode): bool =
   ## we move out all elements of unpacked tuples,
   ## hence unpacked tuples themselves don't need to be destroyed
   ## except it's already a cursor
+  ## restricted to `skTemp`, tuple temps where not every field is unpacked should not use `skTemp`
   (n.kind == nkSym and n.sym.kind == skTemp and
    n.sym.typ.kind == tyTuple and sfCursor notin n.sym.flags)
 
@@ -197,7 +202,8 @@ proc checkForErrorPragma(c: Con; t: PType; ri: PNode; opname: string; inferredFr
   if inferredFromCopy:
     m.add ", which is inferred from unavailable '=copy'"
 
-  if (opname == "=" or opname == "=copy" or opname == "=dup") and ri != nil:
+  if (opname == "=" or opname == "=copy" or opname == "=dup") and
+       ri != nil:
     m.add "; requires a copy because it's not the last read of '"
     m.add renderTree(ri)
     m.add '\''
@@ -247,7 +253,12 @@ proc genOp(c: var Con; t: PType; kind: TTypeAttachedOp; dest, ri: PNode): PNode 
   dbg:
     if kind == attachedDestructor:
       echo "destructor is ", op.id, " ", op.ast
-  if sfError in op.flags: checkForErrorPragma(c, t, ri, AttachedOpToStr[kind])
+  if sfError in op.flags:
+    if ri != nil:
+      checkForErrorPragma(c, t, ri, AttachedOpToStr[kind])
+    else:
+      # uses the lineinfos of `dest` is `ri` is not available
+      checkForErrorPragma(c, t, dest, AttachedOpToStr[kind])
   c.genOp(op, dest)
 
 proc genDestroy(c: var Con; dest: PNode): PNode =
@@ -275,7 +286,7 @@ proc deepAliases(dest, ri: PNode): bool =
     return aliases(dest, ri) != no
 
 proc genSink(c: var Con; s: var Scope; dest, ri: PNode; flags: set[MoveOrCopyFlag] = {}): PNode =
-  if (c.inLoopCond == 0 and (isUnpackedTuple(dest) or IsDecl in flags or
+  if (c.inLoopCond == 0 and (isFullyUnpackedTuple(dest) or IsDecl in flags or
       (isAnalysableFieldAccess(dest, c.owner) and isFirstWrite(dest, c)))) or
       isNoInit(dest) or IsReturn in flags:
     # optimize sink call into a bitwise memcopy
@@ -449,7 +460,7 @@ proc passCopyToSink(n: PNode; c: var Con; s: var Scope): PNode =
   result = newNodeIT(nkStmtListExpr, n.info, n.typ)
   let nTyp = n.typ.skipTypes(tyUserTypeClasses)
   let tmp = c.getTemp(s, nTyp, n.info)
-  if hasDestructor(c, nTyp):
+  if hasDestructorOrAsgn(c, nTyp):
     let typ = nTyp.skipTypes({tyGenericInst, tyAlias, tySink})
     let op = getAttachedOp(c.graph, typ, attachedDup)
     if op != nil and tfHasOwned notin typ.flags:
@@ -559,7 +570,7 @@ proc cycleCheck(n: PNode; c: var Con) =
 proc pVarTopLevel(v: PNode; c: var Con; s: var Scope; res: PNode) =
   # move the variable declaration to the top of the frame:
   s.vars.add v.sym
-  if isUnpackedTuple(v):
+  if isFullyUnpackedTuple(v):
     if c.inLoop > 0:
       # unpacked tuple needs reset at every loop iteration
       res.add newTree(nkFastAsgn, v, genDefaultCall(v.typ, c, v.info))
@@ -935,6 +946,9 @@ proc p(n: PNode; c: var Con; s: var Scope; mode: ProcessMode; tmpFlags = {sfSing
     of nkVarSection, nkLetSection:
       # transform; var x = y to  var x; x op y  where op is a move or copy
       result = newNodeI(nkStmtList, n.info)
+
+      let isInProc = c.owner.kind in {skProc, skFunc, skMethod, skIterator, skConverter}
+
       for it in n:
         var ri = it[^1]
         if it.kind == nkVarTuple and hasDestructor(c, ri.typ):
@@ -950,7 +964,15 @@ proc p(n: PNode; c: var Con; s: var Scope; mode: ProcessMode; tmpFlags = {sfSing
               s.locals.add v.sym
               pVarTopLevel(v, c, s, result)
             if ri.kind != nkEmpty:
-              result.add moveOrCopy(v, ri, c, s, if v.kind == nkSym: {IsDecl} else: {})
+              let isGlobalPragma = v.kind == nkSym and 
+                      {sfPure, sfGlobal} <= v.sym.flags and
+                      isInProc
+
+              let value = moveOrCopy(v, ri, c, s, if v.kind == nkSym: {IsDecl} else: {})
+              if isGlobalPragma:
+                c.graph.procGlobals.add value
+              else:
+                result.add value
             elif ri.kind == nkEmpty and c.inLoop > 0:
               let skipInit = v.kind == nkDotExpr and # Closure var
                              sfNoInit in v[1].sym.flags
@@ -1122,6 +1144,25 @@ proc genFieldAccessSideEffects(c: var Con; s: var Scope; dest, ri: PNode; flags:
   var snk = c.genSink(s, dest, newAccess, flags)
   result = newTree(nkStmtList, v, snk, c.genWasMoved(newAccess))
 
+proc ownsData(c: var Con; s: var Scope; orig: PNode; flags: set[MoveOrCopyFlag]): PNode =
+  var n = orig
+  while true:
+    case n.kind
+    of nkDotExpr, nkCheckedFieldExpr, nkBracketExpr:
+      n = n[0]
+    else:
+      break
+  if n.kind in nkCallKinds and n.typ != nil and hasDestructor(c, n.typ):
+    result = newNodeIT(nkStmtListExpr, orig.info, orig.typ)
+    let tmp = c.getTemp(s, n.typ, n.info)
+    tmp.sym.flags.incl sfSingleUsedTemp
+    result.add newTree(nkFastAsgn, tmp, copyTree(n))
+    s.final.add c.genDestroy(tmp)
+    n[] = tmp[]
+    result.add copyTree(orig)
+  else:
+    result = nil
+
 proc moveOrCopy(dest, ri: PNode; c: var Con; s: var Scope, flags: set[MoveOrCopyFlag] = {}): PNode =
   var ri = ri
   var isEnsureMove = 0
@@ -1148,7 +1189,7 @@ proc moveOrCopy(dest, ri: PNode; c: var Con; s: var Scope, flags: set[MoveOrCopy
     of nkCallKinds:
       result = c.genSink(s, dest, p(ri, c, s, consumed), flags)
     of nkBracketExpr:
-      if isUnpackedTuple(ri[0]):
+      if isFullyUnpackedTuple(ri[0]):
         # unpacking of tuple: take over the elements
         result = c.genSink(s, dest, p(ri, c, s, consumed), flags)
       elif isAnalysableFieldAccess(ri, c.owner) and isLastRead(ri, c, s):
@@ -1208,7 +1249,11 @@ proc moveOrCopy(dest, ri: PNode; c: var Con; s: var Scope, flags: set[MoveOrCopy
     of nkRaiseStmt:
       result = pRaiseStmt(ri, c, s)
     else:
-      if isAnalysableFieldAccess(ri, c.owner) and isLastRead(ri, c, s) and
+      let isOwnsData = ownsData(c, s, ri2, flags)
+
+      if isOwnsData != nil:
+        result = moveOrCopy(dest, isOwnsData, c, s, flags)
+      elif isAnalysableFieldAccess(ri, c.owner) and isLastRead(ri, c, s) and
           canBeMoved(c, dest.typ):
         # Rule 3: `=sink`(x, z); wasMoved(z)
         let snk = c.genSink(s, dest, ri, flags)

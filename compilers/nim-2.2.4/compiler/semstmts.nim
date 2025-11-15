@@ -725,22 +725,33 @@ template isLocalSym(sym: PSym): bool =
       sym.typ.kind == tyTypeDesc or
       sfCompileTime in sym.flags) or
       sym.kind in {skProc, skFunc, skIterator} and
-      sfGlobal notin sym.flags
-
-template isLocalVarSym(n: PNode): bool =
-  n.kind == nkSym and isLocalSym(n.sym)
+      sfGlobal notin sym.flags and sym.typ.callConv == ccClosure
 
 proc usesLocalVar(n: PNode): bool =
-  result = false
-  for z in 1 ..< n.len:
-    if n[z].isLocalVarSym:
-      return true
-    elif n[z].kind in nkCallKinds:
-      if usesLocalVar(n[z]):
+  case n.kind
+  of nkSym:
+    result = isLocalSym(n.sym)
+  of nkCallKinds, nkObjConstr:
+    result = false
+    for i in 1 ..< n.len:
+      if usesLocalVar(n[i]):
         return true
+  of nkTupleConstr, nkPar, nkBracket, nkCurly:
+    result = false
+    for i in 0 ..< n.len:
+      if usesLocalVar(n[i]):
+        return true
+  of nkDotExpr, nkCheckedFieldExpr,
+       nkBracketExpr, nkAddr, nkHiddenAddr,
+       nkObjDownConv, nkObjUpConv:
+    result = usesLocalVar(n[0])
+  of nkHiddenStdConv, nkHiddenSubConv, nkCast, nkExprColonExpr:
+    result = usesLocalVar(n[1])
+  else:
+    result = false
 
 proc globalVarInitCheck(c: PContext, n: PNode) =
-  if n.isLocalVarSym or n.kind in nkCallKinds and usesLocalVar(n):
+  if usesLocalVar(n):
     localError(c.config, n.info, errCannotAssignToGlobal)
 
 const
@@ -2137,13 +2148,17 @@ proc bindDupHook(c: PContext; s: PSym; n: PNode; op: TTypeAttachedOp) =
 proc bindTypeHook(c: PContext; s: PSym; n: PNode; op: TTypeAttachedOp) =
   let t = s.typ
   var noError = false
+  template notRefc: bool =
+    # fixes refc with non-var destructor; cancel warnings (#23156)
+    c.config.backend == backendJs or
+      c.config.selectedGC in {gcArc, gcAtomicArc, gcOrc}
   let cond = case op
              of attachedWasMoved:
                t.len == 2 and t.returnType == nil and t.firstParamType.kind == tyVar
              of attachedTrace:
                t.len == 3 and t.returnType == nil and t.firstParamType.kind == tyVar and t[2].kind == tyPointer
              of attachedDestructor:
-               if c.config.selectedGC in {gcArc, gcAtomicArc, gcOrc}:
+               if notRefc:
                  t.len == 2 and t.returnType == nil
                else:
                  t.len == 2 and t.returnType == nil and t.firstParamType.kind == tyVar
@@ -2176,7 +2191,7 @@ proc bindTypeHook(c: PContext; s: PSym; n: PNode; op: TTypeAttachedOp) =
       localError(c.config, n.info, errGenerated,
         "signature for '=trace' must be proc[T: object](x: var T; env: pointer)")
     of attachedDestructor:
-      if c.config.selectedGC in {gcArc, gcAtomicArc, gcOrc}:
+      if notRefc:
         localError(c.config, n.info, errGenerated,
           "signature for '=destroy' must be proc[T: object](x: var T) or proc[T: object](x: T)")
       else:
@@ -2613,9 +2628,18 @@ proc semProcAux(c: PContext, n: PNode, kind: TSymKind,
           else:
             nil
         # semantic checking also needed with importc in case used in VM
+
+        let isInlineIterator = isInlineIterator(s.typ)
         s.ast[bodyPos] = hloBody(c, semProcBody(c, n[bodyPos], resultType))
         # unfortunately we cannot skip this step when in 'system.compiles'
         # context as it may even be evaluated in 'system.compiles':
+
+        if isInlineIterator and s.typ.callConv == ccClosure:
+          # iterators without explicit callconvs are lifted to closure,
+          # we need to add a result symbol for them
+          maybeAddResult(c, s, n)
+
+ 
         trackProc(c, s, s.ast[bodyPos])
       else:
         if (s.typ.returnType != nil and s.kind != skIterator):
@@ -2801,9 +2825,24 @@ proc recursiveSetFlag(n: PNode, flag: TNodeFlag) =
     for i in 0..<n.safeLen: recursiveSetFlag(n[i], flag)
     incl(n.flags, flag)
 
+proc enterPragmaBlock(c: PContext): POptionEntry =
+  result = POptionEntry(options: c.config.options,
+    notes: c.config.notes,
+    warningAsErrors: c.config.warningAsErrors,
+    features: c.features)
+
+proc leavePragmaBlock(c: PContext, p: POptionEntry) =
+  c.config.options = p.options
+  c.config.notes = p.notes
+  c.config.warningAsErrors = p.warningAsErrors
+  c.features = p.features
+
 proc semPragmaBlock(c: PContext, n: PNode; expectedType: PType = nil): PNode =
   checkSonsLen(n, 2, c.config)
   let pragmaList = n[0]
+
+  let oldOptionEntry = enterPragmaBlock(c)
+
   pragma(c, nil, pragmaList, exprPragmas, isStatement = true)
 
   var inUncheckedAssignSection = 0
@@ -2827,6 +2866,8 @@ proc semPragmaBlock(c: PContext, n: PNode; expectedType: PType = nil): PNode =
     of wLine: setInfoRecursive(result, pragmaList[i].info)
     of wNoRewrite: recursiveSetFlag(result, nfNoRewrite)
     else: discard
+
+  leavePragmaBlock(c, oldOptionEntry)
 
 proc semStaticStmt(c: PContext, n: PNode): PNode =
   #echo "semStaticStmt"

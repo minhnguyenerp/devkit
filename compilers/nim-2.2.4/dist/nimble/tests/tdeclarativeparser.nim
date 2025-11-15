@@ -5,8 +5,8 @@ import std/[options, tables, sequtils, os]
 import
   nimblepkg/[packageinfotypes, version, options, config, nimblesat, declarativeparser, cli, common]
 
-proc getNimbleFileFromPkgNameHelper(pkgName: string): string =
-  let pv: PkgTuple = (pkgName, VersionRange(kind: verAny))
+proc getNimbleFileFromPkgNameHelper(pkgName: string, ver = VersionRange(kind: verAny)): string =
+  let pv: PkgTuple = (pkgName, ver)
   var options = initOptions()
   options.nimBin = some options.makeNimBin("nim")
   options.config.packageLists["official"] = PackageList(
@@ -22,6 +22,9 @@ proc getNimbleFileFromPkgNameHelper(pkgName: string): string =
   pkgInfo.myPath
 
 suite "Declarative parsing":
+  setup:
+    removeDir("nimbleDir")
+
   test "should parse requires from a nimble file":
     let nimbleFile = getNimbleFileFromPkgNameHelper("nimlangserver")
     let nimbleFileInfo = extractRequiresInfo(nimbleFile)
@@ -32,6 +35,13 @@ suite "Declarative parsing":
       @["nim", "json_rpc", "with", "chronicles", "serialization", "stew", "regex"]
     for pkg in expectedPkgs:
       check pkg in requires.mapIt(it[0])
+  
+  test "should detect nested requires and fail":
+    let nimbleFile = getNimbleFileFromPkgNameHelper("jester")
+    let nimbleFileInfo = extractRequiresInfo(nimbleFile)
+
+    check nimbleFileInfo.nestedRequires
+  
   
   test "should parse bin from a nimble file":
     let nimbleFile = getNimbleFileFromPkgNameHelper("nimlangserver")
@@ -77,10 +87,15 @@ suite "Declarative parsing":
     check fileExists(repoDir / TaggedVersionsFileName)
 
   test "should be able to install a package using the declarative parser":
-    let (output, exitCode) = execNimble("--parser:declarative", "install", "nimlangserver")
+    let (output, exitCode) = execNimble("--parser:declarative", "install", "nimlangserver@#head")
     echo output
     check exitCode == QuitSuccess
 
+  test "should be able to retrieve the nim info from a nim directory":
+    let versions = @["1.6.12", "2.2.0"]
+    for ver in versions:
+      let nimbleFile = getNimbleFileFromPkgNameHelper("nim", parseVersionRange(ver))
+      check extractNimVersion(nimbleFile) == ver
 
 suite "Declarative parser features":
   test "should be able to parse features from a nimble file":
@@ -89,6 +104,7 @@ suite "Declarative parser features":
     let features = nimbleFileInfo.features
     check features.len == 2 #we need to account for the default 'dev' feature
     check features["feature1"] == @["stew"]
+    check nimbleFileInfo.requires == @["nim", "result[resultfeature]"]
 
   test "should be able to install a package using the declarative parser with a feature":
     cd "features":
@@ -136,13 +152,3 @@ suite "Declarative parser features":
       let (output, exitCode) = execNimble("--parser:declarative", "run")
       check exitCode == QuitSuccess
       check output.processOutput.inLines("dev is enabled")
-
-
-  #[NEXT Tests:
-
-    TODO:
-    - compile time nimble parser detection so we can warn when using the vm parser with features
-
-]#
-
-echo ""

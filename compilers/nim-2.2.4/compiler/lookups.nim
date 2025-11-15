@@ -75,10 +75,13 @@ proc addUniqueSym*(scope: PScope, s: PSym): PSym =
 proc openScope*(c: PContext): PScope {.discardable.} =
   result = PScope(parent: c.currentScope,
                   symbols: initStrTable(),
-                  depthLevel: c.scopeDepth + 1)
+                  depthLevel: c.scopeDepth + 1,
+                  optionStackLen: c.optionStack.len)
   c.currentScope = result
 
 proc rawCloseScope*(c: PContext) =
+  if c.currentScope.optionStackLen >= 1:
+    c.optionStack.setLen(c.currentScope.optionStackLen)
   c.currentScope = c.currentScope.parent
 
 proc closeScope*(c: PContext) =
@@ -385,7 +388,7 @@ proc addDeclAt*(c: PContext; scope: PScope, sym: PSym, info: TLineInfo) =
   if sym.name.id == ord(wUnderscore): return
   let conflict = scope.addUniqueSym(sym)
   if conflict != nil:
-    if sym.kind == skModule and conflict.kind == skModule:
+    if sym.kind == skModule and conflict.kind == skModule and not c.config.isDefined("nimPreviewDuplicateModuleError"):
       # e.g.: import foo; import foo
       # xxx we could refine this by issuing a different hint for the case
       # where a duplicate import happens inside an include.

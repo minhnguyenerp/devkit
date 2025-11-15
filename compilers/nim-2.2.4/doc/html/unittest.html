@@ -16,10 +16,10 @@
 <link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA3XAAAN1wFCKJt4AAAAB3RJTUUH4QQQEwksSS9ZWwAAAk1JREFUWMPtll2ITVEUx39nn/O7Y5qR8f05wtCUUr6ZIS++8pEnkZInPImneaCQ5METNdOkeFBKUhMPRIkHKfEuUZSUlGlKPN2TrgfncpvmnntnmlEyq1Z7t89/rf9a6+y99oZxGZf/XeIq61EdtgKXgdXA0xrYAvBjOIF1AI9zvjcC74BSpndrJPkBWDScTF8Aa4E3wDlgHbASaANmVqlcCnwHvgDvgVfAJ+AikAAvgfVZwLnSVZHZaOuKoQi3ZOMi4NkYkpe1p4J7A8BpYAD49hfIy/oqG0+hLomiKP2L5L+1ubn5115S+3OAn4EnwBlgMzCjyt6ZAnQCJ4A7wOs88iRJHvw50HoujuPBoCKwHWiosy8MdfZnAdcHk8dxXFJ3VQbQlCTJvRBCGdRbD4M6uc5glpY3eAihpN5S5w12diSEcCCEcKUO4ljdr15T76ur1FDDLIQQ3qv71EdDOe3Kxj3leRXyk+pxdWnFWod6Wt2bY3de3aSuUHcPBVimHs7mK9WrmeOF6lR1o9qnzskh2ar2qm1qizpfXaPeVGdlmGN5pb09qMxz1Xb1kLqgzn1RyH7JUXW52lr5e/Kqi9qpto7V1atuUzfnARrV7jEib1T76gG2qxdGmXyiekkt1GswPTtek0aBfJp6YySGBfWg2tPQ0FAYgf1stUfdmdcjarbYJEniKIq6gY/Aw+zWHAC+p2labGpqiorFYgGYCEzN7oQdQClN07O1/EfDyGgC0ALMBdYAi4FyK+4H3gLPsxfR1zRNi+NP7nH5J+QntnXe5B5mpfQAAAAASUVORK5CYII=">
 
 <!-- CSS -->
-<link rel="stylesheet" type="text/css" href="nimdoc.out.css?v=2.2.4">
+<link rel="stylesheet" type="text/css" href="nimdoc.out.css?v=2.2.6">
 
 <!-- JS -->
-<script type="text/javascript" src="dochack.js?v=2.2.4"></script>
+<script type="text/javascript" src="dochack.js?v=2.2.6"></script>
 </head>
 <body>
   <div class="document" id="documentId">
@@ -64,20 +64,7 @@
   <details open>
     <summary><a class="reference reference-toplevel" href="#7" id="57">Types</a></summary>
     <ul class="simple simple-toc-section">
-      <li><a class="reference" href="#ConsoleOutputFormatter" title="ConsoleOutputFormatter = ref object of OutputFormatter
-  ## Have test results printed in color.
-  ## Default is `auto` depending on `isatty(stdout)`, or override it with
-  ## `-d:nimUnittestColor:auto|on|off`.
-  ## 
-  ## Deprecated: Setting the environment variable `NIMTEST_COLOR` to `always`
-  ## or `never` changes the default for the non-js target to true or false respectively.
-  ## Deprecated: the environment variable `NIMTEST_NO_COLOR`, when set, changes the
-  ## default to true, if `NIMTEST_COLOR` is undefined.
-  ## Set the verbosity of test results.
-  ## Default is `PRINT_ALL`, or override with:
-  ## `-d:nimUnittestOutputLevel:PRINT_ALL|PRINT_FAILURES|PRINT_NONE`.
-  ## 
-  ## Deprecated: the `NIMTEST_OUTPUT_LVL` environment variable is set for the non-js target.">ConsoleOutputFormatter</a></li>
+      <li><a class="reference" href="#ConsoleOutputFormatter" title="ConsoleOutputFormatter = ref object of OutputFormatter">ConsoleOutputFormatter</a></li>
 <li><a class="reference" href="#JUnitOutputFormatter" title="JUnitOutputFormatter = ref object of OutputFormatter">JUnitOutputFormatter</a></li>
 <li><a class="reference" href="#OutputFormatter" title="OutputFormatter = ref object of RootObj">OutputFormatter</a></li>
 <li><a class="reference" href="#OutputLevel" title="OutputLevel = enum
@@ -311,20 +298,7 @@
   <h1><a class="toc-backref" href="#7">Types</a></h1>
   <dl class="item">
     <div id="ConsoleOutputFormatter">
-  <dt><pre><a href="unittest.html#ConsoleOutputFormatter"><span class="Identifier">ConsoleOutputFormatter</span></a> <span class="Other">=</span> <span class="Keyword">ref</span> <span class="Keyword">object</span> <span class="Keyword">of</span> <a href="unittest.html#OutputFormatter"><span class="Identifier">OutputFormatter</span></a>
-  <span class="Comment">## Have test results printed in color.</span>
-  <span class="Comment">## Default is `auto` depending on `isatty(stdout)`, or override it with</span>
-  <span class="Comment">## `-d:nimUnittestColor:auto|on|off`.</span>
-  <span class="Comment">## </span>
-  <span class="Comment">## Deprecated: Setting the environment variable `NIMTEST_COLOR` to `always`</span>
-  <span class="Comment">## or `never` changes the default for the non-js target to true or false respectively.</span>
-  <span class="Comment">## Deprecated: the environment variable `NIMTEST_NO_COLOR`, when set, changes the</span>
-  <span class="Comment">## default to true, if `NIMTEST_COLOR` is undefined.</span>
-  <span class="Comment">## Set the verbosity of test results.</span>
-  <span class="Comment">## Default is `PRINT_ALL`, or override with:</span>
-  <span class="Comment">## `-d:nimUnittestOutputLevel:PRINT_ALL|PRINT_FAILURES|PRINT_NONE`.</span>
-  <span class="Comment">## </span>
-  <span class="Comment">## Deprecated: the `NIMTEST_OUTPUT_LVL` environment variable is set for the non-js target.</span></pre></dt>
+  <dt><pre><a href="unittest.html#ConsoleOutputFormatter"><span class="Identifier">ConsoleOutputFormatter</span></a> <span class="Other">=</span> <span class="Keyword">ref</span> <span class="Keyword">object</span> <span class="Keyword">of</span> <a href="unittest.html#OutputFormatter"><span class="Identifier">OutputFormatter</span></a></pre></dt>
   <dd>
     
     
@@ -495,8 +469,8 @@
   <dd>
     
     disables filtering tests with the command line params
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/unittest.nim#L802" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/unittest.nim#L802" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/unittest.nim#L833" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/unittest.nim#L833" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -781,8 +755,8 @@
 
 <span class="Identifier">expect</span> <span class="Identifier">IOError</span><span class="Punctuation">,</span> <span class="Identifier">OSError</span><span class="Punctuation">,</span> <span class="Identifier">ValueError</span><span class="Punctuation">,</span> <span class="Identifier">AssertionDefect</span><span class="Punctuation">:</span>
   <span class="Identifier">defectiveRobot</span><span class="Punctuation">(</span><span class="Punctuation">)</span></pre>
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/unittest.nim#L749" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/unittest.nim#L749" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/unittest.nim#L780" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/unittest.nim#L780" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -818,8 +792,8 @@
   <dd>
     
     Same as <tt class="docutils literal"><span class="pre"><span class="Identifier">check</span></span></tt> except any failed test causes the program to quit immediately. Any teardown statements are not executed and the failed test output is not generated.
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/unittest.nim#L739" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/unittest.nim#L739" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/unittest.nim#L770" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/unittest.nim#L770" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -900,7 +874,7 @@
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2025-04-22 02:27:21 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2025-10-31 02:26:44 UTC</small>
       </div>
     </div>
   </div>

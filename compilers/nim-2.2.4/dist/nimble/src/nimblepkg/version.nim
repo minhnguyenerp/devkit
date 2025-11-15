@@ -3,11 +3,11 @@
 
 ## Module for handling versions and version ranges such as ``>= 1.0 & <= 1.5``
 import json, sets
-import common, strutils, tables, hashes, parseutils
+import common, strutils, tables, hashes, parseutils, forge_aliases
 import std/[strscans]
 type
   Version* = object
-    version: string
+    version*: string
 
   VersionRangeEnum* = enum
     verLater, # > V
@@ -303,6 +303,10 @@ proc parseRequires*(req: string): PkgTuple =
   except ParseVersionError:
     raise nimbleError(
         "Unable to parse dependency version range: " & getCurrentExceptionMsg())
+
+  # Expand forge aliases here
+  if result.name.isForgeAlias:
+    result.name = newForge(result.name).expand()
 
 proc `$`*(verRange: VersionRange): string =
   case verRange.kind

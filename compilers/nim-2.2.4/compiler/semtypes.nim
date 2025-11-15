@@ -38,21 +38,27 @@ const
   errNoGenericParamsAllowedForX = "no generic parameters allowed for $1"
   errInOutFlagNotExtern = "the '$1' modifier can be used only with imported types"
 
+proc reusePrev(prev: PType): bool {.inline.} =
+  # only overwrite `prev` if it is a forward type, partial object or magic type
+  result = prev != nil and (prev.kind == tyForward or (prev.sym != nil and
+    # partial object marks sym as `sfForward`
+    (sfForward in prev.sym.flags or prev.sym.magic != mNone)))
+
 proc newOrPrevType(kind: TTypeKind, prev: PType, c: PContext, son: sink PType): PType =
-  if prev == nil or prev.kind == tyGenericBody:
-    result = newTypeS(kind, c, son)
-  else:
+  if reusePrev(prev):
     result = prev
     result.setSon(son)
     if result.kind == tyForward: result.kind = kind
+  else:
+    result = newTypeS(kind, c, son)
   #if kind == tyError: result.flags.incl tfCheckedForDestructor
 
 proc newOrPrevType(kind: TTypeKind, prev: PType, c: PContext): PType =
-  if prev == nil or prev.kind == tyGenericBody:
-    result = newTypeS(kind, c)
-  else:
+  if reusePrev(prev):
     result = prev
     if result.kind == tyForward: result.kind = kind
+  else:
+    result = newTypeS(kind, c)
 
 proc newConstraint(c: PContext, k: TTypeKind): PType =
   result = newTypeS(tyBuiltInTypeClass, c)
@@ -784,7 +790,7 @@ proc semRecordCase(c: PContext, n: PNode, check: var IntSet, pos: var int,
   case typ.kind
   of shouldChckCovered:
     chckCovered = true
-  of tyFloat..tyFloat128, tyError:
+  of tyError:
     discard
   of tyRange:
     if skipTypes(typ.elementType, abstractInst).kind in shouldChckCovered:
@@ -792,7 +798,8 @@ proc semRecordCase(c: PContext, n: PNode, check: var IntSet, pos: var int,
   of tyForward:
     errorUndeclaredIdentifier(c, n[0].info, typ.sym.name.s)
   elif not isOrdinalType(typ):
-    localError(c.config, n[0].info, "selector must be of an ordinal type, float")
+    localError(c.config, n[0].info, "selector must be of an ordinal type")
+
   if firstOrd(c.config, typ) != 0:
     localError(c.config, n.info, "low(" & $a[0].sym.name.s &
                                      ") must be 0 for discriminant")
@@ -1102,7 +1109,9 @@ proc semAnyRef(c: PContext; n: PNode; kind: TTypeKind; prev: PType): PType =
       let t = newTypeS(tySink, c, result)
       result = t
     else: discard
-    if result.kind == tyRef and c.config.selectedGC in {gcArc, gcOrc, gcAtomicArc}:
+    if result.kind == tyRef and 
+        c.config.selectedGC in {gcArc, gcOrc, gcAtomicArc} and
+        tfTriggersCompileTime notin result.flags:
       result.flags.incl tfHasAsgn
 
 proc findEnforcedStaticType(t: PType): PType =

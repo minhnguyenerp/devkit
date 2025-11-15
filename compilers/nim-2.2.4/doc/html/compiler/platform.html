@@ -16,10 +16,10 @@
 <link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA3XAAAN1wFCKJt4AAAAB3RJTUUH4QQQEwksSS9ZWwAAAk1JREFUWMPtll2ITVEUx39nn/O7Y5qR8f05wtCUUr6ZIS++8pEnkZInPImneaCQ5METNdOkeFBKUhMPRIkHKfEuUZSUlGlKPN2TrgfncpvmnntnmlEyq1Z7t89/rf9a6+y99oZxGZf/XeIq61EdtgKXgdXA0xrYAvBjOIF1AI9zvjcC74BSpndrJPkBWDScTF8Aa4E3wDlgHbASaANmVqlcCnwHvgDvgVfAJ+AikAAvgfVZwLnSVZHZaOuKoQi3ZOMi4NkYkpe1p4J7A8BpYAD49hfIy/oqG0+hLomiKP2L5L+1ubn5115S+3OAn4EnwBlgMzCjyt6ZAnQCJ4A7wOs88iRJHvw50HoujuPBoCKwHWiosy8MdfZnAdcHk8dxXFJ3VQbQlCTJvRBCGdRbD4M6uc5glpY3eAihpN5S5w12diSEcCCEcKUO4ljdr15T76ur1FDDLIQQ3qv71EdDOe3Kxj3leRXyk+pxdWnFWod6Wt2bY3de3aSuUHcPBVimHs7mK9WrmeOF6lR1o9qnzskh2ar2qm1qizpfXaPeVGdlmGN5pb09qMxz1Xb1kLqgzn1RyH7JUXW52lr5e/Kqi9qpto7V1atuUzfnARrV7jEib1T76gG2qxdGmXyiekkt1GswPTtek0aBfJp6YySGBfWg2tPQ0FAYgf1stUfdmdcjarbYJEniKIq6gY/Aw+zWHAC+p2labGpqiorFYgGYCEzN7oQdQClN07O1/EfDyGgC0ALMBdYAi4FyK+4H3gLPsxfR1zRNi+NP7nH5J+QntnXe5B5mpfQAAAAASUVORK5CYII=">
 
 <!-- CSS -->
-<link rel="stylesheet" type="text/css" href="nimdoc.out.css?v=2.2.4">
+<link rel="stylesheet" type="text/css" href="nimdoc.out.css?v=2.2.6">
 
 <!-- JS -->
-<script type="text/javascript" src="dochack.js?v=2.2.4"></script>
+<script type="text/javascript" src="dochack.js?v=2.2.6"></script>
 </head>
 <body>
   <div class="document" id="documentId">
@@ -75,7 +75,7 @@
 <li><a class="reference" href="#TSystemCPU" title="TSystemCPU = enum
   cpuNone, cpuI386, cpuM68k, cpuAlpha, cpuPowerpc, cpuPowerpc64, cpuPowerpc64el,
   cpuSparc, cpuVm, cpuHppa, cpuIa64, cpuAmd64, cpuMips, cpuMipsel, cpuArm,
-  cpuArm64, cpuJS, cpuNimVM, cpuAVR, cpuMSP430, cpuSparc64, cpuMips64,
+  cpuArm64, cpuJS, cpuNimVM, cpuAVR, cpuMSP430, cpuSparc64, cpuS390x, cpuMips64,
   cpuMips64el, cpuRiscV32, cpuRiscV64, cpuEsp, cpuWasm32, cpuE2k, cpuLoongArch64">TSystemCPU</a></li>
 <li><a class="reference" href="#TSystemOS" title="TSystemOS = enum
   osNone, osDos, osWindows, osOs2, osLinux, osMorphos, osSkyos, osSolaris,
@@ -113,6 +113,7 @@
     (name: &quot;avr&quot;, intSize: 16, endian: littleEndian, floatSize: 32, bit: 16), (
     name: &quot;msp430&quot;, intSize: 16, endian: littleEndian, floatSize: 32, bit: 16),
     (name: &quot;sparc64&quot;, intSize: 64, endian: bigEndian, floatSize: 64, bit: 64),
+    (name: &quot;s390x&quot;, intSize: 64, endian: bigEndian, floatSize: 64, bit: 64),
     (name: &quot;mips64&quot;, intSize: 64, endian: bigEndian, floatSize: 64, bit: 64), (
     name: &quot;mips64el&quot;, intSize: 64, endian: littleEndian, floatSize: 64, bit: 64), (
     name: &quot;riscv32&quot;, intSize: 32, endian: littleEndian, floatSize: 64, bit: 32), (
@@ -292,8 +293,8 @@
   <dd>
     
     
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/compiler/platform.nim#L254" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/compiler/platform.nim#L254" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/compiler/platform.nim#L255" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/compiler/platform.nim#L255" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -347,7 +348,7 @@
   <dt><pre><a href="platform.html#TSystemCPU"><span class="Identifier">TSystemCPU</span></a> <span class="Other">=</span> <span class="Keyword">enum</span>
   <span class="Identifier">cpuNone</span><span class="Other">,</span> <span class="Identifier">cpuI386</span><span class="Other">,</span> <span class="Identifier">cpuM68k</span><span class="Other">,</span> <span class="Identifier">cpuAlpha</span><span class="Other">,</span> <span class="Identifier">cpuPowerpc</span><span class="Other">,</span> <span class="Identifier">cpuPowerpc64</span><span class="Other">,</span> <span class="Identifier">cpuPowerpc64el</span><span class="Other">,</span>
   <span class="Identifier">cpuSparc</span><span class="Other">,</span> <span class="Identifier">cpuVm</span><span class="Other">,</span> <span class="Identifier">cpuHppa</span><span class="Other">,</span> <span class="Identifier">cpuIa64</span><span class="Other">,</span> <span class="Identifier">cpuAmd64</span><span class="Other">,</span> <span class="Identifier">cpuMips</span><span class="Other">,</span> <span class="Identifier">cpuMipsel</span><span class="Other">,</span> <span class="Identifier">cpuArm</span><span class="Other">,</span>
-  <span class="Identifier">cpuArm64</span><span class="Other">,</span> <span class="Identifier">cpuJS</span><span class="Other">,</span> <span class="Identifier">cpuNimVM</span><span class="Other">,</span> <span class="Identifier">cpuAVR</span><span class="Other">,</span> <span class="Identifier">cpuMSP430</span><span class="Other">,</span> <span class="Identifier">cpuSparc64</span><span class="Other">,</span> <span class="Identifier">cpuMips64</span><span class="Other">,</span>
+  <span class="Identifier">cpuArm64</span><span class="Other">,</span> <span class="Identifier">cpuJS</span><span class="Other">,</span> <span class="Identifier">cpuNimVM</span><span class="Other">,</span> <span class="Identifier">cpuAVR</span><span class="Other">,</span> <span class="Identifier">cpuMSP430</span><span class="Other">,</span> <span class="Identifier">cpuSparc64</span><span class="Other">,</span> <span class="Identifier">cpuS390x</span><span class="Other">,</span> <span class="Identifier">cpuMips64</span><span class="Other">,</span>
   <span class="Identifier">cpuMips64el</span><span class="Other">,</span> <span class="Identifier">cpuRiscV32</span><span class="Other">,</span> <span class="Identifier">cpuRiscV64</span><span class="Other">,</span> <span class="Identifier">cpuEsp</span><span class="Other">,</span> <span class="Identifier">cpuWasm32</span><span class="Other">,</span> <span class="Identifier">cpuE2k</span><span class="Other">,</span> <span class="Identifier">cpuLoongArch64</span></pre></dt>
   <dd>
     
@@ -401,6 +402,7 @@
     <span class="Other">(</span><span class="Identifier">name</span><span class="Other">:</span> <span class="StringLit">&quot;avr&quot;</span><span class="Other">,</span> <span class="Identifier">intSize</span><span class="Other">:</span> <span class="DecNumber">16</span><span class="Other">,</span> <span class="Identifier">endian</span><span class="Other">:</span> <span class="DecNumber">littleEndian</span><span class="Other">,</span> <span class="Identifier">floatSize</span><span class="Other">:</span> <span class="DecNumber">32</span><span class="Other">,</span> <span class="Identifier">bit</span><span class="Other">:</span> <span class="DecNumber">16</span><span class="Other">)</span><span class="Other">,</span> <span class="Other">(</span>
     <span class="Identifier">name</span><span class="Other">:</span> <span class="StringLit">&quot;msp430&quot;</span><span class="Other">,</span> <span class="Identifier">intSize</span><span class="Other">:</span> <span class="DecNumber">16</span><span class="Other">,</span> <span class="Identifier">endian</span><span class="Other">:</span> <span class="DecNumber">littleEndian</span><span class="Other">,</span> <span class="Identifier">floatSize</span><span class="Other">:</span> <span class="DecNumber">32</span><span class="Other">,</span> <span class="Identifier">bit</span><span class="Other">:</span> <span class="DecNumber">16</span><span class="Other">)</span><span class="Other">,</span>
     <span class="Other">(</span><span class="Identifier">name</span><span class="Other">:</span> <span class="StringLit">&quot;sparc64&quot;</span><span class="Other">,</span> <span class="Identifier">intSize</span><span class="Other">:</span> <span class="DecNumber">64</span><span class="Other">,</span> <span class="Identifier">endian</span><span class="Other">:</span> <span class="DecNumber">bigEndian</span><span class="Other">,</span> <span class="Identifier">floatSize</span><span class="Other">:</span> <span class="DecNumber">64</span><span class="Other">,</span> <span class="Identifier">bit</span><span class="Other">:</span> <span class="DecNumber">64</span><span class="Other">)</span><span class="Other">,</span>
+    <span class="Other">(</span><span class="Identifier">name</span><span class="Other">:</span> <span class="StringLit">&quot;s390x&quot;</span><span class="Other">,</span> <span class="Identifier">intSize</span><span class="Other">:</span> <span class="DecNumber">64</span><span class="Other">,</span> <span class="Identifier">endian</span><span class="Other">:</span> <span class="DecNumber">bigEndian</span><span class="Other">,</span> <span class="Identifier">floatSize</span><span class="Other">:</span> <span class="DecNumber">64</span><span class="Other">,</span> <span class="Identifier">bit</span><span class="Other">:</span> <span class="DecNumber">64</span><span class="Other">)</span><span class="Other">,</span>
     <span class="Other">(</span><span class="Identifier">name</span><span class="Other">:</span> <span class="StringLit">&quot;mips64&quot;</span><span class="Other">,</span> <span class="Identifier">intSize</span><span class="Other">:</span> <span class="DecNumber">64</span><span class="Other">,</span> <span class="Identifier">endian</span><span class="Other">:</span> <span class="DecNumber">bigEndian</span><span class="Other">,</span> <span class="Identifier">floatSize</span><span class="Other">:</span> <span class="DecNumber">64</span><span class="Other">,</span> <span class="Identifier">bit</span><span class="Other">:</span> <span class="DecNumber">64</span><span class="Other">)</span><span class="Other">,</span> <span class="Other">(</span>
     <span class="Identifier">name</span><span class="Other">:</span> <span class="StringLit">&quot;mips64el&quot;</span><span class="Other">,</span> <span class="Identifier">intSize</span><span class="Other">:</span> <span class="DecNumber">64</span><span class="Other">,</span> <span class="Identifier">endian</span><span class="Other">:</span> <span class="DecNumber">littleEndian</span><span class="Other">,</span> <span class="Identifier">floatSize</span><span class="Other">:</span> <span class="DecNumber">64</span><span class="Other">,</span> <span class="Identifier">bit</span><span class="Other">:</span> <span class="DecNumber">64</span><span class="Other">)</span><span class="Other">,</span> <span class="Other">(</span>
     <span class="Identifier">name</span><span class="Other">:</span> <span class="StringLit">&quot;riscv32&quot;</span><span class="Other">,</span> <span class="Identifier">intSize</span><span class="Other">:</span> <span class="DecNumber">32</span><span class="Other">,</span> <span class="Identifier">endian</span><span class="Other">:</span> <span class="DecNumber">littleEndian</span><span class="Other">,</span> <span class="Identifier">floatSize</span><span class="Other">:</span> <span class="DecNumber">64</span><span class="Other">,</span> <span class="Identifier">bit</span><span class="Other">:</span> <span class="DecNumber">32</span><span class="Other">)</span><span class="Other">,</span> <span class="Other">(</span>
@@ -557,8 +559,8 @@
   <dd>
     
     
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/compiler/platform.nim#L290" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/compiler/platform.nim#L290" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/compiler/platform.nim#L291" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/compiler/platform.nim#L291" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -570,8 +572,8 @@
   <dd>
     
     
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/compiler/platform.nim#L279" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/compiler/platform.nim#L279" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/compiler/platform.nim#L280" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/compiler/platform.nim#L280" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -583,8 +585,8 @@
   <dd>
     
     
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/compiler/platform.nim#L284" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/compiler/platform.nim#L284" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/compiler/platform.nim#L285" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/compiler/platform.nim#L285" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -596,8 +598,8 @@
   <dd>
     
     
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/compiler/platform.nim#L273" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/compiler/platform.nim#L273" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/compiler/platform.nim#L274" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/compiler/platform.nim#L274" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -610,8 +612,8 @@
   <dd>
     
     
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/compiler/platform.nim#L262" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/compiler/platform.nim#L262" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/compiler/platform.nim#L263" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/compiler/platform.nim#L263" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -623,8 +625,8 @@
   <dd>
     
     
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/compiler/platform.nim#L295" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/compiler/platform.nim#L295" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/compiler/platform.nim#L296" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/compiler/platform.nim#L296" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -640,7 +642,7 @@
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2025-04-22 02:28:12 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2025-10-31 02:27:29 UTC</small>
       </div>
     </div>
   </div>

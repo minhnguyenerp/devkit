@@ -1150,7 +1150,14 @@ proc allPathsAsgnResult(p: BProc; n: PNode): InitResultEnum =
       else:
         allPathsInBranch(n[i].lastSon)
   of nkCallKinds:
-    if canRaiseDisp(p, n[0]):
+    if canRaiseDisp(p, n[0]) or
+        (n[0].kind == nkSym and sfNoReturn in n[0].sym.flags):
+      # requires initializations when encountering unreachable code
+      result = InitRequired
+    elif n[0].kind == nkSym and
+        n[0].sym.magic in {mUnaryMinusI..mAbsI, mAddI..mPred} and
+          optOverflowCheck in p.config.options:
+      # arithmetic operations may raise exceptions
       result = InitRequired
     else:
       for i in 0..<n.safeLen:
@@ -2168,6 +2175,20 @@ proc addHcrInitGuards(p: BProc, n: PNode, inInitGuard: var bool) =
 
     genStmts(p, n)
 
+proc handleProcGlobals(m: BModule) =
+  var procGlobals: seq[PNode] = move m.g.graph.procGlobals
+
+  for i in 0..<procGlobals.len:
+    var stmts = ""
+
+    # fixes recursive calls #24997
+    swap stmts, m.preInitProc.s(cpsStmts)
+    genStmts(m.preInitProc, procGlobals[i])
+    swap stmts, m.preInitProc.s(cpsStmts)
+
+    handleProcGlobals(m)
+    m.preInitProc.s(cpsStmts).add stmts
+
 proc genTopLevelStmt*(m: BModule; n: PNode) =
   ## Also called from `ic/cbackend.nim`.
   if pipelineutils.skipCodegen(m.config, n): return
@@ -2182,6 +2203,8 @@ proc genTopLevelStmt*(m: BModule; n: PNode) =
     addHcrInitGuards(m.initProc, transformedN, m.inHcrInitGuard)
   else:
     genProcBody(m.initProc, transformedN)
+
+  handleProcGlobals(m)
 
 proc shouldRecompile(m: BModule; code: Rope, cfile: Cfile): bool =
   if optForceFullMake notin m.config.globalOptions:

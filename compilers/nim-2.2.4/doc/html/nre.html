@@ -16,10 +16,10 @@
 <link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA3XAAAN1wFCKJt4AAAAB3RJTUUH4QQQEwksSS9ZWwAAAk1JREFUWMPtll2ITVEUx39nn/O7Y5qR8f05wtCUUr6ZIS++8pEnkZInPImneaCQ5METNdOkeFBKUhMPRIkHKfEuUZSUlGlKPN2TrgfncpvmnntnmlEyq1Z7t89/rf9a6+y99oZxGZf/XeIq61EdtgKXgdXA0xrYAvBjOIF1AI9zvjcC74BSpndrJPkBWDScTF8Aa4E3wDlgHbASaANmVqlcCnwHvgDvgVfAJ+AikAAvgfVZwLnSVZHZaOuKoQi3ZOMi4NkYkpe1p4J7A8BpYAD49hfIy/oqG0+hLomiKP2L5L+1ubn5115S+3OAn4EnwBlgMzCjyt6ZAnQCJ4A7wOs88iRJHvw50HoujuPBoCKwHWiosy8MdfZnAdcHk8dxXFJ3VQbQlCTJvRBCGdRbD4M6uc5glpY3eAihpN5S5w12diSEcCCEcKUO4ljdr15T76ur1FDDLIQQ3qv71EdDOe3Kxj3leRXyk+pxdWnFWod6Wt2bY3de3aSuUHcPBVimHs7mK9WrmeOF6lR1o9qnzskh2ar2qm1qizpfXaPeVGdlmGN5pb09qMxz1Xb1kLqgzn1RyH7JUXW52lr5e/Kqi9qpto7V1atuUzfnARrV7jEib1T76gG2qxdGmXyiekkt1GswPTtek0aBfJp6YySGBfWg2tPQ0FAYgf1stUfdmdcjarbYJEniKIq6gY/Aw+zWHAC+p2labGpqiorFYgGYCEzN7oQdQClN07O1/EfDyGgC0ALMBdYAi4FyK+4H3gLPsxfR1zRNi+NP7nH5J+QntnXe5B5mpfQAAAAASUVORK5CYII=">
 
 <!-- CSS -->
-<link rel="stylesheet" type="text/css" href="nimdoc.out.css?v=2.2.4">
+<link rel="stylesheet" type="text/css" href="nimdoc.out.css?v=2.2.6">
 
 <!-- JS -->
-<script type="text/javascript" src="dochack.js?v=2.2.4"></script>
+<script type="text/javascript" src="dochack.js?v=2.2.6"></script>
 </head>
 <body>
   <div class="document" id="documentId">
@@ -67,18 +67,13 @@
   pos*: int                  ## the location of the invalid unicode in bytes">InvalidUnicodeError</a></li>
 <li><a class="reference" href="#Regex" title="Regex = ref RegexDesc">Regex</a></li>
 <li><a class="reference" href="#RegexDesc" title="RegexDesc = object
-  pattern*: string
-  ## not nil
-  ## nil">RegexDesc</a></li>
+  pattern*: string">RegexDesc</a></li>
 <li><a class="reference" href="#RegexError" title="RegexError = ref object of CatchableError">RegexError</a></li>
 <li><a class="reference" href="#RegexInternalError" title="RegexInternalError = ref object of RegexError">RegexInternalError</a></li>
 <li><a class="reference" href="#RegexMatch" title="RegexMatch = object
   pattern*: Regex            ## The regex doing the matching.
                              ## Not nil.
-  str*: string               ## The string that was matched against.
-  ## First item is the bounds of the match
-  ## Other items are the captures
-  ## `a` is inclusive start, `b` is exclusive end">RegexMatch</a></li>
+  str*: string               ## The string that was matched against.">RegexMatch</a></li>
 <li><a class="reference" href="#StudyError" title="StudyError = ref object of RegexError">StudyError</a></li>
 <li><a class="reference" href="#SyntaxError" title="SyntaxError = ref object of RegexError
   pos*: int                  ## the location of the syntax error in bytes
@@ -346,9 +341,7 @@ There are also alternative nimble packages such as <a class="reference external"
 </div>
 <div id="RegexDesc">
   <dt><pre><a href="nre.html#RegexDesc"><span class="Identifier">RegexDesc</span></a> <span class="Other">=</span> <span class="Keyword">object</span>
-  <span class="Identifier">pattern</span><span class="Operator">*</span><span class="Other">:</span> <a href="system.html#string"><span class="Identifier">string</span></a>
-  <span class="Comment">## not nil</span>
-  <span class="Comment">## nil</span></pre></dt>
+  <span class="Identifier">pattern</span><span class="Operator">*</span><span class="Other">:</span> <a href="system.html#string"><span class="Identifier">string</span></a></pre></dt>
   <dd>
     
     
@@ -381,10 +374,7 @@ There are also alternative nimble packages such as <a class="reference external"
   <dt><pre><a href="nre.html#RegexMatch"><span class="Identifier">RegexMatch</span></a> <span class="Other">=</span> <span class="Keyword">object</span>
   <span class="Identifier">pattern</span><span class="Operator">*</span><span class="Other">:</span> <a href="nre.html#Regex"><span class="Identifier">Regex</span></a>            <span class="Comment">## The regex doing the matching.</span>
                              <span class="Comment">## Not nil.</span>
-  <span class="Identifier">str</span><span class="Operator">*</span><span class="Other">:</span> <a href="system.html#string"><span class="Identifier">string</span></a>               <span class="Comment">## The string that was matched against.</span>
-  <span class="Comment">## First item is the bounds of the match</span>
-  <span class="Comment">## Other items are the captures</span>
-  <span class="Comment">## `a` is inclusive start, `b` is exclusive end</span></pre></dt>
+  <span class="Identifier">str</span><span class="Operator">*</span><span class="Other">:</span> <a href="system.html#string"><span class="Identifier">string</span></a>               <span class="Comment">## The string that was matched against.</span></pre></dt>
   <dd>
     
     Usually seen as Option<a class="reference internal nimdoc" title="object RegexMatch" href="#RegexMatch">RegexMatch</a>, it represents the result of an execution. On failure, it is none, on success, it is some.<dl class="docutils"><dt><tt class="docutils literal"><span class="pre"><span class="Identifier">pattern</span><span class="Punctuation">:</span> <span class="Identifier">Regex</span></span></tt></dt>
@@ -961,7 +951,7 @@ There are also alternative nimble packages such as <a class="reference external"
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2025-04-22 02:27:47 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2025-10-31 02:27:07 UTC</small>
       </div>
     </div>
   </div>

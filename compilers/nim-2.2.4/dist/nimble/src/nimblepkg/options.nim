@@ -11,8 +11,10 @@ import config, version, common, cli, packageinfotypes, displaymessages
 const
   nimbledeps* = "nimbledeps"
   defaultLockFileName* = "nimble.lock"
+  defaultDevelopPath* = "vendor"
 
 type
+
   NimBin* = object
     path*: string
     version*: Version
@@ -64,9 +66,11 @@ type
     nimBinariesDir*: string # Directory where nim binaries are stored. Separated from nimbleDir as it can be changed by the user/tests
     disableNimBinaries*: bool # Whether to disable the use of nim binaries
     maxTaggedVersions*: int # Maximum number of tags to check for a package when discovering versions in a local repo
-    useDeclarativeParser*: bool # Whether to use the declarative parser for parsing nimble files (only when solver is SAT)
+    useDeclarativeParser*: bool # Whether to use the declarative parser for parsing nimble files (only when solver is SAT). A new code path is used when declarative is on.
     features*: seq[string] # Features to be activated. Only used when using the declarative parser
     ignoreSubmodules*: bool # Whether to ignore submodules when cloning a repository
+    satResult*: SatResult
+    legacy*: bool # Whether to use the legacy code path.
 
   ActionType* = enum
     actionNil, actionRefresh, actionInit, actionDump, actionPublish, actionUpgrade
@@ -108,6 +112,8 @@ type
     of actionInit, actionDump:
       projName*: string
       vcsOption*: string
+      collect*: bool
+      solve*: bool
     of actionCompile, actionDoc, actionBuild:
       file*: string
       backend*: string
@@ -216,7 +222,9 @@ Commands:
                                   external tools. The argument can be a
                                   .nimble file, a project directory or
                                   the name of an installed package.
-               [--ini, --json]    Selects the output format (the default is --ini).
+               [--ini, --json]    Selects the output format (the default is --ini). Only applicable to package information.
+               [--collect]        Collects all the packages in the dependency tree of the given package and shows the result in the console.
+               [--solve]          Solves the dependency tree of the given package and shows the result in the console.
   lock                            Generates or updates a package lock file.
   upgrade      [pkgname, ...]     Upgrades a list of packages in the lock file.
   deps                            Outputs dependencies for current package.
@@ -275,6 +283,7 @@ Nimble Options:
       --parser:declarative|nimvm  Use the declarative parser or the nimvm parser (default).
       --features                  Activate features. Only used when using the declarative parser.
       --ignoreSubmodules          Ignore submodules when cloning a repository.
+      --legacy                    Use the legacy code path (pre nimble 1.0.0)
 For more information read the GitHub readme:
   https://github.com/nim-lang/nimble#readme
 """
@@ -626,6 +635,7 @@ proc parseFlag*(flag, val: string, result: var Options, kind = cmdLongOption) =
   of "package", "p": result.package = val
   of "lockfile": result.lockFileName = val
   of "usesystemnim": result.useSystemNim = true
+  of "legacy": result.legacy = true
   of "developfile":
     if result.developFile.len == 0:
       result.developFile = val.normalizedPath
@@ -683,6 +693,8 @@ proc parseFlag*(flag, val: string, result: var Options, kind = cmdLongOption) =
     case f
     of "json": result.dumpMode = kdumpJson
     of "ini": result.dumpMode = kdumpIni
+    of "collect": result.action.collect = true
+    of "solve": result.action.solve = true
     else:
       wasFlagHandled = false
   of actionInstall:
@@ -775,7 +787,7 @@ proc parseFlag*(flag, val: string, result: var Options, kind = cmdLongOption) =
 
   if not wasFlagHandled and not isGlobalFlag:
     result.unknownFlags.add((kind, flag, val))
-
+  
 proc initOptions*(): Options =
   # Exported for choosenim
   Options(
@@ -787,7 +799,9 @@ proc initOptions*(): Options =
     nimBinariesDir: getHomeDir() / ".nimble" / "nimbinaries", 
     maxTaggedVersions: 4,
     useSatSolver: true,
-    useDeclarativeParser: false
+    useDeclarativeParser: false,
+    legacy: true, #default to legacy code path for nimble < 1.0.0
+    satResult: SatResult()
   )
 
 proc handleUnknownFlags(options: var Options) =
@@ -811,6 +825,10 @@ proc handleUnknownFlags(options: var Options) =
     options.unknownFlags = @[]
     for flag in unknownFlags:
       parseFlag(flag[1], flag[2], options, flag[0])
+
+  if not options.legacy: 
+    #default to declarative parser for new code path.
+    options.useDeclarativeParser = true 
 
   # Any unhandled flags?
   if options.unknownFlags.len > 0:
@@ -956,3 +974,10 @@ proc isDevelopment*(pkg: PackageInfo, options: Options): bool =
   ### Returns true if the package is a development package. 
   ### A development package is a root package that is not installed.
   not pkg.myPath.parentDir.startsWith(options.getPkgsDir())
+
+proc isLegacy*(options: Options): bool =
+  let isVnext = not options.legacy or options.useDeclarativeParser
+  if isVnext:
+    once: 
+      displayWarning("Using the new code path. This is experimental and may break in the future.")
+  return not isVnext

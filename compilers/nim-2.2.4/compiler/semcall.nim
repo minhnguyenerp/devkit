@@ -581,7 +581,7 @@ proc resolveOverloads(c: PContext, n, orig: PNode,
   let overloadsState = result.state
   if overloadsState != csMatch:
     if nfDotField in n.flags:
-      internalAssert c.config, f.kind == nkIdent and n.len >= 2
+      internalAssert c.config, f.kind in nkIdentKinds and n.len >= 2
 
       # leave the op head symbol empty,
       # we are going to try multiple variants
@@ -688,7 +688,9 @@ proc instGenericConvertersArg*(c: PContext, a: PNode, x: TCandidate) =
     if s.isGenericRoutineStrict:
       var src = s.typ.firstParamType
       var convMatch = newCandidate(c, src)
-      let srca = typeRel(convMatch, src, a[1].typ)
+      var arg = a[1]
+      if arg.kind in {nkHiddenAddr, nkHiddenSubConv}: arg = arg[^1]
+      let srca = typeRel(convMatch, src, arg.typ)
       if srca notin {isEqual, isGeneric, isSubtype}:
         internalError(c.config, a.info, "generic converter failed rematch")
       let finalCallee = generateInstance(c, s, convMatch.bindings, a.info)
@@ -834,9 +836,12 @@ proc semResolvedCall(c: PContext, x: var TCandidate,
   assert x.state == csMatch
   var finalCallee = x.calleeSym
   let info = getCallLineInfo(n)
-  markUsed(c, info, finalCallee)
-  onUse(info, finalCallee)
+  markUsed(c, info, finalCallee, isGenericInstance = false)
+  onUse(info, finalCallee, isGenericInstance = false)
   assert finalCallee.ast != nil
+  if x.matchedErrorType:
+    markUsed(c, info, finalCallee, isGenericInstance = true)
+    onUse(info, finalCallee, isGenericInstance = true)
   if x.matchedErrorType:
     result = x.call
     result[0] = newSymNode(finalCallee, getCallLineInfo(result[0]))
@@ -872,6 +877,8 @@ proc semResolvedCall(c: PContext, x: var TCandidate,
           x.call.add tn
         else:
           internalAssert c.config, false
+  markUsed(c, info, finalCallee, isGenericInstance = true)
+  onUse(info, finalCallee, isGenericInstance = true)
 
   result = x.call
   instGenericConvertersSons(c, result, x)
@@ -907,15 +914,15 @@ proc semOverloadedCall(c: PContext, n, nOrig: PNode,
     if c.inGenericContext > 0 and c.matchedConcept == nil:
       result = semGenericStmt(c, n)
       result.typ() = makeTypeFromExpr(c, result.copyTree)
+    elif efNoUndeclared in flags:
+      result = nil
     elif efExplain notin flags:
       # repeat the overload resolution,
       # this time enabling all the diagnostic output (this should fail again)
       result = semOverloadedCall(c, n, nOrig, filter, flags + {efExplain})
-    elif efNoUndeclared notin flags:
-      result = nil
-      notFoundError(c, n, errors)
     else:
       result = nil
+      notFoundError(c, n, errors)
 
 proc explicitGenericInstError(c: PContext; n: PNode): PNode =
   localError(c.config, getCallLineInfo(n), errCannotInstantiateX % renderTree(n))
@@ -940,8 +947,10 @@ proc explicitGenericSym(c: PContext, n: PNode, s: PSym, errors: var CandidateErr
   var newInst = generateInstance(c, s, m.bindings, n.info)
   newInst.typ.flags.excl tfUnresolved
   let info = getCallLineInfo(n)
-  markUsed(c, info, s)
-  onUse(info, s)
+  markUsed(c, info, s, isGenericInstance = false)
+  onUse(info, s, isGenericInstance = false)
+  markUsed(c, info, newInst, isGenericInstance = true)
+  onUse(info, newInst, isGenericInstance = true)
   result = newSymNode(newInst, info)
 
 proc setGenericParams(c: PContext, n, expectedParams: PNode) =

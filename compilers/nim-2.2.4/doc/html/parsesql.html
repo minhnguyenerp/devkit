@@ -16,10 +16,10 @@
 <link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA3XAAAN1wFCKJt4AAAAB3RJTUUH4QQQEwksSS9ZWwAAAk1JREFUWMPtll2ITVEUx39nn/O7Y5qR8f05wtCUUr6ZIS++8pEnkZInPImneaCQ5METNdOkeFBKUhMPRIkHKfEuUZSUlGlKPN2TrgfncpvmnntnmlEyq1Z7t89/rf9a6+y99oZxGZf/XeIq61EdtgKXgdXA0xrYAvBjOIF1AI9zvjcC74BSpndrJPkBWDScTF8Aa4E3wDlgHbASaANmVqlcCnwHvgDvgVfAJ+AikAAvgfVZwLnSVZHZaOuKoQi3ZOMi4NkYkpe1p4J7A8BpYAD49hfIy/oqG0+hLomiKP2L5L+1ubn5115S+3OAn4EnwBlgMzCjyt6ZAnQCJ4A7wOs88iRJHvw50HoujuPBoCKwHWiosy8MdfZnAdcHk8dxXFJ3VQbQlCTJvRBCGdRbD4M6uc5glpY3eAihpN5S5w12diSEcCCEcKUO4ljdr15T76ur1FDDLIQQ3qv71EdDOe3Kxj3leRXyk+pxdWnFWod6Wt2bY3de3aSuUHcPBVimHs7mK9WrmeOF6lR1o9qnzskh2ar2qm1qizpfXaPeVGdlmGN5pb09qMxz1Xb1kLqgzn1RyH7JUXW52lr5e/Kqi9qpto7V1atuUzfnARrV7jEib1T76gG2qxdGmXyiekkt1GswPTtek0aBfJp6YySGBfWg2tPQ0FAYgf1stUfdmdcjarbYJEniKIq6gY/Aw+zWHAC+p2labGpqiorFYgGYCEzN7oQdQClN07O1/EfDyGgC0ALMBdYAi4FyK+4H3gLPsxfR1zRNi+NP7nH5J+QntnXe5B5mpfQAAAAASUVORK5CYII=">
 
 <!-- CSS -->
-<link rel="stylesheet" type="text/css" href="nimdoc.out.css?v=2.2.4">
+<link rel="stylesheet" type="text/css" href="nimdoc.out.css?v=2.2.6">
 
 <!-- JS -->
-<script type="text/javascript" src="dochack.js?v=2.2.4"></script>
+<script type="text/javascript" src="dochack.js?v=2.2.6"></script>
 </head>
 <body>
   <div class="document" id="documentId">
@@ -80,8 +80,7 @@
   else:
     sons*: seq[SqlNode]      ## the node's children">SqlNodeObj</a></li>
 <li><a class="reference" href="#SqlParseError" title="SqlParseError = object of ValueError">SqlParseError</a></li>
-<li><a class="reference" href="#SqlParser" title="SqlParser = object of SqlLexer
-  ## Determines whether type parameters (e.g., sizes in types like VARCHAR(255)) are included in the SQL AST.">SqlParser</a></li>
+<li><a class="reference" href="#SqlParser" title="SqlParser = object of SqlLexer">SqlParser</a></li>
 
     </ul>
   </details>
@@ -139,7 +138,10 @@
 <a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/parsesql.nim#L1" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
     <div id="tocRoot"></div>
-    
+    <div class="deprecation-message">
+  <b>Deprecated:</b> use `nimble install parsesql` and import `pkg/parsesql` instead
+</div>
+
     <p class="module-desc"><p>The <tt class="docutils literal"><span class="pre"><span class="Identifier">parsesql</span></span></tt> module implements a high performance SQL file parser. It parses PostgreSQL syntax and the SQL ANSI standard.</p>
 <p>Unstable API.</p>
 </p>
@@ -157,8 +159,8 @@
   <dd>
     
     the parser object.
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/parsesql.nim#L50" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/parsesql.nim#L50" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/parsesql.nim#L52" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/parsesql.nim#L52" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -167,8 +169,8 @@
   <dd>
     
     an SQL abstract syntax tree node
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/parsesql.nim#L541" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/parsesql.nim#L541" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/parsesql.nim#L543" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/parsesql.nim#L543" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -188,8 +190,8 @@
   <dd>
     
     kind of SQL abstract syntax tree
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/parsesql.nim#L471" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/parsesql.nim#L471" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/parsesql.nim#L473" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/parsesql.nim#L473" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -204,8 +206,8 @@
   <dd>
     
     an SQL abstract syntax tree node
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/parsesql.nim#L542" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/parsesql.nim#L542" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/parsesql.nim#L544" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/parsesql.nim#L544" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -214,19 +216,18 @@
   <dd>
     
     Invalid SQL encountered
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/parsesql.nim#L540" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/parsesql.nim#L540" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/parsesql.nim#L542" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/parsesql.nim#L542" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
 <div id="SqlParser">
-  <dt><pre><a href="parsesql.html#SqlParser"><span class="Identifier">SqlParser</span></a> <span class="Other">=</span> <span class="Keyword">object</span> <span class="Keyword">of</span> <a href="parsesql.html#SqlLexer"><span class="Identifier">SqlLexer</span></a>
-  <span class="Comment">## Determines whether type parameters (e.g., sizes in types like VARCHAR(255)) are included in the SQL AST.</span></pre></dt>
+  <dt><pre><a href="parsesql.html#SqlParser"><span class="Identifier">SqlParser</span></a> <span class="Other">=</span> <span class="Keyword">object</span> <span class="Keyword">of</span> <a href="parsesql.html#SqlLexer"><span class="Identifier">SqlLexer</span></a></pre></dt>
   <dd>
     
     SQL parser object
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/parsesql.nim#L550" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/parsesql.nim#L550" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/parsesql.nim#L552" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/parsesql.nim#L552" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -243,8 +244,8 @@
   <dd>
     
     an alias for <tt class="docutils literal"><span class="pre"><span class="Identifier">renderSql</span></span></tt>.
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/parsesql.nim#L1539" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/parsesql.nim#L1539" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/parsesql.nim#L1541" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/parsesql.nim#L1541" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -257,8 +258,8 @@
   <dd>
     
     
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/parsesql.nim#L579" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/parsesql.nim#L579" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/parsesql.nim#L581" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/parsesql.nim#L581" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -267,8 +268,8 @@
   <dd>
     
     
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/parsesql.nim#L578" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/parsesql.nim#L578" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/parsesql.nim#L580" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/parsesql.nim#L580" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -280,8 +281,8 @@
   <dd>
     
     
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/parsesql.nim#L581" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/parsesql.nim#L581" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/parsesql.nim#L583" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/parsesql.nim#L583" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -293,8 +294,8 @@
   <dd>
     
     
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/parsesql.nim#L572" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/parsesql.nim#L572" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/parsesql.nim#L574" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/parsesql.nim#L574" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -306,8 +307,8 @@
   <dd>
     
     
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/parsesql.nim#L554" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/parsesql.nim#L554" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/parsesql.nim#L556" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/parsesql.nim#L556" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -317,8 +318,8 @@
   <dd>
     
     
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/parsesql.nim#L564" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/parsesql.nim#L564" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/parsesql.nim#L566" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/parsesql.nim#L566" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -328,8 +329,8 @@
   <dd>
     
     
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/parsesql.nim#L568" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/parsesql.nim#L568" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/parsesql.nim#L570" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/parsesql.nim#L570" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -343,8 +344,8 @@
   <dd>
     
     parses the SQL from <tt class="docutils literal"><span class="pre"><span class="Identifier">input</span></span></tt> into an AST and returns the AST. <tt class="docutils literal"><span class="pre"><span class="Identifier">filename</span></span></tt> is only used for error messages. Syntax errors raise an <tt class="docutils literal"><span class="pre"><span class="Identifier">SqlParseError</span></span></tt> exception.
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/parsesql.nim#L1573" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/parsesql.nim#L1573" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/parsesql.nim#L1575" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/parsesql.nim#L1575" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -355,8 +356,8 @@
   <dd>
     
     parses the SQL from <tt class="docutils literal"><span class="pre"><span class="Identifier">input</span></span></tt> into an AST and returns the AST. <tt class="docutils literal"><span class="pre"><span class="Identifier">filename</span></span></tt> is only used for error messages. Syntax errors raise an <tt class="docutils literal"><span class="pre"><span class="Identifier">SqlParseError</span></span></tt> exception.
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/parsesql.nim#L1584" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/parsesql.nim#L1584" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/parsesql.nim#L1586" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/parsesql.nim#L1586" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -369,8 +370,8 @@
   <dd>
     
     Converts an SQL abstract syntax tree to its string representation.
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/parsesql.nim#L1533" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/parsesql.nim#L1533" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/parsesql.nim#L1535" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/parsesql.nim#L1535" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -382,8 +383,8 @@
   <dd>
     
     
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/parsesql.nim#L1555" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/parsesql.nim#L1555" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/parsesql.nim#L1557" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/parsesql.nim#L1557" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -399,7 +400,7 @@
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2025-04-22 02:27:00 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2025-10-31 02:26:23 UTC</small>
       </div>
     </div>
   </div>

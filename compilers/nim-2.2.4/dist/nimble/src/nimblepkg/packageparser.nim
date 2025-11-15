@@ -212,6 +212,8 @@ proc readPackageInfoFromNimble(path: string; result: var PackageInfo) =
             result.paths.add(ev.value.multiSplit)
           of "entrypoints":
             result.entryPoints.add(ev.value.multiSplit)
+          of "testentrypoint":
+            result.testEntryPoint = ev.value
           else:
             raise nimbleError("Invalid field: " & ev.key)
         of "deps", "dependencies":
@@ -259,7 +261,7 @@ proc inferInstallRules(pkgInfo: var PackageInfo, options: Options) =
   # installed.)
   let installInstructions =
     pkgInfo.installDirs.len + pkgInfo.installExt.len + pkgInfo.installFiles.len
-  if installInstructions == 0 and pkgInfo.bin.len > 0 and pkgInfo.basicInfo.name != "nim":
+  if installInstructions == 0 and pkgInfo.bin.len > 0 and pkgInfo.basicInfo.name != "nim" and options.isLegacy: #dont skip nim files for vnext. We build in the install directory
     pkgInfo.skipExt.add("nim")
 
   # When a package doesn't specify a `srcDir` it's fair to assume that
@@ -369,12 +371,12 @@ proc readPackageInfo(pkgInfo: var PackageInfo, nf: NimbleFile, options: Options,
     validatePackageInfo(pkgInfo, options)
 
 proc getPkgInfoFromFile*(file: NimbleFile, options: Options,
-                         forValidation = false, useCache = true): PackageInfo =
+                         forValidation = false, useCache = true, onlyMinimalInfo = false): PackageInfo =
   ## Reads the specified .nimble file and returns its data as a PackageInfo
   ## object. Any validation errors are handled and displayed as warnings.
   result = initPackageInfo()
   try:
-    readPackageInfo(result, file, options, useCache= useCache)
+    readPackageInfo(result, file, options, onlyMinimalInfo = onlyMinimalInfo, useCache= useCache)
   except ValidationError:
     let exc = (ref ValidationError)(getCurrentException())
     if exc.warnAll and not forValidation:
@@ -383,11 +385,11 @@ proc getPkgInfoFromFile*(file: NimbleFile, options: Options,
     else:
       raise
 
-proc getPkgInfo*(dir: string, options: Options, forValidation = false):
+proc getPkgInfo*(dir: string, options: Options, forValidation = false, onlyMinimalInfo = false):
     PackageInfo =
   ## Find the .nimble file in ``dir`` and parses it, returning a PackageInfo.
   let nimbleFile = findNimbleFile(dir, true, options)
-  result = getPkgInfoFromFile(nimbleFile, options, forValidation)
+  result = getPkgInfoFromFile(nimbleFile, options, forValidation, onlyMinimalInfo = onlyMinimalInfo)
 
 proc getInstalledPkgs*(libsDir: string, options: Options): seq[PackageInfo] =
   ## Gets a list of installed packages.
@@ -445,7 +447,7 @@ proc isNimScript*(nf: string, options: Options): bool =
   result = pkg.isNimScript
 
 proc toFullInfo*(pkg: PackageInfo, options: Options): PackageInfo =
-  if pkg.isMinimal:
+  if pkg.isMinimal or pkg.infoKind == pikRequires:
     result = getPkgInfoFromFile(pkg.mypath, options)
     result.isInstalled = pkg.isInstalled
     # The `isLink` data from the meta data file is with priority because of the

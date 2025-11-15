@@ -16,10 +16,10 @@
 <link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA3XAAAN1wFCKJt4AAAAB3RJTUUH4QQQEwksSS9ZWwAAAk1JREFUWMPtll2ITVEUx39nn/O7Y5qR8f05wtCUUr6ZIS++8pEnkZInPImneaCQ5METNdOkeFBKUhMPRIkHKfEuUZSUlGlKPN2TrgfncpvmnntnmlEyq1Z7t89/rf9a6+y99oZxGZf/XeIq61EdtgKXgdXA0xrYAvBjOIF1AI9zvjcC74BSpndrJPkBWDScTF8Aa4E3wDlgHbASaANmVqlcCnwHvgDvgVfAJ+AikAAvgfVZwLnSVZHZaOuKoQi3ZOMi4NkYkpe1p4J7A8BpYAD49hfIy/oqG0+hLomiKP2L5L+1ubn5115S+3OAn4EnwBlgMzCjyt6ZAnQCJ4A7wOs88iRJHvw50HoujuPBoCKwHWiosy8MdfZnAdcHk8dxXFJ3VQbQlCTJvRBCGdRbD4M6uc5glpY3eAihpN5S5w12diSEcCCEcKUO4ljdr15T76ur1FDDLIQQ3qv71EdDOe3Kxj3leRXyk+pxdWnFWod6Wt2bY3de3aSuUHcPBVimHs7mK9WrmeOF6lR1o9qnzskh2ar2qm1qizpfXaPeVGdlmGN5pb09qMxz1Xb1kLqgzn1RyH7JUXW52lr5e/Kqi9qpto7V1atuUzfnARrV7jEib1T76gG2qxdGmXyiekkt1GswPTtek0aBfJp6YySGBfWg2tPQ0FAYgf1stUfdmdcjarbYJEniKIq6gY/Aw+zWHAC+p2labGpqiorFYgGYCEzN7oQdQClN07O1/EfDyGgC0ALMBdYAi4FyK+4H3gLPsxfR1zRNi+NP7nH5J+QntnXe5B5mpfQAAAAASUVORK5CYII=">
 
 <!-- CSS -->
-<link rel="stylesheet" type="text/css" href="nimdoc.out.css?v=2.2.4">
+<link rel="stylesheet" type="text/css" href="nimdoc.out.css?v=2.2.6">
 
 <!-- JS -->
-<script type="text/javascript" src="dochack.js?v=2.2.4"></script>
+<script type="text/javascript" src="dochack.js?v=2.2.6"></script>
 </head>
 <body>
   <div class="document" id="documentId">
@@ -467,7 +467,7 @@
   <span class="Identifier">ot</span> <span class="Operator">=</span> <span class="Identifier">a</span><span class="Operator">.</span><span class="Identifier">toOrderedTable</span>  <span class="Comment"># ordered tables</span>
 
 <span class="Identifier">assert</span> <span class="Operator">$</span><span class="Identifier">ot</span> <span class="Operator">==</span> <span class="LongStringLit">&quot;&quot;&quot;{'z': 1, 'y': 2, 'x': 3}&quot;&quot;&quot;</span></pre>
-<h2><a class="toc-backref" id="basic-usage-counttable" href="#basic-usage-counttable">CountTable</a></h2><p><a class="reference external" href="#CountTable">CountTable</a> is useful for counting number of items of some container (e.g. string, sequence or array), as it is a mapping where the items are the keys, and their number of occurrences are the values. For that purpose <a class="reference external" href="#toCountTable,openArray[A]">toCountTable proc</a> comes handy:</p>
+<h2><a class="toc-backref" id="basic-usage-counttable" href="#basic-usage-counttable">CountTable</a></h2><p><a class="reference external" href="#CountTable">CountTable</a> is useful for counting number of items of some container (e.g. string, sequence or array), as it is a mapping where the items are the keys, and their number of occurrences are the values. For that purpose <a class="reference external" href="#toCountTable,openArray[A]">toCountTable proc</a> comes in handy:</p>
 
 <p><strong class="examples_text">Example:</strong></p>
 <pre class="listing"><span class="Keyword">import</span> <span class="Identifier">std</span><span class="Operator">/</span><span class="Identifier">tables</span>
@@ -536,11 +536,11 @@ hashes.hash(x: float): Hash</pre>
   <dt><pre><a href="tables.html#CountTable"><span class="Identifier">CountTable</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span> <span class="Other">=</span> <span class="Keyword">object</span></pre></dt>
   <dd>
     
-    <p>Hash table that counts the number of each key.</p>
+    <p>Hash table that counts the number of each key.  Unlike <a class="reference external" href="#Table">Table</a>, this uses a zero count to signal &quot;empty&quot; &amp; so does not cache hash values for comparison reduction or resize acceleration.</p>
 <p>For creating an empty CountTable, use <a class="reference external" href="#initCountTable">initCountTable proc</a>.</p>
 
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2343" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2343" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2337" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2337" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -551,8 +551,8 @@ hashes.hash(x: float): Hash</pre>
     <p>Ref version of <a class="reference external" href="#CountTable">CountTable</a>.</p>
 <p>For creating a new empty CountTableRef, use <a class="reference external" href="#newCountTable">newCountTable proc</a>.</p>
 
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2351" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2351" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2347" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2347" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -673,8 +673,8 @@ hashes.hash(x: float): Hash</pre>
   <dd>
     
     The <tt class="docutils literal"><span class="pre"><span class="Operator">$</span></span></tt> operator for count tables. Used internally when calling <tt class="docutils literal"><span class="pre"><span class="Identifier">echo</span></span></tt> on a table.
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2620" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2620" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2616" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2616" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -683,8 +683,8 @@ hashes.hash(x: float): Hash</pre>
   <dd>
     
     The <tt class="docutils literal"><span class="pre"><span class="Operator">$</span></span></tt> operator for count tables. Used internally when calling <tt class="docutils literal"><span class="pre"><span class="Identifier">echo</span></span></tt> on a table.
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2898" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2898" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2890" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2890" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -756,8 +756,8 @@ hashes.hash(x: float): Hash</pre>
   <dd>
     
     The <tt class="docutils literal"><span class="pre"><span class="Operator">==</span></span></tt> operator for count tables. Returns <tt class="docutils literal"><span class="pre"><span class="Identifier">true</span></span></tt> if both tables contain the same keys with the same count. Insert order does not matter.
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2625" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2625" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2621" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2621" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -766,8 +766,8 @@ hashes.hash(x: float): Hash</pre>
   <dd>
     
     The <tt class="docutils literal"><span class="pre"><span class="Operator">==</span></span></tt> operator for count tables. Returns <tt class="docutils literal"><span class="pre"><span class="Identifier">true</span></span></tt> if either both tables are <tt class="docutils literal"><span class="pre"><span class="Keyword">nil</span></span></tt>, or neither is <tt class="docutils literal"><span class="pre"><span class="Keyword">nil</span></span></tt> and both contain the same keys with the same count. Insert order does not matter.
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2903" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2903" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2895" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2895" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -913,8 +913,8 @@ hashes.hash(x: float): Hash</pre>
 <li><a class="reference external" href="#hasKey,CountTable[A],A">hasKey proc</a> for checking if a key is in the table</li>
 </ul>
 
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2410" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2410" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2406" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2406" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -930,8 +930,8 @@ hashes.hash(x: float): Hash</pre>
 <li><a class="reference external" href="#hasKey,CountTableRef[A],A">hasKey proc</a> for checking if a key is in the table</li>
 </ul>
 
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2770" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2770" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2762" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2762" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -1036,8 +1036,8 @@ hashes.hash(x: float): Hash</pre>
 <li><a class="reference external" href="#inc,CountTableRef[A],A,int">inc proc</a> for incrementing a value of a key</li>
 </ul>
 
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2784" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2784" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2776" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2776" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -1051,8 +1051,8 @@ hashes.hash(x: float): Hash</pre>
 <li><a class="reference external" href="#inc,CountTable[A],A,int">inc proc</a> for incrementing a value of a key</li>
 </ul>
 
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2428" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2428" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2424" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2424" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -1215,8 +1215,8 @@ hashes.hash(x: float): Hash</pre>
 <li><a class="reference external" href="#pop,CountTableRef[A],A,int">pop proc</a></li>
 </ul>
 
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2868" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2868" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2860" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2860" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -1230,8 +1230,8 @@ hashes.hash(x: float): Hash</pre>
 <li><a class="reference external" href="#pop,CountTable[A],A,int">pop proc</a></li>
 </ul>
 
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2561" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2561" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2557" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2557" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -1299,8 +1299,8 @@ hashes.hash(x: float): Hash</pre>
   <dd>
     
     Alias of <a class="reference external" href="#hasKey,CountTable[A],A">hasKey proc</a> for use with the <tt class="docutils literal"><span class="pre"><span class="Keyword">in</span></span></tt> operator.
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2505" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2505" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2501" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2501" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -1309,8 +1309,8 @@ hashes.hash(x: float): Hash</pre>
   <dd>
     
     Alias of <a class="reference external" href="#hasKey,CountTableRef[A],A">hasKey proc</a> for use with the <tt class="docutils literal"><span class="pre"><span class="Keyword">in</span></span></tt> operator.
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2830" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2830" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2822" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2822" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -1413,8 +1413,8 @@ If duplicate keys were added (via the now deprecated <tt class="docutils literal
 <li><a class="reference external" href="#clear,CountTableRef[A]">clear proc</a> to empty the whole table</li>
 </ul>
 
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2849" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2849" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2841" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2841" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -1436,8 +1436,8 @@ If duplicate keys were added (via the now deprecated <tt class="docutils literal
 <span class="Identifier">assert</span> <span class="Identifier">a</span> <span class="Operator">==</span> <span class="Identifier">toCountTable</span><span class="Punctuation">(</span><span class="StringLit">&quot;aaccccc&quot;</span><span class="Punctuation">)</span>
 <span class="Identifier">a</span><span class="Operator">.</span><span class="Identifier">del</span><span class="Punctuation">(</span><span class="Punctuation">'</span><span class="Identifier">c</span><span class="CharLit">')</span>
 <span class="Identifier">assert</span> <span class="Identifier">a</span> <span class="Operator">==</span> <span class="Identifier">toCountTable</span><span class="Punctuation">(</span><span class="StringLit">&quot;aa&quot;</span><span class="Punctuation">)</span></pre>
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2520" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2520" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2516" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2516" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -1630,8 +1630,8 @@ If duplicate keys were added (via the now deprecated <tt class="docutils literal
 <li><a class="reference external" href="#hasKey,CountTable[A],A">hasKey proc</a> for checking if a key is in the table</li>
 </ul>
 
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2510" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2510" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2506" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2506" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -1645,8 +1645,8 @@ If duplicate keys were added (via the now deprecated <tt class="docutils literal
 <li><a class="reference external" href="#hasKey,CountTableRef[A],A">hasKey proc</a> for checking if a key is in the table</li>
 </ul>
 
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2835" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2835" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2827" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2827" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -1658,8 +1658,8 @@ If duplicate keys were added (via the now deprecated <tt class="docutils literal
   <dd>
     
     
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L3024" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L3024" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L3016" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L3016" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -1668,8 +1668,8 @@ If duplicate keys were added (via the now deprecated <tt class="docutils literal
   <dd>
     
     
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L3019" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L3019" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L3011" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L3011" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -1678,8 +1678,8 @@ If duplicate keys were added (via the now deprecated <tt class="docutils literal
   <dd>
     
     
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L3029" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L3029" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L3021" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L3021" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -1781,8 +1781,8 @@ If duplicate keys were added (via the now deprecated <tt class="docutils literal
 <li><a class="reference external" href="#getOrDefault,CountTable[A],A,int">getOrDefault proc</a> to return a custom value if the key doesn't exist</li>
 </ul>
 
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2493" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2493" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2489" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2489" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -1797,8 +1797,8 @@ If duplicate keys were added (via the now deprecated <tt class="docutils literal
 <li><a class="reference external" href="#getOrDefault,CountTableRef[A],A,int">getOrDefault proc</a> to return a custom value if the key doesn't exist</li>
 </ul>
 
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2819" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2819" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2811" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2811" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -1909,8 +1909,8 @@ If duplicate keys were added (via the now deprecated <tt class="docutils literal
   <dd>
     
     
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2749" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2749" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2741" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2741" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -1919,8 +1919,8 @@ If duplicate keys were added (via the now deprecated <tt class="docutils literal
   <dd>
     
     
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2387" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2387" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2383" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2383" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -1951,8 +1951,8 @@ If duplicate keys were added (via the now deprecated <tt class="docutils literal
 <li><a class="reference external" href="#newCountTable">newCountTable proc</a> for creating a <tt class="docutils literal"><span class="pre"><span class="Identifier">CountTableRef</span></span></tt></li>
 </ul>
 
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2391" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2391" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2387" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2387" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -2014,8 +2014,8 @@ If duplicate keys were added (via the now deprecated <tt class="docutils literal
 <ul class="simple"><li><a class="reference external" href="#smallest,CountTable[A]">smallest proc</a></li>
 </ul>
 
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2481" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2481" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2477" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2477" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -2028,8 +2028,8 @@ If duplicate keys were added (via the now deprecated <tt class="docutils literal
 <ul class="simple"><li><a class="reference external" href="#smallest,CountTable[A]">smallest proc</a></li>
 </ul>
 
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2812" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2812" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2804" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2804" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -2093,8 +2093,8 @@ If duplicate keys were added (via the now deprecated <tt class="docutils literal
   <dd>
     
     Returns the number of keys in <tt class="docutils literal"><span class="pre"><span class="Identifier">t</span></span></tt>.
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2464" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2464" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2460" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2460" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -2103,8 +2103,8 @@ If duplicate keys were added (via the now deprecated <tt class="docutils literal
   <dd>
     
     Returns the number of keys in <tt class="docutils literal"><span class="pre"><span class="Identifier">t</span></span></tt>.
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2845" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2845" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2837" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2837" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -2122,8 +2122,8 @@ If duplicate keys were added (via the now deprecated <tt class="docutils literal
   <span class="Identifier">b</span> <span class="Operator">=</span> <span class="Identifier">newCountTable</span><span class="Punctuation">(</span><span class="StringLit">&quot;bcc&quot;</span><span class="Punctuation">)</span>
 <span class="Identifier">a</span><span class="Operator">.</span><span class="Identifier">merge</span><span class="Punctuation">(</span><span class="Identifier">b</span><span class="Punctuation">)</span>
 <span class="Identifier">doAssert</span> <span class="Identifier">a</span> <span class="Operator">==</span> <span class="Identifier">newCountTable</span><span class="Punctuation">(</span><span class="StringLit">&quot;aaabbbccc&quot;</span><span class="Punctuation">)</span></pre>
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2887" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2887" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2879" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2879" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -2137,8 +2137,8 @@ If duplicate keys were added (via the now deprecated <tt class="docutils literal
 <span class="Keyword">let</span> <span class="Identifier">b</span> <span class="Operator">=</span> <span class="Identifier">toCountTable</span><span class="Punctuation">(</span><span class="StringLit">&quot;bcc&quot;</span><span class="Punctuation">)</span>
 <span class="Identifier">a</span><span class="Operator">.</span><span class="Identifier">merge</span><span class="Punctuation">(</span><span class="Identifier">b</span><span class="Punctuation">)</span>
 <span class="Identifier">doAssert</span> <span class="Identifier">a</span> <span class="Operator">==</span> <span class="Identifier">toCountTable</span><span class="Punctuation">(</span><span class="StringLit">&quot;aaabbbccc&quot;</span><span class="Punctuation">)</span></pre>
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2594" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2594" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2590" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2590" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -2334,8 +2334,8 @@ If duplicate keys were added (via the now deprecated <tt class="docutils literal
 <li><a class="reference external" href="#initCountTable">initCountTable proc</a> for creating a <tt class="docutils literal"><span class="pre"><span class="Identifier">CountTable</span></span></tt></li>
 </ul>
 
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2751" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2751" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2743" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2743" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -2344,8 +2344,8 @@ If duplicate keys were added (via the now deprecated <tt class="docutils literal
   <dd>
     
     Creates a new ref count table with every member of a container <tt class="docutils literal"><span class="pre"><span class="Identifier">keys</span></span></tt> having a count of how many times it occurs in that container.
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2763" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2763" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2755" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2755" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -2567,8 +2567,8 @@ If duplicate keys were added (via the now deprecated <tt class="docutils literal
 <li><a class="reference external" href="#clear,CountTableRef[A]">clear proc</a> to empty the whole table</li>
 </ul>
 
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2857" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2857" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2849" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2849" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -2590,8 +2590,8 @@ If duplicate keys were added (via the now deprecated <tt class="docutils literal
 <span class="Identifier">i</span> <span class="Operator">=</span> <span class="DecNumber">99</span>
 <span class="Identifier">assert</span> <span class="Keyword">not</span> <span class="Identifier">a</span><span class="Operator">.</span><span class="Identifier">pop</span><span class="Punctuation">(</span><span class="Punctuation">'</span><span class="Identifier">b</span><span class="CharLit">', i)</span>
 <span class="Identifier">assert</span> <span class="Identifier">i</span> <span class="Operator">==</span> <span class="DecNumber">99</span></pre>
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2537" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2537" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2533" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2533" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -2607,8 +2607,8 @@ If duplicate keys were added (via the now deprecated <tt class="docutils literal
 <ul class="simple"><li><a class="reference external" href="#largest,CountTable[A]">largest proc</a></li>
 </ul>
 
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2468" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2468" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2464" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2464" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -2621,8 +2621,8 @@ If duplicate keys were added (via the now deprecated <tt class="docutils literal
 <ul class="simple"><li><a class="reference external" href="#largest,CountTableRef[A]">largest proc</a></li>
 </ul>
 
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2805" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2805" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2797" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2797" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -2683,8 +2683,8 @@ If duplicate keys were added (via the now deprecated <tt class="docutils literal
 <p><strong>This is destructive! You must not modify `t` afterwards!</strong></p>
 <p>You can use the iterators <a class="reference external" href="#pairs.i,CountTableRef[A]">pairs</a>, <a class="reference external" href="#keys.i,CountTableRef[A]">keys</a>, and <a class="reference external" href="#values.i,CountTableRef[A]">values</a> to iterate over <tt class="docutils literal"><span class="pre"><span class="Identifier">t</span></span></tt> in the sorted order.</p>
 
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2876" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2876" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2868" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2868" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -2704,8 +2704,8 @@ This is destructive! Once sorted, you must not modify <tt class="docutils litera
 <span class="Identifier">doAssert</span> <span class="Identifier">toSeq</span><span class="Punctuation">(</span><span class="Identifier">a</span><span class="Operator">.</span><span class="Identifier">values</span><span class="Punctuation">)</span> <span class="Operator">==</span> <span class="Operator">@</span><span class="Punctuation">[</span><span class="DecNumber">5</span><span class="Punctuation">,</span> <span class="DecNumber">2</span><span class="Punctuation">,</span> <span class="DecNumber">2</span><span class="Punctuation">,</span> <span class="DecNumber">1</span><span class="Punctuation">,</span> <span class="DecNumber">1</span><span class="Punctuation">]</span>
 <span class="Identifier">a</span><span class="Operator">.</span><span class="Identifier">sort</span><span class="Punctuation">(</span><span class="Identifier">SortOrder</span><span class="Operator">.</span><span class="Identifier">Ascending</span><span class="Punctuation">)</span>
 <span class="Identifier">doAssert</span> <span class="Identifier">toSeq</span><span class="Punctuation">(</span><span class="Identifier">a</span><span class="Operator">.</span><span class="Identifier">values</span><span class="Punctuation">)</span> <span class="Operator">==</span> <span class="Operator">@</span><span class="Punctuation">[</span><span class="DecNumber">1</span><span class="Punctuation">,</span> <span class="DecNumber">1</span><span class="Punctuation">,</span> <span class="DecNumber">2</span><span class="Punctuation">,</span> <span class="DecNumber">2</span><span class="Punctuation">,</span> <span class="DecNumber">5</span><span class="Punctuation">]</span></pre>
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2573" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2573" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2569" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2569" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -2744,8 +2744,8 @@ This is destructive! Once sorted, you must not modify <tt class="docutils litera
   <dd>
     
     Creates a new count table with every member of a container <tt class="docutils literal"><span class="pre"><span class="Identifier">keys</span></span></tt> having a count of how many times it occurs in that container.
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2404" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2404" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2400" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2400" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -2938,8 +2938,8 @@ This is destructive! Once sorted, you must not modify <tt class="docutils litera
 <span class="Keyword">for</span> <span class="Identifier">k</span> <span class="Keyword">in</span> <span class="Identifier">keys</span><span class="Punctuation">(</span><span class="Identifier">a</span><span class="Punctuation">)</span><span class="Punctuation">:</span>
   <span class="Identifier">a</span><span class="Punctuation">[</span><span class="Identifier">k</span><span class="Punctuation">]</span> <span class="Operator">=</span> <span class="DecNumber">2</span>
 <span class="Identifier">doAssert</span> <span class="Identifier">a</span> <span class="Operator">==</span> <span class="Identifier">toCountTable</span><span class="Punctuation">(</span><span class="StringLit">&quot;aabbccddrr&quot;</span><span class="Punctuation">)</span></pre>
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2684" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2684" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2680" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2680" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -2958,8 +2958,8 @@ This is destructive! Once sorted, you must not modify <tt class="docutils litera
 <span class="Keyword">for</span> <span class="Identifier">k</span> <span class="Keyword">in</span> <span class="Identifier">keys</span><span class="Punctuation">(</span><span class="Identifier">a</span><span class="Punctuation">)</span><span class="Punctuation">:</span>
   <span class="Identifier">a</span><span class="Punctuation">[</span><span class="Identifier">k</span><span class="Punctuation">]</span> <span class="Operator">=</span> <span class="DecNumber">2</span>
 <span class="Identifier">doAssert</span> <span class="Identifier">a</span> <span class="Operator">==</span> <span class="Identifier">newCountTable</span><span class="Punctuation">(</span><span class="StringLit">&quot;aabbccddrr&quot;</span><span class="Punctuation">)</span></pre>
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2965" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2965" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2957" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2957" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -3075,8 +3075,8 @@ This is destructive! Once sorted, you must not modify <tt class="docutils litera
 <span class="Keyword">for</span> <span class="Identifier">k</span><span class="Punctuation">,</span> <span class="Identifier">v</span> <span class="Keyword">in</span> <span class="Identifier">mpairs</span><span class="Punctuation">(</span><span class="Identifier">a</span><span class="Punctuation">)</span><span class="Punctuation">:</span>
   <span class="Identifier">v</span> <span class="Operator">=</span> <span class="DecNumber">2</span>
 <span class="Identifier">doAssert</span> <span class="Identifier">a</span> <span class="Operator">==</span> <span class="Identifier">newCountTable</span><span class="Punctuation">(</span><span class="StringLit">&quot;aabbccddrr&quot;</span><span class="Punctuation">)</span></pre>
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2946" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2946" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2938" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2938" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -3095,8 +3095,8 @@ This is destructive! Once sorted, you must not modify <tt class="docutils litera
 <span class="Keyword">for</span> <span class="Identifier">k</span><span class="Punctuation">,</span> <span class="Identifier">v</span> <span class="Keyword">in</span> <span class="Identifier">mpairs</span><span class="Punctuation">(</span><span class="Identifier">a</span><span class="Punctuation">)</span><span class="Punctuation">:</span>
   <span class="Identifier">v</span> <span class="Operator">=</span> <span class="DecNumber">2</span>
 <span class="Identifier">doAssert</span> <span class="Identifier">a</span> <span class="Operator">==</span> <span class="Identifier">toCountTable</span><span class="Punctuation">(</span><span class="StringLit">&quot;aabbccddrr&quot;</span><span class="Punctuation">)</span></pre>
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2665" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2665" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2661" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2661" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -3212,8 +3212,8 @@ This is destructive! Once sorted, you must not modify <tt class="docutils litera
 <span class="Keyword">for</span> <span class="Identifier">v</span> <span class="Keyword">in</span> <span class="Identifier">mvalues</span><span class="Punctuation">(</span><span class="Identifier">a</span><span class="Punctuation">)</span><span class="Punctuation">:</span>
   <span class="Identifier">v</span> <span class="Operator">=</span> <span class="DecNumber">2</span>
 <span class="Identifier">doAssert</span> <span class="Identifier">a</span> <span class="Operator">==</span> <span class="Identifier">newCountTable</span><span class="Punctuation">(</span><span class="StringLit">&quot;aabbccddrr&quot;</span><span class="Punctuation">)</span></pre>
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L3001" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L3001" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2993" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2993" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -3232,8 +3232,8 @@ This is destructive! Once sorted, you must not modify <tt class="docutils litera
 <span class="Keyword">for</span> <span class="Identifier">v</span> <span class="Keyword">in</span> <span class="Identifier">mvalues</span><span class="Punctuation">(</span><span class="Identifier">a</span><span class="Punctuation">)</span><span class="Punctuation">:</span>
   <span class="Identifier">v</span> <span class="Operator">=</span> <span class="DecNumber">2</span>
 <span class="Identifier">doAssert</span> <span class="Identifier">a</span> <span class="Operator">==</span> <span class="Identifier">toCountTable</span><span class="Punctuation">(</span><span class="StringLit">&quot;aabbccddrr&quot;</span><span class="Punctuation">)</span></pre>
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2720" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2720" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2716" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2716" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -3388,8 +3388,8 @@ This is destructive! Once sorted, you must not modify <tt class="docutils litera
 <span class="Comment"># key: r</span>
 <span class="Comment"># value: 2</span></pre></p>
 
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2631" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2631" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2627" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2627" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -3421,8 +3421,8 @@ This is destructive! Once sorted, you must not modify <tt class="docutils litera
 <span class="Comment"># key: r</span>
 <span class="Comment"># value: 2</span></pre></p>
 
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2912" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2912" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2904" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2904" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -3536,8 +3536,8 @@ This is destructive! Once sorted, you must not modify <tt class="docutils litera
 <pre class="listing"><span class="Keyword">let</span> <span class="Identifier">a</span> <span class="Operator">=</span> <span class="Identifier">toCountTable</span><span class="Punctuation">(</span><span class="StringLit">&quot;abracadabra&quot;</span><span class="Punctuation">)</span>
 <span class="Keyword">for</span> <span class="Identifier">v</span> <span class="Keyword">in</span> <span class="Identifier">values</span><span class="Punctuation">(</span><span class="Identifier">a</span><span class="Punctuation">)</span><span class="Punctuation">:</span>
   <span class="Identifier">assert</span> <span class="Identifier">v</span> <span class="Operator">&lt;</span> <span class="DecNumber">10</span></pre>
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2702" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2702" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2698" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2698" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -3556,8 +3556,8 @@ This is destructive! Once sorted, you must not modify <tt class="docutils litera
 <pre class="listing"><span class="Keyword">let</span> <span class="Identifier">a</span> <span class="Operator">=</span> <span class="Identifier">newCountTable</span><span class="Punctuation">(</span><span class="StringLit">&quot;abracadabra&quot;</span><span class="Punctuation">)</span>
 <span class="Keyword">for</span> <span class="Identifier">v</span> <span class="Keyword">in</span> <span class="Identifier">values</span><span class="Punctuation">(</span><span class="Identifier">a</span><span class="Punctuation">)</span><span class="Punctuation">:</span>
   <span class="Identifier">assert</span> <span class="Identifier">v</span> <span class="Operator">&lt;</span> <span class="DecNumber">10</span></pre>
-    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2983" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
-<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2983" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
+    <a href="https://github.com/nim-lang/Nim/tree/version-2-2/lib/pure/collections/tables.nim#L2975" class="link-seesrc" target="_blank">Source</a>&nbsp;&nbsp;
+<a href="https://github.com/nim-lang/Nim/edit/devel/lib/pure/collections/tables.nim#L2975" class="link-seesrc" target="_blank" >Edit</a>&nbsp;&nbsp;
 
   </dd>
 </div>
@@ -3713,7 +3713,7 @@ This is destructive! Once sorted, you must not modify <tt class="docutils litera
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2025-04-22 02:27:33 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2025-10-31 02:26:55 UTC</small>
       </div>
     </div>
   </div>
