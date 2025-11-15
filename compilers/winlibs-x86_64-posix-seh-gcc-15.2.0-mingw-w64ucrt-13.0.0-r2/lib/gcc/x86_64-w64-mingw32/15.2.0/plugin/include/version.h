@@ -10,7 +10,7 @@ BASEVER, DATESTAMP, DEVPHASE, and REVISION are defined by the
 Makefile.  */
 
 #define version_string "15.2.0"
-#define pkgversion_string "(MinGW-W64 x86_64-ucrt-posix-seh, built by Brecht Sanders, r2) "
+#define pkgversion_string "(MinGW-W64 x86_64-ucrt-posix-seh, built by Brecht Sanders, r3) "
 
 /* This is the location of the online document giving instructions for
 reporting bugs.  If you distribute a modified version of GCC,

@@ -251,7 +251,7 @@ LDLIBRARYDIR=
 INSTSONAME=	$(LDLIBRARY)
 
 
-LIBS=		-lcrypt  -lm -lversion -lshlwapi
+LIBS=		 -lm -lversion -lshlwapi
 LIBM=		-lm
 LIBC=		
 SYSLIBS=	$(LIBM) $(LIBC)
