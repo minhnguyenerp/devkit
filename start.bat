@@ -34,6 +34,6 @@ set "RUSTFLAGS=--sysroot=%ROOT%compilers\rust-1.91.1-x86_64-pc-windows-gnu\rust-
 set "CARGO_HOME=%ROOT%compilers\rust-1.91.1-x86_64-pc-windows-gnu\cargo"
 set "PATH=%npm_config_prefix%;%PATH%"
 set "PATH=%ROOT%compilers\nim-2.2.6\bin;%PATH%"
-set "PATH=%ROOT%compilers\zig-x86_64-windows-0.16.0-dev.747+493ad58ff;%PATH%"
+set "PATH=%ROOT%compilers\zig-x86_64-windows-0.16.0-dev.1316+181b25ce4;%PATH%"
 set "PATH=%ROOT%compilers\winlibs-x86_64-posix-seh-gcc-15.2.0-mingw-w64ucrt-13.0.0-r3\bin;%PATH%"
 cmd.exe /k "echo [Minh Nguyen DevKit Shell Ready] && echo code, sqlitestudio, winmergeu, notepad++, dbeaver, beekeeper, heidisql, geany, codeblocks, git gui && cd /d %ROOT%"
