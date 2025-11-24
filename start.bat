@@ -36,7 +36,7 @@ reg add "HKCU\Software\Classes\Directory\shell\DevKit Zed" /ve /d "DevKit Zed" /
 reg add "HKCU\Software\Classes\Directory\shell\DevKit Zed\command" /ve /d "\"%ROOT%ides\shell-zed.bat\" \"%%1\"" /f >nul
 reg add "HKCU\Software\Classes\Directory\Background\shell\DevKit Zed" /ve /d "DevKit Zed" /f >nul
 reg add "HKCU\Software\Classes\Directory\Background\shell\DevKit Zed\command" /ve /d "\"%ROOT%ides\shell-zed.bat\" \"%%V\"" /f >nul
-set "PATH=%ROOT%ides\VSCode-win32-x64-1.106.0;%PATH%"
+set "PATH=%ROOT%ides\VSCode-win32-x64-1.106.2;%PATH%"
 reg add "HKCU\Software\Classes\*\shell\DevKit VSCode" /ve /d "DevKit VSCode" /f >nul
 reg add "HKCU\Software\Classes\*\shell\DevKit VSCode\command" /ve /d "\"%ROOT%ides\shell-code.bat\" \"%%1\"" /f >nul
 reg add "HKCU\Software\Classes\Directory\shell\DevKit VSCode" /ve /d "DevKit VSCode" /f >nul
@@ -68,7 +68,7 @@ set "RUSTFLAGS=--sysroot=%ROOT%compilers\rust-1.91.1-x86_64-pc-windows-gnu\rust-
 set "CARGO_HOME=%ROOT%compilers\rust-1.91.1-x86_64-pc-windows-gnu\cargo"
 set "PATH=%npm_config_prefix%;%PATH%"
 set "PATH=%ROOT%compilers\nim-2.2.6\bin;%PATH%"
-set "PATH=%ROOT%compilers\zig-x86_64-windows-0.16.0-dev.1316+181b25ce4;%PATH%"
+set "PATH=%ROOT%compilers\zig-x86_64-windows-0.16.0-dev.1442+21f9f378f;%PATH%"
 set "PATH=%ROOT%compilers\winlibs-x86_64-posix-seh-gcc-15.2.0-mingw-w64ucrt-13.0.0-r3\bin;%PATH%"
 set "TARGET=%~1"
 if "%TARGET%"=="" set "TARGET=%ROOT%"

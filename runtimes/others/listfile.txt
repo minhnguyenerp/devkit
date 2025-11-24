@@ -1,7 +1,7 @@
 ../../runtimes/node-v24.11.1-win-x64/node.exe
 ../../runtimes/jdk-25/lib/modules
 ../../programs/beekeeper/beekeeper-5.4.10/beekeeper.exe
-../../ides/VSCode-win32-x64-1.106.0/Code.exe
+../../ides/VSCode-win32-x64-1.106.2/Code.exe
 ../../compilers/rust-1.91.1-x86_64-pc-windows-gnu/cargo/bin/cargo.exe
 ../../compilers/rust-1.91.1-x86_64-pc-windows-gnu/llvm-tools-preview/lib/rustlib/x86_64-pc-windows-gnu/bin/llc.exe
 ../../compilers/rust-1.91.1-x86_64-pc-windows-gnu/llvm-tools-preview/lib/rustlib/x86_64-pc-windows-gnu/bin/llvm-ar.exe
@@ -13,7 +13,7 @@
 ../../compilers/rust-1.91.1-x86_64-pc-windows-gnu/rust-std-x86_64-pc-windows-gnu/lib/rustlib/x86_64-pc-windows-gnu/lib/libcore-b566be85b3fb54ac.rlib
 ../../compilers/rust-1.91.1-x86_64-pc-windows-gnu/rustc/bin/rustc_driver-ee49369eefca8df5.dll
 ../../compilers/rust-1.91.1-x86_64-pc-windows-gnu/rustc/lib/rustlib/x86_64-pc-windows-gnu/bin/rust-lld.exe
-../../compilers/zig-x86_64-windows-0.16.0-dev.1316+181b25ce4/zig.exe
+../../compilers/zig-x86_64-windows-0.16.0-dev.1442+21f9f378f/zig.exe
 ../../runtimes/python-3.14.0-embed-amd64/uv.exe
 ../../runtimes/consul_1.22.0_windows_amd64/consul.exe
 ../../ides/Zed/Zed.exe
