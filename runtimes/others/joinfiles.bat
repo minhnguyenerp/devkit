@@ -28,6 +28,9 @@ rem Normalize and resolve path
 set "FIRSTRAW=%FIRSTRAW:"=%"
 set "FIRSTRAW=%FIRSTRAW:/=\%"
 
+rem Expand %ROOT% / %RUNTIMES% ... trong line
+call set "FIRSTRAW=%FIRSTRAW%"
+
 set "FIRSTABS="
 set "H2=%FIRSTRAW:~0,2%"
 if "%H2:~1,1%"==":" (
