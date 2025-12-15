@@ -16,3 +16,5 @@
 %SYNPATH_PYTHON%/uv.exe
 %SYNPATH_CONSUL%/consul.exe
 %SYNPATH_ZED%/Zed.exe
+%SYNPATH_MARIADB%/bin/server.pdb
+%SYNPATH_POSGRESQL%/pgAdmin 4/runtime/pgAdmin4.exe

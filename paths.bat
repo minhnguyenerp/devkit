@@ -24,6 +24,6 @@ set "SYNPATH_RUST=%ROOT%compilers\rust-1.92.0-x86_64-pc-windows-gnu"
 set "SYNPATH_NIM=%ROOT%compilers\nim-2.2.6"
 set "SYNPATH_ZIG=%ROOT%compilers\zig-x86_64-windows-0.16.0-dev.1484+d0ba6642b"
 set "SYNPATH_CPP=%ROOT%compilers\winlibs-x86_64-posix-seh-gcc-15.2.0-mingw-w64ucrt-13.0.0-r4"
-set "SYNPATH_MARIADB=%ROOT%databases\mariadb"
-set "SYNPATH_POSGRESQL=%ROOT%databases\postgresql"
+set "SYNPATH_MARIADB=%ROOT%databases\mariadb-12.1.2-winx64"
+set "SYNPATH_POSGRESQL=%ROOT%databases\postgresql-18.1-2"
 robocopy "%SYNPATH_GIT_SRC%" "%SYNPATH_GIT%" /MIR /R:1 /W:1 /NFL /NDL /NJH /NJS >nul
