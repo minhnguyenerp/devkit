@@ -4,6 +4,8 @@ setlocal EnableExtensions EnableDelayedExpansion
 rem ===== Settings =====
 set "LIST=%~dp0listfile.txt"
 
+call "%~dp0..\..\paths.bat"
+
 rem ===== Check for list file =====
 if not exist "%LIST%" (
   echo [ERR] listfile.txt not found at: "%LIST%"
@@ -28,8 +30,8 @@ rem Normalize and resolve path
 set "FIRSTRAW=%FIRSTRAW:"=%"
 set "FIRSTRAW=%FIRSTRAW:/=\%"
 
-rem Expand %ROOT% / %RUNTIMES% ... trong line
-call set "FIRSTRAW=%FIRSTRAW%"
+set "RAW_LINE=%FIRSTRAW%"
+for /f "usebackq delims=" %%E in (`powershell -NoProfile -Command "[Environment]::ExpandEnvironmentVariables($env:RAW_LINE)"`) do set "FIRSTRAW=%%E"
 
 set "FIRSTABS="
 set "H2=%FIRSTRAW:~0,2%"
@@ -118,6 +120,9 @@ for /f "usebackq delims=" %%A in ("%LIST%") do (
   if defined RAW if not "!RAW:~0,1!"=="#" if not "!RAW:~0,1!"==";" (
     set "RAW=!RAW:"=!"
     set "RAW=!RAW:/=\!"
+	
+	set "RAW_LINE=!RAW!"
+	for /f "usebackq delims=" %%E in (`powershell -NoProfile -Command "[Environment]::ExpandEnvironmentVariables($env:RAW_LINE)"`) do set "RAW=%%E"
 
     set "FIRST2=!RAW:~0,2!"
     if "!FIRST2:~1,1!"==":" (

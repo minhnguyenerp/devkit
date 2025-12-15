@@ -4,6 +4,8 @@ setlocal EnableExtensions EnableDelayedExpansion
 rem ===== Settings =====
 set "LIST=%~dp0listfile.txt"
 
+call "%~dp0..\..\paths.bat"
+
 rem ===== Check for list file =====
 if not exist "%LIST%" (
   echo [ERR] listfile.txt not found at: "%LIST%"
@@ -84,6 +86,12 @@ for /f "usebackq delims=" %%A in ("%LIST%") do (
 
     rem Normalize slashes
     set "RAW=!RAW:/=\!"
+	
+	rem Expand %VARS% inside RAW via PowerShell using env var (robust)
+	set "RAW_LINE=!RAW!"
+	for /f "usebackq delims=" %%E in (`
+	  powershell -NoProfile -Command "[Environment]::ExpandEnvironmentVariables($env:RAW_LINE)"
+	`) do set "RAW=%%E"
 
     rem Resolve to absolute path
     set "FIRST2=!RAW:~0,2!"
