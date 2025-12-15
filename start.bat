@@ -82,4 +82,4 @@ reg add "HKCU\Software\Classes\Directory\shell\DevKit Shell" /ve /d "DevKit Shel
 reg add "HKCU\Software\Classes\Directory\shell\DevKit Shell\command" /ve /d "\"%ROOT%start.bat\" \"%%1\"" /f >nul
 reg add "HKCU\Software\Classes\Directory\Background\shell\DevKit Shell" /ve /d "DevKit Shell" /f >nul
 reg add "HKCU\Software\Classes\Directory\Background\shell\DevKit Shell\command" /ve /d "\"%ROOT%start.bat\" \"%%V\"" /f >nul
-cmd.exe /k "echo [Minh Nguyen DevKit Shell Ready] && echo code, sqlitestudio, winmergeu, notepad++, heidisql, geany, codeblocks, git gui && cd /d %TARGET%"
+cmd.exe /k "echo [Minh Nguyen DevKit Shell Ready] && echo code, sqlitestudio, winmergeu, notepad++, heidisql, geany, codeblocks, git gui, start-mariadb, stop-mariadb, start-postgresql, stop-postgresql && cd /d %TARGET%"
