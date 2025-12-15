@@ -1,0 +1,33 @@
+Notepad++ v8.8.9 security enhancement, new features, regression fixes & bug-fixes:
+
+ 1. Security Enhancement: verify certificate & signature on downloaded update installer.
+ 2. Fix corrupted file loading on Windows system using the full UTF-8 code page.
+ 3. Fix crashing when hashing SHA-256 for large files.
+ 4. Fix "Select & Find Next" command not working regression.
+ 5. MSI improvement: Add NOUPDATER option & suppress REBOOT.
+ 6. Fix Perl Function List causes Notepad++ to freeze on tab switch regression.
+ 7. Fix context menu truncated regression on localization change.
+ 8. Add ability to update users' langs.xml & stylers.xml from model XML files.
+ 9. Update to Scintilla 5.5.8 & Lexilla 5.4.6.
+10. Add feature to sort lines in a document by length.
+11. Undo & redo enhancement: restore vertical scroll position after undo & redo.
+12. Fix mouse wheel horizontal scrolling amount not respecting Windows setting.
+13. Fix document map regression with keyboard input.
+14. Fix wrong system font scaling on Windows 7.
+15. Update to nlohman json 3.11.3.
+
+
+Get more info on
+https://notepad-plus-plus.org/downloads/v8.8.9/
+
+
+Included plugins:
+
+ 1.  NppExport v0.4
+ 2.  Converter v4.7
+ 3.  Mime Tool v3.1
+
+
+Updater (Installer only):
+
+* WinGUp (for Notepad++) v5.3.8
