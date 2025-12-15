@@ -4,6 +4,7 @@ set "ROOT=%~dp0"
 call "%ROOT%paths.bat"
 call "%SYNPATH_OTHERS%\joinfiles.bat"
 cls
+set "PATH=%SYNPATH_CADDY%;%PATH%"
 set "PATH=%SYNPATH_CONSUL%;%PATH%"
 set "PATH=%SYNPATH_CURL%\bin;%PATH%"
 set "PATH=%SYNPATH_ETCD%;%PATH%"

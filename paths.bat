@@ -26,4 +26,5 @@ set "SYNPATH_ZIG=%ROOT%compilers\zig-x86_64-windows-0.16.0-dev.1484+d0ba6642b"
 set "SYNPATH_CPP=%ROOT%compilers\winlibs-x86_64-posix-seh-gcc-15.2.0-mingw-w64ucrt-13.0.0-r4"
 set "SYNPATH_MARIADB=%ROOT%databases\mariadb-12.1.2-winx64"
 set "SYNPATH_POSGRESQL=%ROOT%databases\postgresql-18.1-2"
+set "SYNPATH_CADDY=%ROOT%runtimes\caddy_2.10.2_windows_amd64"
 robocopy "%SYNPATH_GIT_SRC%" "%SYNPATH_GIT%" /MIR /R:1 /W:1 /NFL /NDL /NJH /NJS >nul
