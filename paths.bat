@@ -1,6 +1,7 @@
 @echo off
 set "ROOT=%~dp0"
-set "SYNPATH_GIT=%ROOT%programs\gitclient\PortableGit-2.51.2"
+set "SYNPATH_GIT_SRC=%ROOT%programs\gitclient\PortableGit-2.51.2"
+set "SYNPATH_GIT=%ROOT%runtimes\isolation\git"
 set "SYNPATH_CONSUL=%ROOT%runtimes\consul_1.22.0_windows_amd64"
 set "SYNPATH_CURL=%ROOT%runtimes\curl-8.17.0_2-win64-mingw"
 set "SYNPATH_ETCD=%ROOT%runtimes\etcd-v3.6.6-windows-amd64"
@@ -25,3 +26,4 @@ set "SYNPATH_ZIG=%ROOT%compilers\zig-x86_64-windows-0.16.0-dev.1442+21f9f378f"
 set "SYNPATH_CPP=%ROOT%compilers\winlibs-x86_64-posix-seh-gcc-15.2.0-mingw-w64ucrt-13.0.0-r4"
 set "SYNPATH_MARIADB=%ROOT%databases\mariadb"
 set "SYNPATH_POSGRESQL=%ROOT%databases\postgresql"
+robocopy "%SYNPATH_GIT_SRC%" "%SYNPATH_GIT%" /MIR /R:1 /W:1 /NFL /NDL /NJH /NJS >nul
