@@ -9,7 +9,7 @@
 %SYNPATH_RUST%/llvm-tools-preview/lib/rustlib/x86_64-pc-windows-gnu/bin/opt.exe
 %SYNPATH_RUST%/rust-analyzer-preview/bin/rust-analyzer.exe
 %SYNPATH_RUST%/rust-docs-json-preview/share/doc/rust/json/core.json
-%SYNPATH_RUST%/rust-std-x86_64-pc-windows-gnu/lib/rustlib/x86_64-pc-windows-gnu/lib/libcore-b566be85b3fb54ac.rlib
+%SYNPATH_RUST%/rust-std-x86_64-pc-windows-gnu/lib/rustlib/x86_64-pc-windows-gnu/lib/libcore-6018603b0a83ce5b.rlib
 %SYNPATH_RUST%/rustc/bin/rustc_driver-87354c6c9d3f15fe.dll
 %SYNPATH_RUST%/rustc/lib/rustlib/x86_64-pc-windows-gnu/bin/rust-lld.exe
 %SYNPATH_ZIG%/zig.exe
