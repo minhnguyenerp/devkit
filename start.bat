@@ -6,6 +6,7 @@ call "%SYNPATH_OTHERS%\joinfiles.bat"
 cls
 set "PATH=%SYNPATH_GIT%\bin;%PATH%"
 set "PATH=%SYNPATH_CADDY%;%PATH%"
+set "PATH=%SYNPATH_APACHE%\bin;%PATH%"
 set "PATH=%SYNPATH_CONSUL%;%PATH%"
 set "PATH=%SYNPATH_CURL%\bin;%PATH%"
 set "PATH=%SYNPATH_ETCD%;%PATH%"
