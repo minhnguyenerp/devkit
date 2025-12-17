@@ -6,6 +6,20 @@ if "%~1"=="" goto :usage
 if "%~2"=="" goto :usage
 
 set "WEBROOT=%~1"
+
+set "RAW_PATH=%~1"
+if "%RAW_PATH%"=="." (
+    set "WEBROOT=%CD%"
+) else (
+    pushd "%RAW_PATH%" 2>nul
+    if errorlevel 1 (
+        echo [ERROR] Directory not exists: "%RAW_PATH%"
+        exit /b 2
+    )
+    set "WEBROOT=!CD!"
+    popd
+)
+
 set "HTTP_PORT=%~2"
 
 REM Init command names (resolved via PATH)
