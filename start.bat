@@ -39,6 +39,13 @@ reg add "HKCU\Software\Classes\Directory\shell\DevKit Zed" /ve /d "DevKit Zed" /
 reg add "HKCU\Software\Classes\Directory\shell\DevKit Zed\command" /ve /d "\"%ROOT%ides\shell-zed.bat\" \"%%1\"" /f >nul
 reg add "HKCU\Software\Classes\Directory\Background\shell\DevKit Zed" /ve /d "DevKit Zed" /f >nul
 reg add "HKCU\Software\Classes\Directory\Background\shell\DevKit Zed\command" /ve /d "\"%ROOT%ides\shell-zed.bat\" \"%%V\"" /f >nul
+set "PATH=%SYNPATH_CODELITE%;%PATH%"
+reg add "HKCU\Software\Classes\*\shell\DevKit CodeLite" /ve /d "DevKit CodeLite" /f >nul
+reg add "HKCU\Software\Classes\*\shell\DevKit CodeLite\command" /ve /d "\"%ROOT%ides\shell-codelite.bat\" \"%%1\"" /f >nul
+reg add "HKCU\Software\Classes\Directory\shell\DevKit CodeLite" /ve /d "DevKit CodeLite" /f >nul
+reg add "HKCU\Software\Classes\Directory\shell\DevKit CodeLite\command" /ve /d "\"%ROOT%ides\shell-codelite.bat\" \"%%1\"" /f >nul
+reg add "HKCU\Software\Classes\Directory\Background\shell\DevKit CodeLite" /ve /d "DevKit CodeLite" /f >nul
+reg add "HKCU\Software\Classes\Directory\Background\shell\DevKit CodeLite\command" /ve /d "\"%ROOT%ides\shell-codelite.bat\" \"%%V\"" /f >nul
 set "PATH=%SYNPATH_VSCODE%;%PATH%"
 reg add "HKCU\Software\Classes\*\shell\DevKit VSCode" /ve /d "DevKit VSCode" /f >nul
 reg add "HKCU\Software\Classes\*\shell\DevKit VSCode\command" /ve /d "\"%ROOT%ides\shell-code.bat\" \"%%1\"" /f >nul

@@ -18,3 +18,5 @@
 %SYNPATH_ZED%/Zed.exe
 %SYNPATH_MARIADB%/bin/server.pdb
 %SYNPATH_POSGRESQL%/pgAdmin 4/runtime/pgAdmin4.exe
+%SYNPATH_CODELITE%/libclang-cpp.dll
+%SYNPATH_CODELITE%/libLLVM-20.dll
