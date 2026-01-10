@@ -1,0 +1,28 @@
+Notepad++ v8.9 security enhancement, new improvements, regression fixes & bug-fixes:
+
+0. Remove Notepad++ self-singed certificate signature, use only the certificate issued by GlobalSign.
+1. Log security errors automatically while auto-updating in "%LOCALAPPDATA%\Notepad++\log\securityError.log".
+2. Fix jarring color regression in dark mode (introduced in v8.8.9).
+3. Fix "/noUpdater" installer option not working if updater was previously installed.
+4. Fix column mode edit undo regression (introduced in v8.8.9).
+5. Fix issue where an empty file opened without encoding under a UTF-8 system codepage.
+6. Add makefile function list parser.
+7. Improve performance & add missing file ext. from langs.model.xml to langs.xml.
+8. Improve "Open containing folder in Explorer" command to avoid creating Explorer process.
+9. Allow refresh mouse scroll amount according to OS settings changes.
+
+
+Get more info on
+https://notepad-plus-plus.org/downloads/v8.9/
+
+
+Included plugins:
+
+ 1.  NppExport v0.4
+ 2.  Converter v4.7
+ 3.  Mime Tool v3.1
+
+
+Updater (Installer only):
+
+* WinGUp (for Notepad++) v5.3.9
