@@ -10,56 +10,60 @@ set "PATH=%SYNPATH_APACHE%\bin;%PATH%"
 set "PATH=%SYNPATH_CONSUL%;%PATH%"
 set "PATH=%SYNPATH_CURL%\bin;%PATH%"
 set "PATH=%SYNPATH_ETCD%;%PATH%"
+set "PATH=%SYNPATH_SUMATRA_PDF%;%PATH%"
+REM reg add "HKCU\Software\Classes\*\shell\DevKit SumatraPDF" /ve /d "DevKit SumatraPDF" /f >nul
+REM reg add "HKCU\Software\Classes\*\shell\DevKit SumatraPDF" /v Icon /t REG_SZ /d "%SYNPATH_SUMATRA_PDF%\SumatraPDF-3.5.2-64.exe" /f >nul
+REM reg add "HKCU\Software\Classes\*\shell\DevKit SumatraPDF\command" /ve /d "\"%SYNPATH_SUMATRA_PDF%\SumatraPDF-3.5.2-64.exe\" \"%%1\"" /f >nul
 set "PATH=%SYNPATH_NPP%;%PATH%"
 attrib +r "%SYNPATH_NPP%\config.xml"
-reg add "HKCU\Software\Classes\*\shell\DevKit Notepad++" /ve /d "DevKit Notepad++" /f >nul
-reg add "HKCU\Software\Classes\*\shell\DevKit Notepad++\command" /ve /d "\"%SYNPATH_NPP%\notepad++.exe\" \"%%1\"" /f >nul
+REM reg add "HKCU\Software\Classes\*\shell\DevKit Notepad++" /ve /d "DevKit Notepad++" /f >nul
+REM reg add "HKCU\Software\Classes\*\shell\DevKit Notepad++\command" /ve /d "\"%SYNPATH_NPP%\notepad++.exe\" \"%%1\"" /f >nul
 set "PATH=%ROOT%programs\dbeaver\dbeaver-ce-25.2.4-win32.win32.x86_64;%PATH%"
 set "PATH=%ROOT%programs\beekeeper\beekeeper-5.4.10;%PATH%"
 set "PATH=%SYNPATH_HEIDISQL%;%PATH%"
 set "PATH=%SYNPATH_SQLITESTUDIO%;%PATH%"
 set "PATH=%SYNPATH_WINMERGE%;%PATH%"
-reg add "HKCU\Software\Classes\*\shell\DevKit WinMerge" /ve /d "DevKit WinMerge" /f >nul
-reg add "HKCU\Software\Classes\*\shell\DevKit WinMerge\command" /ve /d "\"%SYNPATH_WINMERGE%\WinMergeU.exe\" \"%%1\"" /f >nul
-reg add "HKCU\Software\Classes\Directory\shell\DevKit WinMerge" /ve /d "DevKit WinMerge" /f >nul
-reg add "HKCU\Software\Classes\Directory\shell\DevKit WinMerge\command" /ve /d "\"%SYNPATH_WINMERGE%\WinMergeU.exe\" \"%%1\"" /f >nul
-reg add "HKCU\Software\Classes\Directory\Background\shell\DevKit WinMerge" /ve /d "DevKit WinMerge" /f >nul
-reg add "HKCU\Software\Classes\Directory\Background\shell\DevKit WinMerge\command" /ve /d "\"%SYNPATH_WINMERGE%\WinMergeU.exe\" \"%%V\"" /f >nul
+REM reg add "HKCU\Software\Classes\*\shell\DevKit WinMerge" /ve /d "DevKit WinMerge" /f >nul
+REM reg add "HKCU\Software\Classes\*\shell\DevKit WinMerge\command" /ve /d "\"%SYNPATH_WINMERGE%\WinMergeU.exe\" \"%%1\"" /f >nul
+REM reg add "HKCU\Software\Classes\Directory\shell\DevKit WinMerge" /ve /d "DevKit WinMerge" /f >nul
+REM reg add "HKCU\Software\Classes\Directory\shell\DevKit WinMerge\command" /ve /d "\"%SYNPATH_WINMERGE%\WinMergeU.exe\" \"%%1\"" /f >nul
+REM reg add "HKCU\Software\Classes\Directory\Background\shell\DevKit WinMerge" /ve /d "DevKit WinMerge" /f >nul
+REM reg add "HKCU\Software\Classes\Directory\Background\shell\DevKit WinMerge\command" /ve /d "\"%SYNPATH_WINMERGE%\WinMergeU.exe\" \"%%V\"" /f >nul
 set "PATH=%SYNPATH_GEANY%\bin;%PATH%"
-reg add "HKCU\Software\Classes\*\shell\DevKit Geany" /ve /d "DevKit Geany" /f >nul
-reg add "HKCU\Software\Classes\*\shell\DevKit Geany\command" /ve /d "\"%ROOT%ides\shell-geany.bat\" \"%%1\"" /f >nul
-reg add "HKCU\Software\Classes\Directory\shell\DevKit Geany" /ve /d "DevKit Geany" /f >nul
-reg add "HKCU\Software\Classes\Directory\shell\DevKit Geany\command" /ve /d "\"%ROOT%ides\shell-geany.bat\" \"%%1\"" /f >nul
-reg add "HKCU\Software\Classes\Directory\Background\shell\DevKit Geany" /ve /d "DevKit Geany" /f >nul
-reg add "HKCU\Software\Classes\Directory\Background\shell\DevKit Geany\command" /ve /d "\"%ROOT%ides\shell-geany.bat\" \"%%V\"" /f >nul
+REM reg add "HKCU\Software\Classes\*\shell\DevKit Geany" /ve /d "DevKit Geany" /f >nul
+REM reg add "HKCU\Software\Classes\*\shell\DevKit Geany\command" /ve /d "\"%ROOT%ides\shell-geany.bat\" \"%%1\"" /f >nul
+REM reg add "HKCU\Software\Classes\Directory\shell\DevKit Geany" /ve /d "DevKit Geany" /f >nul
+REM reg add "HKCU\Software\Classes\Directory\shell\DevKit Geany\command" /ve /d "\"%ROOT%ides\shell-geany.bat\" \"%%1\"" /f >nul
+REM reg add "HKCU\Software\Classes\Directory\Background\shell\DevKit Geany" /ve /d "DevKit Geany" /f >nul
+REM reg add "HKCU\Software\Classes\Directory\Background\shell\DevKit Geany\command" /ve /d "\"%ROOT%ides\shell-geany.bat\" \"%%V\"" /f >nul
 set "PATH=%SYNPATH_ZED%;%PATH%"
-reg add "HKCU\Software\Classes\*\shell\DevKit Zed" /ve /d "DevKit Zed" /f >nul
-reg add "HKCU\Software\Classes\*\shell\DevKit Zed\command" /ve /d "\"%ROOT%ides\shell-zed.bat\" \"%%1\"" /f >nul
-reg add "HKCU\Software\Classes\Directory\shell\DevKit Zed" /ve /d "DevKit Zed" /f >nul
-reg add "HKCU\Software\Classes\Directory\shell\DevKit Zed\command" /ve /d "\"%ROOT%ides\shell-zed.bat\" \"%%1\"" /f >nul
-reg add "HKCU\Software\Classes\Directory\Background\shell\DevKit Zed" /ve /d "DevKit Zed" /f >nul
-reg add "HKCU\Software\Classes\Directory\Background\shell\DevKit Zed\command" /ve /d "\"%ROOT%ides\shell-zed.bat\" \"%%V\"" /f >nul
+REM reg add "HKCU\Software\Classes\*\shell\DevKit Zed" /ve /d "DevKit Zed" /f >nul
+REM reg add "HKCU\Software\Classes\*\shell\DevKit Zed\command" /ve /d "\"%ROOT%ides\shell-zed.bat\" \"%%1\"" /f >nul
+REM reg add "HKCU\Software\Classes\Directory\shell\DevKit Zed" /ve /d "DevKit Zed" /f >nul
+REM reg add "HKCU\Software\Classes\Directory\shell\DevKit Zed\command" /ve /d "\"%ROOT%ides\shell-zed.bat\" \"%%1\"" /f >nul
+REM reg add "HKCU\Software\Classes\Directory\Background\shell\DevKit Zed" /ve /d "DevKit Zed" /f >nul
+REM reg add "HKCU\Software\Classes\Directory\Background\shell\DevKit Zed\command" /ve /d "\"%ROOT%ides\shell-zed.bat\" \"%%V\"" /f >nul
 set "PATH=%SYNPATH_CODELITE%;%PATH%"
-reg add "HKCU\Software\Classes\*\shell\DevKit CodeLite" /ve /d "DevKit CodeLite" /f >nul
-reg add "HKCU\Software\Classes\*\shell\DevKit CodeLite\command" /ve /d "\"%ROOT%ides\shell-codelite.bat\" \"%%1\"" /f >nul
-reg add "HKCU\Software\Classes\Directory\shell\DevKit CodeLite" /ve /d "DevKit CodeLite" /f >nul
-reg add "HKCU\Software\Classes\Directory\shell\DevKit CodeLite\command" /ve /d "\"%ROOT%ides\shell-codelite.bat\" \"%%1\"" /f >nul
-reg add "HKCU\Software\Classes\Directory\Background\shell\DevKit CodeLite" /ve /d "DevKit CodeLite" /f >nul
-reg add "HKCU\Software\Classes\Directory\Background\shell\DevKit CodeLite\command" /ve /d "\"%ROOT%ides\shell-codelite.bat\" \"%%V\"" /f >nul
+REM reg add "HKCU\Software\Classes\*\shell\DevKit CodeLite" /ve /d "DevKit CodeLite" /f >nul
+REM reg add "HKCU\Software\Classes\*\shell\DevKit CodeLite\command" /ve /d "\"%ROOT%ides\shell-codelite.bat\" \"%%1\"" /f >nul
+REM reg add "HKCU\Software\Classes\Directory\shell\DevKit CodeLite" /ve /d "DevKit CodeLite" /f >nul
+REM reg add "HKCU\Software\Classes\Directory\shell\DevKit CodeLite\command" /ve /d "\"%ROOT%ides\shell-codelite.bat\" \"%%1\"" /f >nul
+REM reg add "HKCU\Software\Classes\Directory\Background\shell\DevKit CodeLite" /ve /d "DevKit CodeLite" /f >nul
+REM reg add "HKCU\Software\Classes\Directory\Background\shell\DevKit CodeLite\command" /ve /d "\"%ROOT%ides\shell-codelite.bat\" \"%%V\"" /f >nul
 set "PATH=%SYNPATH_VSCODE%;%PATH%"
-reg add "HKCU\Software\Classes\*\shell\DevKit VSCode" /ve /d "DevKit VSCode" /f >nul
-reg add "HKCU\Software\Classes\*\shell\DevKit VSCode\command" /ve /d "\"%ROOT%ides\shell-code.bat\" \"%%1\"" /f >nul
-reg add "HKCU\Software\Classes\Directory\shell\DevKit VSCode" /ve /d "DevKit VSCode" /f >nul
-reg add "HKCU\Software\Classes\Directory\shell\DevKit VSCode\command" /ve /d "\"%ROOT%ides\shell-code.bat\" \"%%1\"" /f >nul
-reg add "HKCU\Software\Classes\Directory\Background\shell\DevKit VSCode" /ve /d "DevKit VSCode" /f >nul
-reg add "HKCU\Software\Classes\Directory\Background\shell\DevKit VSCode\command" /ve /d "\"%ROOT%ides\shell-code.bat\" \"%%V\"" /f >nul
+REM reg add "HKCU\Software\Classes\*\shell\DevKit VSCode" /ve /d "DevKit VSCode" /f >nul
+REM reg add "HKCU\Software\Classes\*\shell\DevKit VSCode\command" /ve /d "\"%ROOT%ides\shell-code.bat\" \"%%1\"" /f >nul
+REM reg add "HKCU\Software\Classes\Directory\shell\DevKit VSCode" /ve /d "DevKit VSCode" /f >nul
+REM reg add "HKCU\Software\Classes\Directory\shell\DevKit VSCode\command" /ve /d "\"%ROOT%ides\shell-code.bat\" \"%%1\"" /f >nul
+REM reg add "HKCU\Software\Classes\Directory\Background\shell\DevKit VSCode" /ve /d "DevKit VSCode" /f >nul
+REM reg add "HKCU\Software\Classes\Directory\Background\shell\DevKit VSCode\command" /ve /d "\"%ROOT%ides\shell-code.bat\" \"%%V\"" /f >nul
 set "PATH=%SYNPATH_CODEBLOCKS%;%PATH%"
-reg add "HKCU\Software\Classes\*\shell\DevKit CodeBlocks" /ve /d "DevKit CodeBlocks" /f >nul
-reg add "HKCU\Software\Classes\*\shell\DevKit CodeBlocks\command" /ve /d "\"%ROOT%ides\shell-codeblocks.bat\" \"%%1\"" /f >nul
-reg add "HKCU\Software\Classes\Directory\shell\DevKit CodeBlocks" /ve /d "DevKit CodeBlocks" /f >nul
-reg add "HKCU\Software\Classes\Directory\shell\DevKit CodeBlocks\command" /ve /d "\"%ROOT%ides\shell-codeblocks.bat\" \"%%1\"" /f >nul
-reg add "HKCU\Software\Classes\Directory\Background\shell\DevKit CodeBlocks" /ve /d "DevKit CodeBlocks" /f >nul
-reg add "HKCU\Software\Classes\Directory\Background\shell\DevKit CodeBlocks\command" /ve /d "\"%ROOT%ides\shell-codeblocks.bat\" \"%%V\"" /f >nul
+REM reg add "HKCU\Software\Classes\*\shell\DevKit CodeBlocks" /ve /d "DevKit CodeBlocks" /f >nul
+REM reg add "HKCU\Software\Classes\*\shell\DevKit CodeBlocks\command" /ve /d "\"%ROOT%ides\shell-codeblocks.bat\" \"%%1\"" /f >nul
+REM reg add "HKCU\Software\Classes\Directory\shell\DevKit CodeBlocks" /ve /d "DevKit CodeBlocks" /f >nul
+REM reg add "HKCU\Software\Classes\Directory\shell\DevKit CodeBlocks\command" /ve /d "\"%ROOT%ides\shell-codeblocks.bat\" \"%%1\"" /f >nul
+REM reg add "HKCU\Software\Classes\Directory\Background\shell\DevKit CodeBlocks" /ve /d "DevKit CodeBlocks" /f >nul
+REM reg add "HKCU\Software\Classes\Directory\Background\shell\DevKit CodeBlocks\command" /ve /d "\"%ROOT%ides\shell-codeblocks.bat\" \"%%V\"" /f >nul
 set "PATH=%SYNPATH_NODE%;%PATH%"
 set "PATH=%SYNPATH_PYTHON%;%PATH%"
 set "PATH=%SYNPATH_PYTHON%\Scripts;%PATH%"
@@ -87,8 +91,8 @@ set "PATH=%SYNPATH_ZIG%;%PATH%"
 set "PATH=%SYNPATH_CPP%\bin;%PATH%"
 set "TARGET=%~1"
 if "%TARGET%"=="" set "TARGET=%ROOT%"
-reg add "HKCU\Software\Classes\Directory\shell\DevKit Shell" /ve /d "DevKit Shell" /f >nul
-reg add "HKCU\Software\Classes\Directory\shell\DevKit Shell\command" /ve /d "\"%ROOT%start.bat\" \"%%1\"" /f >nul
-reg add "HKCU\Software\Classes\Directory\Background\shell\DevKit Shell" /ve /d "DevKit Shell" /f >nul
-reg add "HKCU\Software\Classes\Directory\Background\shell\DevKit Shell\command" /ve /d "\"%ROOT%start.bat\" \"%%V\"" /f >nul
+REM reg add "HKCU\Software\Classes\Directory\shell\DevKit Shell" /ve /d "DevKit Shell" /f >nul
+REM reg add "HKCU\Software\Classes\Directory\shell\DevKit Shell\command" /ve /d "\"%ROOT%start.bat\" \"%%1\"" /f >nul
+REM reg add "HKCU\Software\Classes\Directory\Background\shell\DevKit Shell" /ve /d "DevKit Shell" /f >nul
+REM reg add "HKCU\Software\Classes\Directory\Background\shell\DevKit Shell\command" /ve /d "\"%ROOT%start.bat\" \"%%V\"" /f >nul
 cmd.exe /k "echo [Minh Nguyen DevKit Shell Ready] && echo code, sqlitestudio, winmergeu, notepad++, heidisql, geany, codeblocks, git gui, start-mariadb, stop-mariadb, start-postgresql, stop-postgresql && cd /d %TARGET%"
